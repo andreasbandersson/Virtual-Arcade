@@ -6,7 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 /*
- * Måns Grundberg
+ * Måns Grundberg fakking King
  */
 
 public class ChatClient extends Thread {
