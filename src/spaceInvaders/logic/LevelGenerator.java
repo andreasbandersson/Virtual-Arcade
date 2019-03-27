@@ -1,4 +1,4 @@
-package Logic;
+package spaceInvaders.logic;
 
 public class LevelGenerator {
 

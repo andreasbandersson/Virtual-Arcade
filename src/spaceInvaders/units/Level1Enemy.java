@@ -1,6 +1,6 @@
-package Units;
+package spaceInvaders.units;
 
-import Logic.Controller;
+import spaceInvaders.logic.Controller;
 
 import javax.swing.*;
 import java.awt.*;

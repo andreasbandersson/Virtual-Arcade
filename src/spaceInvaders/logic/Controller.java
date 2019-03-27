@@ -1,10 +1,14 @@
-package Logic;
+package spaceInvaders.logic;
 
-import Graphics.Painter;
-import Levels.Difficulty;
-import Levels.Level;
-import Levels.Level1;
-import Units.*;
+import spaceInvaders.graphics.Painter;
+import spaceInvaders.levels.Difficulty;
+import spaceInvaders.levels.Level;
+import spaceInvaders.levels.Level1;
+import spaceInvaders.units.Player;
+import spaceInvaders.units.Position;
+import spaceInvaders.units.Shot;
+import spaceInvaders.units.Unit;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;

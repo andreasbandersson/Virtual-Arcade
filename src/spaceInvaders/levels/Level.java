@@ -1,7 +1,8 @@
-package Levels;
+package spaceInvaders.levels;
 
-import Logic.Controller;
-import Units.Enemy;
+import spaceInvaders.logic.Controller;
+import spaceInvaders.units.Enemy;
+
 import java.util.ArrayList;
 
 public abstract class Level {

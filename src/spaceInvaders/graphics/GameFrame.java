@@ -1,5 +1,5 @@
-package Graphics;
-import Logic.Controller;
+package spaceInvaders.graphics;
+import spaceInvaders.logic.Controller;
 
 import javax.swing.*;
 

@@ -1,4 +1,4 @@
-package Units;
+package spaceInvaders.units;
 
 public class Position {
 

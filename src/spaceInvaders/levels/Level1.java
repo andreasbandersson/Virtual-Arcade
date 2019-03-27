@@ -1,9 +1,10 @@
-package Levels;
+package spaceInvaders.levels;
 
-import Logic.Controller;
-import Units.Enemy;
-import Units.Level1Enemy;
-import Units.Position;
+import spaceInvaders.logic.Controller;
+import spaceInvaders.units.Enemy;
+import spaceInvaders.units.Level1Enemy;
+import spaceInvaders.units.Position;
+
 import java.util.ArrayList;
 
 public class Level1 extends Level {

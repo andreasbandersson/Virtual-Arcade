@@ -1,4 +1,4 @@
-package Levels;
+package spaceInvaders.levels;
 
 public enum Difficulty {
 

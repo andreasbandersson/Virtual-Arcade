@@ -1,10 +1,9 @@
-package Graphics;
+package spaceInvaders.graphics;
 
-import Logic.Controller;
-import Units.Enemy;
-import Units.Player;
-import Units.Shot;
-import Units.Unit;
+import spaceInvaders.logic.Controller;
+import spaceInvaders.units.Player;
+import spaceInvaders.units.Shot;
+import spaceInvaders.units.Unit;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +12,7 @@ import java.awt.*;
 public class Painter extends JPanel {
 
 
-  private  Controller controller;
+  private Controller controller;
   private Player player;
   private Shot playerShot;
   private boolean shotFired;

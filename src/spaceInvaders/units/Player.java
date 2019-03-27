@@ -1,11 +1,11 @@
-package Units;
+package spaceInvaders.units;
 
-import Logic.Controller;
+import spaceInvaders.logic.Controller;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class Player extends Unit{
+public class Player extends Unit {
 
     private static Image playerSprite = new ImageIcon("Sprites/player.png").getImage().getScaledInstance(50,40,Image.SCALE_DEFAULT);
     private static Position startPosition = new Position(350,500);
