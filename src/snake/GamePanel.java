@@ -77,7 +77,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener
 		}
 		ticks++;
 		
-		if(ticks > 250000)
+		if(ticks > 300000)
 		{
 			if(right == true) 
 			{
