@@ -2,7 +2,12 @@ package application;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+
+import javax.swing.SwingUtilities;
+
+import chat.ChatTestUI;
 import javafx.application.Application;
+import javafx.embed.swing.SwingNode;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
@@ -10,7 +15,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -18,6 +22,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.TextAlignment;
 
 public class MainUI extends Application {
@@ -31,13 +36,12 @@ public class MainUI extends Application {
 	private Scene scene, scene2;
 	private HBox hBox;
 	private GridPane gridPane;
-	private User user;
 	private Label userNameLabel = new Label("Username:");
 	private Label passwordLabel = new Label("Password:");
 	private Label startLabel = new Label("Press Start Button");
 	private TextField usernameTextField = new TextField();
 	private PasswordField passwordTextField = new PasswordField();
-	private TextArea textArea = new TextArea();
+	private ChatTestUI chatTestUI = new ChatTestUI();
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -49,7 +53,7 @@ public class MainUI extends Application {
 		loginRoot.setId("loginRoot");
 
 		gridPane = new GridPane();
-		
+
 		userNameLabel.setPadding(new Insets(80.0, 0.0, 0.0, 0.0));
 		gridPane.add(userNameLabel, 0, 1);
 		gridPane.add(usernameTextField, 0, 2);
@@ -62,11 +66,12 @@ public class MainUI extends Application {
 		startLabel.setPadding(new Insets(25.0, 0.0, 0.0, 0.0));
 		gridPane.add(startLabel, 0, 7);
 		gridPane.add(loginButton, 0, 10);
-		GridPane.setConstraints(loginButton, 0, 10, 1, 1, null, null, Priority.NEVER, Priority.NEVER, new Insets(30.0, 0.0, 0.0, 24.0));
+		GridPane.setConstraints(loginButton, 0, 10, 1, 1, null, null, Priority.NEVER, Priority.NEVER,
+				new Insets(30.0, 0.0, 0.0, 24.0));
 		loginButton.setId("hBoxButtons");
-		
+
 		gridPane.setAlignment(Pos.CENTER);
-		
+
 		loginButton.setOnAction(e -> setMainMenuScene(primaryStage));
 
 		loginRoot.setCenter(gridPane);
@@ -83,13 +88,26 @@ public class MainUI extends Application {
 
 	}
 
+	private void createSwingContent(final SwingNode swingNode) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				swingNode.setContent(chatTestUI);
+				swingNode.requestFocus();
+				
+				chatTestUI.addNewMessage("Use @username to send a private message");
+				chatTestUI.addNewMessage("Example: @Aragorn This is a message");
+			}
+		});
+	}
+
 	public void setMainMenuScene(Stage primaryStage) {
 		mainRoot = new BorderPane();
 		mainRoot.setId("mainRoot");
 
 		hBox = new HBox();
 		hBox.setId("hBox");
-		hBox.setPrefSize(1200.0, 100.0);
+		hBox.setPrefSize(900.0, 100.0);
 		hBox.getChildren().add(leaderboardButton);
 		hBox.getChildren().add(settingsButton);
 		hBox.setSpacing(50.0);
@@ -98,19 +116,29 @@ public class MainUI extends Application {
 		leaderboardButton.setId("hBoxButtons");
 		settingsButton.setId("hBoxButtons");
 		settingsButton.setTextAlignment(TextAlignment.CENTER);
-		textArea.setPrefSize(300, 500);
+	//	textArea.setPrefSize(300, 500);
 
 		mainRoot.setBottom(hBox);
-		mainRoot.setRight(textArea);
+
+		SwingNode chatUI = new SwingNode();
+		createSwingContent(chatUI);
+		StackPane pane = new StackPane();
+		pane.setId("swingPane");
+		pane.setPrefSize(300.0, 600.0);
+		pane.getChildren().add(chatUI);
+		pane.setAlignment(Pos.BASELINE_RIGHT);
+		mainRoot.setRight(pane);
 		
+		
+
 		setArcadeMachineImage();
-		
+
 		scene2 = new Scene(mainRoot, 1200, 600);
 		scene2.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 		// primaryStage.setResizable(false);
 
-		primaryStage.setTitle("VIRTUAL ARCADE");
-		primaryStage.setResizable(true);
+		primaryStage.setTitle("VIRTUAL ARCADEs");
+		primaryStage.setResizable(false);
 		primaryStage.setScene(scene2);
 		primaryStage.centerOnScreen();
 		primaryStage.show();
