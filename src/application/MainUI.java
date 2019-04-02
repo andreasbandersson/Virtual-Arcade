@@ -2,109 +2,60 @@ package application;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-
 import javax.swing.SwingUtilities;
-
 import chat.ChatTestUI;
 import javafx.application.Application;
 import javafx.embed.swing.SwingNode;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.TextAlignment;
+
+/**
+ * @author Andreas Andersson
+ */
 
 public class MainUI extends Application {
 
 	private Button leaderboardButton = new Button("  LEADERBOARD");
 	private Button settingsButton = new Button("  SETTINGS");
-	private Button loginButton = new Button("  START");
 	private Image pong;
 	private ImageView pongView;
-	private BorderPane mainRoot, loginRoot;
-	private Scene scene, scene2;
+	private Scene scene2;
 	private HBox hBox;
-	private GridPane gridPane;
-	private Label userNameLabel = new Label("Username:");
-	private Label passwordLabel = new Label("Password:");
-	private Label startLabel = new Label("Press Start Button");
-	private TextField usernameTextField = new TextField();
-	private PasswordField passwordTextField = new PasswordField();
+	private GridPane mainRoot;
 	private ChatTestUI chatTestUI = new ChatTestUI();
+	private final int numOfCols = 24;
+	private final int numOfRows = 12;
 
-	@Override
 	public void start(Stage primaryStage) {
-		setLoginScene(primaryStage);
-	}
-
-	public void setLoginScene(Stage primaryStage) {
-		loginRoot = new BorderPane();
-		loginRoot.setId("loginRoot");
-
-		gridPane = new GridPane();
-
-		userNameLabel.setPadding(new Insets(80.0, 0.0, 0.0, 0.0));
-		gridPane.add(userNameLabel, 0, 1);
-		gridPane.add(usernameTextField, 0, 2);
-		usernameTextField.setPromptText("Enter a username");
-		passwordLabel.setPadding(new Insets(5.0, 0.0, 0.0, 0.0));
-		gridPane.add(passwordLabel, 0, 4);
-		gridPane.add(passwordTextField, 0, 5);
-		passwordTextField.setPromptText("Enter a password");
-		startLabel.setId("startLabel");
-		startLabel.setPadding(new Insets(25.0, 0.0, 0.0, 0.0));
-		gridPane.add(startLabel, 0, 7);
-		gridPane.add(loginButton, 0, 10);
-		GridPane.setConstraints(loginButton, 0, 10, 1, 1, null, null, Priority.NEVER, Priority.NEVER,
-				new Insets(30.0, 0.0, 0.0, 24.0));
-		loginButton.setId("hBoxButtons");
-
-		gridPane.setAlignment(Pos.CENTER);
-
-		loginButton.setOnAction(e -> setMainMenuScene(primaryStage));
-
-		loginRoot.setCenter(gridPane);
-		BorderPane.setAlignment(gridPane, Pos.CENTER);
-
-		scene = new Scene(loginRoot, 700, 400);
-		scene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-
-		primaryStage.setTitle("VIRTUAL ARCADE");
-		primaryStage.setResizable(false);
-		primaryStage.setScene(scene);
-		primaryStage.centerOnScreen();
-		primaryStage.show();
-
-	}
-
-	private void createSwingContent(final SwingNode swingNode) {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				swingNode.setContent(chatTestUI);
-				swingNode.requestFocus();
-				
-				chatTestUI.addNewMessage("Use @username to send a private message");
-				chatTestUI.addNewMessage("Example: @Aragorn This is a message");
-			}
-		});
-	}
-
-	public void setMainMenuScene(Stage primaryStage) {
-		mainRoot = new BorderPane();
+		mainRoot = new GridPane();
 		mainRoot.setId("mainRoot");
+		mainRoot.setPrefSize(1200.0, 600.0);
+		mainRoot.setGridLinesVisible(true);
 
+		// Sets the number and size-percentage of the rows and columns in the GridPane.
+		for (int i = 0; i < numOfCols; i++) {
+			ColumnConstraints colConst = new ColumnConstraints();
+			colConst.setPercentWidth(100.0 / numOfCols);
+			mainRoot.getColumnConstraints().add(colConst);
+		}
+		for (int i = 0; i < numOfRows; i++) {
+			RowConstraints rowConst = new RowConstraints();
+			rowConst.setPercentHeight(100.0 / numOfRows);
+			mainRoot.getRowConstraints().add(rowConst);
+		}
+
+		// Setting the HBox-node for the leader and settingsbutton.
 		hBox = new HBox();
 		hBox.setId("hBox");
 		hBox.setPrefSize(900.0, 100.0);
@@ -116,9 +67,9 @@ public class MainUI extends Application {
 		leaderboardButton.setId("hBoxButtons");
 		settingsButton.setId("hBoxButtons");
 		settingsButton.setTextAlignment(TextAlignment.CENTER);
-	//	textArea.setPrefSize(300, 500);
+		// textArea.setPrefSize(300, 500);
 
-		mainRoot.setBottom(hBox);
+		mainRoot.add(hBox, 0, 10, 18, 2);
 
 		SwingNode chatUI = new SwingNode();
 		createSwingContent(chatUI);
@@ -127,9 +78,7 @@ public class MainUI extends Application {
 		pane.setPrefSize(300.0, 600.0);
 		pane.getChildren().add(chatUI);
 		pane.setAlignment(Pos.BASELINE_RIGHT);
-		mainRoot.setRight(pane);
-		
-		
+		mainRoot.add(pane, 18, 0, 6, 12);
 
 		setArcadeMachineImage();
 
@@ -144,6 +93,19 @@ public class MainUI extends Application {
 		primaryStage.show();
 	}
 
+	private void createSwingContent(final SwingNode swingNode) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				swingNode.setContent(chatTestUI);
+				swingNode.requestFocus();
+
+				chatTestUI.addNewMessage("Use @username to send a private message");
+				chatTestUI.addNewMessage("Example: @Aragorn This is a message");
+			}
+		});
+	}
+
 	public void setArcadeMachineImage() {
 		try {
 			pong = new Image(new FileInputStream("images/arcadeGreen.png"));
@@ -154,7 +116,7 @@ public class MainUI extends Application {
 
 		pongView.setFitWidth(250);
 		pongView.setPreserveRatio(true);
-		mainRoot.setCenter(pongView);
+		mainRoot.add(pongView, 1, 2);
 		BorderPane.setAlignment(pongView, Pos.CENTER_LEFT);
 	}
 
