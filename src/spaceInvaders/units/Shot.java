@@ -29,7 +29,7 @@ public class Shot extends Unit {
     @Override
     public void registerHit() {
         flying = false;
-        controller.getUnits().remove(this);
+        isDead();
     }
 
     public void run() {

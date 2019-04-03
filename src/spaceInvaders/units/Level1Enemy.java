@@ -18,32 +18,7 @@ public class Level1Enemy extends Enemy {
     public void shoot() {
     }
 
-    public void moveEnemy(){
-        switch (counter) {
-            case 0:
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-                move(getPosition().getX()-15,getPosition().getY());
-                break;
-            case 5:
-                move(getPosition().getX(),getPosition().getY()+40);
-                break;
-            case 6:
-            case 7:
-            case 8:
-            case 9:
-            case 10:
-                move(getPosition().getX()+15,getPosition().getY());
-                break;
-            case 11:
-                move(getPosition().getX(),getPosition().getY()+40);
-                break;
-        }
-        counter++;
-        counter = counter % 12;
-    }
+    public void moveEnemy(){}
 
     @Override
     public void sleep() {
@@ -53,5 +28,6 @@ public class Level1Enemy extends Enemy {
             e.printStackTrace();
         }
     }
+
 
 }

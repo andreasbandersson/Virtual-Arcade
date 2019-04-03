@@ -4,27 +4,28 @@ import spaceInvaders.graphics.Painter;
 import spaceInvaders.levels.Difficulty;
 import spaceInvaders.levels.Level;
 import spaceInvaders.levels.Level1;
-import spaceInvaders.units.Player;
-import spaceInvaders.units.Position;
-import spaceInvaders.units.Shot;
-import spaceInvaders.units.Unit;
+import spaceInvaders.units.*;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Timer;
 
-public class Controller implements KeyListener {
+public class Controller extends Thread implements KeyListener {
 
     Painter painter;
     private Player player = new Player(this);
     private ArrayList<Unit> units  = new ArrayList<>();
     private Difficulty difficulty;
+    private Boolean timerActivated = false;
 
     public Controller(Difficulty difficulty) {
         this.difficulty = difficulty;
         units.add(player);
         painter = new Painter(this);
         initializeLevel(new Level1(difficulty,this));
+        this.start();
     }
 
     public Player getPlayer() {
@@ -34,6 +35,7 @@ public class Controller implements KeyListener {
     public void initializeLevel(Level level){
         for (Unit unit: level.getEnemyList()){
             units.add(unit);
+            if (unit instanceof Boss)
             unit.start();
         }
     }
@@ -73,28 +75,34 @@ public class Controller implements KeyListener {
 
     public void registerShot(Unit shooter){
 
-        if (shooter instanceof Player){
+        if (shooter instanceof Player && !timerActivated){
             Shot shot = new Shot(new Position(shooter.getPosition().getX()+20,shooter.getPosition().getY()-10),2,true,this);
             shot.start();
             units.add(shot);
+            timerActivated = true;
+            setTimeout( ()-> {
+                timerActivated = false;
+            }
+            ,1000);
         }
-        else {
+        else if (shooter instanceof Enemy) {
             Shot shot = new Shot(new Position(shooter.getPosition()),(difficulty.ordinal()+1)*500,false,this);
             shot.start();
             units.add(shot);
         }
     }
 
-    public void requestRepaint(){
+    public synchronized void requestRepaint(){
         ArrayList<Unit> temp = new ArrayList<>(units);
-        temp.forEach(unit ->{
-            temp.forEach(otherUnit ->{
+        outerLoop: for (Unit unit : temp){
+            for (Unit otherUnit : temp){
                 if (unit.collidesWith(otherUnit)){
                     unit.registerHit();
                     otherUnit.registerHit();
+                    break outerLoop;
                 }
-            });
-        });
+            }
+        }
         painter.repaint();
     }
 
@@ -102,11 +110,33 @@ public class Controller implements KeyListener {
         return units;
     }
 
-    public void isDead(Unit unit){
-        if (unit instanceof Player){
-            player.setPosition(player.getStartPosition());
+    public void moveEnemyBlock() {
+     
+}
+
+
+    public void run() {
+
+        while (true){
+            for (Unit unit : units){
+                if (unit instanceof Enemy){
+
+                }
+            }
         }
-        else
-        units.remove(unit);
+    }
+
+
+
+    public static void setTimeout(Runnable runnable, int delay){
+        new Thread(() -> {
+            try {
+                Thread.sleep(delay);
+                runnable.run();
+            }
+            catch (Exception e){
+                System.err.println(e);
+            }
+        }).start();
     }
 }

@@ -26,7 +26,7 @@ public abstract class Unit extends Thread {
        this.life = life;
    }
 
-   public void setPosition(Position position){
+   public synchronized void setPosition(Position position){
        this.position = position;
    }
 
@@ -60,7 +60,7 @@ public abstract class Unit extends Thread {
 
     public abstract void shoot();
 
-   public void move(int x, int y){
+   public synchronized void move(int x, int y){
        position.setX(x);
        position.setY(y);
    }
@@ -71,6 +71,14 @@ public abstract class Unit extends Thread {
     }
 
     public abstract void registerHit();
+
+    public void isDead() {
+        if (this instanceof Player) {
+            this.setPosition(Player.startPosition);
+        } else {
+            controller.getUnits().remove(this);
+         }
+    }
 
    public Rectangle getHitbox() {
        return new Rectangle(position.getX(),position.getY(),width,height);

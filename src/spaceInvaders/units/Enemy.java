@@ -17,7 +17,7 @@ public abstract class Enemy extends Unit {
         life--;
         if (life == 0) {
             alive = false;
-            controller.isDead(this);
+            isDead();
         }
     }
 
