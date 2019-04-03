@@ -4,7 +4,10 @@ import spaceInvaders.logic.Controller;
 
 import java.awt.*;
 
-public class Boss extends Unit {
+public abstract class Boss
+    extends Unit
+    implements Runnable {
+
     public Boss(int life, Position position, Image image, int width, int height, Controller controller) {
         super(life, position, image, width, height, controller);
     }
@@ -18,4 +21,10 @@ public class Boss extends Unit {
     public void registerHit() {
 
     }
+
+    public void start(){
+        new Thread(this).start();
+    }
+
+
 }

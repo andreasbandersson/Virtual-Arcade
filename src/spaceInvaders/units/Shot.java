@@ -5,7 +5,7 @@ import spaceInvaders.logic.Controller;
 import javax.swing.*;
 import java.awt.*;
 
-public class Shot extends Unit {
+public class Shot extends Unit implements Runnable {
 
     private static int width = 2;
     private static int height = 15;
@@ -30,6 +30,10 @@ public class Shot extends Unit {
     public void registerHit() {
         flying = false;
         isDead();
+    }
+
+    public void start(){
+        new Thread(this).start();
     }
 
     public void run() {

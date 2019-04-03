@@ -20,15 +20,4 @@ public abstract class Enemy extends Unit {
             isDead();
         }
     }
-
-    public abstract void moveEnemy();
-    public abstract void sleep();
-
-    public void run() {
-        while(alive){
-            moveEnemy();
-            controller.requestRepaint();
-            sleep();
-        }
-    }
 }

@@ -17,17 +17,4 @@ public class Level1Enemy extends Enemy {
     @Override
     public void shoot() {
     }
-
-    public void moveEnemy(){}
-
-    @Override
-    public void sleep() {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-
 }

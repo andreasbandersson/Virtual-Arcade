@@ -4,7 +4,7 @@ import spaceInvaders.logic.Controller;
 
 import java.awt.*;
 
-public abstract class Unit extends Thread {
+public abstract class Unit {
 
    protected int life;
    protected Position position;
@@ -65,6 +65,11 @@ public abstract class Unit extends Thread {
        position.setY(y);
    }
 
+    public synchronized void moveRelative(int x, int y){
+        position.setX(position.getX() + x);
+        position.setY(position.getY() + y);
+    }
+
     public void move(Position position){
         this.position.setX(position.getX());
         this.position.setY(position.getY());
@@ -76,7 +81,7 @@ public abstract class Unit extends Thread {
         if (this instanceof Player) {
             this.setPosition(Player.startPosition);
         } else {
-            controller.getUnits().remove(this);
+            controller.removeUnit(this);
          }
     }
 
