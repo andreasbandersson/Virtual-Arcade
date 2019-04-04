@@ -20,6 +20,7 @@ public class Controller extends Thread implements KeyListener {
     private GameFrame frame;
     private Painter painter;
     private Player player = new Player(this);
+    private int score = 0;
 
     private List<Unit> allUnits = new ArrayList<>(); //used in collision
 
@@ -27,15 +28,13 @@ public class Controller extends Thread implements KeyListener {
     private List<Shot> shots = new ArrayList<>(); //not rly used
     private List<List<Enemy>> enemies = new ArrayList<>(); //List of Lists = grid; used for moving
 
-    private Difficulty difficulty;
     private Boolean timerActivated = false;
 
     private int direction = +1; //+1 = right; -1 = left
 
-    public Controller(Difficulty difficulty) {
-        this.difficulty = difficulty;
+    public Controller() {
         painter = new Painter(this);
-        initializeLevel(new Level1(difficulty,this));
+        initializeLevel(new Level1(Difficulty.EASY,this));
     }
 
     public Player getPlayer() {
@@ -49,6 +48,7 @@ public class Controller extends Thread implements KeyListener {
         bosses.forEach(Boss::start);
 
         enemies.forEach(allUnits::addAll);
+        allUnits.add(player);
         allUnits.addAll(bosses);
     }
 
@@ -61,8 +61,12 @@ public class Controller extends Thread implements KeyListener {
        return painter;
     }
 
-    public List<Unit> getAllUnits() {
-        return allUnits;
+    public synchronized List<Unit> getAllUnits() {
+        return new ArrayList<>(allUnits);
+    }
+
+    public int getScore() {
+        return score;
     }
 
     @Override
@@ -101,7 +105,7 @@ public class Controller extends Thread implements KeyListener {
             timerActivated = true;
             setTimeout( ()-> timerActivated = false,1000);
         }else if(shooter instanceof Enemy) {
-            shot = new Shot(new Position(shooter.getPosition()),(difficulty.ordinal()+1)*500,false,this);
+            shot = new EnemyShot(new Position(shooter.getPosition()), ((Enemy) shooter).getDifficulty().ordinal(),false,this);
         }else{
             return;
         }
@@ -120,6 +124,9 @@ public class Controller extends Thread implements KeyListener {
                     otherUnit.registerHit();
                     break outerLoop;
                 }
+                if (unit.getPosition().getY() > frame.getHeight() || unit.getPosition().getY() < 0){
+                     removeUnit(unit);
+                }
             }
         }
         painter.repaint();
@@ -127,7 +134,6 @@ public class Controller extends Thread implements KeyListener {
 
     public void removeUnit(Unit unit){
         allUnits.remove(unit);
-
         if(unit instanceof Shot){
             shots.remove(unit);
         }
@@ -136,11 +142,11 @@ public class Controller extends Thread implements KeyListener {
             for(List<Enemy> row : enemies){
                 if(row.contains(unit)){
                     row.remove(unit);
+                    score += ((Enemy) unit).getPoints();
                     return;
                 }
             }
         }
-
         if(unit instanceof Boss){
             bosses.remove(unit);
         }
@@ -180,8 +186,9 @@ public class Controller extends Thread implements KeyListener {
                 moveDown = true;
             }
 
-            for (List<Enemy> row : enemies) {
+            for (List<Enemy> row : new ArrayList<>(enemies)) {
                 for (Enemy e : row) {
+                    enemyFire(e);
                     if (!moveDown)
                         e.moveRelative(direction * enemySpeed, 0);
                     else
@@ -197,5 +204,11 @@ public class Controller extends Thread implements KeyListener {
         }
 
         System.out.println("U WIN LEL"); //gg
+    }
+
+    public void enemyFire(Enemy e){
+        if (e.willShoot()){
+            e.shoot();
+        }
     }
 }

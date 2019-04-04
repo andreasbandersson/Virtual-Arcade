@@ -28,13 +28,19 @@ public class Shot extends Unit implements Runnable {
 
     @Override
     public void registerHit() {
+        die();
+    }
+
+    @Override
+    public void die() {
         flying = false;
-        isDead();
+        controller.removeUnit(this);
     }
 
     public void start(){
         new Thread(this).start();
     }
+
 
     public void run() {
         while (flying) {
@@ -46,7 +52,7 @@ public class Shot extends Unit implements Runnable {
             }
             controller.requestRepaint();
             try {
-                Thread.sleep(speed);
+                Thread.sleep(9/(speed+1));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

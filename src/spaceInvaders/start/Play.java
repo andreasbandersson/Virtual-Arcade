@@ -7,6 +7,6 @@ import spaceInvaders.logic.Controller;
 public class Play {
 
     public static void main(String[] args) {
-        new GameFrame(new Controller(Difficulty.EASY));
+        new GameFrame(new Controller());
     }
 }

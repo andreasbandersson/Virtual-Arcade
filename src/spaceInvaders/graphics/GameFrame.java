@@ -22,4 +22,8 @@ public class GameFrame extends JPanel {
     public int getWidth(){
         return frame.getWidth();
     }
+    @Override
+    public int getHeight() {
+        return  frame.getHeight();
+    }
 }

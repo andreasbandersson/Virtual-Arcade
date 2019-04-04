@@ -54,7 +54,7 @@ public abstract class Unit {
         return width;
     }
 
-    public Position getPosition() {
+    public synchronized Position getPosition() {
         return position;
     }
 
@@ -77,13 +77,8 @@ public abstract class Unit {
 
     public abstract void registerHit();
 
-    public void isDead() {
-        if (this instanceof Player) {
-            this.setPosition(Player.startPosition);
-        } else {
-            controller.removeUnit(this);
-         }
-    }
+    public abstract void die();
+
 
    public Rectangle getHitbox() {
        return new Rectangle(position.getX(),position.getY(),width,height);
@@ -94,15 +89,30 @@ public abstract class Unit {
        if (this.equals(unit)){
            return false;
        }
+
+       if (this instanceof EnemyShot && unit instanceof  Enemy){
+           return false;
+       }
+        if (this instanceof Enemy && unit instanceof  EnemyShot){
+            return false;
+        }
        if (this instanceof Enemy && unit instanceof Enemy){
            return false;
        }
-       if (this instanceof Shot && unit instanceof Player){
+        if (this instanceof EnemyShot && unit instanceof Player){
+            return this.getHitbox().intersects(unit.getHitbox());
+        }
+        if (this instanceof Player && unit instanceof EnemyShot){
+            return this.getHitbox().intersects(unit.getHitbox());
+        }
+
+        if (this instanceof Shot && unit instanceof Player){
            return false;
        }
        if (this instanceof Player && unit instanceof Shot){
            return false;
        }
+
 
        return this.getHitbox().intersects(unit.getHitbox());
     }

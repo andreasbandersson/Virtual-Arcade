@@ -8,10 +8,10 @@ import java.awt.*;
 public class Player extends Unit {
 
     private static Image playerSprite = new ImageIcon("Sprites/player.png").getImage().getScaledInstance(50,40,Image.SCALE_DEFAULT);
-    public static Position startPosition = new Position(350,500);
+    private static Position startPosition = new Position(350,500);
 
     public Player(Controller controller) {
-        super(3, startPosition, playerSprite,50,40, controller);
+        super(3, new Position(startPosition), playerSprite,50,40, controller);
 
     }
 
@@ -32,10 +32,14 @@ public class Player extends Unit {
     public void registerHit() {
         life--;
         if (life > 0){
-            isDead();
+            move(Player.startPosition);
         }
         if (life == 0){
-            //TERMINATE GAME, YOU LOST
+           die();
         }
+    }
+
+    @Override
+    public void die() {
     }
 }
