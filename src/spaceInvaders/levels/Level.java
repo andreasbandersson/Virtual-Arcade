@@ -4,7 +4,12 @@ import spaceInvaders.logic.Controller;
 import spaceInvaders.units.Boss;
 import spaceInvaders.units.Enemy;
 
+import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * @author Viktor Altintas
+ */
 
 public abstract class Level {
 
@@ -19,12 +24,17 @@ public abstract class Level {
     }
 
     public List<List<Enemy>> getEnemyGrid() {
+        List<List<Enemy>> enemyGridClone = new ArrayList<>(); //makes a list that takes listobjects
         for(List<Enemy> row : enemyGrid) {
+            ArrayList<Enemy> enemyList = new ArrayList<>(); // making a new row
+            enemyGridClone.add(enemyList); //adding row to list of rows
             for (Enemy e : row) {
-                e.setController(controller);
+                Enemy clone = e.clone();
+                enemyList.add(clone);
+               clone.setController(controller);
             }
         }
-        return enemyGrid;
+        return enemyGridClone;
     }
 
     public abstract List<Boss> getBosses();

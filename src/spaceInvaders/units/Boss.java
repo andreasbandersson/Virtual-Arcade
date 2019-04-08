@@ -4,6 +4,10 @@ import spaceInvaders.logic.Controller;
 
 import java.awt.*;
 
+/**
+ * @author Viktor Altintas
+ */
+
 public abstract class Boss extends Unit implements Runnable {
 
     public Boss(int life, Position position, Image image, int width, int height, Controller controller) {

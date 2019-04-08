@@ -7,10 +7,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Random;
 
+/**
+ * @author Viktor Altintas
+ */
+
 public class Level1Enemy extends Enemy {
 
     private static final Image sprite = new ImageIcon("Sprites/enemyYellow.png").getImage().getScaledInstance(35,30,Image.SCALE_DEFAULT);;
-    private int counter = 0;
     private Random rand = new Random();
 
     public Level1Enemy(Position position, Controller controller, Difficulty difficulty) {
@@ -27,5 +30,10 @@ public class Level1Enemy extends Enemy {
     public boolean willShoot() {
         int r = rand.nextInt(100) - getDifficulty().ordinal()*5;
         return (r >= 89);
+    }
+
+    @Override
+    public Enemy clone() {
+        return new Level1Enemy(new Position(this.position),this.controller,this.difficulty);
     }
 }

@@ -4,6 +4,10 @@ import spaceInvaders.logic.Controller;
 
 import java.awt.*;
 
+/**
+ * @author Viktor Altintas
+ */
+
 public abstract class Unit {
 
    protected int life;

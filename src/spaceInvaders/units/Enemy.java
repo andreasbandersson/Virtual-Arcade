@@ -6,11 +6,15 @@ import spaceInvaders.logic.Controller;
 
 import java.awt.*;
 
+/**
+ * @author Viktor Altintas
+ */
+
 public abstract class Enemy extends Unit {
 
     private boolean alive = true;
-    private int points;
-    private Difficulty difficulty;
+    protected int points;
+    protected Difficulty difficulty;
 
     public Enemy(int life, Position position, Image image, int width, int height, Controller controller, int points, Difficulty difficulty) {
         super(life, position, image, width, height, controller);
@@ -38,4 +42,7 @@ public abstract class Enemy extends Unit {
     }
 
     public abstract boolean willShoot();
+
+    public abstract Enemy clone();
+
 }

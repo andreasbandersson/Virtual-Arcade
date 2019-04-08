@@ -5,6 +5,10 @@ import spaceInvaders.logic.Controller;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * @author Viktor Altintas
+ */
+
 public class Player extends Unit {
 
     private static Image playerSprite = new ImageIcon("Sprites/player.png").getImage().getScaledInstance(50,40,Image.SCALE_DEFAULT);

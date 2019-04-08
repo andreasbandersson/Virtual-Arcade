@@ -5,6 +5,10 @@ import spaceInvaders.logic.Controller;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * @author Viktor Altintas
+ */
+
 public class Shot extends Unit implements Runnable {
 
     private static int width = 2;

@@ -8,6 +8,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 
+/**
+ * @author Viktor Altintas
+ */
+
 
 public class Painter extends JPanel {
 
@@ -15,6 +19,8 @@ public class Painter extends JPanel {
     private Controller controller;
     private Player player;
     public  JLabel scoreLabel;
+    public JLabel levelTitle;
+    private static Image playerLifeSprite = new ImageIcon("Sprites/player.png").getImage().getScaledInstance(30,25,Image.SCALE_DEFAULT);
 
     public Painter(Controller controller) {
         this.controller = controller;
@@ -25,11 +31,14 @@ public class Painter extends JPanel {
         this.player = controller.getPlayer();
 
         scoreLabel = new JLabel("");
-        scoreLabel.setFont(new Font(("bla bla"),Font.PLAIN,12));
+        scoreLabel.setFont(new Font(("byt till något fett"),Font.PLAIN,12));
         scoreLabel.setForeground(Color.green);
 
-        add(scoreLabel);
+        levelTitle = new JLabel("Level " + controller.getLevelCounter());
+        levelTitle.setFont(new Font(("byt till något fett"),Font.PLAIN,40));
+        levelTitle.setForeground(Color.WHITE);
 
+        add(scoreLabel);
     }
 
     @Override
@@ -40,6 +49,19 @@ public class Painter extends JPanel {
         for (Unit unit : controller.getAllUnits()) {
             g.drawImage(unit.getSprite(), unit.getPosition().getX(), unit.getPosition().getY(), this);
         }
+        for (int i = 0; i < player.getLife(); i++){
+            g.drawImage(playerLifeSprite,510+((i+1)*39),10,this);
+        }
+    }
+    public void showLevelTitle() {
+        add(levelTitle);
+        levelTitle.setText("Level " + controller.getLevelCounter());
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        remove(levelTitle);
     }
 }
 

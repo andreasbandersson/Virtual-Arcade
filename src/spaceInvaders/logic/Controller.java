@@ -12,7 +12,11 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Controller extends Thread implements KeyListener {
+/**
+ * @author Viktor Altintas
+ */
+
+public class Controller implements Runnable, KeyListener {
 
     private final int FPS = 2;
     private final int enemySpeed = 25;
@@ -21,6 +25,7 @@ public class Controller extends Thread implements KeyListener {
     private Painter painter;
     private Player player = new Player(this);
     private int score = 0;
+    private int levelCounter = 1;
 
     private List<Unit> allUnits = new ArrayList<>(); //used in collision
 
@@ -34,7 +39,8 @@ public class Controller extends Thread implements KeyListener {
 
     public Controller() {
         painter = new Painter(this);
-        initializeLevel(new Level1(Difficulty.EASY,this));
+        painter.showLevelTitle();
+        allUnits.add(player);
     }
 
     public Player getPlayer() {
@@ -47,14 +53,21 @@ public class Controller extends Thread implements KeyListener {
 
         bosses.forEach(Boss::start);
 
-        enemies.forEach(allUnits::addAll);
-        allUnits.add(player);
+        enemies.forEach(allUnits::addAll); //calling addAll of allUnits with every row in enemies
         allUnits.addAll(bosses);
+        for (Unit unit : allUnits){
+            System.out.println(unit.getClass().getSimpleName()); //testing to see what units were added
+        }
+        start();
     }
 
     public void installFrame(GameFrame frame){
         this.frame = frame;
-        this.start();
+        initializeLevel(new Level1(Difficulty.EASY,this));
+    }
+
+    public void start(){
+        new Thread(this).start();
     }
 
     public Painter getPainter() {
@@ -103,7 +116,7 @@ public class Controller extends Thread implements KeyListener {
         if (shooter instanceof Player && !timerActivated) {
             shot = new Shot(new Position(shooter.getPosition().getX()+20,shooter.getPosition().getY()-10),2,true,this);
             timerActivated = true;
-            setTimeout( ()-> timerActivated = false,1000);
+            setTimeout( ()-> timerActivated = false,1000); //wait 1 second, then say that timerActivated is false
         }else if(shooter instanceof Enemy) {
             shot = new EnemyShot(new Position(shooter.getPosition()), ((Enemy) shooter).getDifficulty().ordinal(),false,this);
         }else{
@@ -179,7 +192,8 @@ public class Controller extends Thread implements KeyListener {
 
     @Override
     public void run(){ //moves blocks of enemies
-        while (!enemies.stream().allMatch(List::isEmpty)){ //while any of the enemy rows has an enemy in it
+        while (!enemies.stream().allMatch(List::isEmpty)){ //if all objects delivered by the stream match the method isEmpty, statement is true
+            // stream = take out the elements one by one
             boolean moveDown = false;
             if (anyEnemyTouchesBorder()) {
                 direction *= -1;
@@ -202,13 +216,23 @@ public class Controller extends Thread implements KeyListener {
                 e.printStackTrace();
             }
         }
-
-        System.out.println("U WIN LEL"); //gg
+       levelWin();
     }
 
     public void enemyFire(Enemy e){
         if (e.willShoot()){
             e.shoot();
         }
+    }
+
+    public int getLevelCounter() {
+     return levelCounter;
+    }
+
+    public void levelWin() {
+        levelCounter++;
+        painter.showLevelTitle();
+        initializeLevel(new Level1(Difficulty.MEDIUM,this)); //should be a list of levels that initialize retrieves from
+        System.out.println("U WIN LEL"); //gg
     }
 }

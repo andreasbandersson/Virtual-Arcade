@@ -3,6 +3,10 @@ import spaceInvaders.logic.Controller;
 
 import javax.swing.*;
 
+/**
+ * @author Viktor Altintas
+ */
+
 public class GameFrame extends JPanel {
 
     private JFrame frame;
