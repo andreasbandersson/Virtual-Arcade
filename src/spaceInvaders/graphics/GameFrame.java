@@ -3,19 +3,31 @@ import spaceInvaders.logic.Controller;
 
 import javax.swing.*;
 
+/**
+ * @author Viktor Altintas
+ */
+
 public class GameFrame extends JPanel {
 
+    private JFrame frame;
 
     public GameFrame(Controller controller) {
-        /**
-         * frame instantiation
-         */
-        JFrame frame = new JFrame();
+        frame = new JFrame();
         frame.setVisible(true);
         frame.add(this);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.add(controller.getPainter());
         frame.addKeyListener(controller);
         frame.pack();
+        controller.installFrame(this);
+    }
+
+    @Override
+    public int getWidth(){
+        return frame.getWidth();
+    }
+    @Override
+    public int getHeight() {
+        return  frame.getHeight();
     }
 }

@@ -13,6 +13,7 @@ public class Platform {
 	private boolean isLeftPlatform;
 	private int points;
 	private int id;
+	private Color platformColor;
 	
 	public Platform(boolean isLeftPlatform) {
 		
@@ -21,6 +22,7 @@ public class Platform {
 		this.height = Config.Platform.height;
 		this.xOffset = Config.Platform.xOffset;
 		this.speed = Config.Platform.speed;
+		this.platformColor = Config.Platform.color;
 		
 		if(isLeftPlatform) {
 			this.isLeftPlatform = true;
@@ -43,25 +45,25 @@ public class Platform {
 		
 	}
 	
-	public void update(HashMap<Integer, Boolean> keyDownMap) {
+	public void update(HashMap<Integer, Boolean> keyDownMap, double dt) {
 		if(this.isLeftPlatform) {
 			
 			// UP
 			if(keyDownMap.containsKey(KeyEvent.VK_W)) {
-				this.y -= this.speed;
+				this.y -= this.speed * dt;
 			// Down
 			} else if(keyDownMap.containsKey(KeyEvent.VK_S)) {
-				this.y += this.speed;
+				this.y += this.speed * dt;
 			}
 		} else {
 			
 			// arrow UP
 			if(keyDownMap.containsKey(KeyEvent.VK_UP)) {
-				this.y -= this.speed;
+				this.y -= this.speed * dt;
 
 			// arrow Down
 			} else if(keyDownMap.containsKey(KeyEvent.VK_DOWN)) {
-				this.y += this.speed;
+				this.y += this.speed * dt;
 
 			}
 		}
@@ -76,7 +78,7 @@ public class Platform {
 	public void render(Graphics2D g) {
 	
 		// Change color before drawing
-		g.setColor(Config.Platform.color);
+		g.setColor(this.platformColor);
 		
 		// Draw the platform at position(x, y)
 		g.fillRect(x, y, width, height);
@@ -92,6 +94,15 @@ public class Platform {
 	
 	public void increasePoints() {
 		this.points++;
+	}
+	
+	//choose color
+	public void setColor(Color newColor) {
+		this.platformColor = newColor;
+	}
+	
+	public void resetPoints() {
+		this.points = 0;
 	}
 	
 	public Rectangle getBounds() {

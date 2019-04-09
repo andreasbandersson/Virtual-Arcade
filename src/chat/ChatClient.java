@@ -9,13 +9,14 @@ import java.net.Socket;
  * Måns Grundberg
  */
 
-public class ChatClient extends Thread {
+public class ChatClient {
 	private Socket socket;
 	private ObjectOutputStream oos;
 	private ObjectInputStream ois;
 	private int port;
 	private String ip;
 	private boolean connected = false;
+	private InputListener listener;
 	private ChatController controller;
 
 	public ChatClient(int port, String ip, ChatController controller) {
@@ -31,17 +32,21 @@ public class ChatClient extends Thread {
 				socket = new Socket(ip, port);
 				oos = new ObjectOutputStream(socket.getOutputStream());
 				ois = new ObjectInputStream(socket.getInputStream());
-				new InputListener().start();
+				this.listener = new InputListener();
+				listener.start();
 				connected = true;
+				System.out.println("Nerkopplad");
 			} catch (IOException e) {
 				System.err.println(e);
 			}
 		}
 	}
 
+	// TODO: Koppla till UI
 	public void disconnect() {
 		if (connected) {
 			try {
+				listener.terminate();
 				oos.close();
 				ois.close();
 				socket.close();
@@ -57,6 +62,7 @@ public class ChatClient extends Thread {
 			oos.writeUTF("LOGIN");
 			oos.writeObject(user);
 			oos.writeUTF(password);
+			oos.flush();
 		} catch (IOException e) {
 			System.err.println(e);
 		}
@@ -67,6 +73,7 @@ public class ChatClient extends Thread {
 			oos.writeUTF("NEW USER");
 			oos.writeObject(user);
 			oos.writeUTF(password);
+			oos.flush();
 		} catch (IOException e) {
 			System.err.println(e);
 		}
@@ -81,17 +88,24 @@ public class ChatClient extends Thread {
 	}
 
 	private class InputListener extends Thread {
+		private boolean running = true;
 
 		@Override
 		public void run() {
-			while (!Thread.interrupted()) {
+			while (running) {
 				try {
 					Object obj = ois.readObject();
 					controller.incoming(obj);
 				} catch (IOException | ClassNotFoundException e) {
-					System.err.println(e);
+					disconnect();
 				}
 			}
+		}
+		
+		// TODO: Koppla till UI
+		public void terminate() {
+			running = false;
+			listener = null;
 		}
 	}
 

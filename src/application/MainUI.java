@@ -2,132 +2,148 @@ package application;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import javax.swing.SwingUtilities;
+import chat.ChatTestUI;
 import javafx.application.Application;
-import javafx.geometry.Insets;
+import javafx.embed.swing.SwingNode;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.TextAlignment;
+
+/**
+ * @author Andreas Andersson
+ */
 
 public class MainUI extends Application {
 
 	private Button leaderboardButton = new Button("  LEADERBOARD");
 	private Button settingsButton = new Button("  SETTINGS");
-	private Button loginButton = new Button("  START");
-	private Image pong;
-	private ImageView pongView;
-	private BorderPane mainRoot, loginRoot;
-	private Scene scene, scene2;
+	private Button pongPlayButton = new Button("  START");
+	private Button spacePlayButton = new Button("  START");
+	private Button snakePlayButton = new Button("START");
+	private Image pong, space, snake;
+	private ImageView pongView, spaceView, snakeView;
+	private Scene scene2;
 	private HBox hBox;
-	private GridPane gridPane;
-	private User user;
-	private Label userNameLabel = new Label("Username:");
-	private Label passwordLabel = new Label("Password:");
-	private Label startLabel = new Label("Press Start Button");
-	private TextField usernameTextField = new TextField();
-	private PasswordField passwordTextField = new PasswordField();
-	private TextArea textArea = new TextArea();
+	private GridPane mainRoot;
+	private ChatTestUI chatTestUI;
 
-	@Override
+
+	private final int numOfCols = 48;
+	private final int numOfRows = 24;
+
 	public void start(Stage primaryStage) {
-		setLoginScene(primaryStage);
-	}
-
-	public void setLoginScene(Stage primaryStage) {
-		loginRoot = new BorderPane();
-		loginRoot.setId("loginRoot");
-
-		gridPane = new GridPane();
-		
-		userNameLabel.setPadding(new Insets(80.0, 0.0, 0.0, 0.0));
-		gridPane.add(userNameLabel, 0, 1);
-		gridPane.add(usernameTextField, 0, 2);
-		usernameTextField.setPromptText("Enter a username");
-		passwordLabel.setPadding(new Insets(5.0, 0.0, 0.0, 0.0));
-		gridPane.add(passwordLabel, 0, 4);
-		gridPane.add(passwordTextField, 0, 5);
-		passwordTextField.setPromptText("Enter a password");
-		startLabel.setId("startLabel");
-		startLabel.setPadding(new Insets(25.0, 0.0, 0.0, 0.0));
-		gridPane.add(startLabel, 0, 7);
-		gridPane.add(loginButton, 0, 10);
-		GridPane.setConstraints(loginButton, 0, 10, 1, 1, null, null, Priority.NEVER, Priority.NEVER, new Insets(30.0, 0.0, 0.0, 24.0));
-		loginButton.setId("hBoxButtons");
-		
-		gridPane.setAlignment(Pos.CENTER);
-		
-		loginButton.setOnAction(e -> setMainMenuScene(primaryStage));
-
-		loginRoot.setCenter(gridPane);
-		BorderPane.setAlignment(gridPane, Pos.CENTER);
-
-		scene = new Scene(loginRoot, 700, 400);
-		scene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-
-		primaryStage.setTitle("VIRTUAL ARCADE");
-		primaryStage.setResizable(false);
-		primaryStage.setScene(scene);
-		primaryStage.centerOnScreen();
-		primaryStage.show();
-
-	}
-
-	public void setMainMenuScene(Stage primaryStage) {
-		mainRoot = new BorderPane();
+		mainRoot = new GridPane();
 		mainRoot.setId("mainRoot");
+		mainRoot.setPrefSize(1200.0, 600.0);
+		//mainRoot.setGridLinesVisible(true);
 
+		// Sets the number and size-percentage of the rows and columns in the GridPane.
+		for (int i = 0; i < numOfCols; i++) {
+			ColumnConstraints colConst = new ColumnConstraints();
+			colConst.setPercentWidth(100.0 / numOfCols);
+			mainRoot.getColumnConstraints().add(colConst);
+		}
+		for (int i = 0; i < numOfRows; i++) {
+			RowConstraints rowConst = new RowConstraints();
+			rowConst.setPercentHeight(100.0 / numOfRows);
+			mainRoot.getRowConstraints().add(rowConst);
+		}
+
+		//Metod for adding the arcade machine pictures.
+		setArcadeMachineImage();
+		
+		// Setting the HBox-node for the leaderbutton and settingsbutton.
 		hBox = new HBox();
 		hBox.setId("hBox");
-		hBox.setPrefSize(1200.0, 100.0);
+		hBox.setPrefSize(900.0, 100.0);
 		hBox.getChildren().add(leaderboardButton);
 		hBox.getChildren().add(settingsButton);
 		hBox.setSpacing(50.0);
-		hBox.setAlignment(Pos.BASELINE_CENTER);
+		hBox.setAlignment(Pos.CENTER);
 
 		leaderboardButton.setId("hBoxButtons");
 		settingsButton.setId("hBoxButtons");
-		settingsButton.setTextAlignment(TextAlignment.CENTER);
-		textArea.setPrefSize(300, 500);
+		mainRoot.add(hBox, 0, 20, 36, 4);
+		
+		pongPlayButton.setId("arcadeButtons");
+		mainRoot.add(pongPlayButton, 5, 12, 4, 2);
+		
+		spacePlayButton.setId("arcadeButtons");
+		mainRoot.add(spacePlayButton, 15, 15, 4, 2);
+		
+		snakePlayButton.setId("nokiaButton");
+		mainRoot.add(snakePlayButton, 25, 15, 4, 1);
 
-		mainRoot.setBottom(hBox);
-		mainRoot.setRight(textArea);
+		//Setting the chatt
+		SwingNode chatUI = new SwingNode();
+		createSwingContent(chatUI);
+		StackPane pane = new StackPane();
+		pane.setId("swingPane");
+		pane.setPrefSize(300.0, 600.0);
+		pane.getChildren().add(chatUI);
+		mainRoot.add(pane, 36, 0, 12, 24);
 		
-		setArcadeMachineImage();
-		
+		//Sets the scene, adds all children nodes and sets the css style.
 		scene2 = new Scene(mainRoot, 1200, 600);
 		scene2.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-		// primaryStage.setResizable(false);
-
+		
+		//Sets the primaryStage
 		primaryStage.setTitle("VIRTUAL ARCADE");
-		primaryStage.setResizable(true);
+		//primaryStage.setFullScreen(true);
+		primaryStage.setResizable(false);
 		primaryStage.setScene(scene2);
 		primaryStage.centerOnScreen();
 		primaryStage.show();
 	}
 
+	private void createSwingContent(final SwingNode swingNode) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				swingNode.setContent(chatTestUI);
+				swingNode.requestFocus();
+
+				chatTestUI.addNewMessage("Use @username to send a private message");
+				chatTestUI.addNewMessage("Example: @Aragorn This is a message");
+			}
+		});
+	}
+
 	public void setArcadeMachineImage() {
 		try {
-			pong = new Image(new FileInputStream("images/arcadeGreen.png"));
+			pong = new Image(new FileInputStream("images/pongGame.png"));
+			space = new Image(new FileInputStream("images/spaceGame.png"));
+			snake = new Image(new FileInputStream("images/snakeGame.png"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 		pongView = new ImageView(pong);
-
+		spaceView = new ImageView(space);
+		snakeView = new ImageView(snake);
+		
 		pongView.setFitWidth(250);
 		pongView.setPreserveRatio(true);
-		mainRoot.setCenter(pongView);
-		BorderPane.setAlignment(pongView, Pos.CENTER_LEFT);
+		mainRoot.add(pongView, 2, 12);
+		
+		spaceView.setFitWidth(250);
+		spaceView.setPreserveRatio(true);
+		mainRoot.add(spaceView, 12, 12);
+		
+		snakeView.setFitWidth(250);
+		snakeView.setPreserveRatio(true);
+		mainRoot.add(snakeView, 22, 12);
+
 	}
 
 	public static void main(String[] args) {

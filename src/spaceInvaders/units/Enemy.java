@@ -1,34 +1,48 @@
 package spaceInvaders.units;
 
 
+import spaceInvaders.levels.Difficulty;
 import spaceInvaders.logic.Controller;
 
 import java.awt.*;
 
+/**
+ * @author Viktor Altintas
+ */
+
 public abstract class Enemy extends Unit {
 
     private boolean alive = true;
+    protected int points;
+    protected Difficulty difficulty;
 
-    public Enemy(int life, Position position, Image image, int width, int height, Controller controller) {
+    public Enemy(int life, Position position, Image image, int width, int height, Controller controller, int points, Difficulty difficulty) {
         super(life, position, image, width, height, controller);
+        this.points = points;
+        this.difficulty = difficulty;
     }
 
     public void registerHit(){
         life--;
         if (life == 0) {
-            alive = false;
-            controller.isDead(this);
+            die();
         }
     }
-
-    public abstract void moveEnemy();
-    public abstract void sleep();
-
-    public void run() {
-        while(alive){
-            moveEnemy();
-            controller.requestRepaint();
-            sleep();
-        }
+    public int getPoints() {
+        return points;
     }
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+
+    @Override
+    public void die(){
+        alive = false;
+        controller.removeUnit(this);
+    }
+
+    public abstract boolean willShoot();
+
+    public abstract Enemy clone();
+
 }

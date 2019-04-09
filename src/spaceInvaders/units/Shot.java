@@ -5,7 +5,11 @@ import spaceInvaders.logic.Controller;
 import javax.swing.*;
 import java.awt.*;
 
-public class Shot extends Unit {
+/**
+ * @author Viktor Altintas
+ */
+
+public class Shot extends Unit implements Runnable {
 
     private static int width = 2;
     private static int height = 15;
@@ -28,9 +32,19 @@ public class Shot extends Unit {
 
     @Override
     public void registerHit() {
-        flying = false;
-        controller.getUnits().remove(this);
+        die();
     }
+
+    @Override
+    public void die() {
+        flying = false;
+        controller.removeUnit(this);
+    }
+
+    public void start(){
+        new Thread(this).start();
+    }
+
 
     public void run() {
         while (flying) {
@@ -42,7 +56,7 @@ public class Shot extends Unit {
             }
             controller.requestRepaint();
             try {
-                Thread.sleep(speed);
+                Thread.sleep(9/(speed+1));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

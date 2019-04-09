@@ -1,14 +1,14 @@
 #loginRoot{
-    -fx-background-image: url("loginbg2.png");
+    -fx-background-image: url("loginbg3.png");
     -fx-background-repeat: stretch;   
     -fx-background-size:  cover;
     -fx-background-position: center center; 
 }
 
 #mainRoot{
-    -fx-background-image: url("arcadeBg.jpg");
+    -fx-background-image: url("arcadeBg.png");
     -fx-background-repeat: stretch;   
-    -fx-background-size:  auto;
+    -fx-background-size: cover;
     -fx-background-position: center center; 
 }
 .text-area .content{
@@ -17,6 +17,54 @@
 .label .text{
 	-fx-fill: white;
 	-fx-font-size: 1.2em;
+}
+
+#arcadeButtons{
+	-fx-padding: 15.0 25.0 25.0 15.0;
+    -fx-background-insets: 0.0,0.0 0.0 5.0 0.0, 0.0 0.0 6.0 0.0, 0.0 0.0 7.0 0.0;
+    -fx-background-radius: 4.0;
+    -fx-background-color: 
+        linear-gradient(from 0.0% 93.0% to 0.0% 100.0%, #c11111 0.0%, #b50101 100.0%),
+        #b70303,
+        #ff3838,
+        radial-gradient(center 50.0% 50.0%, radius 100.0%, #ff3838, #ce1a1a);
+    -fx-effect: dropshadow( gaussian , rgba(0.0,0.0,0.0,0.75) , 4.0,0.0,0.0,1.0 );
+    -fx-font-weight: normal;
+    -fx-font-size: 1.2em;
+    -fx-alignment: center;
+}
+#arcadeButtons:pressed {
+    -fx-padding: 19.0 25.0 21.0 15.0;
+    -fx-background-insets: 2.0 0.0 0.0 0.0,2.0 0.0 3.0 0.0, 2.0 0.0 4.0 0.0, 2.0 0.0 5.0 0.0;
+}
+#arcadeButtons .text {
+    -fx-fill: white;
+    -fx-effect: dropshadow( gaussian , #a30000 , 0.0,0.0,0.0,2.0 );
+    -fx-font-family: 'sans-serif';
+}
+
+#nokiaButton{
+	-fx-padding: 10.0 22.0 20.0 22.0;
+    -fx-background-insets: 0.0,0.0 0.0 5.0 0.0, 0.0 0.0 6.0 0.0, 0.0 0.0 7.0 0.0;
+    -fx-background-radius: 24.0;
+    -fx-background-color: 
+        linear-gradient(from 0.0% 93.0% to 0.0% 100.0%, #BBBBBB 0.0%, #CCCCCC 100.0%),
+        #AAAAAA,
+        #DDDDDD,
+        radial-gradient(center 50.0% 50.0%, radius 100.0%, #DDDDDD, #CCCCCC);
+    -fx-effect: dropshadow( gaussian , rgba(0.0,0.0,0.0,0.25) , 4.0,0.0,0.0,1.0 );
+    -fx-font-weight: normal;
+    -fx-font-size: 1.2em;
+    -fx-alignment: center;
+}
+#nokiaButton:pressed {
+    -fx-padding: 14.0 20.0 16.0 10.0;
+    -fx-background-insets: 2.0 0.0 0.0 0.0,2.0 0.0 3.0 0.0, 2.0 0.0 4.0 0.0, 2.0 0.0 5.0 0.0;
+}
+#nokiaButton .text {
+    -fx-fill: grey;
+   
+    -fx-font-family: 'sans-serif';
 }
 
 #hBoxButtons{
@@ -45,6 +93,13 @@
     -fx-padding: 19.0 25.0 21.0 15.0;
     -fx-background-insets: 2.0 0.0 0.0 0.0,2.0 0.0 3.0 0.0, 2.0 0.0 4.0 0.0, 2.0 0.0 5.0 0.0;
 }
+
+#hBoxButtons .text {
+    -fx-fill: white;
+    -fx-effect: dropshadow( gaussian , #a30000 , 0.0,0.0,0.0,2.0 );
+    -fx-font-family: 'sans-serif';
+}
+
 #startLabel{
 	-fx-fill: white;
 	-fx-font-family: 'monospace';
@@ -52,8 +107,4 @@
 	-fx-font-size: 1.4em;
 }
 
- #hBoxButtons .text {
-    -fx-fill: white;
-    -fx-effect: dropshadow( gaussian , #a30000 , 0.0,0.0,0.0,2.0 );
-    -fx-font-family: 'sans-serif';
-}
+ 

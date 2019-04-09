@@ -1,5 +1,9 @@
 package spaceInvaders.units;
 
+/**
+ * @author Viktor Altintas
+ */
+
 public class Position {
 
     private int x;

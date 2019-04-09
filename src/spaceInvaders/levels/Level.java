@@ -1,26 +1,42 @@
 package spaceInvaders.levels;
 
 import spaceInvaders.logic.Controller;
+import spaceInvaders.units.Boss;
 import spaceInvaders.units.Enemy;
 
 import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * @author Viktor Altintas
+ */
 
 public abstract class Level {
 
-    ArrayList<Enemy> enemyList;
-    Difficulty difficulty;
+    private List<List<Enemy>> enemyGrid;
+    private Difficulty difficulty;
     private Controller controller;
 
-    public Level(Difficulty difficulty, ArrayList<Enemy> enemies, Controller controller) {
+    public Level(Difficulty difficulty, List<List<Enemy>> enemies, Controller controller) {
         this.difficulty = difficulty;
-        this.enemyList = enemies;
+        this.enemyGrid = enemies;
         this.controller = controller;
     }
 
-    public ArrayList<Enemy> getEnemyList() {
-        for (Enemy e : enemyList){
-            e.setController(controller);
+    public List<List<Enemy>> getEnemyGrid() {
+        List<List<Enemy>> enemyGridClone = new ArrayList<>(); //makes a list that takes listobjects
+        for(List<Enemy> row : enemyGrid) {
+            ArrayList<Enemy> enemyList = new ArrayList<>(); // making a new row
+            enemyGridClone.add(enemyList); //adding row to list of rows
+            for (Enemy e : row) {
+                Enemy clone = e.clone();
+                enemyList.add(clone);
+               clone.setController(controller);
+            }
         }
-        return enemyList;
+        return enemyGridClone;
     }
+
+    public abstract List<Boss> getBosses();
+
 }

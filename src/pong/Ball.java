@@ -32,9 +32,9 @@ public class Ball {
 		this.hitPlatform = this.resetBall = false;
 	}
 	
-	public void update(LinkedList<Platform> platforms) {
+	public void update(LinkedList<Platform> platforms, double dt) {
 		
-		this.x += this.dirX * this.speed;
+		this.x += (this.dirX * dt) * this.speed;
 
 		for(Platform platform: platforms) {
 			if(platform.getBounds().intersects(getBounds())) {
@@ -46,19 +46,7 @@ public class Ball {
 				
 				break;
 			}
-		
-			// +1 to left platform
-			if(this.x+this.width >= Config.Window.width) {
-				if(platform.getPlayerId() == 1)
-					platform.increasePoints();
-				
-				this.resetBall = true;
-			} else if(this.x <= 0) {
-				if(platform.getPlayerId() == 2)
-					platform.increasePoints();
-			
-				this.resetBall = true;
-			}
+
 		}
 		
 		
@@ -68,7 +56,7 @@ public class Ball {
 			this.resetBall = false;
 		}
 		
-		this.y += this.dirY * this.speed;
+		this.y += (this.dirY * dt) * this.speed;
 		
 		if(this.y <= 0 || (this.y + this.height >= Config.Window.height)) {
 			this.dirY *= -1;
@@ -95,6 +83,20 @@ public class Ball {
 	public void render(Graphics2D g) {
 		g.setColor(Color.WHITE);
 		g.fillOval(x, y, width, height);
+	}
+	
+	public int getX() {
+		return this.x;
+	}
+	
+	public int getY() {
+		return this.y;
+	}
+	public int getWidth() {
+		return this.width;
+	}
+	public int getHeight() {
+		return this.height;
 	}
 
 	public Rectangle getBounds() {
