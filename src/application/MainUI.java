@@ -37,6 +37,8 @@ public class MainUI extends Application {
 	private HBox hBox;
 	private GridPane mainRoot;
 	private ChatTestUI chatTestUI;
+
+
 	private final int numOfCols = 48;
 	private final int numOfRows = 24;
 
