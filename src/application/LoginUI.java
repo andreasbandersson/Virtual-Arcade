@@ -61,7 +61,7 @@ public class LoginUI extends Application {
 		scene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 
 		primaryStage.setTitle("VIRTUAL ARCADE");
-		primaryStage.setResizable(false);
+		primaryStage.setResizable(true);
 		primaryStage.setScene(scene);
 		primaryStage.centerOnScreen();
 		primaryStage.show();
