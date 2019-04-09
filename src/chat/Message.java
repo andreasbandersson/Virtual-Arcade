@@ -10,18 +10,22 @@ import java.util.Date;
 
 public class Message implements Serializable {
 	private static final long serialVersionUID = -2953445922981279895L;
-	private User sender;
+	private String sender;
 	private String text;
 	private String timeStamp;
 	private SimpleDateFormat simpleDate = new SimpleDateFormat("HH:mm");
 	private User receiver;
 	
-	public Message(User sender, String text) {
+	public Message(String sender, String text) {
 		this.sender = sender;
 		this.text = text;
 	}
 	
-	public User getSender() {
+	public Message(String text) {
+		this.text = text;
+	}
+	
+	public String getSender() {
 		return this.sender;
 	}
 	

@@ -23,7 +23,7 @@ import javax.swing.SwingUtilities;
 public class LoginTestUI extends JPanel implements ActionListener {
 	private JLabel username = new JLabel("Username:");
 	private JLabel password = new JLabel("Password:");
-	private JLabel response = new JLabel("Wrong username and/or password");
+	private JLabel response = new JLabel();
 	private JTextField inputUsername = new JTextField();
 	private JPasswordField inputPassword = new JPasswordField();
 	private JButton login = new JButton("Login");
@@ -31,9 +31,12 @@ public class LoginTestUI extends JPanel implements ActionListener {
 	private ChatController controller;
 	private JPanel northPanel = new JPanel(new GridLayout(2, 2));
 	private JPanel southPanel = new JPanel(new GridLayout(1, 2));
+	private JFrame frame;
 
-	public LoginTestUI() {
+	public LoginTestUI(ChatController controller) {
+		this.controller = controller;
 		init();
+		setPanelInFrame(this);
 	}
 
 	public void init() {
@@ -63,21 +66,29 @@ public class LoginTestUI extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == login) {
-
+			controller.login(inputUsername.getText(), inputPassword.getText());
+			login.setEnabled(false);
+			createUser.setEnabled(false);
+			setResponse("Wait...");
 		} else if (e.getSource() == createUser) {
-
+			controller.newUser(inputUsername.getText(), inputPassword.getText());
+			login.setEnabled(false);
+			createUser.setEnabled(false);
+			setResponse("Wait...");
 		}
 	}
 
 	public void setResponse(String str) {
 		response.setText(str);
+		login.setEnabled(true);
+		createUser.setEnabled(true);
 	}
-
-	public static void main(String[] args) {
+	
+	public void setPanelInFrame(JPanel panel) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				JFrame frame = new JFrame("ServerUI");
-				frame.add(new LoginTestUI());
+				frame = new JFrame("LOGIN");
+				frame.add(panel);
 				frame.pack();
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				frame.setVisible(true);
@@ -86,5 +97,8 @@ public class LoginTestUI extends JPanel implements ActionListener {
 			}
 		});
 	}
-
+	
+	public void disposeFrame() {
+		frame.dispose();
+	}
 }

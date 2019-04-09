@@ -11,12 +11,15 @@ import java.net.Socket;
  */
 
 public class ChatServer {
+	private ServerController controller;
 
-	public ChatServer(int chatPort) {
+	public ChatServer(int chatPort, ServerController controller) {
+		this.controller = controller;
+		controller.addServer(this);
 		new ConnectionListener(chatPort).start();
 	}
 
-	public void senObject(Object obj, ObjectOutputStream oos) {
+	public synchronized void sendObject(Object obj, ObjectOutputStream oos) {
 		try {
 			oos.writeObject(obj);
 		} catch (IOException e) {
@@ -62,30 +65,32 @@ public class ChatServer {
 			try (ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
 					ObjectInputStream ois = new ObjectInputStream(socket.getInputStream())) {
 				while (!userConfirmed) {
-					ois.readUTF();
-
-					/*
-					 * TODO: OM utf = LOGIN -> testa att logga in Om utf = NEW USER -> skapa ny
-					 * användare Loopen fortsätter lyssna tills controllern meddelar att user är
-					 * "confirmed", d.v.s. antingen att ny user skapats eller att användarnamn +
-					 * lösenord är korrekt
-					 */
+					try {
+						String command = ois.readUTF();
+						this.user = (User) ois.readObject();
+						String password = ois.readUTF();
+						userConfirmed = controller.login(command, user, password, oos);
+					} catch (IOException | ClassNotFoundException e) {
+						System.err.println(e);
+						controller.disconnectUser(user);
+						socket.close();
+					}
 				}
 				while (true) {
-					// TODO: Lyssna efter meddelanden
+					try {
+						controller.newMessage((Message) ois.readObject());
+					} catch (ClassNotFoundException e) {
+						System.err.println(e);
+					}
 				}
 			} catch (IOException e) {
 				try {
 					System.out.println(socket.getInetAddress().getHostAddress() + " kopplar ner");
+					controller.disconnectUser(user);
 					socket.close();
 				} catch (Exception e2) {
 				}
 			}
-		}
-
-		public void confirmUser(User user) {
-			userConfirmed = true;
-			this.user = user;
 		}
 	}
 

@@ -7,11 +7,10 @@ import java.io.Serializable;
  */
 
 public class User implements Serializable {
-	private static final long serialVersionUID = 5256333028190488609L;
 	private String username;
 	
 	public User(String username) {
-		
+		this.username = username;
 	}
 	
 	public String getUsername() {
