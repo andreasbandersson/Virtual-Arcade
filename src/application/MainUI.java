@@ -28,20 +28,23 @@ public class MainUI extends Application {
 
 	private Button leaderboardButton = new Button("  LEADERBOARD");
 	private Button settingsButton = new Button("  SETTINGS");
-	private Image pong;
-	private ImageView pongView;
+	private Button pongPlayButton = new Button("  START");
+	private Button spacePlayButton = new Button("  START");
+	private Button snakePlayButton = new Button("START");
+	private Image pong, space, snake;
+	private ImageView pongView, spaceView, snakeView;
 	private Scene scene2;
 	private HBox hBox;
 	private GridPane mainRoot;
-	private ChatTestUI chatTestUI = new ChatTestUI();
-	private final int numOfCols = 24;
-	private final int numOfRows = 12;
+	private ChatTestUI chatTestUI;
+	private final int numOfCols = 48;
+	private final int numOfRows = 24;
 
 	public void start(Stage primaryStage) {
 		mainRoot = new GridPane();
 		mainRoot.setId("mainRoot");
 		mainRoot.setPrefSize(1200.0, 600.0);
-		mainRoot.setGridLinesVisible(true);
+		//mainRoot.setGridLinesVisible(true);
 
 		// Sets the number and size-percentage of the rows and columns in the GridPane.
 		for (int i = 0; i < numOfCols; i++) {
@@ -55,38 +58,47 @@ public class MainUI extends Application {
 			mainRoot.getRowConstraints().add(rowConst);
 		}
 
-		// Setting the HBox-node for the leader and settingsbutton.
+		//Metod for adding the arcade machine pictures.
+		setArcadeMachineImage();
+		
+		// Setting the HBox-node for the leaderbutton and settingsbutton.
 		hBox = new HBox();
 		hBox.setId("hBox");
 		hBox.setPrefSize(900.0, 100.0);
 		hBox.getChildren().add(leaderboardButton);
 		hBox.getChildren().add(settingsButton);
 		hBox.setSpacing(50.0);
-		hBox.setAlignment(Pos.BASELINE_CENTER);
+		hBox.setAlignment(Pos.CENTER);
 
 		leaderboardButton.setId("hBoxButtons");
 		settingsButton.setId("hBoxButtons");
-		settingsButton.setTextAlignment(TextAlignment.CENTER);
-		// textArea.setPrefSize(300, 500);
+		mainRoot.add(hBox, 0, 20, 36, 4);
+		
+		pongPlayButton.setId("arcadeButtons");
+		mainRoot.add(pongPlayButton, 5, 12, 4, 2);
+		
+		spacePlayButton.setId("arcadeButtons");
+		mainRoot.add(spacePlayButton, 15, 15, 4, 2);
+		
+		snakePlayButton.setId("nokiaButton");
+		mainRoot.add(snakePlayButton, 25, 15, 4, 1);
 
-		mainRoot.add(hBox, 0, 10, 18, 2);
-
+		//Setting the chatt
 		SwingNode chatUI = new SwingNode();
 		createSwingContent(chatUI);
 		StackPane pane = new StackPane();
 		pane.setId("swingPane");
 		pane.setPrefSize(300.0, 600.0);
 		pane.getChildren().add(chatUI);
-		pane.setAlignment(Pos.BASELINE_RIGHT);
-		mainRoot.add(pane, 18, 0, 6, 12);
-
-		setArcadeMachineImage();
-
+		mainRoot.add(pane, 36, 0, 12, 24);
+		
+		//Sets the scene, adds all children nodes and sets the css style.
 		scene2 = new Scene(mainRoot, 1200, 600);
 		scene2.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-		// primaryStage.setResizable(false);
-
-		primaryStage.setTitle("VIRTUAL ARCADEs");
+		
+		//Sets the primaryStage
+		primaryStage.setTitle("VIRTUAL ARCADE");
+		//primaryStage.setFullScreen(true);
 		primaryStage.setResizable(false);
 		primaryStage.setScene(scene2);
 		primaryStage.centerOnScreen();
@@ -108,16 +120,28 @@ public class MainUI extends Application {
 
 	public void setArcadeMachineImage() {
 		try {
-			pong = new Image(new FileInputStream("images/arcadeGreen.png"));
+			pong = new Image(new FileInputStream("images/pongGame.png"));
+			space = new Image(new FileInputStream("images/spaceGame.png"));
+			snake = new Image(new FileInputStream("images/snakeGame.png"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 		pongView = new ImageView(pong);
-
+		spaceView = new ImageView(space);
+		snakeView = new ImageView(snake);
+		
 		pongView.setFitWidth(250);
 		pongView.setPreserveRatio(true);
-		mainRoot.add(pongView, 1, 2);
-		BorderPane.setAlignment(pongView, Pos.CENTER_LEFT);
+		mainRoot.add(pongView, 2, 12);
+		
+		spaceView.setFitWidth(250);
+		spaceView.setPreserveRatio(true);
+		mainRoot.add(spaceView, 12, 12);
+		
+		snakeView.setFitWidth(250);
+		snakeView.setPreserveRatio(true);
+		mainRoot.add(snakeView, 22, 12);
+
 	}
 
 	public static void main(String[] args) {
