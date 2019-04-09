@@ -34,4 +34,8 @@ public class GameFrame extends JFrame {
 	public void startGame() {
 		this.game.start();
 	}
+	
+	public void updateTitle(String newTitle) {
+		this.setTitle(Config.Window.title+" | "+newTitle);
+	}
 }
