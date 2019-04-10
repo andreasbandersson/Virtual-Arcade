@@ -11,9 +11,6 @@ public class ServerController {
 	private RegisteredUsers users = new RegisteredUsers();
 	private ChatServer server;
 
-	public ServerController() {
-	}
-	
 	public void addServer(ChatServer server) {
 		this.server = server;
 	}
@@ -34,10 +31,15 @@ public class ServerController {
 		System.out.println(user.getUsername());
 	}
 
-	public synchronized boolean login(String command, User user, String password, ObjectOutputStream oos) {
+	public boolean login(String command, User user, String password, ObjectOutputStream oos) {
 		if (command.equals("LOGIN")) {
-			System.out.println("Kollar lösenord");
-			return checkPassword(user, password, oos);
+			if (clientStreams.contains(user)) {
+				server.sendObject("User already logged in", oos);
+				return false;
+			} else {
+				System.out.println("Kollar lösenord");
+				return checkPassword(user, password, oos);
+			}
 		} else {
 			return newUser(user, password, oos);
 		}
@@ -47,8 +49,8 @@ public class ServerController {
 		if (users.contains(user) && users.checkPassword(user, password)) {
 			System.out.println("Lösenord OK");
 			clientStreams.put(user, oos);
-			server.sendObject("LOGIN OK", oos);
 			server.sendObject(user, oos);
+			server.sendObject("LOGIN OK", oos);
 			sendUserList(user);
 			return true;
 		} else {
@@ -64,8 +66,8 @@ public class ServerController {
 		} else {
 			users.put(user, password);
 			clientStreams.put(user, oos);
-			server.sendObject("USER CREATED", oos);
 			server.sendObject(user, oos);
+			server.sendObject("USER CREATED", oos);
 			sendUserList(user);
 			return true;
 		}

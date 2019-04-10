@@ -21,16 +21,12 @@ import javax.swing.SwingUtilities;
 
 @SuppressWarnings("serial")
 public class LoginTestUI extends JPanel implements ActionListener {
-	private JLabel username = new JLabel("Username:");
-	private JLabel password = new JLabel("Password:");
 	private JLabel response = new JLabel();
 	private JTextField inputUsername = new JTextField();
 	private JPasswordField inputPassword = new JPasswordField();
 	private JButton login = new JButton("Login");
 	private JButton createUser = new JButton("Create User");
 	private ChatController controller;
-	private JPanel northPanel = new JPanel(new GridLayout(2, 2));
-	private JPanel southPanel = new JPanel(new GridLayout(1, 2));
 	private JFrame frame;
 
 	public LoginTestUI(ChatController controller) {
@@ -39,8 +35,14 @@ public class LoginTestUI extends JPanel implements ActionListener {
 		setPanelInFrame(this);
 	}
 
-	public void init() {
-		setPreferredSize(new Dimension(250, 125));
+	private void init() {
+		setPreferredSize(new Dimension(300, 125));
+		
+		JLabel username = new JLabel("Username:");
+		JLabel password = new JLabel("Password:");
+		JPanel northPanel = new JPanel(new GridLayout(2, 2));
+		JPanel southPanel = new JPanel(new GridLayout(1, 2));
+		
 		response.setForeground(Color.RED);
 		username.setPreferredSize(new Dimension(120, 25));
 		inputUsername.setPreferredSize(new Dimension(120, 25));
@@ -58,7 +60,10 @@ public class LoginTestUI extends JPanel implements ActionListener {
 		add(northPanel);
 		add(response);
 		add(southPanel);
-
+		
+		login.setOpaque(true);
+		createUser.setOpaque(true);
+		
 		login.addActionListener(this);
 		createUser.addActionListener(this);
 	}
@@ -69,12 +74,10 @@ public class LoginTestUI extends JPanel implements ActionListener {
 			controller.login(inputUsername.getText(), inputPassword.getText());
 			login.setEnabled(false);
 			createUser.setEnabled(false);
-			setResponse("Wait...");
 		} else if (e.getSource() == createUser) {
 			controller.newUser(inputUsername.getText(), inputPassword.getText());
 			login.setEnabled(false);
 			createUser.setEnabled(false);
-			setResponse("Wait...");
 		}
 	}
 
@@ -84,7 +87,7 @@ public class LoginTestUI extends JPanel implements ActionListener {
 		createUser.setEnabled(true);
 	}
 	
-	public void setPanelInFrame(JPanel panel) {
+	private void setPanelInFrame(JPanel panel) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				frame = new JFrame("LOGIN");

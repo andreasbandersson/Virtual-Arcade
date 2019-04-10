@@ -23,7 +23,6 @@ public class ChatClient {
 		this.controller = controller;
 		this.ip = ip;
 		this.port = port;
-
 	}
 
 	public void connect() {
@@ -35,7 +34,6 @@ public class ChatClient {
 				this.listener = new InputListener();
 				listener.start();
 				connected = true;
-				System.out.println("Nerkopplad");
 			} catch (IOException e) {
 				System.err.println(e);
 			}

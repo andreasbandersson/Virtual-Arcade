@@ -14,7 +14,6 @@ public class ChatController {
 		client = new ChatClient(60000, "localhost", this);
 		client.connect();
 		loginUi = new LoginTestUI(this);
-		ui = new ChatTestUI(this);
 	}
 
 	public void login(String username, String password) {
@@ -26,15 +25,17 @@ public class ChatController {
 	}
 
 	public void newUser(String username, String password) {
-		if (username.length() < 3 || password.length() < 5) {
-			loginUi.setResponse("Username/password must be atleast 3/5 characters");
+		if (username.length() < 3 || password.length() < 6) {
+			loginUi.setResponse("Username/password too short/long");
 		} else {
 			client.newUser(new User(username), password);
 		}
 	}
 
 	public void sendMessage(String text) {
-		client.sendMessage(new Message(user.getUsername(), text));
+		if (!text.equals("")) {
+			client.sendMessage(new Message(user.getUsername(), text));
+		}
 	}
 
 	public void incoming(Object obj) {
@@ -55,10 +56,15 @@ public class ChatController {
 		}
 	}
 
-	// TODO
 	private void checkLoginFailure(String str) {
-		if (str.equals("LOGIN OK") || str.equals("USER CREATED")) {
+		if (str.equals("LOGIN OK")) {
 			loginUi.disposeFrame();
+			ui = new ChatTestUI(this);
+			ui.addNewMessage("Welcome back " + this.user.getUsername() + "!");
+		} else if (str.equals("USER CREATED")) {
+			loginUi.disposeFrame();
+			ui = new ChatTestUI(this);
+			ui.addNewMessage("Welcome to Virtual Arcade " + this.user.getUsername() + "!");
 		} else {
 			loginUi.setResponse(str);
 		}

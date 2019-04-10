@@ -19,8 +19,9 @@ public class ChatServer {
 		new ConnectionListener(chatPort).start();
 	}
 
-	public synchronized void sendObject(Object obj, ObjectOutputStream oos) {
+	public void sendObject(Object obj, ObjectOutputStream oos) {
 		try {
+			System.out.println(Thread.currentThread().getName() + "skickar meddelande");
 			oos.writeObject(obj);
 		} catch (IOException e) {
 			System.err.println(e);
@@ -72,12 +73,13 @@ public class ChatServer {
 						userConfirmed = controller.login(command, user, password, oos);
 					} catch (IOException | ClassNotFoundException e) {
 						System.err.println(e);
-						controller.disconnectUser(user);
 						socket.close();
+						break;
 					}
 				}
 				while (true) {
 					try {
+						System.out.println(Thread.currentThread().getName() + "tar emot meddelande");
 						controller.newMessage((Message) ois.readObject());
 					} catch (ClassNotFoundException e) {
 						System.err.println(e);
