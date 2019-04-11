@@ -7,7 +7,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Queue;
 import java.util.Random;
 
 import javax.swing.JFrame;
@@ -25,7 +27,7 @@ public class SnakeGame implements ActionListener, KeyListener
 
 	public RenderPanel renderPanel;
 
-	public Timer timer = new Timer(20, this);
+	public Timer timer = new Timer(20, this);	
 
 	public ArrayList<Point> snakeParts = new ArrayList<Point>();
 
@@ -45,15 +47,19 @@ public class SnakeGame implements ActionListener, KeyListener
 
 	public boolean over = false;
 	public boolean paused = false;
+	
+//	private enum Movement { UP, DOWN, RIGHT, LEFT };
+//	Queue<Movement> movementQueue = new ArrayDeque<Movement>();
+	
 
 	public SnakeGame()
 	{
 		frame = new JFrame("Snake");
 		frame.setVisible(true);
-		frame.setSize(805, 800);
+		frame.setSize(605, 600);
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
-		frame.add(renderPanel = new RenderPanel());
+		frame.add(renderPanel = new RenderPanel()); 
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.addKeyListener(this);
 		startGame();
@@ -68,7 +74,7 @@ public class SnakeGame implements ActionListener, KeyListener
 		head = new Point(1, 1);
 		random = new Random();
 		snakeParts.clear();
-		food = new Point(random.nextInt(63), random.nextInt(63));
+		food = new Point(random.nextInt(46), random.nextInt(46));
 		timer.start();
 	}
 
@@ -98,7 +104,7 @@ public class SnakeGame implements ActionListener, KeyListener
 			//Collision code for when the snake is going down.
 			if (direction == DOWN)
 			{
-				if (head.y < 63 && noTailAt(head.x, head.y + 1))
+				if (head.y < 46 && noTailAt(head.x, head.y + 1))
 				{
 					head = new Point(head.x, head.y + 1);
 				}
@@ -122,7 +128,7 @@ public class SnakeGame implements ActionListener, KeyListener
 			//Collision code for when the snake is going right.
 			if (direction == RIGHT)
 			{
-				if (head.x < 66 && noTailAt(head.x + 1, head.y))
+				if (head.x < 49 && noTailAt(head.x + 1, head.y))
 				{
 					head = new Point(head.x + 1, head.y);
 				}
@@ -143,7 +149,7 @@ public class SnakeGame implements ActionListener, KeyListener
 				{
 					score++;
 					tailLength++;
-					food.setLocation(random.nextInt(63), random.nextInt(63));
+					food.setLocation(random.nextInt(46), random.nextInt(46));
 				}
 			}
 		}
@@ -223,5 +229,14 @@ public class SnakeGame implements ActionListener, KeyListener
 	{
 		snake = new SnakeGame();
 	}
+	
+	/**
+	 * Saker som behöver fixas.
+	 * 1. Det är en delay när man pausar och när man dör. Om man pausar en gång under spelets gång så är det ingen delay när man dör.
+	 * 	  -FIXED- Lade till en font till score, length, time. 
+	 * 2. Om man trycker på 2 knappar samtidigt så dör ormen ibland. (Använd en queue för att lösa eller kanske lägg en check efter ändring.)
+	 * 3. Kollisionen funkar inte alltid som den ska. (skriv om koden så den kollisionen inte är baserad på ormens riktning.)
+	 * 4. Borde skriva om koden så att man inte behöver använda public variabler. 
+	 */
 
 }
