@@ -11,12 +11,15 @@ public class Ball {
 	private int x, y, dirX, dirY;
 	private int width, height;
 	private int[] directions;
+	private Color ballColor;
 	
 	private boolean hitPlatform, resetBall;
 	
 	private int speed;
 	
 	public Ball(int x, int y) {
+		this.ballColor = Color.white;
+		
 		this.x = x;
 		this.y = y;
 		
@@ -43,6 +46,8 @@ public class Ball {
 				this.dirX *= -1;
 				
 				this.hitPlatform = true;
+				
+				setColor(platform.getColor());
 				
 				break;
 			}
@@ -81,7 +86,7 @@ public class Ball {
 	}
 	
 	public void render(Graphics2D g) {
-		g.setColor(Color.WHITE);
+		g.setColor(this.ballColor);
 		g.fillOval(x, y, width, height);
 	}
 	
@@ -97,6 +102,11 @@ public class Ball {
 	}
 	public int getHeight() {
 		return this.height;
+	}
+	
+	//bollen ändrar färg till platform färg 
+	public void setColor(Color newColor) {
+		this.ballColor = newColor;
 	}
 
 	public Rectangle getBounds() {

@@ -18,8 +18,6 @@ import java.util.List;
 
 import javax.sound.sampled.AudioInputStream;
 
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 
 public class Game extends Canvas implements Runnable, KeyListener, MouseListener {
 	private static final long serialVersionUID = 1L;
@@ -268,7 +266,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	    
 	    Graphics2D g = (Graphics2D)bufferStrategy.getDrawGraphics();
 	   
-	    g.setColor(new Color(173, 50, 111));
+	    g.setColor(new Color(255, 251, 140));
 	    g.fillRect(0, 0, Config.Window.width, Config.Window.height);
 	    ////////////////////////////////////////////////////////////
 	    

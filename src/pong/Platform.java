@@ -101,6 +101,10 @@ public class Platform {
 		this.platformColor = newColor;
 	}
 	
+	public Color getColor() {
+		return this.platformColor;
+	}
+	
 	public void resetPoints() {
 		this.points = 0;
 	}
