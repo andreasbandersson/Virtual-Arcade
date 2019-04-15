@@ -18,8 +18,6 @@ public class Ball {
 	private int speed;
 	
 	public Ball(int x, int y) {
-		this.ballColor = Color.white;
-		
 		this.x = x;
 		this.y = y;
 		
@@ -33,6 +31,7 @@ public class Ball {
 		this.dirY = this.directions[rand.nextInt(this.directions.length)];
 		
 		this.hitPlatform = this.resetBall = false;
+		this.ballColor = Config.Ball.defaultColor;
 	}
 	
 	public void update(LinkedList<Platform> platforms, double dt) {
