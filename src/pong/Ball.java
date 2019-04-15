@@ -41,6 +41,7 @@ public class Ball {
 		for(Platform platform: platforms) {
 			if(platform.getBounds().intersects(getBounds())) {
 				
+				this.ballColor = platform.getColor();
 				// switch direction
 				this.dirX *= -1;
 				
