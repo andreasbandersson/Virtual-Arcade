@@ -18,9 +18,9 @@ public class Level1 extends Level {
 
     private static final List<List<Enemy>> enemyBlock = new ArrayList<>();
     static {
-        for (int i  = 0 ; i < 1; i ++) {
+        for (int i  = 0 ; i < 4; i ++) {
             enemyBlock.add(new ArrayList<>());
-            for (int j = 0; j < 2; j++ ) {
+            for (int j = 0; j < 8; j++ ) {
                 enemyBlock.get(i).add(new Level1Enemy(new Position((200+ j*60),40+(i*45)),null,Difficulty.EASY));
             }
         }

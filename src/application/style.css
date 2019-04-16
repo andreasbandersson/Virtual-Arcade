@@ -1,49 +1,61 @@
 #loginRoot{
-    -fx-background-image: url("loginbg3.png");
+    -fx-background-image: url("login2.jpg");
     -fx-background-repeat: stretch;   
     -fx-background-size:  cover;
     -fx-background-position: center center; 
 }
 
 #mainRoot{
-    -fx-background-image: url("arcadeBg.png");
+    -fx-background-image: url("arcade5.jpg");
     -fx-background-repeat: stretch;   
     -fx-background-size: cover;
     -fx-background-position: center center; 
 }
-.text-area .content{
-	-fx-background-color: black;
-}
-.label .text{
-	-fx-fill: white;
-	-fx-font-size: 1.2em;
+
+#leaderboardRoot{
+	 -fx-background-image: url("login3.jpg");
+    -fx-background-repeat: stretch;   
+    -fx-background-size: cover;
+    -fx-background-position: center center; 
 }
 
-#arcadeButtons{
-	-fx-padding: 15.0 25.0 25.0 15.0;
+#highscoreLabel{
+	-fx-background-color: #000000; 
+	
+}
+#highscoreLabel .text{
+	-fx-fill: linear-gradient(#ffffff 0%, #ffff00 40%, #dd6000 70%);
+    -fx-font-size: 1em;
+    -fx-effect: dropshadow( three-pass-box , rgba(0.0,0.0,0.0,0.90) , 4.0,0.0,0.0,0.90 );
+    -fx-font-weight: bold;
+    -fx-font-family: 'Press Start 2P';
+}
+
+#loginButton{
+	-fx-padding: 10.0 22.0 20.0 22.0;
     -fx-background-insets: 0.0,0.0 0.0 5.0 0.0, 0.0 0.0 6.0 0.0, 0.0 0.0 7.0 0.0;
-    -fx-background-radius: 4.0;
-    -fx-background-color: 
+    -fx-background-radius: 24.0;
+  -fx-background-color: 
         linear-gradient(from 0.0% 93.0% to 0.0% 100.0%, #c11111 0.0%, #b50101 100.0%),
         #b70303,
         #ff3838,
         radial-gradient(center 50.0% 50.0%, radius 100.0%, #ff3838, #ce1a1a);
-    -fx-effect: dropshadow( gaussian , rgba(0.0,0.0,0.0,0.75) , 4.0,0.0,0.0,1.0 );
+    -fx-effect: dropshadow( gaussian , rgba(0.0,0.0,0.0,0.25) , 4.0,0.0,0.0,1.0 );
     -fx-font-weight: normal;
     -fx-font-size: 1.2em;
     -fx-alignment: center;
 }
-#arcadeButtons:pressed {
-    -fx-padding: 19.0 25.0 21.0 15.0;
+#loginButton:pressed {
+    -fx-padding: 14.0 22.0 16.0 22.0;
     -fx-background-insets: 2.0 0.0 0.0 0.0,2.0 0.0 3.0 0.0, 2.0 0.0 4.0 0.0, 2.0 0.0 5.0 0.0;
 }
-#arcadeButtons .text {
+#loginButton .text {
     -fx-fill: white;
-    -fx-effect: dropshadow( gaussian , #a30000 , 0.0,0.0,0.0,2.0 );
+   
     -fx-font-family: 'sans-serif';
 }
 
-#nokiaButton{
+#logOutButton{
 	-fx-padding: 10.0 22.0 20.0 22.0;
     -fx-background-insets: 0.0,0.0 0.0 5.0 0.0, 0.0 0.0 6.0 0.0, 0.0 0.0 7.0 0.0;
     -fx-background-radius: 24.0;
@@ -57,18 +69,48 @@
     -fx-font-size: 1.2em;
     -fx-alignment: center;
 }
-#nokiaButton:pressed {
-    -fx-padding: 14.0 20.0 16.0 10.0;
+#logOutButton:pressed {
+    -fx-padding: 14.0 22.0 16.0 22.0;
     -fx-background-insets: 2.0 0.0 0.0 0.0,2.0 0.0 3.0 0.0, 2.0 0.0 4.0 0.0, 2.0 0.0 5.0 0.0;
 }
-#nokiaButton .text {
+#logOutButton .text {
     -fx-fill: grey;
    
     -fx-font-family: 'sans-serif';
 }
 
-#hBoxButtons{
-	-fx-padding: 15.0 25.0 25.0 15.0;
+#vaLabel .text{
+	-fx-fill: linear-gradient(#fc3f91 0%, #ff006e 40%, #ff569f 70%);
+    -fx-font-size: 5em;
+    -fx-effect: dropshadow( three-pass-box , rgba(0.0,0.0,0.0,0.90) , 4.0,0.0,0.0,0.90 );
+    -fx-font-weight: bold;
+    -fx-font-family: 'Neoneon';
+}
+#leaderboardLabel .text{
+	-fx-fill: linear-gradient(#ffffff 0%, #ffff00 40%, #dd6000 70%);
+    -fx-font-size: 4em;
+    -fx-effect: dropshadow( three-pass-box , rgba(0.0,0.0,0.0,0.90) , 4.0,0.0,0.0,0.90 );
+    -fx-font-weight: bold;
+    -fx-font-family: 'Press Start 2P';
+}
+
+#headerLabel .text{
+	-fx-fill: linear-gradient(#ffffff 0%, #ffff00 40%, #dd6000 70%);
+    -fx-font-size: 2.2em;
+    -fx-effect: dropshadow( three-pass-box , rgba(0.0,0.0,0.0,0.90) , 4.0,0.0,0.0,0.90 );
+    -fx-font-weight: bold;
+    -fx-font-family: 'Press Start 2P';
+}
+.text-area .content{
+	-fx-background-color: black;
+}
+.label .text{
+	-fx-fill: white;
+	-fx-font-size: 1.2em;
+}
+
+#arcadeButtons{
+	-fx-padding: 15.0 25.0 25.0 25.0;
     -fx-background-insets: 0.0,0.0 0.0 5.0 0.0, 0.0 0.0 6.0 0.0, 0.0 0.0 7.0 0.0;
     -fx-background-radius: 4.0;
     -fx-background-color: 
@@ -78,23 +120,64 @@
         radial-gradient(center 50.0% 50.0%, radius 100.0%, #ff3838, #ce1a1a);
     -fx-effect: dropshadow( gaussian , rgba(0.0,0.0,0.0,0.75) , 4.0,0.0,0.0,1.0 );
     -fx-font-weight: normal;
-    -fx-font-size: 1.4em;
+    -fx-font-size: 1.2em;
     -fx-alignment: center;
- }
- #hBoxButtons:hover {
-    -fx-background-color: 
-        linear-gradient(from 0.0% 93.0% to 0.0% 100.0%, #a34313 0.0%, #903b12 100.0%),
-        #9d4024,
-        #d86e3a,
-        radial-gradient(center 50.0% 50.0%, radius 100.0%, #ea7f4b, #c54e2c);
+}
+#arcadeButtons:pressed {
+    -fx-padding: 19.0 25.0 21.0 25.0;
+    -fx-background-insets: 2.0 0.0 0.0 0.0,2.0 0.0 3.0 0.0, 2.0 0.0 4.0 0.0, 2.0 0.0 5.0 0.0;
+}
+#arcadeButtons .text {
+    -fx-fill: white;
+    -fx-effect: dropshadow( gaussian , #a30000 , 0.0,0.0,0.0,2.0 );
+    -fx-font-family: 'sans-serif';
 }
 
-#hBoxButtons:pressed {
-    -fx-padding: 19.0 25.0 21.0 15.0;
+#nokiaButton{
+	-fx-padding: 10.0 25.0 20.0 25.0;
+    -fx-background-insets: 0.0,0.0 0.0 5.0 0.0, 0.0 0.0 6.0 0.0, 0.0 0.0 7.0 0.0;
+    -fx-background-radius: 24.0;
+    -fx-background-color: 
+        linear-gradient(from 0.0% 93.0% to 0.0% 100.0%, #BBBBBB 0.0%, #CCCCCC 100.0%),
+        #AAAAAA,
+        #DDDDDD,
+        radial-gradient(center 50.0% 50.0%, radius 100.0%, #DDDDDD, #CCCCCC);
+    -fx-effect: dropshadow( gaussian , rgba(0.0,0.0,0.0,0.25) , 4.0,0.0,0.0,1.0 );
+    -fx-font-weight: normal;
+    -fx-font-size: 1.2em;
+    -fx-alignment: center;
+}
+#nokiaButton:pressed {
+    -fx-padding: 14.0 25.0 16.0 25.0;
+    -fx-background-insets: 2.0 0.0 0.0 0.0,2.0 0.0 3.0 0.0, 2.0 0.0 4.0 0.0, 2.0 0.0 5.0 0.0;
+}
+#nokiaButton .text {
+    -fx-fill: grey;
+   
+    -fx-font-family: 'sans-serif';
+}
+
+#mainButtons{
+	-fx-padding: 15.0 20.0 25.0 20.0;
+    -fx-background-insets: 0.0,0.0 0.0 5.0 0.0, 0.0 0.0 6.0 0.0, 0.0 0.0 7.0 0.0;
+    -fx-background-radius: 4.0;
+    -fx-background-color: 
+        linear-gradient(from 0.0% 93.0% to 0.0% 100.0%, #c11111 0.0%, #b50101 100.0%),
+        #b70303,
+        #ff3838,
+        radial-gradient(center 50.0% 50.0%, radius 100.0%, #ff3838, #ce1a1a);
+    -fx-effect: dropshadow( gaussian , rgba(0.0,0.0,0.0,0.75) , 4.0,0.0,0.0,1.0 );
+    -fx-font-weight: normal;
+    -fx-font-size: 1em;
+    -fx-alignment: center;
+ }
+
+#mainButtons:pressed {
+    -fx-padding: 19.0 20.0 21.0 20.0;
     -fx-background-insets: 2.0 0.0 0.0 0.0,2.0 0.0 3.0 0.0, 2.0 0.0 4.0 0.0, 2.0 0.0 5.0 0.0;
 }
 
-#hBoxButtons .text {
+#mainButtons .text {
     -fx-fill: white;
     -fx-effect: dropshadow( gaussian , #a30000 , 0.0,0.0,0.0,2.0 );
     -fx-font-family: 'sans-serif';

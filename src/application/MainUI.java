@@ -3,13 +3,21 @@ package application;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import javax.swing.SwingUtilities;
+
+import chat.ChatController;
 import chat.ChatTestUI;
+import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.embed.swing.SwingNode;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.effect.Bloom;
+import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -26,17 +34,21 @@ import javafx.scene.text.TextAlignment;
 
 public class MainUI extends Application {
 
-	private Button leaderboardButton = new Button("  LEADERBOARD");
-	private Button settingsButton = new Button("  SETTINGS");
-	private Button pongPlayButton = new Button("  START");
-	private Button spacePlayButton = new Button("  START");
+	private Button leaderboardButton = new Button("LEADERBOARD");
+	private Button settingsButton = new Button("SETTINGS");
+	private Button logOutButton = new Button("LOG OUT");
+	private Button pongPlayButton = new Button("START");
+	private Button spacePlayButton = new Button("START");
 	private Button snakePlayButton = new Button("START");
 	private Image pong, space, snake;
 	private ImageView pongView, spaceView, snakeView;
-	private Scene scene2;
-	private HBox hBox;
+	private Scene scene2, scene3;
 	private GridPane mainRoot;
-	private ChatTestUI chatTestUI;
+	private ChatTestUI chatTestUI = new ChatTestUI(new ChatController());
+	private Label headerLabel = new Label("CHOOSE YOUR GAME"); 
+	private Label virtualArcadeLabel = new Label("VIRTUAL\nARCADE");
+	private Glow glow = new Glow(1.0);
+	private Bloom bloom = new Bloom(0.9);
 
 
 	private final int numOfCols = 48;
@@ -47,43 +59,44 @@ public class MainUI extends Application {
 		mainRoot.setId("mainRoot");
 		mainRoot.setPrefSize(1200.0, 600.0);
 		//mainRoot.setGridLinesVisible(true);
-
-		// Sets the number and size-percentage of the rows and columns in the GridPane.
-		for (int i = 0; i < numOfCols; i++) {
-			ColumnConstraints colConst = new ColumnConstraints();
-			colConst.setPercentWidth(100.0 / numOfCols);
-			mainRoot.getColumnConstraints().add(colConst);
-		}
-		for (int i = 0; i < numOfRows; i++) {
-			RowConstraints rowConst = new RowConstraints();
-			rowConst.setPercentHeight(100.0 / numOfRows);
-			mainRoot.getRowConstraints().add(rowConst);
-		}
-
-		//Metod for adding the arcade machine pictures.
+		
+		createColumnsandRows();
+		
+		//Adding and setting the Label for Virtual Arcade-header
+		virtualArcadeLabel.setId("vaLabel");
+		virtualArcadeLabel.setEffect(bloom);
+		virtualArcadeLabel.setEffect(glow);
+        mainRoot.add(virtualArcadeLabel, 1, 0, 10, 6);
+        
+        //Adding and setting the Label for the "Choose game"-header
+		headerLabel.setId("headerLabel");
+		FadeTransition fadeTransitionH = new FadeTransition(Duration.seconds(2.0), headerLabel);
+        fadeTransitionH.setFromValue(1.0);
+        fadeTransitionH.setToValue(0.2);
+        fadeTransitionH.setCycleCount(Animation.INDEFINITE);
+        fadeTransitionH.play();
+		mainRoot.add(headerLabel, 9, 7, 20, 4);
+		
+		//Function for adding the arcade machine pictures.
 		setArcadeMachineImage();
 		
-		// Setting the HBox-node for the leaderbutton and settingsbutton.
-		hBox = new HBox();
-		hBox.setId("hBox");
-		hBox.setPrefSize(900.0, 100.0);
-		hBox.getChildren().add(leaderboardButton);
-		hBox.getChildren().add(settingsButton);
-		hBox.setSpacing(50.0);
-		hBox.setAlignment(Pos.CENTER);
-
-		leaderboardButton.setId("hBoxButtons");
-		settingsButton.setId("hBoxButtons");
-		mainRoot.add(hBox, 0, 20, 36, 4);
+		//ADdin and setting the mainbuttons
+		leaderboardButton.setId("mainButtons");
+		leaderboardButton.setOnAction(e -> new Leaderboard().start(primaryStage));
+		settingsButton.setId("mainButtons");
+		mainRoot.add(leaderboardButton, 25, 0, 6, 3);
+		mainRoot.add(settingsButton, 31, 0, 5, 3);
+		logOutButton.setId("logOutButton");
+		logOutButton.setOnAction(e -> {new LoginUI().start(primaryStage); });
+		mainRoot.add(logOutButton, 19, 0, 6, 3);
 		
+		//Adding and setting the buttons for the different arcade games
 		pongPlayButton.setId("arcadeButtons");
-		mainRoot.add(pongPlayButton, 5, 12, 4, 2);
-		
+		mainRoot.add(pongPlayButton, 5, 17, 4, 2);
 		spacePlayButton.setId("arcadeButtons");
-		mainRoot.add(spacePlayButton, 15, 15, 4, 2);
-		
+		mainRoot.add(spacePlayButton, 15, 20, 4, 2);
 		snakePlayButton.setId("nokiaButton");
-		mainRoot.add(snakePlayButton, 25, 15, 4, 1);
+		mainRoot.add(snakePlayButton, 25, 20, 4, 1);
 
 		//Setting the chatt
 		SwingNode chatUI = new SwingNode();
@@ -106,6 +119,20 @@ public class MainUI extends Application {
 		primaryStage.centerOnScreen();
 		primaryStage.show();
 	}
+	
+	private void createColumnsandRows() {
+		// Sets the number and size-percentage of the rows and columns in the GridPane.
+				for (int i = 0; i < numOfCols; i++) {
+					ColumnConstraints colConst = new ColumnConstraints();
+					colConst.setPercentWidth(100.0 / numOfCols);
+					mainRoot.getColumnConstraints().add(colConst);
+				}
+				for (int i = 0; i < numOfRows; i++) {
+					RowConstraints rowConst = new RowConstraints();
+					rowConst.setPercentHeight(100.0 / numOfRows);
+					mainRoot.getRowConstraints().add(rowConst);
+				}
+	}
 
 	private void createSwingContent(final SwingNode swingNode) {
 		SwingUtilities.invokeLater(new Runnable() {
@@ -113,9 +140,6 @@ public class MainUI extends Application {
 			public void run() {
 				swingNode.setContent(chatTestUI);
 				swingNode.requestFocus();
-
-				chatTestUI.addNewMessage("Use @username to send a private message");
-				chatTestUI.addNewMessage("Example: @Aragorn This is a message");
 			}
 		});
 	}
@@ -134,16 +158,20 @@ public class MainUI extends Application {
 		
 		pongView.setFitWidth(250);
 		pongView.setPreserveRatio(true);
-		mainRoot.add(pongView, 2, 12);
+		mainRoot.add(pongView, 2, 17);
 		
 		spaceView.setFitWidth(250);
 		spaceView.setPreserveRatio(true);
-		mainRoot.add(spaceView, 12, 12);
+		mainRoot.add(spaceView, 12, 17);
 		
 		snakeView.setFitWidth(250);
 		snakeView.setPreserveRatio(true);
-		mainRoot.add(snakeView, 22, 12);
+		mainRoot.add(snakeView, 22, 17);
 
+	}
+	
+	public void goToLeaderboard(Stage primarystage) {
+		
 	}
 
 	public static void main(String[] args) {
