@@ -1,7 +1,7 @@
 package chat;
 
 /*
- * Måns Grundberg
+ * Måns Grundberg	
  */
 public class ChatController {
 	private ChatTestUI ui; // TEMPORÄRT UI. ENDAST FÖR TEST-SYFTE.
@@ -33,8 +33,31 @@ public class ChatController {
 	}
 
 	public void sendMessage(String text) {
-		if (!text.equals("")) {
-			client.sendMessage(new Message(user.getUsername(), text));
+		Message message;
+		if (text.charAt(0) == '@') {
+			sendPrivateMessage(text);
+		} else {
+			message = new Message(user.getUsername(), text);
+			client.sendMessage(message);
+			ui.addNewMessage(message.getTimeStamp() + ": " + "To All: " + message.getText());
+		}
+	}
+
+	private void sendPrivateMessage(String text) {
+		boolean found = false;
+		for (int i = 0; i < userList.size(); i++) {
+			if (userList.get(i).getUsername().equals(text.substring(1, text.indexOf(' ')))) {
+				Message message = new Message(userList.get(i), user.getUsername(),
+						text.substring(text.indexOf(' ') + 1));
+				client.sendMessage(message);
+				ui.addNewMessage(message.getTimeStamp() + ": " + "To " + userList.get(i).getUsername() + " : "
+						+ message.getText());
+				found = true;
+				break;
+			}
+		}
+		if (!found) {
+			ui.addNewMessage("Couldn't send message: " + text.substring(1, text.indexOf(' ')) + " is not online");
 		}
 	}
 

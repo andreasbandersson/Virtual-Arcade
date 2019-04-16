@@ -21,6 +21,12 @@ public class Message implements Serializable {
 		this.text = text;
 	}
 	
+	public Message(User receiver, String sender, String text) {
+		this.receiver = receiver;
+		this.sender = sender;
+		this.text = text;
+	}
+	
 	public Message(String text) {
 		this.text = text;
 	}
