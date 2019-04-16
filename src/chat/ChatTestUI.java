@@ -3,17 +3,22 @@ package chat;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.border.EmptyBorder;
 
 /*
  * TEMPORÄR KLASS. ENDAST FÖR ATT TESTA CHATTSYSTEMET.
@@ -21,20 +26,16 @@ import javax.swing.SwingUtilities;
  */
 
 @SuppressWarnings("serial")
-public class ChatTestUI extends JPanel implements ActionListener {
+public class ChatTestUI extends JPanel implements ActionListener, KeyListener {
 	private JTextArea messages = new JTextArea();
-	private JScrollPane scrollMessages = new JScrollPane(messages);
 	private JTextArea newMessage = new JTextArea();
-	private JScrollPane scrollPane2 = new JScrollPane(newMessage);
-	private JPanel southPanel = new JPanel(new GridLayout(3, 0));
 	private JButton sendButton = new JButton("Send Message");
 	private JButton btnSwitch = new JButton("Show online users");
 	private JTextArea onlineUsers = new JTextArea();
+	private CardLayout card = new CardLayout();
+	private JPanel cardPanel;
 	private boolean showingMessages = true;
 	private ChatController controller;
-	private CardLayout card = new CardLayout();
-	private JPanel cardPanel = new JPanel(card);
-	private JScrollPane scrollUsers = new JScrollPane(onlineUsers);
 
 	public ChatTestUI(ChatController controller) {
 		this.controller = controller;
@@ -42,9 +43,24 @@ public class ChatTestUI extends JPanel implements ActionListener {
 		setPanelInFrame(this);
 	}
 
-	public void init() {
+	private void init() {
 		setPreferredSize(new Dimension(300, 600));
 		setLayout(new BorderLayout());
+		setBackground(Color.BLACK);
+		
+		JScrollPane scrollMessages = new JScrollPane(messages);
+		JScrollPane scrollPane2 = new JScrollPane(newMessage);
+		JPanel southPanel = new JPanel(new GridLayout(3, 0));
+		cardPanel = new JPanel(card);
+		JScrollPane scrollUsers = new JScrollPane(onlineUsers);
+		
+		scrollMessages.setBackground(Color.BLACK);
+		scrollMessages.setForeground(Color.GREEN);
+		scrollPane2.setBackground(Color.BLACK);
+		scrollPane2.setForeground(Color.GREEN);
+		
+		
+		messages.setEditable(false);
 		newMessage.setForeground(Color.GREEN);
 		newMessage.setBackground(Color.BLACK);
 		messages.setBackground(Color.BLACK);
@@ -65,6 +81,8 @@ public class ChatTestUI extends JPanel implements ActionListener {
 		newMessage.setWrapStyleWord(true);
 		onlineUsers.setLineWrap(true);
 		onlineUsers.setWrapStyleWord(true);
+		
+		newMessage.setCaretColor(Color.GREEN);
 
 		southPanel.setPreferredSize(new Dimension(300, 100));
 		cardPanel.add(scrollMessages);
@@ -75,6 +93,8 @@ public class ChatTestUI extends JPanel implements ActionListener {
 		add(southPanel, BorderLayout.SOUTH);
 
 		add(cardPanel, BorderLayout.CENTER);
+		
+		btnSwitch.requestFocus();
 
 		btnSwitch.addActionListener(this);
 		sendButton.addActionListener(this);
@@ -100,7 +120,7 @@ public class ChatTestUI extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == sendButton) {
-			controller.sendMessage(newMessage.getText());
+			controller.sendMessage(newMessage.getText().trim());
 			newMessage.setText("");
 		} else if (e.getSource() == btnSwitch) {
 			if (showingMessages) {
@@ -117,7 +137,7 @@ public class ChatTestUI extends JPanel implements ActionListener {
 		}
 	}
 
-	public void setPanelInFrame(JPanel panel) {
+	private void setPanelInFrame(JPanel panel) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				JFrame frame = new JFrame("CHATTA RÅÅ!!!!");
@@ -131,7 +151,32 @@ public class ChatTestUI extends JPanel implements ActionListener {
 		});
 	}
 
-	public static void main(String[] args) {
-		new ChatTestUI(new ChatController());
+	@Override
+	public void keyTyped(KeyEvent e) {}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_TAB) {
+			if (showingMessages) {
+				card.next(cardPanel);
+				btnSwitch.setText("Show messages");
+				showingMessages = false;
+				revalidate();
+			} else if (!showingMessages) {
+				card.first(cardPanel);
+				btnSwitch.setText("Show online users");
+				showingMessages = true;
+				revalidate();
+			}
+		} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			if (e.getSource() == sendButton) {
+				controller.sendMessage(newMessage.getText());
+				newMessage.setText("");
+			}
+		}
+		
 	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {}
 }
