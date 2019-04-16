@@ -5,7 +5,15 @@ import java.awt.Color;
 public class Config {
 	
 	public static class Game {
-		public static final int maxWins = 5; 
+		public static final int maxWins = 5;
+		public static Color[] colors = {
+				Color.WHITE, // 	new Color(255, 255, 255) 
+				Color.BLACK,  // 	new Color(0, 0, 0)
+				Color.ORANGE, // 	.. etc
+				Color.YELLOW, 
+				Color.GREEN, 
+				Color.MAGENTA
+		};
 	}
 
 	public static class Window {
@@ -26,6 +34,8 @@ public class Config {
 		public static final int width = 20, height = 20;
 		public static final int speed = 10;
 		public static final String bounceSound = "files/bounce.wav";
+		public static final int delayTime = 2000;
+		public static final Color defaultColor = Color.WHITE;
 	}
 	
 	public static class ColorOpt {
