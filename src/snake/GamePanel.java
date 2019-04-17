@@ -30,9 +30,9 @@ import javax.swing.Timer;
 
 public class GamePanel extends JPanel implements ActionListener, KeyListener
 {
-	private Dimension panelSize = new Dimension(600, 600);
+	private Dimension panelSize = new Dimension(600, 600); //Dimension of the game screen. 
 	
-	private Font font1 = new Font("Monospaced", Font.PLAIN, 15);
+	private Font font1 = new Font("Monospaced", Font.PLAIN, 16);
 	private Font font2 = new Font("Monospaced", Font.BOLD, 30);
 	private Font menuTitleFont = new Font("Monospaced", Font.BOLD, 60);
 	private Font instructionFont = new Font("Monospaced", Font.PLAIN, 20);
@@ -43,14 +43,13 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener
 	private Food food;
 	private ArrayList<Food> foodList;
 	
-	public Timer timer = new Timer(50, this);
+	private Timer timer = new Timer(50, this); //Timer that the game runs on. 
 	
 	private Random r = new Random();
 	
-	public static final int WIDTH = 600, HEIGHT = 600;
+	public static final int WIDTH = 600, HEIGHT = 600; //Height and width of the game screen. 
 
-	private int x; //Snakes x-position
-	private int y;	//Snakes y-position
+	private int x, y; //The snakes X and Y position. 
 	private int size;; //Length of the snake. 
 	private int score; //Keeps track of the score. 
 	private int pieceSize = 15; //Size of every piece of the snake and the food. 
@@ -64,6 +63,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener
 	private static final int LEFT = 3;
 	private static final int RIGHT = 4;
 	
+	private Queue<Integer> movementQueue = new LinkedList<Integer>();
+	
 	private String gameOverString = "Game Over!";
 	private String pausedString = "Paused!";
 	private String restartString = "Press R to Restart";
@@ -71,8 +72,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener
 	
 	private boolean paused = false;
 	private boolean over = false;
-	
-	private Queue<Integer> movementQueue = new LinkedList<Integer>();
 	
 	public GamePanel()
 	{
@@ -88,7 +87,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener
 		
 		startGame();
 	}
-	
+	//Method that resets everything. score, x and y position of the snake, the size of the snake. Clears the list of food objects
+	//and the list of snake objects. Removes any object in the movementQueue and adds RIGHT and starts the timer. 
 	public void startGame()
 	{
 		score = 0;
@@ -101,7 +101,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener
 		movementQueue.add(RIGHT);
 		timer.start();
 	}
-	
+	//Method that pauses the game. 
 	public void pauseGame()
 	{
 		if(paused == true)
@@ -116,15 +116,16 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener
 			repaint();
 		}
 	}
-	
+	//Method that stops the game when you lose. 
 	public void gameOver()
 	{
 		timer.stop();
 		over = true;
 	}
-	
+	//Method for painting. 
 	public void paint(Graphics g)
 	{
+		//Draws the game. 
 		if(gameState == INGAMESTATE)
 		{
 			g.setColor(Color.BLACK);
@@ -140,20 +141,20 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener
 				g.drawLine(0, i * pieceSize, HEIGHT, i * pieceSize);
 			}
 			//*
-			
-			for(int i = 0; i < snake.size(); i++) //Draws the snake.
+			//Draws the snake.
+			for(int i = 0; i < snake.size(); i++) 
 			{
 				snake.get(i).draw(g);
 			}
-			
-			for(int i = 0; i < foodList.size(); i++) //Draws the food. 
+			//Draws the food. 
+			for(int i = 0; i < foodList.size(); i++) 
 			{
 				foodList.get(i).draw(g);
 			}
 			
-			g.setColor(Color.WHITE); //Sets the color of the text
-			g.setFont(font1);  //Sets the font of scoreString  
-			g.drawString("Score:" + score, (int) 270, 20); //Draws scoreString
+			g.setColor(Color.WHITE);
+			g.setFont(font1); 
+			g.drawString("Score:" + score, (int) 270, 20);
 			
 			if(over == true)
 			{
@@ -169,7 +170,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener
 				g.drawString(pausedString, 240, 200);
 			}
 		}
-		if(gameState == MENUSTATE) //Draws the menu. 
+		//Draws the menu. 
+		if(gameState == MENUSTATE)
 		{
 			repaint();
 			g.setColor(Color.BLACK);
@@ -197,13 +199,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener
 		{
 			repaint();
 			
-			if(snake.size() == 0)
-			{
-				bp = new BodyPart(x, y, pieceSize);
-				snake.add(bp);
-			}
 			//Checking what int value is in the queue to decide what direction the snake should move in. 
-			//switch(movementQueue.peek())
 			switch(movementQueue.peek())
 			{
 			    case UP: y--; break;
@@ -215,10 +211,12 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener
 			bp = new BodyPart(x, y, pieceSize);
 			snake.add(bp);
 			
+			//Removes the snakes trail. 
 			if(snake.size() > size)
 			{
 				snake.remove(0);
 			}
+			//Spawns the food. 
 			if(foodList.size() == 0)
 			{
 				int x = r.nextInt(37);
@@ -255,6 +253,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener
 			}
 		}
 	}
+	
 
 	@Override
 	public void keyPressed(KeyEvent e) 
@@ -300,7 +299,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener
 		//Pressing spacebar pauses the game.
 		if(key == KeyEvent.VK_SPACE)
 		{
-			pauseGame();
+			if(over == false)
+			{
+				pauseGame();
+			}
 		}
 		//Pressing R restarts the game. 
 		if(key == KeyEvent.VK_R) 
@@ -317,6 +319,14 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener
 			if(gameState == MENUSTATE)
 			{
 				gameState = INGAMESTATE;
+			}
+		}
+		//Pressing Esc closes the game if you've lost. 
+		if(key == KeyEvent.VK_ESCAPE)
+		{
+			if(over == true)
+			{
+				System.exit(10);
 			}
 		}
 	}
@@ -344,3 +354,4 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener
 
 //Saker att fixa:
 //1. När man bytar riktning snabbt så kan man få ormen att åka in i sig själv. Testat använda både queue och stack men funkar fortfarande inte.
+//	 Testat sätta en Thread.sleep innan den bytar riktning men funkar forfarande inte som det ska. Försökt använda KeyReleased, funkar inte. 

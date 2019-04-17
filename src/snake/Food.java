@@ -12,7 +12,6 @@ public class Food
 {
 	private int x, y;
 	private int width, height;
-	private int tileSize;
 	
 	public Food(int x, int y, int tileSize)
 	{
