@@ -11,7 +11,7 @@ public class ChatController {
 	private UserList userList;
 
 	public ChatController() {
-		client = new ChatClient(60000, "localhost", this);
+		client = new ChatClient(60000, "10.2.3.221", this);
 		client.connect();
 		loginUi = new LoginTestUI(this);
 	}

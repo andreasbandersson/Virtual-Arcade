@@ -174,7 +174,6 @@ public class ChatTestUI extends JPanel implements ActionListener, KeyListener {
 				newMessage.setText("");
 			}
 		}
-		
 	}
 
 	@Override
