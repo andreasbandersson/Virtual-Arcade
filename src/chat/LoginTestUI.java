@@ -72,19 +72,26 @@ public class LoginTestUI extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == login) {
 			controller.login(inputUsername.getText(), inputPassword.getText());
-			login.setEnabled(false);
-			createUser.setEnabled(false);
+			disableButtons();
 		} else if (e.getSource() == createUser) {
 			controller.newUser(inputUsername.getText(), inputPassword.getText());
-			login.setEnabled(false);
-			createUser.setEnabled(false);
+			disableButtons();
 		}
+	}
+	
+	private void disableButtons() {
+		login.setEnabled(false);
+		createUser.setEnabled(false);
+	}
+	
+	private void enableButtons() {
+		login.setEnabled(true);
+		createUser.setEnabled(true);
 	}
 
 	public void setResponse(String str) {
 		response.setText(str);
-		login.setEnabled(true);
-		createUser.setEnabled(true);
+		enableButtons();
 	}
 	
 	private void setPanelInFrame(JPanel panel) {

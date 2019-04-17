@@ -26,7 +26,7 @@ import javax.swing.border.EmptyBorder;
  */
 
 @SuppressWarnings("serial")
-public class ChatTestUI extends JPanel implements ActionListener, KeyListener {
+public class ChatTestUI extends JPanel implements ActionListener {
 	private JTextArea messages = new JTextArea();
 	private JTextArea newMessage = new JTextArea();
 	private JButton sendButton = new JButton("Send Message");
@@ -48,6 +48,10 @@ public class ChatTestUI extends JPanel implements ActionListener, KeyListener {
 		setLayout(new BorderLayout());
 		setBackground(Color.BLACK);
 		
+		sendButton.setBackground(Color.BLACK);
+		sendButton.setForeground(Color.BLACK);
+		sendButton.setOpaque(true);
+		
 		JScrollPane scrollMessages = new JScrollPane(messages);
 		JScrollPane scrollPane2 = new JScrollPane(newMessage);
 		JPanel southPanel = new JPanel(new GridLayout(3, 0));
@@ -58,9 +62,13 @@ public class ChatTestUI extends JPanel implements ActionListener, KeyListener {
 		scrollMessages.setForeground(Color.GREEN);
 		scrollPane2.setBackground(Color.BLACK);
 		scrollPane2.setForeground(Color.GREEN);
+		scrollUsers.setBackground(Color.BLACK);
+		southPanel.setBackground(Color.BLACK);
+		
 		
 		
 		messages.setEditable(false);
+		onlineUsers.setEditable(false);
 		newMessage.setForeground(Color.GREEN);
 		newMessage.setBackground(Color.BLACK);
 		messages.setBackground(Color.BLACK);
@@ -93,13 +101,11 @@ public class ChatTestUI extends JPanel implements ActionListener, KeyListener {
 		add(southPanel, BorderLayout.SOUTH);
 
 		add(cardPanel, BorderLayout.CENTER);
-		
-		btnSwitch.requestFocus();
 
 		btnSwitch.addActionListener(this);
 		sendButton.addActionListener(this);
 
-		addNewMessage("Use @username to send a private message");
+		addNewMessage("Type @username to send a private message");
 		addNewMessage("Example: @Aragorn This is a message");
 	}
 
@@ -140,7 +146,7 @@ public class ChatTestUI extends JPanel implements ActionListener, KeyListener {
 	private void setPanelInFrame(JPanel panel) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				JFrame frame = new JFrame("CHATTA RÅÅ!!!!");
+				JFrame frame = new JFrame("Chatt");
 				frame.add(panel);
 				frame.pack();
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -150,32 +156,4 @@ public class ChatTestUI extends JPanel implements ActionListener, KeyListener {
 			}
 		});
 	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_TAB) {
-			if (showingMessages) {
-				card.next(cardPanel);
-				btnSwitch.setText("Show messages");
-				showingMessages = false;
-				revalidate();
-			} else if (!showingMessages) {
-				card.first(cardPanel);
-				btnSwitch.setText("Show online users");
-				showingMessages = true;
-				revalidate();
-			}
-		} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-			if (e.getSource() == sendButton) {
-				controller.sendMessage(newMessage.getText());
-				newMessage.setText("");
-			}
-		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {}
 }

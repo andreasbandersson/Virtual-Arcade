@@ -12,7 +12,6 @@ public class BodyPart
 {
 	private int x, y;
 	private int width, height;
-	private int tileSize;
 	
 	public BodyPart(int xCoordinate, int yCoordinate, int tileSize)
 	{

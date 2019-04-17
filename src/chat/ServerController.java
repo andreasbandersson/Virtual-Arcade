@@ -17,8 +17,14 @@ public class ServerController {
 
 	public void newMessage(Message message) {
 		UserList temp = new UserList(clientStreams.getKeySet());
-		for (int i = 0; i < temp.size(); i++) {
-			server.sendObject(message, clientStreams.getOutputStream(temp.get(i)));
+		if (message.getReceiver() == null) { // Not a private message, send to all
+			for (int i = 0; i < temp.size(); i++) {
+				if (!temp.get(i).getUsername().equals(message.getSender())) { // Exclude sender
+					server.sendObject(message, clientStreams.getOutputStream(temp.get(i)));
+				}
+			}
+		} else {
+			server.sendObject(message, clientStreams.getOutputStream(message.getReceiver()));
 		}
 	}
 
@@ -28,7 +34,6 @@ public class ServerController {
 			server.sendObject(temp, clientStreams.getOutputStream(temp.get(i)));
 		}
 		newMessage(new Message(user.getUsername() + " is now online"));
-		System.out.println(user.getUsername());
 	}
 
 	public boolean login(String command, User user, String password, ObjectOutputStream oos) {
