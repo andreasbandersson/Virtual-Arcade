@@ -15,18 +15,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import javax.sound.sampled.AudioInputStream;
 
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 
 public class Game extends Canvas implements Runnable, KeyListener, MouseListener {
 	private static final long serialVersionUID = 1L;
 	
 	private Thread thread;
 	private boolean running, gamePaused;
-	private long lastKeyPressTime;
+	private long lastKeyPressTime, firstGameTime;
 	private Sound mainTheme;
 	private boolean muteSound, muted, firstGame;
 	
@@ -38,8 +37,10 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public static HashMap<Integer,Boolean> keyDownMap = new HashMap<Integer, Boolean>();
 	private LinkedList<Platform> platforms = new LinkedList<Platform>();
 	
-	private List<ColorOption> leftPlatformColors = new ArrayList<ColorOption>();
+//	private List<ColorOption> leftPlatformColors = new ArrayList<ColorOption>();
 	private List<ColorOption> rightPlatformColors = new ArrayList<ColorOption>();
+	private Color rightChosenColor;
+	public static int nextYLerp;
 
 	
 	private Ball ball;
@@ -80,7 +81,6 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		double delta = 0;
 		int frames = 0;
 		int updates = 0;
-		
 		while(running) {
 			this.requestFocusInWindow();
 
@@ -106,12 +106,12 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		}
 	}
 	
-	
-	//Ändra platform färg
 	public void init() {
 		
 		addKeyListener(this);
 		addMouseListener(this);
+		
+		this.rightChosenColor = Color.WHITE;
 		
 		this.running = this.firstGame = true;
 		
@@ -126,16 +126,15 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		txtFont = new Font(Font.MONOSPACED, Font.BOLD, 20);
 		
 		int marginLeft = 5;
-		Color[] colors = {Color.WHITE, Color.BLACK, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.MAGENTA};
 		
-		for(int i = 0; i < colors.length; i++) {
-			leftPlatformColors.add(new ColorOption((i * Config.ColorOpt.width + marginLeft), 10, colors[i]));
+		for(int i = 0; i < Config.Game.colors.length; i++) {
+			//leftPlatformColors.add(new ColorOption((i * Config.ColorOpt.width + marginLeft), 10, colors[i]));
 			
 			rightPlatformColors.add(
 				new ColorOption(
-					(Config.Window.width - Config.ColorOpt.width - marginLeft) - (i*Config.ColorOpt.width), 
+					(Config.Window.width/2) - (i*Config.ColorOpt.width) + (Config.Game.colors.length*Config.ColorOpt.width)/2, 
 					10, 
-					colors[i]
+					Config.Game.colors[i]
 				)
 			);
 		}
@@ -171,28 +170,20 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			this.lastKeyPressTime = System.currentTimeMillis();
 
 		}
-		// If Enter was pressed
+		
 		if(keyDownMap.containsKey(KeyEvent.VK_ENTER)
 		&& (System.currentTimeMillis() - this.lastKeyPressTime >= 200)) {			
 			if(firstGame) {
 				firstGame = false;
 			}
 			this.lastKeyPressTime = System.currentTimeMillis();
+			this.firstGameTime = System.currentTimeMillis();
+
 
 		}
 		
-		
 		// Update everything while the game is NOT paused.
 		if(!gamePaused && !firstGame) {
-			
-			// Update Colors
-			for(ColorOption co: leftPlatformColors) {
-				co.update();
-			}
-			for(ColorOption co: rightPlatformColors) {
-				co.update();
-			}
-			
 			
 			// Update platforms
 			// Check for ROUND WINNER
@@ -200,14 +191,16 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 				
 				for(Platform platform: this.platforms) {
 					if(platform.getPlayerId() == 1) {
+												
 						System.out.println("increase point for P1");
 						platform.increasePoints();
 					}
 					
-					this.ball.resetPos();	
+					this.ball.resetPos();
 					platform.update(keyDownMap, dt);	
 				}
 				
+				nextYLerp = -1;
 			} else if(this.ball.getX() <= 0) {
 				System.out.println("BALL OUT <");
 				
@@ -220,12 +213,25 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 					this.ball.resetPos();	
 				}
 				
+				nextYLerp = -1;
 				
 			}
 			
-			//Check for winner
-			//if any players points are bigger than maxpoints, he she wins.  
 			for(Platform platform: this.platforms) {
+				// make it follow ball in Y direction
+				
+				if(platform.getPlayerId() == 1) {
+					// -1 = currently unknown 
+					if(nextYLerp != -1) {
+						if(this.ball.getX() < Config.Window.width/2) {
+							platform.setY((int)lerp((float)platform.getBounds().getY(), (float)nextYLerp, 0.5f));
+						}
+					} else {
+
+						platform.setY((int)lerp((float)platform.getBounds().getY(), (float)(Config.Window.height/2-platform.getBounds().getHeight()), 0.3f));						
+					}					
+				}
+				
 				platform.update(keyDownMap, dt);
 				if(platform.getPoints() >= Config.Game.maxWins) {
 					System.out.println("Player " + platform.getPlayerId() + " WINS !");
@@ -234,11 +240,23 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 				}
 			}
 				
-			// Update pong ball
-			this.ball.update(this.platforms, dt);
+			// start updating ball after 2 seconds
+			if(System.currentTimeMillis() - this.firstGameTime >= Config.Ball.delayTime){
+				// Update pong ball
+				this.ball.update(this.platforms, dt);	
+			}
 			
 	
-		} 
+		} else {
+			// Update Colors
+/*			for(ColorOption co: leftPlatformColors) {
+				co.update();
+			}
+*/
+			for(ColorOption co: rightPlatformColors) {
+				co.update();
+			}
+		}
 		
 		
 		
@@ -275,17 +293,25 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	    // RENDER ONLY WHEN THE GAME IS _NOT_ PAUSED
 	    
 	    if(firstGame) {
-	    	displayText(g, "[ENTER] Start", Color.WHITE);
+	    	displayText(g, "[ENTER] Start", Color.WHITE, Config.Window.width/2, 60);
+	    	displayText(g, "[M] Mute", Color.WHITE, Config.Window.width/2, 80);
+	    	displayText(g, "[P] Pause", Color.WHITE, Config.Window.width/2, 100);
+			
+	    /*	for(ColorOption co: leftPlatformColors) {
+				co.render(g);
+			}*/
+			for(ColorOption co: rightPlatformColors) {
+				co.render(g);
+			}
+			
+			g.setColor(this.rightChosenColor);
+			g.fillRect(Config.Window.width/2-25, Config.Window.height/2, 50, 50);
+			
+
+			
 	    } else {
 		    if(!gamePaused) {
 		    	
-				for(ColorOption co: leftPlatformColors) {
-					co.render(g);
-				}
-				for(ColorOption co: rightPlatformColors) {
-					co.render(g);
-				}
-				
 		    	// Render(draw/paint) platforms
 		 		for(Platform platform: this.platforms) {
 		 			platform.render(g);
@@ -298,13 +324,20 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		    } else {
 		    	
 		    	// DISPLAY "paused" WHEN GAME IS PAUSED
-		    	displayText(g, "Paused", Color.WHITE);
+		    	displayText(g, "- Paused -", Color.WHITE, Config.Window.width/2, 60);
+		    	displayText(g, "[P] Resume", Color.WHITE, Config.Window.width/2, 80);
+
 		    }
 	    }
 	    
 	    ////////////////////////////////////////////////////////////
 	    g.dispose();
 	    bufferStrategy.show();
+	}
+	
+	public static float lerp(float a, float b, float f) {
+		  //return (1 - t) * v0 + t * v1;
+		  return a + f * (b - a);
 	}
 	
 	public void resetGame() {
@@ -341,7 +374,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	}
 	
 	public void displayText(Graphics2D g, String text, Color textColor) {
-	
+		
 		g.setFont(txtFont);
 	
 		FontMetrics metrics = g.getFontMetrics(txtFont);
@@ -353,25 +386,39 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		g.drawString(text, x, y);
 	}
 	
+	public void displayText(Graphics2D g, String text, Color textColor, int posX, int posY) {
+		g.setFont(txtFont);
+		
+		FontMetrics metrics = g.getFontMetrics(txtFont);
+	
+	    int x = posX - metrics.stringWidth(text) / 2;
+	    int y = posY + (metrics.getHeight() / 2) + metrics.getAscent();
+	    
+		g.setColor(textColor);
+		g.drawString(text, x, y);
+	}
+	
 	//  LOOK FOR MOUSE CLICKS ON COLORS
 	public void updatePaddleColor(MouseEvent e) {
-		for(ColorOption co: leftPlatformColors) {
+		/*for(ColorOption co: leftPlatformColors) {
 			if(co.getBounds().contains(e.getX(), e.getY())) {
 				
 				for(Platform p: this.platforms) {
 					if(p.getPlayerId() == 1) {
+						leftChosenColor = co.getColor();
 						p.setColor(co.getColor());
 					}
 				}
 				
 			}
-		}
+		}*/
 		
 		for(ColorOption co: rightPlatformColors) {
 			if(co.getBounds().contains(e.getX(), e.getY())) {
 				
 				for(Platform p: this.platforms) {
 					if(p.getPlayerId() == 2) {
+						rightChosenColor = co.getColor();
 						p.setColor(co.getColor());
 					}
 				}

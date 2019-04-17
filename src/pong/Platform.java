@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
+import java.util.Random;
 
 public class Platform {
 
@@ -31,6 +32,13 @@ public class Platform {
 			this.x = this.xOffset;
 			this.id = 1;
 			
+			this.speed *= 0.2;
+			
+			Random rand = new Random();
+			int colorIndex = rand.nextInt(Config.Game.colors.length-1);
+			System.out.println(colorIndex);
+			this.platformColor = Config.Game.colors[colorIndex];
+			
 		} else {
 			this.isLeftPlatform = false;
 		
@@ -47,14 +55,13 @@ public class Platform {
 	
 	public void update(HashMap<Integer, Boolean> keyDownMap, double dt) {
 		if(this.isLeftPlatform) {
+
+		//	if(Game.nextYLerp == -1) {
+		//		this.y = (int) Game.lerp(y, Config.Window.height/2-height/2, (float)dt);
+		//		System.out.println(this.y);
+		//	}
+
 			
-			// UP
-			if(keyDownMap.containsKey(KeyEvent.VK_W)) {
-				this.y -= this.speed * dt;
-			// Down
-			} else if(keyDownMap.containsKey(KeyEvent.VK_S)) {
-				this.y += this.speed * dt;
-			}
 		} else {
 			
 			// arrow UP
@@ -68,6 +75,7 @@ public class Platform {
 			}
 		}
 		
+		// keep platform inside window
 		if(this.y < 0) {
 			this.y = 0;
 		} else if(this.y > Config.Window.height - this.height) {
@@ -96,9 +104,20 @@ public class Platform {
 		this.points++;
 	}
 	
-	//choose color
 	public void setColor(Color newColor) {
 		this.platformColor = newColor;
+	}
+	
+	public Color getColor() {
+		return this.platformColor;
+	}
+	
+	public void setY(int newY) {
+		this.y = newY;
+	}
+	
+	public int getY() {
+		return this.y;
 	}
 	
 	public void resetPoints() {
