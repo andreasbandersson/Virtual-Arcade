@@ -66,12 +66,12 @@ public class Controller implements Runnable, KeyListener {
         initializeLevel(new Level1(Difficulty.EASY,this));
     }
 
-    public void start(){
+    private void start(){
         new Thread(this).start();
     }
 
     public Painter getPainter() {
-       return painter;
+        return painter;
     }
 
     public synchronized List<Unit> getAllUnits() {
@@ -119,10 +119,9 @@ public class Controller implements Runnable, KeyListener {
             setTimeout( ()-> timerActivated = false,1000); //wait 1 second, then say that timerActivated is false
         }else if(shooter instanceof Enemy) {
             shot = new EnemyShot(new Position(shooter.getPosition()), ((Enemy) shooter).getDifficulty().ordinal(),false,this);
-        }else{
+        }else {
             return;
         }
-
         shot.start();
         shots.add(shot);
         allUnits.add(shot);
@@ -138,7 +137,7 @@ public class Controller implements Runnable, KeyListener {
                     break outerLoop;
                 }
                 if (unit.getPosition().getY() > frame.getHeight() || unit.getPosition().getY() < 0){
-                     removeUnit(unit);
+                    removeUnit(unit);
                 }
             }
         }
@@ -150,7 +149,6 @@ public class Controller implements Runnable, KeyListener {
         if(unit instanceof Shot){
             shots.remove(unit);
         }
-
         if(unit instanceof Enemy){
             for(List<Enemy> row : enemies){
                 if(row.contains(unit)){
@@ -182,7 +180,7 @@ public class Controller implements Runnable, KeyListener {
         for(List<Enemy> row : enemies){
             for(Enemy e : row){
                 if(e.getPosition().getX() + e.getWidth() + direction*enemySpeed > frame.getWidth() ||
-                   e.getPosition().getX() + direction*enemySpeed < 0){
+                        e.getPosition().getX() + direction*enemySpeed < 0){
                     return true;
                 }
             }
@@ -199,7 +197,6 @@ public class Controller implements Runnable, KeyListener {
                 direction *= -1;
                 moveDown = true;
             }
-
             for (List<Enemy> row : new ArrayList<>(enemies)) {
                 for (Enemy e : row) {
                     enemyFire(e);
@@ -216,7 +213,7 @@ public class Controller implements Runnable, KeyListener {
                 e.printStackTrace();
             }
         }
-       levelWin();
+        levelWin();
     }
 
     public void enemyFire(Enemy e){
@@ -226,7 +223,7 @@ public class Controller implements Runnable, KeyListener {
     }
 
     public int getLevelCounter() {
-     return levelCounter;
+        return levelCounter;
     }
 
     public void levelWin() {

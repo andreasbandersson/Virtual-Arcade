@@ -12,14 +12,12 @@ import java.io.IOException;
  * @author Viktor Altintas
  */
 
-
 public class Painter extends JPanel {
-
 
     private Controller controller;
     private Player player;
-    public  JLabel scoreLabel;
-    public JLabel levelTitle;
+    private JLabel scoreLabel;
+    private JLabel levelTitle;
     private static Image playerLifeSprite = new ImageIcon("Sprites/player.png").getImage().getScaledInstance(30,25,Image.SCALE_DEFAULT);
 
     public Painter(Controller controller) {
@@ -53,6 +51,7 @@ public class Painter extends JPanel {
             g.drawImage(playerLifeSprite,510+((i+1)*39),10,this);
         }
     }
+
     public void showLevelTitle() {
         add(levelTitle);
         levelTitle.setText("Level " + controller.getLevelCounter());

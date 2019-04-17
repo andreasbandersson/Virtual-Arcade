@@ -15,7 +15,6 @@ import java.util.List;
 
 public class Level1 extends Level {
 
-
     private static final List<List<Enemy>> enemyBlock = new ArrayList<>();
     static {
         for (int i  = 0 ; i < 4; i ++) {
