@@ -42,7 +42,7 @@ public class MainUI extends Application {
 	private Button snakePlayButton = new Button("START");
 	private Image pong, space, snake;
 	private ImageView pongView, spaceView, snakeView;
-	private Scene scene2, scene3;
+	private Scene scene2, pongScene;
 	private GridPane mainRoot;
 	private ChatTestUI chatTestUI = new ChatTestUI(new ChatController());
 	private Label headerLabel = new Label("CHOOSE YOUR GAME"); 
@@ -92,10 +92,13 @@ public class MainUI extends Application {
 		
 		//Adding and setting the buttons for the different arcade games
 		pongPlayButton.setId("arcadeButtons");
+		pongPlayButton.setOnAction(e -> new Pong().start(primaryStage));
 		mainRoot.add(pongPlayButton, 5, 17, 4, 2);
 		spacePlayButton.setId("arcadeButtons");
+		spacePlayButton.setOnAction(e -> new SpaceInvaders().start(primaryStage));
 		mainRoot.add(spacePlayButton, 15, 20, 4, 2);
 		snakePlayButton.setId("nokiaButton");
+		snakePlayButton.setOnAction(e -> new Snake().start(primaryStage));
 		mainRoot.add(snakePlayButton, 25, 20, 4, 1);
 
 		//Setting the chatt
