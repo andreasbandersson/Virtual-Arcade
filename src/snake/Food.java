@@ -2,6 +2,7 @@ package snake;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.Random;
 
 /**
  * Food class that has Setters and Getters for the food and a draw method for drawing the food. 
@@ -10,8 +11,10 @@ import java.awt.Graphics;
  */
 public class Food 
 {
-	private int x, y;
-	private int width, height;
+	private int x;
+	private int y;
+	private int width;
+	private int height;
 	
 	public Food(int x, int y, int tileSize)
 	{

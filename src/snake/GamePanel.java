@@ -1,11 +1,9 @@
 package snake;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -15,10 +13,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
-import java.util.Stack;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -30,9 +26,13 @@ import javax.swing.Timer;
 
 public class GamePanel extends JPanel implements ActionListener, KeyListener
 {
-	private Dimension panelSize = new Dimension(600, 600); //Dimension of the game screen. 
+	private static final long serialVersionUID = 1L;
+
+	private Dimension panelSize = new Dimension(600, 400); //Dimension of the game screen. 
 	
-	private Font font1 = new Font("Monospaced", Font.PLAIN, 16);
+	private Color customLawnGreen = new Color(124,252,0);
+	
+	private Font font1 = new Font("Monospaced", Font.BOLD, 16);
 	private Font font2 = new Font("Monospaced", Font.BOLD, 30);
 	private Font menuTitleFont = new Font("Monospaced", Font.BOLD, 60);
 	private Font instructionFont = new Font("Monospaced", Font.PLAIN, 20);
@@ -47,23 +47,25 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener
 	
 	private Random r = new Random();
 	
-	public static final int WIDTH = 600, HEIGHT = 600; //Height and width of the game screen. 
+	private static final int WIDTH = 600; //Width of the game scree. 
+	private static final int HEIGHT = 400; //Height of the game screen. 
 
-	private int x, y; //The snakes X and Y position. 
+	private int x; //The snakes X position. 
+	private int y; //The snakes Y position. 
 	private int size;; //Length of the snake. 
 	private int score; //Keeps track of the score. 
 	private int pieceSize = 15; //Size of every piece of the snake and the food. 
 	private int gameState = 1;  //Keeps track of which state the program is in (MENUSTATE or INGAMESTATE). 
 	
-	private static final int MENUSTATE = 1;
-	private static final int INGAMESTATE = 2;
+	private static final int MENU_STATE = 1;
+	private static final int INGAME_STATE = 2;
 	
 	private static final int UP = 1;
 	private static final int DOWN = 2;	
 	private static final int LEFT = 3;
 	private static final int RIGHT = 4;
 	
-	private Queue<Integer> movementQueue = new LinkedList<Integer>();
+	private Queue<Integer> movementQueue = new ArrayDeque<Integer>();	
 	
 	private String gameOverString = "Game Over!";
 	private String pausedString = "Paused!";
@@ -87,7 +89,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener
 		
 		startGame();
 	}
-	//Method that resets everything. score, x and y position of the snake, the size of the snake. Clears the list of food objects
+	//Method that resets everything. score, x and y position of the snake and the size of the snake. Clears the list of food objects
 	//and the list of snake objects. Removes any object in the movementQueue and adds RIGHT and starts the timer. 
 	public void startGame()
 	{
@@ -98,13 +100,13 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener
 		foodList.clear();
 		snake.clear();
 		movementQueue.remove();
-		movementQueue.add(RIGHT);
+		movementQueue.offer(RIGHT);
 		timer.start();
 	}
 	//Method that pauses the game. 
 	public void pauseGame()
 	{
-		if(paused == true)
+		if(paused)
 		{
 			paused = false;
 			timer.restart();
@@ -126,9 +128,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener
 	public void paint(Graphics g)
 	{
 		//Draws the game. 
-		if(gameState == INGAMESTATE)
+		if(gameState == INGAME_STATE)
 		{
-			g.setColor(Color.BLACK);
+			g.setColor(customLawnGreen);
 			g.fillRect(0, 0, WIDTH, HEIGHT);
 			
 			//Draws the grid.*
@@ -151,43 +153,48 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener
 			{
 				foodList.get(i).draw(g);
 			}
-			
-			g.setColor(Color.WHITE);
+			//Draws the score during the game. 
+			g.setColor(Color.BLACK);
 			g.setFont(font1); 
-			g.drawString("Score:" + score, (int) 270, 20);
-			
-			if(over == true)
+			g.drawString("Score:" + score, (int) 260, 20);
+			//Draws the text that shows up when you lose. 
+			if(over)
 			{
 				g.setFont(font2);
-				g.drawString(gameOverString, (int) 210, (int) 200);
-				g.drawString("Score:" + score, 225, 250);
-				g.drawString(restartString, 140, 500);
+				g.drawString(gameOverString, (int) 210, (int) 150);
+				g.drawString("Score:" + score, 230, 200);
+				g.drawString(restartString, 145, 350);
+				
+				//Code that removes the food and snake from the screen when the game is over to not cover the Game Over text. 
+				snake.clear();
+				foodList.clear();
+				repaint();
 			}
-			
-			if(paused == true)
+			//Draws "Paused!" on the screen when the game is paused. 
+			if(paused)
 			{
 				g.setFont(font2);
 				g.drawString(pausedString, 240, 200);
 			}
 		}
 		//Draws the menu. 
-		if(gameState == MENUSTATE)
+		if(gameState == MENU_STATE)
 		{
 			repaint();
-			g.setColor(Color.BLACK);
+			g.setColor(customLawnGreen);
 			g.fillRect(0, 0, WIDTH, HEIGHT);
 			
-			g.setColor(Color.GREEN);
+			g.setColor(Color.BLACK);
 			g.setFont(menuTitleFont);
 			g.drawString("Snake", 210, 70);
 			
-			g.setColor(Color.WHITE);
+			g.setColor(Color.BLACK);
 			
 			g.setFont(instructionFont);
-			g.drawString(instructionsString, 20, 250);
+			g.drawString(instructionsString, 20, 200);
 			
 			g.setFont(font2);
-			g.drawString("Press P to Play", 160, 500);
+			g.drawString("Press P to Play", 160, 350);
 		}
 	}
 
@@ -195,7 +202,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener
 	//The code in this method is based on the Timer timer. 
 	public void actionPerformed(ActionEvent e) 
 	{
-		if(gameState == INGAMESTATE)
+		if(gameState == INGAME_STATE)
 		{
 			repaint();
 			
@@ -220,7 +227,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener
 			if(foodList.size() == 0)
 			{
 				int x = r.nextInt(37);
-				int y = r.nextInt(37);
+				int y = r.nextInt(24);
 				food = new Food(x, y, pieceSize);
 				foodList.add(food);
 			}
@@ -247,14 +254,13 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener
 				}
 			}
 			//Collision code for the edges of the screen. 
-			if(x < 0 || x > 38 || y < 0 || y > 38)
+			if(x < 0 || x > 38 || y < 0 || y > 25)
 			{
 				gameOver();
 			}
 		}
 	}
 	
-
 	@Override
 	public void keyPressed(KeyEvent e) 
 	{
@@ -307,7 +313,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener
 		//Pressing R restarts the game. 
 		if(key == KeyEvent.VK_R) 
 		{
-			if(over == true)
+			if(over)
 			{
 				over = false;
 				startGame();
@@ -316,15 +322,15 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener
 		//Pressing P starts the game when you're in the menu. 
 		if(key == KeyEvent.VK_P)
 		{
-			if(gameState == MENUSTATE)
+			if(gameState == MENU_STATE)
 			{
-				gameState = INGAMESTATE;
+				gameState = INGAME_STATE;
 			}
 		}
 		//Pressing Esc closes the game if you've lost. 
 		if(key == KeyEvent.VK_ESCAPE)
 		{
-			if(over == true)
+			if(over)
 			{
 				System.exit(10);
 			}
@@ -338,7 +344,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener
 	
 	public static void main(String[] args)
 	{
-		GamePanel gp = new GamePanel();
+		GamePanel gp = new GamePanel();	 
 		
 		JFrame frame = new JFrame("Snake");
 		frame.add(gp);
@@ -355,3 +361,4 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener
 //Saker att fixa:
 //1. När man bytar riktning snabbt så kan man få ormen att åka in i sig själv. Testat använda både queue och stack men funkar fortfarande inte.
 //	 Testat sätta en Thread.sleep innan den bytar riktning men funkar forfarande inte som det ska. Försökt använda KeyReleased, funkar inte. 
+//	 Testa använda enums och arrayDequeue. 

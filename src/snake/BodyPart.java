@@ -10,20 +10,22 @@ import java.awt.Graphics;
  */
 public class BodyPart 
 {
-	private int x, y;
-	private int width, height;
+	private int x;
+	private int y;
+	private int width;
+	private int height;
 	
 	public BodyPart(int xCoordinate, int yCoordinate, int tileSize)
 	{
-		this.x = xCoordinate;
-		this.y = yCoordinate;
+		x = xCoordinate;
+		y = yCoordinate;
 		width = tileSize;
 		height = tileSize;
 	}
 	
 	public void draw(Graphics g)
 	{
-		g.setColor(Color.GREEN); //Sets the color of the snake to green. 
+		g.setColor(Color.BLACK); //Sets the color of the snake to green. 
 		g.fillRect(x * width, y * height, width, height); //Fills a rectangle to draw a piece of the snake. 
 	}
 
