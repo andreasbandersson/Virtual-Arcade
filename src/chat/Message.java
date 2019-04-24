@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/*
- * Måns Grundberg
+/**
+ * Represents a message. 
+ * @author Mans
+ *
  */
 
 public class Message implements Serializable {
@@ -39,21 +41,25 @@ public class Message implements Serializable {
 		return this.text;
 	}
 	
+	// TODO
 	public String getTimeStamp() {
 		setTimeStamp();
 		return this.timeStamp;
 	}
 	
+	/**
+	 * Sets the time at which the message was sent
+	 */
 	private void setTimeStamp() {
 		this.timeStamp = simpleDate.format(new Date());
 	}
 	
+	/**
+	 * Used to return the receiving user if message is sent as private
+	 * @return The receiving user
+	 */
 	public User getReceiver() {
 		return receiver;
 	}
 	
-	public void setReceiver(User receiver) {
-		this.receiver = receiver;
-	}
-
 }

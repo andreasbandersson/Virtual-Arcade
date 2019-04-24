@@ -4,8 +4,10 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/*
- * Måns Grundberg
+/**
+ * Stores the ObjectOutputStreams for all connected users.
+ * @author Mans
+ *
  */
 
 public class ClientStreams {
@@ -23,10 +25,10 @@ public class ClientStreams {
 		return streams.get(user);
 	}
 
-	public synchronized int size() {
-		return streams.size();
-	}
-
+	/**
+	 * 
+	 * @return An ArrayList containing all of the online users
+	 */
 	public synchronized ArrayList<User> getKeySet() {
 		return new ArrayList<User>(streams.keySet());
 	}

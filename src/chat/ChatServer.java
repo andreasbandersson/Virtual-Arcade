@@ -6,8 +6,10 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-/*
- * Måns Grundberg
+/**
+ * Handles all communication with the chat- and login systems client.
+ * @author Mans
+ *
  */
 
 public class ChatServer {
@@ -19,6 +21,11 @@ public class ChatServer {
 		new ConnectionListener(chatPort).start();
 	}
 
+	/**
+	 * Sends specified object to specified client
+	 * @param obj The object to send
+	 * @param oos The ObjectOutputStream to send through
+	 */
 	public void sendObject(Object obj, ObjectOutputStream oos) {
 		try {
 			System.out.println(Thread.currentThread().getName() + "skickar meddelande");
@@ -28,6 +35,11 @@ public class ChatServer {
 		}
 	}
 
+	/**
+	 * Listens for connecting clients, spawning ClientHandlers
+	 * @author Mans
+	 *
+	 */
 	private class ConnectionListener extends Thread {
 		private int port;
 
@@ -52,6 +64,11 @@ public class ChatServer {
 		}
 	}
 
+	/**
+	 * Handles all the incoming data from a specific Client
+	 * @author Mans
+	 *
+	 */
 	private class ClientInputHandler extends Thread {
 		private User user;
 		private Socket socket;
@@ -65,7 +82,7 @@ public class ChatServer {
 		public void run() {
 			try (ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
 					ObjectInputStream ois = new ObjectInputStream(socket.getInputStream())) {
-				while (!userConfirmed) {
+				while (!userConfirmed) { // Loop until user has been confirmed (login/user created successfully)
 					try {
 						String command = ois.readUTF();
 						this.user = (User) ois.readObject();
@@ -77,7 +94,7 @@ public class ChatServer {
 						break;
 					}
 				}
-				while (true) {
+				while (true) { // Listens for incoming messages aslong as the client is connected
 					try {
 						System.out.println(Thread.currentThread().getName() + "tar emot meddelande");
 						controller.newMessage((Message) ois.readObject());

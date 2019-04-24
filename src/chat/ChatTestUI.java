@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
@@ -26,7 +27,7 @@ import javax.swing.border.EmptyBorder;
  */
 
 @SuppressWarnings("serial")
-public class ChatTestUI extends JPanel implements ActionListener {
+public class ChatTestUI extends JPanel implements ActionListener, KeyListener {
 	private JTextArea messages = new JTextArea();
 	private JTextArea newMessage = new JTextArea();
 	private JButton sendButton = new JButton("Send Message");
@@ -52,6 +53,7 @@ public class ChatTestUI extends JPanel implements ActionListener {
 		sendButton.setForeground(Color.BLACK);
 		sendButton.setOpaque(true);
 		
+		
 		JScrollPane scrollMessages = new JScrollPane(messages);
 		JScrollPane scrollPane2 = new JScrollPane(newMessage);
 		JPanel southPanel = new JPanel(new GridLayout(3, 0));
@@ -75,6 +77,12 @@ public class ChatTestUI extends JPanel implements ActionListener {
 		messages.setForeground(Color.GREEN);
 		onlineUsers.setBackground(Color.BLACK);
 		onlineUsers.setForeground(Color.GREEN);
+		
+		newMessage.getInputMap().clear();
+		scrollPane2.getInputMap().clear();
+		
+		newMessage.addKeyListener(this);
+		
 
 		scrollMessages.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollMessages.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -104,7 +112,7 @@ public class ChatTestUI extends JPanel implements ActionListener {
 
 		btnSwitch.addActionListener(this);
 		sendButton.addActionListener(this);
-
+		
 		addNewMessage("Type @username to send a private message");
 		addNewMessage("Example: @Aragorn This is a message");
 	}
@@ -125,9 +133,10 @@ public class ChatTestUI extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == sendButton) {
+		if (e.getSource() == sendButton && !newMessage.getText().isEmpty()) {
 			controller.sendMessage(newMessage.getText().trim());
-			newMessage.setText("");
+			newMessage.setText(null);
+			newMessage.setCaretPosition(0);
 		} else if (e.getSource() == btnSwitch) {
 			if (showingMessages) {
 				card.next(cardPanel);
@@ -139,7 +148,7 @@ public class ChatTestUI extends JPanel implements ActionListener {
 				btnSwitch.setText("Show online users");
 				showingMessages = true;
 				revalidate();
-			}
+			} 
 		}
 	}
 
@@ -153,7 +162,27 @@ public class ChatTestUI extends JPanel implements ActionListener {
 				frame.setVisible(true);
 				frame.setLocation(0, 0);
 				frame.setResizable(false);
+				frame.getRootPane().setDefaultButton(sendButton);
 			}
 		});
 	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+	}
+	
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			sendButton.doClick();
+			e.consume();
+		} else if (e.getKeyCode() == KeyEvent.VK_TAB) {
+			btnSwitch.doClick();
+			e.consume();
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {}
 }
