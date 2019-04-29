@@ -1,0 +1,8 @@
+#MessageArea {
+    -fx-background-color: black;
+    -fx-text-fill: #00ff00;
+}
+
+.text-area .content {
+    -fx-background-color: black;
+}

@@ -54,6 +54,7 @@ public class ServerController {
 	 * @param oos The ObjectOutputStream connected to the Client in question
 	 * @return True if login/creating user is successful, otherwise false
 	 */
+	
 	public boolean login(String command, User user, String password, ObjectOutputStream oos) {
 		if (command.equals("LOGIN")) {
 			if (clientStreams.contains(user)) {
@@ -75,6 +76,7 @@ public class ServerController {
 	 * @param oos The ObjectOutputStream connected to the Client in question
 	 * @return True if password is correct, otherwise false
 	 */
+	
 	private boolean checkPassword(User user, String password, ObjectOutputStream oos) {
 		if (users.contains(user) && users.checkPassword(user, password)) {
 			clientStreams.put(user, oos);
@@ -95,6 +97,7 @@ public class ServerController {
 	 * @param oos The ObjectOutputStream connected to the Client in question
 	 * @return True if user is successfully created, false if username is already in use
 	 */
+	
 	private boolean newUser(User user, String password, ObjectOutputStream oos) {
 		if (users.contains(user)) {
 			server.sendObject("Username already in use", oos);

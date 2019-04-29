@@ -3,7 +3,6 @@ package chat;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -16,10 +15,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
-import javax.swing.border.EmptyBorder;
+
 
 /*
  * TEMPORÄR KLASS. ENDAST FÖR ATT TESTA CHATTSYSTEMET.
@@ -37,11 +34,12 @@ public class ChatTestUI extends JPanel implements ActionListener, KeyListener {
 	private JPanel cardPanel;
 	private boolean showingMessages = true;
 	private ChatController controller;
+	
 
 	public ChatTestUI(ChatController controller) {
 		this.controller = controller;
 		init();
-		setPanelInFrame(this);
+		//setPanelInFrame(this);
 	}
 
 	private void init() {
@@ -51,8 +49,6 @@ public class ChatTestUI extends JPanel implements ActionListener, KeyListener {
 		
 		sendButton.setBackground(Color.BLACK);
 		sendButton.setForeground(Color.BLACK);
-		sendButton.setOpaque(true);
-		
 		
 		JScrollPane scrollMessages = new JScrollPane(messages);
 		JScrollPane scrollPane2 = new JScrollPane(newMessage);
@@ -66,8 +62,6 @@ public class ChatTestUI extends JPanel implements ActionListener, KeyListener {
 		scrollPane2.setForeground(Color.GREEN);
 		scrollUsers.setBackground(Color.BLACK);
 		southPanel.setBackground(Color.BLACK);
-		
-		
 		
 		messages.setEditable(false);
 		onlineUsers.setEditable(false);
@@ -83,7 +77,6 @@ public class ChatTestUI extends JPanel implements ActionListener, KeyListener {
 		
 		newMessage.addKeyListener(this);
 		
-
 		scrollMessages.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollMessages.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane2.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
