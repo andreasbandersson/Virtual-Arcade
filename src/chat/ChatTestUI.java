@@ -35,7 +35,7 @@ public class ChatTestUI extends JPanel implements ActionListener, KeyListener {
 	private boolean showingMessages = true;
 	private ChatController controller;
 
-	public ChatTestUI(ChatController controller) {
+	public ChatTestUI (ChatController controller) {
 		this.controller = controller;
 		init();
 		setPanelInFrame(this);
