@@ -6,7 +6,6 @@ import spaceInvaders.units.Unit;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 
 /**
  * @author Viktor Altintas
@@ -20,6 +19,7 @@ public class Painter extends JPanel {
     private Player player;
     public  JLabel scoreLabel;
     public JLabel levelTitle;
+    public JLabel pauseTitle;
     private static Image playerLifeSprite = new ImageIcon("Sprites/player.png").getImage().getScaledInstance(30,25,Image.SCALE_DEFAULT);
 
     public Painter(Controller controller) {
@@ -37,6 +37,10 @@ public class Painter extends JPanel {
         levelTitle = new JLabel("Level " + controller.getLevelCounter());
         levelTitle.setFont(new Font(("byt till något fett"),Font.PLAIN,40));
         levelTitle.setForeground(Color.WHITE);
+
+        pauseTitle = new JLabel("Game Paused \nto resume: Press P");
+        pauseTitle.setFont(new Font(("byt till något fett"),Font.PLAIN,40));
+        pauseTitle.setForeground(Color.WHITE);
 
         add(scoreLabel);
     }
@@ -63,5 +67,15 @@ public class Painter extends JPanel {
         }
         remove(levelTitle);
     }
+
+    public void showPauseTitle() {
+        add(levelTitle);
+        repaint();
+    }
+    public void removePauseTitle() {
+        remove(levelTitle);
+        repaint();
+    }
+
 }
 
