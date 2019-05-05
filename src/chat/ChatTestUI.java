@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,7 +17,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
-
 
 /*
  * TEMPORÄR KLASS. ENDAST FÖR ATT TESTA CHATTSYSTEMET.
@@ -34,35 +34,34 @@ public class ChatTestUI extends JPanel implements ActionListener, KeyListener {
 	private JPanel cardPanel;
 	private boolean showingMessages = true;
 	private ChatController controller;
-	
 
 	public ChatTestUI(ChatController controller) {
 		this.controller = controller;
 		init();
-		//setPanelInFrame(this);
+		setPanelInFrame(this);
 	}
 
 	private void init() {
 		setPreferredSize(new Dimension(300, 600));
 		setLayout(new BorderLayout());
 		setBackground(Color.BLACK);
-		
+
 		sendButton.setBackground(Color.BLACK);
 		sendButton.setForeground(Color.BLACK);
-		
+
 		JScrollPane scrollMessages = new JScrollPane(messages);
 		JScrollPane scrollPane2 = new JScrollPane(newMessage);
 		JPanel southPanel = new JPanel(new GridLayout(3, 0));
 		cardPanel = new JPanel(card);
 		JScrollPane scrollUsers = new JScrollPane(onlineUsers);
-		
+
 		scrollMessages.setBackground(Color.BLACK);
 		scrollMessages.setForeground(Color.GREEN);
 		scrollPane2.setBackground(Color.BLACK);
 		scrollPane2.setForeground(Color.GREEN);
 		scrollUsers.setBackground(Color.BLACK);
 		southPanel.setBackground(Color.BLACK);
-		
+
 		messages.setEditable(false);
 		onlineUsers.setEditable(false);
 		newMessage.setForeground(Color.GREEN);
@@ -71,17 +70,15 @@ public class ChatTestUI extends JPanel implements ActionListener, KeyListener {
 		messages.setForeground(Color.GREEN);
 		onlineUsers.setBackground(Color.BLACK);
 		onlineUsers.setForeground(Color.GREEN);
-		
-		newMessage.getInputMap().clear();
-		scrollPane2.getInputMap().clear();
-		
+
 		newMessage.addKeyListener(this);
-		
-		scrollMessages.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		messages.addKeyListener(this);
+
+		scrollMessages.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollMessages.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane2.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane2.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPane2.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollUsers.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollUsers.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollUsers.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
 		messages.setLineWrap(true);
@@ -90,7 +87,7 @@ public class ChatTestUI extends JPanel implements ActionListener, KeyListener {
 		newMessage.setWrapStyleWord(true);
 		onlineUsers.setLineWrap(true);
 		onlineUsers.setWrapStyleWord(true);
-		
+
 		newMessage.setCaretColor(Color.GREEN);
 
 		southPanel.setPreferredSize(new Dimension(300, 100));
@@ -105,12 +102,14 @@ public class ChatTestUI extends JPanel implements ActionListener, KeyListener {
 
 		btnSwitch.addActionListener(this);
 		sendButton.addActionListener(this);
-		
-		addNewMessage("Type @username to send a private message");
-		addNewMessage("Example: @Aragorn This is a message");
+		sendButton.setFont(new Font("MONOSPACE", Font.BOLD, 14));
+		btnSwitch.setFont(new Font("MONOSPACE", Font.BOLD, 14));
+
+		addMessage("Type @username to send a private message");
+		addMessage("Example: @Aragorn This is a message");
 	}
 
-	public void addNewMessage(String message) {
+	public void addMessage(String message) {
 		messages.append(message + "\n");
 	}
 
@@ -141,7 +140,7 @@ public class ChatTestUI extends JPanel implements ActionListener, KeyListener {
 				btnSwitch.setText("Show online users");
 				showingMessages = true;
 				revalidate();
-			} 
+			}
 		}
 	}
 
@@ -163,7 +162,6 @@ public class ChatTestUI extends JPanel implements ActionListener, KeyListener {
 	@Override
 	public void keyTyped(KeyEvent e) {
 	}
-	
 
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -177,5 +175,10 @@ public class ChatTestUI extends JPanel implements ActionListener, KeyListener {
 	}
 
 	@Override
-	public void keyReleased(KeyEvent e) {}
+	public void keyReleased(KeyEvent e) {
+	}
+
+	public static void main(String[] args) {
+		new ChatTestUI(new ChatController());
+	}
 }

@@ -87,6 +87,7 @@ public class LoginTestUI extends JPanel implements ActionListener {
 	private void enableButtons() {
 		login.setEnabled(true);
 		createUser.setEnabled(true);
+		repaint();
 	}
 
 	public void setResponse(String str) {

@@ -1,24 +1,36 @@
 package chat;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 /**
  * Handles the logic of the chat and login systems server side
+ * 
  * @author Mans
  *
  */
 
 public class ServerController {
 	private ClientStreams clientStreams = new ClientStreams();
-	private RegisteredUsers users = new RegisteredUsers();
+	private RegisteredUsers users;
 	private ChatServer server;
 
+	public ServerController() {
+		loadUsers();
+	}
+	
 	public void addServer(ChatServer server) {
 		this.server = server;
 	}
 
 	/**
-	 * Sends the incoming message to all connected users or, if a private message, to the specified receiver
+	 * Sends the incoming message to all connected users or, if a private message,
+	 * to the specified receiver
+	 * 
 	 * @param message
 	 */
 	public void newMessage(Message message) {
@@ -36,6 +48,7 @@ public class ServerController {
 
 	/**
 	 * Distributes an updated list of connected users
+	 * 
 	 * @param user
 	 */
 	private void sendUserList(User user) {
@@ -48,13 +61,15 @@ public class ServerController {
 
 	/**
 	 * Checks whether user tries to login or create a new user
-	 * @param command The command sent by the client, indicating the users desired action
-	 * @param user The specified user
+	 * 
+	 * @param command  The command sent by the client, indicating the users desired
+	 *                 action
+	 * @param user     The specified user
 	 * @param password The specified password
-	 * @param oos The ObjectOutputStream connected to the Client in question
+	 * @param oos      The ObjectOutputStream connected to the Client in question
 	 * @return True if login/creating user is successful, otherwise false
 	 */
-	
+
 	public boolean login(String command, User user, String password, ObjectOutputStream oos) {
 		if (command.equals("LOGIN")) {
 			if (clientStreams.contains(user)) {
@@ -70,13 +85,15 @@ public class ServerController {
 	}
 
 	/**
-	 * Checks whether the specified password matches the stores password for the user in question
-	 * @param user The specified user
+	 * Checks whether the specified password matches the stores password for the
+	 * user in question
+	 * 
+	 * @param user     The specified user
 	 * @param password The specified password
-	 * @param oos The ObjectOutputStream connected to the Client in question
+	 * @param oos      The ObjectOutputStream connected to the Client in question
 	 * @return True if password is correct, otherwise false
 	 */
-	
+
 	private boolean checkPassword(User user, String password, ObjectOutputStream oos) {
 		if (users.contains(user) && users.checkPassword(user, password)) {
 			clientStreams.put(user, oos);
@@ -91,13 +108,16 @@ public class ServerController {
 	}
 
 	/**
-	 * Checks whether username is already in use. If not, adds user to list of registered users
-	 * @param user The user to be created
+	 * Checks whether username is already in use. If not, adds user to list of
+	 * registered users
+	 * 
+	 * @param user     The user to be created
 	 * @param password The specified password
-	 * @param oos The ObjectOutputStream connected to the Client in question
-	 * @return True if user is successfully created, false if username is already in use
+	 * @param oos      The ObjectOutputStream connected to the Client in question
+	 * @return True if user is successfully created, false if username is already in
+	 *         use
 	 */
-	
+
 	private boolean newUser(User user, String password, ObjectOutputStream oos) {
 		if (users.contains(user)) {
 			server.sendObject("Username already in use", oos);
@@ -108,26 +128,45 @@ public class ServerController {
 			server.sendObject(user, oos);
 			server.sendObject("USER CREATED", oos);
 			sendUserList(user);
+			saveUsers();
 			return true;
 		}
 	}
 
 	/**
 	 * Removes the user and it's corresponding ObjectOutputStream from list
+	 * 
 	 * @param user The disconnecting user
 	 */
 	public void disconnectUser(User user) {
 		clientStreams.remove(user);
 	}
 
-	// TODO: Läs in användare från fil
+	/**
+	 * Reads list of registered users from file
+	 */
 	private void loadUsers() {
-
+		File contactFile = new File("files/registeredUsers.dat");
+		if (contactFile.exists()) {
+			try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(contactFile))) {
+				users = (RegisteredUsers) ois.readObject();
+			} catch (IOException | ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+		} if (users == null) {
+			users = new RegisteredUsers();
+		}
 	}
 
-	// TODO: Skriv användare till fil
+	/**
+	 *  Writes list registered users to file
+	 */
 	private void saveUsers() {
-
+		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("files/registeredUsers.dat"))) {
+			oos.writeObject(users);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
