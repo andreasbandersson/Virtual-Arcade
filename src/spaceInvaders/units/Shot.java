@@ -15,6 +15,7 @@ public class Shot extends Unit implements Runnable {
     private static int height = 15;
     private int speed;
     private boolean direction;
+    private boolean paused = false;
     private boolean flying = true;
 
     private static Image Shot = new ImageIcon("Sprites/shot.png").getImage().getScaledInstance(width,height,Image.SCALE_DEFAULT);
@@ -40,6 +41,9 @@ public class Shot extends Unit implements Runnable {
         flying = false;
         controller.removeUnit(this);
     }
+    public void setPaused() {
+        paused = !paused;
+    }
 
     public void start(){
         new Thread(this).start();
@@ -48,6 +52,13 @@ public class Shot extends Unit implements Runnable {
 
     public void run() {
         while (flying) {
+            while (paused){
+                try {
+                    Thread.sleep(250);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             if (direction) {
                 move(getPosition().getX(), getPosition().getY() - 1);
             }

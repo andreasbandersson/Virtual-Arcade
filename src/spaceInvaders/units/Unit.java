@@ -64,6 +64,10 @@ public abstract class Unit {
 
     public abstract void shoot();
 
+   public void pause() {
+
+   }
+
    public synchronized void move(int x, int y){
        position.setX(x);
        position.setY(y);
