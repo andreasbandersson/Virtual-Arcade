@@ -3,6 +3,12 @@ package chat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Stores all registered users and their passwords.
+ * @author Mans
+ *
+ */
+
 public class RegisteredUsers {
 	private HashMap<User, String> users = new HashMap<User, String>();
 
@@ -10,10 +16,13 @@ public class RegisteredUsers {
 		users.put(user, password);
 	}
 
-	public synchronized void remove(User user) {
-		users.remove(user);
-	}
-
+	/**
+	 * Checks whether if specified password is correct 
+	 * @param user The user trying to login
+	 * @param password The specified password
+	 * @return True if password is a match, otherwise false
+	 */
+	
 	public synchronized boolean checkPassword(User user, String password) {
 		if (users.get(user).equals(password)) {
 			return true;
@@ -22,10 +31,11 @@ public class RegisteredUsers {
 		}
 	}
 
-	public synchronized int size() {
-		return users.size();
-	}
-
+	/**
+	 * 
+	 * @return A list of all registered users
+	 */
+	
 	public synchronized ArrayList<User> getKeySet() {
 		return new ArrayList<User>(users.keySet());
 	}

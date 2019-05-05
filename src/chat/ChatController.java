@@ -1,8 +1,11 @@
 package chat;
 
-/*
- * Måns Grundberg
+/**
+ * Controller-class for the chat systemts client-side environment.
+ * @author Mans
+ *
  */
+
 public class ChatController {
 	private ChatTestUI ui; // TEMPORÄRT UI. ENDAST FÖR TEST-SYFTE.
 	private LoginTestUI loginUi;
@@ -13,9 +16,14 @@ public class ChatController {
 	public ChatController() {
 		client = new ChatClient(60000, "localhost", this);
 		client.connect();
-		loginUi = new LoginTestUI(this);
+		// loginUi = new LoginTestUI(this);
 	}
 
+	/**
+	 * Called when a user tries to login
+	 * @param username The specified username
+	 * @param password The specified password
+	 */
 	public void login(String username, String password) {
 		if (username.length() <= 0 || password.length() <= 0) {
 			loginUi.setResponse("Enter username & password");
@@ -24,30 +32,73 @@ public class ChatController {
 		}
 	}
 
+	/**
+	 * Called when the user tries to create a new user
+	 * @param username The specified username
+	 * @param password The specified password
+	 */
 	public void newUser(String username, String password) {
 		if (username.length() < 3 || password.length() < 6) {
-			loginUi.setResponse("Username/password too short/long");
+			loginUi.setResponse("Username/password too short");
 		} else {
 			client.newUser(new User(username), password);
 		}
 	}
-
+	
+	/**
+	 * Checks whether message is private or public
+	 * @param text The text message to send
+	 */
+	
 	public void sendMessage(String text) {
+		Message message;
 		if (!text.equals("")) {
-			client.sendMessage(new Message(user.getUsername(), text));
+			if (text.charAt(0) == '@') { // Private message
+				sendPrivateMessage(text);
+			} else {
+				message = new Message(user.getUsername(), text);
+				client.sendMessage(message);
+				ui.addNewMessage(message.getTimeStamp() + ": " + "To All: " + message.getText());
+			}
 		}
 	}
 
+	/**
+	 * Used to send private messages. 
+	 * @param text The text message to send
+	 */
+	private void sendPrivateMessage(String text) {
+		boolean found = false;
+		for (int i = 0; i < userList.size(); i++) {
+			if (userList.get(i).getUsername().equals(text.substring(1, text.indexOf(' ')))) {
+				Message message = new Message(userList.get(i), user.getUsername(),
+						text.substring(text.indexOf(' ') + 1));
+				client.sendMessage(message);
+				ui.addNewMessage(message.getTimeStamp() + ": " + "To " + userList.get(i).getUsername() + " : "
+						+ message.getText());
+				found = true;
+				break;
+			}
+		}
+		if (!found) { // User not online/doesn't exist
+			ui.addNewMessage("Couldn't send message: " + text.substring(1, text.indexOf(' ')) + " is not online");
+		}
+	}
+
+	/**
+	 * Handles all incoming objects sent from Client.
+	 * @param obj The object received (Message/User/UserList/String)
+	 */
 	public void incoming(Object obj) {
 		if (obj instanceof Message) {
 			Message message = (Message) obj;
 			if (message.getSender() != null) {
 				ui.addNewMessage(message.getTimeStamp() + ": " + message.getSender() + ": " + message.getText());
 			} else {
-				ui.addNewMessage(message.getText());
+				ui.addNewMessage(message.getTimeStamp() + ": " + message.getText());
 			}
 		} else if (obj instanceof String) {
-			checkLoginFailure((String) obj);
+			checkServerResponse((String) obj);
 		} else if (obj instanceof User) {
 			this.user = (User) obj;
 		} else {
@@ -56,16 +107,20 @@ public class ChatController {
 		}
 	}
 
-	private void checkLoginFailure(String str) {
-		if (str.equals("LOGIN OK")) {
+	/**
+	 * Evaluates responses from server regarding status of login 
+	 * @param str The server response
+	 */
+	private void checkServerResponse(String str) {
+		if (str.equals("LOGIN OK")) { // Login successful, open chat
 			loginUi.disposeFrame();
 			ui = new ChatTestUI(this);
 			ui.addNewMessage("Welcome back " + this.user.getUsername() + "!");
-		} else if (str.equals("USER CREATED")) {
+		} else if (str.equals("USER CREATED")) { // User created successfully, open chat
 			loginUi.disposeFrame();
 			ui = new ChatTestUI(this);
 			ui.addNewMessage("Welcome to Virtual Arcade " + this.user.getUsername() + "!");
-		} else {
+		} else { // Login unsuccessful, e.g. password and/or username incorrect, username taken etc
 			loginUi.setResponse(str);
 		}
 	}

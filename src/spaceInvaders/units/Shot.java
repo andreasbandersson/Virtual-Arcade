@@ -72,6 +72,5 @@ public class Shot extends Unit implements Runnable {
                 e.printStackTrace();
             }
         }
-
     }
 }

@@ -41,5 +41,6 @@ public class Player extends Unit {
 
     @Override
     public void die() {
+        //game ends
     }
 }

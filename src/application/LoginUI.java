@@ -1,16 +1,24 @@
 package application;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import javafx.application.Application;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.effect.Bloom;
+import javafx.scene.effect.Glow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaPlayer.Status;
 import javafx.stage.Stage;
 
 /**
@@ -18,56 +26,158 @@ import javafx.stage.Stage;
  */
 
 public class LoginUI extends Application {
-	private Button loginButton = new Button("  START");
-	private BorderPane loginRoot;
+	private Image playSoundImage;
+	private Image muteSoundImage;
+	private ImageView playSoundImageView;
+	private ImageView muteSoundImageView;
+	private Button loginButton;
+	private GridPane loginRoot;
 	private Scene scene;
-	private GridPane gridPane;
-	private Label userNameLabel = new Label("Username:");
-	private Label passwordLabel = new Label("Password:");
-	private Label startLabel = new Label("Press Start Button");
-	private TextField usernameTextField = new TextField();
-	private PasswordField passwordTextField = new PasswordField();
+	private Button soundButton;
+	private MediaPlayer mediaPlayer;
+	private MainUI mainMenu;
+
+	private final int numOfCols = 48;
+	private final int numOfRows = 24;
 
 	public void start(Stage primaryStage) {
-		loginRoot = new BorderPane();
+		
+		// Setting the main Pane for the scene.
+		loginRoot = new GridPane();
 		loginRoot.setId("loginRoot");
 
-		gridPane = new GridPane();
+		createColumnsandRows();
+		setSoundButtonImages();
+		startSound();
 
-		userNameLabel.setPadding(new Insets(80.0, 0.0, 0.0, 0.0));
-		gridPane.add(userNameLabel, 0, 1);
-		gridPane.add(usernameTextField, 0, 2);
+
+		// Adding and setting the Label for Virtual Arcade-header
+		Label virtualArcadeLabel = new Label("VIRTUAL\nARCADE");
+		Glow glow = new Glow(1.0);
+		Bloom bloom = new Bloom(0.9);
+		virtualArcadeLabel.setId("vaLabel");
+		virtualArcadeLabel.setEffect(bloom);
+		virtualArcadeLabel.setEffect(glow);
+		loginRoot.add(virtualArcadeLabel, 1, 0, 15, 9);
+
+		// Adding and setting the Labels and TextFields for the login
+		Label userNameLabel = new Label("Username:");
+		loginRoot.add(userNameLabel, 18, 8, 10, 1);
+
+		TextField usernameTextField = new TextField();
 		usernameTextField.setPromptText("Enter a username");
-		passwordLabel.setPadding(new Insets(5.0, 0.0, 0.0, 0.0));
-		gridPane.add(passwordLabel, 0, 4);
-		gridPane.add(passwordTextField, 0, 5);
+		loginRoot.add(usernameTextField, 18, 9, 10, 2);
+
+		Label passwordLabel = new Label("Password:");
+		loginRoot.add(passwordLabel, 18, 11, 10, 1);
+
+		PasswordField passwordTextField = new PasswordField();
 		passwordTextField.setPromptText("Enter a password");
-		startLabel.setId("startLabel");
-		startLabel.setPadding(new Insets(25.0, 0.0, 0.0, 0.0));
-		gridPane.add(startLabel, 0, 7);
-		gridPane.add(loginButton, 0, 10);
-		GridPane.setConstraints(loginButton, 0, 10, 1, 1, null, null, Priority.NEVER, Priority.NEVER,
-				new Insets(30.0, 0.0, 0.0, 24.0));
-		loginButton.setId("hBoxButtons");
+		loginRoot.add(passwordTextField, 18, 12, 10, 2);
 
-		gridPane.setAlignment(Pos.CENTER);
+		// Adding and setting the button for the login
+		loginButton = new Button("LOGIN");
+		loginButton.setId("loginButton");
+		loginRoot.add(loginButton, 20, 16, 9, 1);
 
-		loginButton.setOnAction(e -> new MainUI().start(primaryStage));
+		// Adding and setting the button for creating a new user
+		Button newUserButton = new Button("CREATE NEW USER");
+		newUserButton.setId("logOutButton");
+		loginRoot.add(newUserButton, 17, 20, 14, 1);
+		
+		//Adding an setting the button for mute and un-mute of login music
+		soundButton = new Button();
+		soundButton.setId("logOutButton");
+		soundButton.setGraphic(playSoundImageView);
+		soundButton.setOnAction(e -> muteUnmuteSound());
+		loginRoot.add(soundButton, 42, 2);
+		
+		addActionListeners(primaryStage);
 
-		loginRoot.setCenter(gridPane);
-		BorderPane.setAlignment(gridPane, Pos.CENTER);
-
+		// Sets the scene, adds all children nodes and sets the css-style.
 		scene = new Scene(loginRoot, 700, 400);
-		scene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-
+		scene.getStylesheets().addAll(this.getClass().getResource("styles/style.css").toExternalForm());
+		
+		// Sets the primaryStage
 		primaryStage.setTitle("VIRTUAL ARCADE");
 		primaryStage.setResizable(true);
 		primaryStage.setScene(scene);
 		primaryStage.centerOnScreen();
 		primaryStage.show();
-
 	}
 
+	// Sets the number and size-percentage of the rows and columns in the GridPane.
+	private void createColumnsandRows() {
+		for (int i = 0; i < numOfCols; i++) {
+			ColumnConstraints colConst = new ColumnConstraints();
+			colConst.setPercentWidth(100.0 / numOfCols);
+			loginRoot.getColumnConstraints().add(colConst);
+		}
+		for (int i = 0; i < numOfRows; i++) {
+			RowConstraints rowConst = new RowConstraints();
+			rowConst.setPercentHeight(100.0 / numOfRows);
+			loginRoot.getRowConstraints().add(rowConst);
+		}
+	}
+
+	// Sets the the login music and starts it.
+	private void startSound() {
+		String musicFile = "sounds/Login-Sound-1.mp3";
+		Media sound = new Media(new File(musicFile).toURI().toString());
+		mediaPlayer = new MediaPlayer(sound);
+		mediaPlayer.play();
+		mediaPlayer.setVolume(0.1);
+	}
+
+	// Mutes the login music if the music is playing, otherwise the function unmutes
+	// the music.
+	private void muteUnmuteSound() {
+		if (mediaPlayer.isMute()) {
+			mediaPlayer.setMute(false);
+			mediaPlayer.setVolume(0.1);
+			soundButton.setGraphic(playSoundImageView);
+		} else {
+			mediaPlayer.setMute(true);
+			soundButton.setGraphic(muteSoundImageView);
+		}
+	}
+	
+	//Stops the music.
+	private void stopSound() {
+		if(mediaPlayer.getStatus()==Status.PLAYING) {
+			mediaPlayer.stop();
+		}
+	}
+	
+	//Sets the sound buttons images.
+	private void setSoundButtonImages() {
+		try {
+			playSoundImage = new Image(new FileInputStream("images/sound.png"));
+			muteSoundImage = new Image(new FileInputStream("images/mute.png"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		playSoundImageView = new ImageView(playSoundImage);
+		muteSoundImageView = new ImageView(muteSoundImage);
+	}
+	
+	//Function for adding and setting Action Listeners to all Buttons.
+	private void addActionListeners(Stage primaryStage) {
+		
+		loginButton.setOnAction(e -> {
+			mainMenu = new MainUI();
+			mainMenu.start(primaryStage);
+			stopSound();
+			try {
+				this.stop();
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+		});
+		
+	}
+
+	// The main-method.
 	public static void main(String[] args) {
 		launch(args);
 	}

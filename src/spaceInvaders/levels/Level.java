@@ -36,7 +36,6 @@ public abstract class Level {
         }
         return enemyGridClone;
     }
-
     public abstract List<Boss> getBosses();
 
 }

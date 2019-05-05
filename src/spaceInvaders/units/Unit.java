@@ -120,8 +120,6 @@ public abstract class Unit {
        if (this instanceof Player && unit instanceof Shot){
            return false;
        }
-
-
        return this.getHitbox().intersects(unit.getHitbox());
     }
 }

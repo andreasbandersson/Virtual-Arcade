@@ -5,8 +5,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-/*
- * Måns Grundberg
+/**
+ * Client handling all communication between the chat system and the server side.
+ * @author Mans
+ *
  */
 
 public class ChatClient {
@@ -25,6 +27,9 @@ public class ChatClient {
 		this.port = port;
 	}
 
+	/**
+	 * Connects to server.
+	 */
 	public void connect() {
 		if (!connected) {
 			try {
@@ -41,6 +46,9 @@ public class ChatClient {
 	}
 
 	// TODO: Koppla till UI
+	/**
+	 * Disconnects client from server.
+	 */
 	public void disconnect() {
 		if (connected) {
 			try {
@@ -55,6 +63,11 @@ public class ChatClient {
 		}
 	}
 
+	/**
+	 * Sends specified user and password to server for check
+	 * @param user The specified user
+	 * @param password The specified password
+	 */
 	public void login(User user, String password) {
 		try {
 			oos.writeUTF("LOGIN");
@@ -66,6 +79,11 @@ public class ChatClient {
 		}
 	}
 
+	/**
+	 * Sends specified user and password to server to create new user
+	 * @param user The specified user
+	 * @param password The specified password
+	 */
 	public void newUser(User user, String password) {
 		try {
 			oos.writeUTF("NEW USER");
@@ -76,7 +94,11 @@ public class ChatClient {
 			System.err.println(e);
 		}
 	}
-
+	
+	/**
+	 * Sends message to server
+	 * @param message The message to send
+	 */
 	public void sendMessage(Message message) {
 		try {
 			oos.writeObject(message);
@@ -85,6 +107,11 @@ public class ChatClient {
 		}
 	}
 
+	/**
+	 * Listens for input from server, sending it along to controller
+	 * @author Mans
+	 *
+	 */
 	private class InputListener extends Thread {
 		private boolean running = true;
 
@@ -100,11 +127,12 @@ public class ChatClient {
 			}
 		}
 		
-		// TODO: Koppla till UI
+		/**
+		 * Terminates thread by interrupting it's run method
+		 */
 		public void terminate() {
 			running = false;
 			listener = null;
 		}
 	}
-
 }

@@ -69,7 +69,7 @@ public class Controller implements Runnable, KeyListener {
         initializeLevel(new Level1(Difficulty.EASY,this));
     }
 
-    public void start(){
+    private void start(){
         new Thread(this).start();
     }
 
@@ -139,10 +139,9 @@ public class Controller implements Runnable, KeyListener {
             setTimeout( ()-> timerActivated = false,1000); //wait 1 second, then say that timerActivated is false
         }else if(shooter instanceof Enemy) {
             shot = new EnemyShot(new Position(shooter.getPosition()), ((Enemy) shooter).getDifficulty().ordinal(),false,this);
-        }else{
+        }else {
             return;
         }
-
         shot.start();
         shots.add(shot);
         allUnits.add(shot);
@@ -170,7 +169,6 @@ public class Controller implements Runnable, KeyListener {
         if(unit instanceof Shot){
             shots.remove(unit);
         }
-
         if(unit instanceof Enemy){
             for(List<Enemy> row : enemies){
                 if(row.contains(unit)){
@@ -227,7 +225,6 @@ public class Controller implements Runnable, KeyListener {
                 direction *= -1;
                 moveDown = true;
             }
-
             for (List<Enemy> row : new ArrayList<>(enemies)) {
                 for (Enemy e : row) {
                     enemyFire(e);
