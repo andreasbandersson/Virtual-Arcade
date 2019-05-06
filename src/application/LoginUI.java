@@ -19,6 +19,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 /**
@@ -36,7 +37,8 @@ public class LoginUI extends Application {
 	private Button soundButton;
 	private MainUI mainMenu;
 	private JukeBox jukebox;
-
+	private Label responseLabel;
+	
 	private final int numOfCols = 48;
 	private final int numOfRows = 24;
 
@@ -54,13 +56,19 @@ public class LoginUI extends Application {
 
 
 		// Adding and setting the Label for Virtual Arcade-header
-		Label virtualArcadeLabel = new Label("VIRTUAL\nARCADE");
+		Label virtualArcadeLabel = new Label("VIRTUAL");
 		Glow glow = new Glow(1.0);
 		Bloom bloom = new Bloom(0.9);
 		virtualArcadeLabel.setId("vaLabel");
 		virtualArcadeLabel.setEffect(bloom);
 		virtualArcadeLabel.setEffect(glow);
-		loginRoot.add(virtualArcadeLabel, 1, 0, 15, 9);
+		loginRoot.add(virtualArcadeLabel, 1, 1, 15, 4);
+		
+		Label virtualArcadeLabel2 = new Label("ARCADE");
+		virtualArcadeLabel2.setId("vaLabel");
+		virtualArcadeLabel2.setEffect(bloom);
+		virtualArcadeLabel2.setEffect(glow);
+		loginRoot.add(virtualArcadeLabel2, 1, 5, 15, 4);
 
 		// Adding and setting the Labels and TextFields for the login
 		Label userNameLabel = new Label("Username:");
@@ -76,16 +84,21 @@ public class LoginUI extends Application {
 		PasswordField passwordTextField = new PasswordField();
 		passwordTextField.setPromptText("Enter a password");
 		loginRoot.add(passwordTextField, 18, 12, 10, 2);
-
+		
+		responseLabel = new Label("Incorrect password or username");
+		responseLabel.setWrapText(true);
+		responseLabel.setId("responseLabel");
+		loginRoot.add(responseLabel, 18, 15, 10, 3 );
+		
 		// Adding and setting the button for the login
-		loginButton = new Button("LOGIN");
+		loginButton = new Button(" LOGIN ");
 		loginButton.setId("loginButton");
-		loginRoot.add(loginButton, 20, 16, 9, 1);
+		loginRoot.add(loginButton, 16, 20, 9, 1);
 
 		// Adding and setting the button for creating a new user
-		Button newUserButton = new Button("CREATE NEW USER");
+		Button newUserButton = new Button("CREATE");
 		newUserButton.setId("logOutButton");
-		loginRoot.add(newUserButton, 17, 20, 14, 1);
+		loginRoot.add(newUserButton, 24, 20, 9, 1);
 		
 		//Adding an setting the button for mute and un-mute of login music
 		soundButton = new Button();
@@ -101,7 +114,7 @@ public class LoginUI extends Application {
 		
 		// Sets the primaryStage
 		primaryStage.setTitle("VIRTUAL ARCADE");
-		primaryStage.setResizable(true);
+		primaryStage.setResizable(false);
 		primaryStage.setScene(scene);
 		primaryStage.centerOnScreen();
 		primaryStage.show();

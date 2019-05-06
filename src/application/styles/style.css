@@ -42,7 +42,7 @@
         radial-gradient(center 50.0% 50.0%, radius 100.0%, #ff3838, #ce1a1a);
     -fx-effect: dropshadow( gaussian , rgba(0.0,0.0,0.0,0.25) , 4.0,0.0,0.0,1.0 );
     -fx-font-weight: normal;
-    -fx-font-size: 1.2em;
+    -fx-font-size: 1em;
     -fx-alignment: center;
 }
 #loginButton:pressed {
@@ -53,6 +53,14 @@
     -fx-fill: white;
    
     -fx-font-family: 'sans-serif';
+}
+
+#responseLabel .text{
+	-fx-fill: #ffffff;
+	-fx-font-weight: normal;
+	-fx-effect: dropshadow( three-pass-box , rgba(0.0,0.0,0.0,0.25) , 4.0,0.0,0.0,1.0 );
+	-fx-text-alignment: center;
+	-fx-font-size: 1.1em;
 }
 
 #logOutButton{
@@ -66,7 +74,7 @@
         radial-gradient(center 50.0% 50.0%, radius 100.0%, #DDDDDD, #CCCCCC);
     -fx-effect: dropshadow( gaussian , rgba(0.0,0.0,0.0,0.25) , 4.0,0.0,0.0,1.0 );
     -fx-font-weight: normal;
-    -fx-font-size: 1.2em;
+    -fx-font-size: 1em;
     -fx-alignment: center;
 }
 #logOutButton:pressed {
@@ -84,7 +92,7 @@
     -fx-font-size: 5em;
     -fx-effect: dropshadow( three-pass-box , rgba(0.0,0.0,0.0,0.90) , 4.0,0.0,0.0,0.90 );
     -fx-font-weight: bold;
-    -fx-font-family: 'Neoneon';
+    -fx-font-family: 'NeoNeon';
 }
 #leaderboardLabel .text{
 	-fx-fill: linear-gradient(#ffffff 0%, #ffff00 40%, #dd6000 70%);
@@ -145,7 +153,7 @@
     -fx-effect: dropshadow( gaussian , rgba(0.0,0.0,0.0,0.25) , 4.0,0.0,0.0,1.0 );
     -fx-font-weight: normal;
     -fx-font-size: 1.2em;
-    -fx-alignment: center;
+    -fx-text-alignment: center;
 }
 #nokiaButton:pressed {
     -fx-padding: 14.0 25.0 16.0 25.0;
@@ -169,7 +177,7 @@
     -fx-effect: dropshadow( gaussian , rgba(0.0,0.0,0.0,0.75) , 4.0,0.0,0.0,1.0 );
     -fx-font-weight: normal;
     -fx-font-size: 1em;
-    -fx-alignment: center;
+    -fx-text-alignment: center;
  }
 
 #mainButtons:pressed {
