@@ -60,6 +60,7 @@ public class MainUI extends Application {
 	private Pong pong;
 	private Snake snake;
 	private SpaceInvaders spaceInvaders;
+	private JukeBox jukebox;
 	private final int numOfCols = 48;
 	private final int numOfRows = 24;
 
@@ -71,11 +72,12 @@ public class MainUI extends Application {
 		mainRoot.setId("mainRoot");
 		mainRoot.setPrefSize(1200.0, 600.0);
 
-		startSound();
 		setColumnsandRows();
 		setArcadeMachineImage();
 		setSoundButtonImages();
 		
+		jukebox = new JukeBox("sounds/Lobby-Sound-1.mp3");
+		jukebox.play();
 
 		// Adding and setting the Label for Virtual Arcade-header
 		Label virtualArcadeLabel = new Label("VIRTUAL\nARCADE");
@@ -109,7 +111,7 @@ public class MainUI extends Application {
 		// Adding an setting the button for mute and un-mute of login music
 		soundButton = new Button();
 		soundButton.setId("logOutButton");
-		soundButton.setGraphic(playSoundImageView);
+		soundButton.setGraphic(muteSoundImageView);
 		mainRoot.add(soundButton, 32, 1);
 
 		// Adding and setting the "Play"-buttons for the different arcade games
@@ -201,35 +203,6 @@ public class MainUI extends Application {
 
 	}
 
-	// Sets the the login music and starts it.
-	private void startSound() {
-		String musicFile = "sounds/Lobby-Sound-1.mp3";
-		Media sound = new Media(new File(musicFile).toURI().toString());
-		mediaPlayer = new MediaPlayer(sound);
-		mediaPlayer.play();
-		mediaPlayer.setVolume(0.1);
-	}
-
-	// Mutes the login music if the music is playing, otherwise the function unmutes
-	// the music.
-	private void muteUnmuteSound() {
-		if (mediaPlayer.isMute()) {
-			mediaPlayer.setMute(false);
-			mediaPlayer.setVolume(0.1);
-			soundButton.setGraphic(playSoundImageView);
-		} else {
-			mediaPlayer.setMute(true);
-			soundButton.setGraphic(muteSoundImageView);
-		}
-	}
-
-	// Stops the music.
-	private void stopSound() {
-		if (mediaPlayer.getStatus() == Status.PLAYING) {
-			mediaPlayer.stop();
-		}
-	}
-
 	// Sets the sound buttons images.
 	private void setSoundButtonImages() {
 		try {
@@ -249,7 +222,7 @@ public class MainUI extends Application {
 			leaderBoard = new Leaderboard();
 			leaderBoard.setMainMenu(this);
 			leaderBoard.start(primaryStage);
-			stopSound();
+			jukebox.stopSound();
 			try {
 				this.stop();
 			} catch (Exception e1) {
@@ -260,7 +233,7 @@ public class MainUI extends Application {
 		logOutButton.setOnAction(e -> {
 			login = new LoginUI();
 			login.start(primaryStage);
-			stopSound();
+			jukebox.stopSound();
 			try {
 				this.stop();
 			} catch (Exception e1) {
@@ -268,12 +241,19 @@ public class MainUI extends Application {
 			}
 		});
 
-		soundButton.setOnAction(e -> muteUnmuteSound());
+		soundButton.setOnAction(e -> {
+			jukebox.muteUnmute();
+			if(jukebox.isMute()) {
+				soundButton.setGraphic(playSoundImageView);
+			}else {
+				soundButton.setGraphic(muteSoundImageView);
+			}
+		});
 
 		pongPlayButton.setOnAction(e -> {
 			pong = new Pong();
 			pong.start(primaryStage);
-			stopSound();
+			jukebox.stopSound();
 			try {
 				this.stop();
 			} catch (Exception e1) {
@@ -284,7 +264,7 @@ public class MainUI extends Application {
 		spacePlayButton.setOnAction(e -> {
 			spaceInvaders = new SpaceInvaders();
 			spaceInvaders.start(primaryStage);
-			stopSound();
+			jukebox.stopSound();
 			try {
 				this.stop();
 			} catch (Exception e1) {
@@ -295,7 +275,7 @@ public class MainUI extends Application {
 		snakePlayButton.setOnAction(e -> {
 			snake = new Snake();
 			snake.start(primaryStage);
-			stopSound();
+			jukebox.stopSound();
 			try {
 				this.stop();
 			} catch (Exception e1) {

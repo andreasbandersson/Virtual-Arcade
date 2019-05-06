@@ -34,8 +34,8 @@ public class LoginUI extends Application {
 	private GridPane loginRoot;
 	private Scene scene;
 	private Button soundButton;
-	private MediaPlayer mediaPlayer;
 	private MainUI mainMenu;
+	private JukeBox jukebox;
 
 	private final int numOfCols = 48;
 	private final int numOfRows = 24;
@@ -48,7 +48,9 @@ public class LoginUI extends Application {
 
 		createColumnsandRows();
 		setSoundButtonImages();
-		startSound();
+		
+		jukebox = new JukeBox("sounds/Login-Sound-1.mp3");
+		jukebox.play();
 
 
 		// Adding and setting the Label for Virtual Arcade-header
@@ -88,8 +90,7 @@ public class LoginUI extends Application {
 		//Adding an setting the button for mute and un-mute of login music
 		soundButton = new Button();
 		soundButton.setId("logOutButton");
-		soundButton.setGraphic(playSoundImageView);
-		soundButton.setOnAction(e -> muteUnmuteSound());
+		soundButton.setGraphic(muteSoundImageView);
 		loginRoot.add(soundButton, 42, 2);
 		
 		addActionListeners(primaryStage);
@@ -120,34 +121,6 @@ public class LoginUI extends Application {
 		}
 	}
 
-	// Sets the the login music and starts it.
-	private void startSound() {
-		String musicFile = "sounds/Login-Sound-1.mp3";
-		Media sound = new Media(new File(musicFile).toURI().toString());
-		mediaPlayer = new MediaPlayer(sound);
-		mediaPlayer.play();
-		mediaPlayer.setVolume(0.1);
-	}
-
-	// Mutes the login music if the music is playing, otherwise the function unmutes
-	// the music.
-	private void muteUnmuteSound() {
-		if (mediaPlayer.isMute()) {
-			mediaPlayer.setMute(false);
-			mediaPlayer.setVolume(0.1);
-			soundButton.setGraphic(playSoundImageView);
-		} else {
-			mediaPlayer.setMute(true);
-			soundButton.setGraphic(muteSoundImageView);
-		}
-	}
-	
-	//Stops the music.
-	private void stopSound() {
-		if(mediaPlayer.getStatus()==Status.PLAYING) {
-			mediaPlayer.stop();
-		}
-	}
 	
 	//Sets the sound buttons images.
 	private void setSoundButtonImages() {
@@ -167,11 +140,19 @@ public class LoginUI extends Application {
 		loginButton.setOnAction(e -> {
 			mainMenu = new MainUI();
 			mainMenu.start(primaryStage);
-			stopSound();
+			jukebox.stopSound();
 			try {
 				this.stop();
 			} catch (Exception e1) {
 				e1.printStackTrace();
+			}
+		});
+		soundButton.setOnAction(e -> {
+			jukebox.muteUnmute();
+			if(jukebox.isMute()) {
+				soundButton.setGraphic(playSoundImageView);
+			}else {
+				soundButton.setGraphic(muteSoundImageView);
 			}
 		});
 		
