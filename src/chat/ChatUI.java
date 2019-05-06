@@ -1,6 +1,7 @@
 package chat;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -20,6 +21,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class ChatUI extends Application {
 	private TextArea messages = new TextArea();
@@ -31,13 +33,15 @@ public class ChatUI extends Application {
 	private TextArea onlineUsers = new TextArea();
 	private Boolean showingMessages = true;
 	private ChatController controller;
-	
-//	public ChatUI(ChatController controller) {
-//		this.controller = controller;
-//	}
+	public static Stage stage = new Stage();
+
+	public ChatUI(ChatController controller) {
+		this.controller = controller;
+	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		stage = primaryStage;
 
 		messages.setWrapText(true);
 		messages.setEditable(false);
@@ -55,7 +59,7 @@ public class ChatUI extends Application {
 		vPane.getChildren().add(newMessage);
 		vPane.getChildren().add(sendBtn);
 		vPane.getChildren().add(switchBtn);
-		
+
 		messages.setId("MessageArea");
 		newMessage.setId("MessageArea");
 		onlineUsers.setId("MessageArea");
@@ -71,11 +75,11 @@ public class ChatUI extends Application {
 
 		switchBtn.setOnAction(buttonHandler);
 		sendBtn.setOnAction(buttonHandler);
-		
+
 		newMessage.addEventFilter(KeyEvent.KEY_PRESSED, keyFilter);
 		messages.addEventFilter(KeyEvent.KEY_PRESSED, keyFilter);
 		onlineUsers.addEventFilter(KeyEvent.KEY_PRESSED, keyFilter);
-		
+
 		addMessage("Type @username to send a private message");
 		addMessage("Example: @Aragorn This is a message");
 
@@ -84,18 +88,34 @@ public class ChatUI extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.centerOnScreen();
 		primaryStage.show();
+		
+		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+		    @Override
+		    public void handle(WindowEvent e) {
+		     Platform.exit();
+		     System.exit(0);
+		    }
+		  });
 	}
 
 	public void addMessage(String msg) {
-		messages.appendText(msg + "\n");
+		Platform.runLater(new Runnable() {
+			public void run() {
+				messages.appendText(msg + "\n");
+			}
+		});
 	}
-	
+
 	public void updateUserList(UserList userList) {
-		onlineUsers.setText("");
-		onlineUsers.appendText("USERS ONLINE:" + "\n");
-		for (int i = 0; i < userList.size(); i++) {
-			onlineUsers.appendText(userList.get(i).getUsername() + "\n");
-		}
+		Platform.runLater(new Runnable() {
+			public void run() {
+				onlineUsers.setText("");
+				onlineUsers.appendText("USERS ONLINE:" + "\n");
+				for (int i = 0; i < userList.size(); i++) {
+					onlineUsers.appendText(userList.get(i).getUsername() + "\n");
+				}
+			}
+		});
 	}
 
 	EventHandler<ActionEvent> buttonHandler = new EventHandler<ActionEvent>() {
@@ -120,7 +140,7 @@ public class ChatUI extends Application {
 			}
 		}
 	};
-	
+
 	EventHandler<KeyEvent> keyFilter = new EventHandler<KeyEvent>() {
 		@Override
 		public void handle(KeyEvent e) {

@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Arrays;
 
 /**
  * Handles the logic of the chat/login systems server side
@@ -18,11 +19,13 @@ public class ServerController {
 	private ClientStreams clientStreams = new ClientStreams();
 	private RegisteredUsers users;
 	private ChatServer server;
+	private Highscore[] snakeScore = new Highscore[10];
+	private Highscore[] spaceScore = new Highscore[10];
 
 	public ServerController() {
 		loadUsers();
 	}
-	
+
 	public void addServer(ChatServer server) {
 		this.server = server;
 	}
@@ -153,13 +156,14 @@ public class ServerController {
 			} catch (IOException | ClassNotFoundException e) {
 				e.printStackTrace();
 			}
-		} if (users == null) {
+		}
+		if (users == null) {
 			users = new RegisteredUsers();
 		}
 	}
 
 	/**
-	 *  Writes list registered users to file
+	 * Writes list registered users to file
 	 */
 	private void saveUsers() {
 		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("files/registeredUsers.dat"))) {
@@ -167,6 +171,35 @@ public class ServerController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	// TODO: Check/save highscores
+
+	private void checkHighscore(Highscore highscore) {
+		if (highscore.getGame().equals("Snake")) {
+			if (highscore.getScore() > snakeScore[0].getScore()) {
+				snakeScore[0] = highscore;
+				Arrays.sort(snakeScore);
+				sendHighscoreList(highscore, snakeScore);
+			}
+		} else {
+			if (highscore.getScore() > spaceScore[0].getScore()) {
+				spaceScore[0] = highscore;
+				Arrays.sort(spaceScore);
+				sendHighscoreList(highscore, spaceScore);
+			}
+		}
+	}
+
+	private void sendHighscoreList(Highscore highscore, Highscore[] array) {
+		String str = highscore.getUser() + " made it onto the " + highscore.getGame() + " Leaderboard with "
+				+ highscore.getScore() + "points!";
+		UserList temp = new UserList(clientStreams.getKeySet());
+
+		for (int i = 0; i < temp.size(); i++) {
+			server.sendObject(array, clientStreams.getOutputStream(temp.get(i)));
+		}
+		newMessage(new Message(str));
 	}
 
 }

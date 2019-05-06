@@ -2,6 +2,9 @@ package chat;
 
 import javax.swing.SwingUtilities;
 
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+
 /**
  * Controller-class for the chat systemts client-side environment.
  * 
@@ -10,8 +13,8 @@ import javax.swing.SwingUtilities;
  */
 
 public class ChatController {
-	private ChatTestUI ui; // TEMPORÄRT UI. ENDAST FÖR TEST-SYFTE.
-	// private ChatUI ui;
+	// private ChatTestUI ui; // TEMPORÄRT UI. ENDAST FÖR TEST-SYFTE.
+	private ChatUI ui;
 	private LoginTestUI loginUi;
 	private ChatClient client;
 	private User user;
@@ -110,9 +113,19 @@ public class ChatController {
 			checkServerResponse((String) obj);
 		} else if (obj instanceof User) {
 			this.user = (User) obj;
-		} else {
+		} else if (obj instanceof UserList) {
 			userList = (UserList) obj;
 			ui.updateUserList(userList);
+		} else {
+			updateHighscores((Highscore[]) obj);
+		}
+	}
+
+	private void updateHighscores(Highscore[] highscores) {
+		if (highscores[9].getGame().equals("Snake")) {
+			// update UI with snake leaderboard
+		} else {
+			// update ui with spaceinvaders leaderboard
 		}
 	}
 
@@ -124,26 +137,44 @@ public class ChatController {
 	private void checkServerResponse(String str) {
 		if (str.equals("LOGIN OK")) { // Login successful, open chat
 			loginUi.disposeFrame();
-			ui = new ChatTestUI(this);
-			// ui = new ChatUI(this);
-			ui.addMessage("Welcome back " + this.user.getUsername() + "!");
+		//	ui = new ChatTestUI(this);
+			Platform.startup(new Runnable() {
+				public void run() {
+					try {
+						ui = new ChatUI(ChatController.this);
+						ui.start(ChatUI.stage);
+						ui.addMessage("Welcome back " + ChatController.this.user.getUsername() + "!");
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
 		} else if (str.equals("USER CREATED")) { // User created successfully, open chat
 			loginUi.disposeFrame();
-			ui = new ChatTestUI(this);
-			// ui = new ChatUI(this);
-			ui.addMessage("Welcome to Virtual Arcade " + this.user.getUsername() + "!");
+			// ui = new ChatTestUI(this);
+			Platform.startup(new Runnable() {
+				public void run() {
+					try {
+						ui = new ChatUI(ChatController.this);
+						ui.start(ChatUI.stage);
+						ui.addMessage("Welcome to Virtual Arcade " + ChatController.this.user.getUsername() + "!");
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
 		} else { // Login unsuccessful, e.g. password and/or username incorrect, username taken
-					// etc
+			// etc
 			loginUi.setResponse(str);
 		}
 	}
 
 	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
+		//SwingUtilities.invokeLater(new Runnable() {
+		//	public void run() {
 				new ChatController();
-			}
-		});
+		//	}
+		// });
 	}
 
 }
