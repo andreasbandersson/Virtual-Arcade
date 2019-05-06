@@ -56,7 +56,7 @@
 }
 
 #responseLabel .text{
-	-fx-fill: #ffffff;
+	-fx-fill: #fa0404;
 	-fx-font-weight: normal;
 	-fx-effect: dropshadow( three-pass-box , rgba(0.0,0.0,0.0,0.25) , 4.0,0.0,0.0,1.0 );
 	-fx-text-alignment: center;

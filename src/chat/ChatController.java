@@ -1,21 +1,20 @@
 package chat;
 
-import javax.swing.SwingUtilities;
-
+import application.LoginUI;
+import application.MainUI;
 import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
 
 /**
  * Controller-class for the chat systemts client-side environment.
  * 
- * @author Mans
+ * @author Måns Grundberg
  *
  */
 
 public class ChatController {
-	// private ChatTestUI ui; // TEMPORÄRT UI. ENDAST FÖR TEST-SYFTE.
-	private ChatUI ui;
-	private LoginTestUI loginUi;
+	private ChatUI chatUI;
+	private MainUI mainUI;
+	private LoginUI loginUI;
 	private ChatClient client;
 	private User user;
 	private UserList userList;
@@ -23,7 +22,27 @@ public class ChatController {
 	public ChatController() {
 		client = new ChatClient(60000, "localhost", this);
 		client.connect();
-		loginUi = new LoginTestUI(this);
+		initLoginUI();
+		chatUI = new ChatUI(this);
+	}
+
+	private void initLoginUI() {
+		Platform.startup(new Runnable() {
+			public void run() {
+				loginUI = new LoginUI(ChatController.this);
+				loginUI.start(LoginUI.stage);
+			}
+		});
+	}
+
+	private void initMainUI() {
+		Platform.runLater(new Runnable() {
+			public void run() {
+				mainUI = new MainUI(chatUI);
+				mainUI.start(MainUI.stage);
+				chatUI.addMessage("Welcome to Virtual Arcade " + ChatController.this.user.getUsername() + "!");
+			}
+		});
 	}
 
 	/**
@@ -34,7 +53,7 @@ public class ChatController {
 	 */
 	public void login(String username, String password) {
 		if (username.length() <= 0 || password.length() <= 0) {
-			loginUi.setResponse("Enter username & password");
+			loginUI.setResponse("Enter username & password");
 		} else {
 			client.login(new User(username), password);
 		}
@@ -48,7 +67,7 @@ public class ChatController {
 	 */
 	public void newUser(String username, String password) {
 		if (username.length() < 3 || password.length() < 6) {
-			loginUi.setResponse("Username/password too short");
+			loginUI.setResponse("Username/password too short");
 		} else {
 			client.newUser(new User(username), password);
 		}
@@ -68,7 +87,7 @@ public class ChatController {
 			} else {
 				message = new Message(user.getUsername(), text);
 				client.sendMessage(message);
-				ui.addMessage(message.getTimeStamp() + ": " + "To All: " + message.getText());
+				chatUI.addMessage(message.getTimeStamp() + ": " + "To All: " + message.getText());
 			}
 		}
 	}
@@ -85,14 +104,14 @@ public class ChatController {
 				Message message = new Message(userList.get(i), user.getUsername(),
 						text.substring(text.indexOf(' ') + 1));
 				client.sendMessage(message);
-				ui.addMessage(message.getTimeStamp() + ": " + "To " + userList.get(i).getUsername() + " : "
+				chatUI.addMessage(message.getTimeStamp() + ": " + "To " + userList.get(i).getUsername() + " : "
 						+ message.getText());
 				found = true;
 				break;
 			}
 		}
 		if (!found) { // User not online/doesn't exist
-			ui.addMessage("Couldn't send message: " + text.substring(1, text.indexOf(' ')) + " is not online");
+			chatUI.addMessage("Couldn't send message: " + text.substring(1, text.indexOf(' ')) + " is not online");
 		}
 	}
 
@@ -105,22 +124,27 @@ public class ChatController {
 		if (obj instanceof Message) {
 			Message message = (Message) obj;
 			if (message.getSender() != null) {
-				ui.addMessage(message.getTimeStamp() + ": " + message.getSender() + ": " + message.getText());
+				chatUI.addMessage(message.getTimeStamp() + ": " + message.getSender() + ": " + message.getText());
 			} else {
-				ui.addMessage(message.getTimeStamp() + ": " + message.getText());
+				chatUI.addMessage(message.getTimeStamp() + ": " + message.getText());
 			}
 		} else if (obj instanceof String) {
 			checkServerResponse((String) obj);
 		} else if (obj instanceof User) {
 			this.user = (User) obj;
 		} else if (obj instanceof UserList) {
-			userList = (UserList) obj;
-			ui.updateUserList(userList);
+			Platform.runLater(new Runnable() {
+				public void run() {
+					userList = (UserList) obj;
+					chatUI.updateUserList(userList);
+				}
+			});
 		} else {
 			updateHighscores((Highscore[]) obj);
 		}
 	}
 
+	// TODO
 	private void updateHighscores(Highscore[] highscores) {
 		if (highscores[9].getGame().equals("Snake")) {
 			// update UI with snake leaderboard
@@ -136,45 +160,26 @@ public class ChatController {
 	 */
 	private void checkServerResponse(String str) {
 		if (str.equals("LOGIN OK")) { // Login successful, open chat
-			loginUi.disposeFrame();
-		//	ui = new ChatTestUI(this);
-			Platform.startup(new Runnable() {
+			Platform.runLater(new Runnable() {
 				public void run() {
-					try {
-						ui = new ChatUI(ChatController.this);
-						ui.start(ChatUI.stage);
-						ui.addMessage("Welcome back " + ChatController.this.user.getUsername() + "!");
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+					initMainUI();
+					loginUI.terminate();
 				}
 			});
 		} else if (str.equals("USER CREATED")) { // User created successfully, open chat
-			loginUi.disposeFrame();
-			// ui = new ChatTestUI(this);
-			Platform.startup(new Runnable() {
+			Platform.runLater(new Runnable() {
 				public void run() {
-					try {
-						ui = new ChatUI(ChatController.this);
-						ui.start(ChatUI.stage);
-						ui.addMessage("Welcome to Virtual Arcade " + ChatController.this.user.getUsername() + "!");
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+					initMainUI();
+					loginUI.terminate();
 				}
 			});
 		} else { // Login unsuccessful, e.g. password and/or username incorrect, username taken
-			// etc
-			loginUi.setResponse(str);
+			loginUI.setResponse(str);
 		}
 	}
 
 	public static void main(String[] args) {
-		//SwingUtilities.invokeLater(new Runnable() {
-		//	public void run() {
-				new ChatController();
-		//	}
-		// });
+		new ChatController();
 	}
 
 }

@@ -52,7 +52,7 @@ public class Leaderboard extends Application {
 	private Button soundButton;
 	private Scene scene2, scene3;
 	private GridPane leaderboardRoot;
-	private ChatTestUI chatTestUI = new ChatTestUI(new ChatController());
+	// private ChatTestUI chatTestUI = new ChatTestUI(new ChatController());
 	private Label headerLabel = new Label("LEADERBOARD");
 	private Glow glow = new Glow(1.0);
 	private Bloom bloom = new Bloom(0.9);
@@ -65,7 +65,7 @@ public class Leaderboard extends Application {
 	public void start(Stage primaryStage) {
 		leaderboardRoot = new GridPane();
 		leaderboardRoot.setId("leaderboardRoot");
-		leaderboardRoot.setPrefSize(1200.0, 600.0);
+		leaderboardRoot.setPrefSize(1200.0, 600.0); // minus chattens bredd (300)
 		leaderboardRoot.setGridLinesVisible(true);
 
 		// Setting amount of columns and rows for the GridPane
@@ -94,13 +94,13 @@ public class Leaderboard extends Application {
 		leaderboardRoot.add(soundButton, 32, 1);
 
 		// Setting the chat
-		SwingNode chatUI = new SwingNode();
-		createSwingContent(chatUI);
-		StackPane pane = new StackPane();
-		pane.setId("swingPane");
-		pane.setPrefSize(300.0, 600.0);
-		pane.getChildren().add(chatUI);
-		leaderboardRoot.add(pane, 36, 0, 12, 24);
+//		SwingNode chatUI = new SwingNode();
+//		createSwingContent(chatUI);
+//		StackPane pane = new StackPane();
+//		pane.setId("swingPane");
+//		pane.setPrefSize(300.0, 600.0);
+//		pane.getChildren().add(chatUI);
+//		leaderboardRoot.add(pane, 36, 0, 12, 24);
 
 		addHighscoreLabels();
 		addActionListeners(primaryStage);

@@ -1,11 +1,9 @@
 package chat;
 
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
@@ -17,13 +15,17 @@ import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
-public class ChatUI extends Application {
+/**
+ * 
+ * @author Måns Grundberg
+ *
+ */
+public class ChatUI extends Pane {
 	private TextArea messages = new TextArea();
 	private TextArea newMessage = new TextArea();
 	private Button sendBtn = new Button("Send Message");
@@ -33,16 +35,15 @@ public class ChatUI extends Application {
 	private TextArea onlineUsers = new TextArea();
 	private Boolean showingMessages = true;
 	private ChatController controller;
-	public static Stage stage = new Stage();
 
 	public ChatUI(ChatController controller) {
 		this.controller = controller;
+		init();
 	}
 
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-		stage = primaryStage;
-
+	private void init() {
+		setPrefSize(300, 600);
+		
 		messages.setWrapText(true);
 		messages.setEditable(false);
 		onlineUsers.setWrapText(true);
@@ -64,8 +65,6 @@ public class ChatUI extends Application {
 		newMessage.setId("MessageArea");
 		onlineUsers.setId("MessageArea");
 
-		Scene scene = new Scene(vPane, 300, 600);
-		scene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 
 		vPane.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
 		newMessage.setBorder(new Border(
@@ -82,20 +81,8 @@ public class ChatUI extends Application {
 
 		addMessage("Type @username to send a private message");
 		addMessage("Example: @Aragorn This is a message");
-
-		primaryStage.setTitle("CHATT");
-		primaryStage.setResizable(true);
-		primaryStage.setScene(scene);
-		primaryStage.centerOnScreen();
-		primaryStage.show();
 		
-		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-		    @Override
-		    public void handle(WindowEvent e) {
-		     Platform.exit();
-		     System.exit(0);
-		    }
-		  });
+		getChildren().add(vPane);
 	}
 
 	public void addMessage(String msg) {
@@ -153,8 +140,4 @@ public class ChatUI extends Application {
 			}
 		}
 	};
-
-	public static void main(String[] args) {
-		launch(args);
-	}
 }

@@ -1,17 +1,12 @@
 package application;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import javax.swing.SwingUtilities;
 
-import chat.ChatController;
-import chat.ChatTestUI;
+import chat.ChatUI;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
-import javafx.embed.swing.SwingNode;
-import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.Scene;
@@ -21,21 +16,17 @@ import javafx.scene.effect.Bloom;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
-import javafx.scene.layout.StackPane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaPlayer.Status;
-import javafx.scene.text.TextAlignment;
+
 
 /**
  * @author Andreas Andersson
  */
 
+// TODO: Lägg till "tillbaka"-knapp som syns när spelen visas, för att återvända till main menu. Låt tillbaka-knapp + typ ljudknapp
+// alltid ligga längst ner i framen. Byt resten av pane (förutom chatt) mot respektive spel när dessa startas
 public class MainUI extends Application {
 	private Image pongImage;
 	private Image spaceImage;
@@ -53,9 +44,9 @@ public class MainUI extends Application {
 	private Button snakePlayButton = new Button("START");
 	private Scene scene;
 	private GridPane mainRoot;
-	private MediaPlayer mediaPlayer;
-	private ChatTestUI chatTestUI = new ChatTestUI(new ChatController());
-	private LoginUI login;
+	// private MediaPlayer mediaPlayer;
+	// private ChatTestUI chatTestUI = new ChatTestUI(new ChatController());
+	// private LoginUI login;
 	private Leaderboard leaderBoard;
 	private Pong pong;
 	private Snake snake;
@@ -63,10 +54,16 @@ public class MainUI extends Application {
 	private JukeBox jukebox;
 	private final int numOfCols = 48;
 	private final int numOfRows = 24;
+	private ChatUI chatUI;
+	public static Stage stage = new Stage();
 
+	public MainUI (ChatUI chatUI) {
+		this.chatUI = chatUI;
+	}
 	// Function that initiates the main menu and its components.
 	public void start(Stage primaryStage) {
-
+		stage = primaryStage;
+	
 		// Setting the main Pane for the scene.
 		mainRoot = new GridPane();
 		mainRoot.setId("mainRoot");
@@ -125,13 +122,13 @@ public class MainUI extends Application {
 		mainRoot.add(snakePlayButton, 27, 20, 4, 1);
 
 		// Setting the chat
-		SwingNode chatUI = new SwingNode();
-		createSwingContent(chatUI);
-		StackPane pane = new StackPane();
-		pane.setId("swingPane");
-		pane.setPrefSize(300.0, 600.0);
-		pane.getChildren().add(chatUI);
-		mainRoot.add(pane, 36, 0, 12, 24);
+//		SwingNode chatUI = new SwingNode();
+//		createSwingContent(chatUI);
+//		StackPane pane = new StackPane();
+//		pane.setId("swingPane");
+//		pane.setPrefSize(300.0, 600.0);
+//		pane.getChildren().add(chatUI);
+		mainRoot.add(chatUI, 36, 0, 12, 24);
 
 		// Sets the scene, adds all children nodes and sets the css-style.
 		scene = new Scene(mainRoot, 1200, 600);
@@ -162,19 +159,19 @@ public class MainUI extends Application {
 	}
 
 	// Function that sets the received parameter as a SwingNode
-	private void createSwingContent(final SwingNode swingNode) {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				swingNode.setContent(chatTestUI);
-				swingNode.requestFocus();
-			}
-		});
-	}
+//	private void createSwingContent(final SwingNode swingNode) {
+//		SwingUtilities.invokeLater(new Runnable() {
+//			@Override
+//			public void run() {
+//				swingNode.setContent(chatTestUI);
+//				swingNode.requestFocus();
+//			}
+//		});
+//	}
 	
-	public ChatTestUI getChat() {
-		return chatTestUI;
-	}
+//	public ChatTestUI getChat() {
+//		return chatTestUI;
+//	}
 
 	// Function that creates and sets the arcade machine images to the main menu.
 	private void setArcadeMachineImage() {
@@ -230,16 +227,16 @@ public class MainUI extends Application {
 			}
 		});
 		
-		logOutButton.setOnAction(e -> {
-			login = new LoginUI();
-			login.start(primaryStage);
-			jukebox.stopSound();
-			try {
-				this.stop();
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
-		});
+//		logOutButton.setOnAction(e -> {
+//			login = new LoginUI();
+//			login.start(primaryStage);
+//			jukebox.stopSound();
+//			try {
+//				this.stop();
+//			} catch (Exception e1) {
+//				e1.printStackTrace();
+//			}
+//		});
 
 		soundButton.setOnAction(e -> {
 			jukebox.muteUnmute();
@@ -249,7 +246,8 @@ public class MainUI extends Application {
 				soundButton.setGraphic(muteSoundImageView);
 			}
 		});
-
+		
+		// Skriv om. Instansiera pong och lägg in i mainRoot som pane bara
 		pongPlayButton.setOnAction(e -> {
 			pong = new Pong();
 			pong.start(primaryStage);
@@ -261,6 +259,7 @@ public class MainUI extends Application {
 			}
 		});
 
+		// Skriv om. Instansiera Space Invaders och lägg in i mainRoot som pane bara
 		spacePlayButton.setOnAction(e -> {
 			spaceInvaders = new SpaceInvaders();
 			spaceInvaders.start(primaryStage);
@@ -272,6 +271,7 @@ public class MainUI extends Application {
 			}
 		});
 
+		// Skriv om. Instansiera Snake och lägg in i mainRoot som pane bara
 		snakePlayButton.setOnAction(e -> {
 			snake = new Snake();
 			snake.start(primaryStage);
