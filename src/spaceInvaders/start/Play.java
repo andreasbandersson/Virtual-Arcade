@@ -12,6 +12,6 @@ import spaceInvaders.logic.Controller;
 public class Play {
 
     public static void main(String[] args) {
-        Painter painter = new Painter();
+    //    Painter painter = new Painter();
     }
 }

@@ -47,8 +47,7 @@ public class MainUI extends Application {
 	private Scene scene;
 	private GridPane mainRoot;
 	private Leaderboard leaderBoard;
-	private Pong pong;
-	private Snake snake;
+
 	// private SpaceInvaders spaceInvaders;
 	private Painter spaceInvaders;
 	private JukeBox jukebox;
@@ -235,8 +234,8 @@ public class MainUI extends Application {
 
 		// Skriv om. Instansiera pong och lägg in i mainRoot som pane bara
 		pongPlayButton.setOnAction(e -> {
-			pong = new Pong();
-			pong.start(primaryStage);
+		//	pong = new Pong();
+		//	pong.start(primaryStage);
 			jukebox.stopSound();
 			try {
 				this.stop();
@@ -257,8 +256,8 @@ public class MainUI extends Application {
 
 		// Skriv om. Instansiera Snake och lägg in i mainRoot som pane bara
 		snakePlayButton.setOnAction(e -> {
-			snake = new Snake();
-			snake.start(primaryStage);
+			//snake = new Snake();
+			//snake.start(primaryStage);
 			jukebox.stopSound();
 			try {
 				this.stop();

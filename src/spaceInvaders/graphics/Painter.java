@@ -147,7 +147,7 @@ public class Painter {
         
         scene = new Scene(spaceInvadersRoot,1200,600, Color.BLACK);
         scene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-        controller = new Controller(this,scene);
+        controller = new Controller(this,canvas);
         this.player = controller.getPlayer();
         gc = canvas.getGraphicsContext2D();
         addListeners(scene);
