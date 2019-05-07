@@ -1,14 +1,11 @@
 package spaceInvaders.graphics;
 
+import application.JukeBox;
 import application.MainUI;
 import chat.ChatUI;
-import javafx.animation.AnimationTimer;
-import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -20,7 +17,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.stage.Stage;
 import spaceInvaders.logic.Controller;
 import spaceInvaders.units.Player;
 import spaceInvaders.units.Unit;
@@ -42,18 +38,19 @@ public class Painter {
     private Label levelTitle;
     private static Image playerLifeSprite;
     private GraphicsContext gc;
-    private Group root;
+    private Pane root;
     private Canvas canvas;
     private Scene scene;
     private MainUI mainUI;
     private ChatUI chatUI;
     private GridPane spaceInvadersRoot;
-    private Button backButton;
-    private Button soundButton;
+    private Button backButton = new Button("BACK");
+    private Button soundButton = new Button();
     private Image muteSoundImage;
     private Image playSoundImage;
     private ImageView muteSoundImageView;
     private ImageView playSoundImageView;
+    private JukeBox jukebox;
 
     private final int numOfCols = 48;
     private final int numOfRows = 24;
@@ -67,9 +64,10 @@ public class Painter {
     }
 
 
-    public Painter(MainUI mainUI, ChatUI chatUI) {
+    public Painter(MainUI mainUI, ChatUI chatUI, JukeBox jukebox) {
         this.chatUI = chatUI;
         this.mainUI = mainUI;
+        this.jukebox = jukebox;
         init();
     }
 
@@ -77,7 +75,7 @@ public class Painter {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                root.getChildren().add(levelTitle);
+                root.getChildren().remove(levelTitle);
                 levelTitle.setText("Level " + controller.getLevelCounter());
                 levelTitle.setLayoutX(300);
                 levelTitle.setLayoutY(0);
@@ -106,6 +104,7 @@ public class Painter {
 
     public Scene getScene(){
         spaceInvadersRoot.add(chatUI,36,0,12,24);
+        chatUI.setFocusTraversable(false);
         return scene;
     }
 
@@ -115,11 +114,16 @@ public class Painter {
         scoreLabel.setStyle("-fx-background-color:green;");
 
         canvas = new Canvas(600.0,400.0);
-
+        
+        canvas.setId("SpaceInvaders");
+ 
+        
         spaceInvadersRoot = new GridPane();
-        root = new Group();
+        root = new Pane();
         createColumnsandRows();
         setSoundButtonImages();
+        
+        root.setId("SpaceInvaders");
 
         // Adding and setting the main buttons
         backButton.setId("logOutButton");
@@ -132,14 +136,17 @@ public class Painter {
         spaceInvadersRoot.add(soundButton, 32, 1);
 
 
-        spaceInvadersRoot.setId("spaceInvadersRoot");
+        // spaceInvadersRoot.setId("spaceInvadersRoot");
         spaceInvadersRoot.setPrefSize(1200.0, 600.0); // minus chattens bredd (300)
 
         root.getChildren().add(scoreLabel);
         root.getChildren().add(canvas);
         spaceInvadersRoot.add(root,6,4,24,16);
-
-        scene = new Scene(spaceInvadersRoot,600,400,Color.BLACK);
+        
+        spaceInvadersRoot.setId("mainRoot");
+        
+        scene = new Scene(spaceInvadersRoot,1200,600, Color.BLACK);
+        scene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
         controller = new Controller(this,scene);
         this.player = controller.getPlayer();
         gc = canvas.getGraphicsContext2D();
@@ -148,6 +155,11 @@ public class Painter {
         levelTitle.setFont(new Font(12));
         levelTitle.setBackground(new Background(new BackgroundFill(Color.YELLOW, CornerRadii.EMPTY, Insets.EMPTY)));
         showLevelTitle();
+        
+        backButton.setFocusTraversable(false);
+        soundButton.setFocusTraversable(false);
+        canvas.requestFocus();
+        canvas.setOnMouseMoved(e -> canvas.requestFocus());
     }
 
     public GraphicsContext getGC() {
@@ -204,6 +216,20 @@ public class Painter {
                 controller.requestRepaint();
             }
         });
+        
+    	backButton.setOnAction(e -> {
+			spaceInvadersRoot.getChildren().remove(chatUI);
+			mainUI.switchToMainUI();
+		});
+
+		soundButton.setOnAction(e -> {
+			jukebox.muteUnmute();
+			if (jukebox.isMute()) {
+				soundButton.setGraphic(playSoundImageView);
+			} else {
+				soundButton.setGraphic(muteSoundImageView);
+			}
+		});
     }
 
 }

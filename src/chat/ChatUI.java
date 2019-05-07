@@ -83,6 +83,7 @@ public class ChatUI extends Pane {
 		addMessage("Example: @Aragorn This is a message");
 		
 		getChildren().add(vPane);
+		getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 	}
 
 	public void addMessage(String msg) {

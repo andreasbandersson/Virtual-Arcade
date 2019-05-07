@@ -163,6 +163,7 @@ public class LoginUI extends Application {
 	
 	// Måns
 	public void terminate() {
+		stage.close();
 		jukebox.stopSound();
 		try {
 			this.stop();

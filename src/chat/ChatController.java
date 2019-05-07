@@ -164,6 +164,12 @@ public class ChatController {
 				public void run() {
 					initMainUI();
 					loginUI.terminate();
+					try {
+						loginUI.stop();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			});
 		} else if (str.equals("USER CREATED")) { // User created successfully, open chat
