@@ -28,8 +28,7 @@ public class ChatController {
 	}
 
 	private void initLoginUI() {
-		new JFXPanel();
-		Platform.runLater(new Runnable() {
+		Platform.startup(new Runnable() {
 			public void run() {
 				loginUI = new LoginUI(ChatController.this);
 				loginUI.start(LoginUI.stage);
