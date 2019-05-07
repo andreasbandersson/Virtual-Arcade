@@ -37,6 +37,7 @@ public class Painter {
 
     private Controller controller;
     private Player player;
+
     private Label scoreLabel;
     private Label levelTitle;
     private static Image playerLifeSprite;
@@ -51,6 +52,7 @@ public class Painter {
             e.printStackTrace();
         }
     }
+
 
     public Painter(MainUI mainUI) {
         init();
@@ -87,8 +89,10 @@ public class Painter {
         });
     }
 
+
     public Scene getScene(){
         return scene;
+
     }
 
     public void init() {
@@ -141,5 +145,6 @@ public class Painter {
             }
         });
     }
+
 }
 

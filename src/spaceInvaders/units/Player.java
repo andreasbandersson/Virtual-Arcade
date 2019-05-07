@@ -39,10 +39,6 @@ public class Player extends Unit {
         controller.registerShot(this);
     }
 
-    public Position getStartPosition(){
-        return startPosition;
-    }
-
     @Override
     public void registerHit() {
         life--;

@@ -72,7 +72,7 @@ public class SpaceInvaders extends Application {
 
 		// Sets the scene, adds all children nodes and sets the css style.
 		scene = new Scene(spaceInvadersRoot, 1200, 600);
-		scene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+		scene.getStylesheets().addAll(this.getClass().getResource("styles/style.css").toExternalForm());
 
 		// Sets the primaryStage
 		primaryStage.setTitle("VIRTUAL ARCADE");

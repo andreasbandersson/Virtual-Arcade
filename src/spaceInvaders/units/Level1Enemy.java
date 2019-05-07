@@ -42,8 +42,8 @@ public class Level1Enemy extends Enemy {
 
     @Override
     public boolean willShoot() {
-        int r = rand.nextInt(100) - getDifficulty().ordinal()*5;
-        return (r >= 89);
+        int r = rand.nextInt(1000) - (getDifficulty().ordinal()*15) - controller.getAllUnits().size();
+        return (r >= 890);
     }
 
     @Override

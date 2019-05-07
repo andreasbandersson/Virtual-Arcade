@@ -1,5 +1,6 @@
 package chat;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -9,9 +10,14 @@ import java.util.HashMap;
  *
  */
 
-public class RegisteredUsers {
-	private HashMap<User, String> users = new HashMap<User, String>();
-
+public class RegisteredUsers implements Serializable {
+	private static final long serialVersionUID = 1L;
+	private HashMap<User, String> users;
+	
+	public RegisteredUsers() {
+		users = new HashMap<User, String>();
+	}
+	
 	public synchronized void put(User user, String password) {
 		users.put(user, password);
 	}
