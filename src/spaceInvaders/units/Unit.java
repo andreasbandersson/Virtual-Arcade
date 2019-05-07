@@ -1,5 +1,6 @@
 package spaceInvaders.units;
 
+import javafx.scene.image.Image;
 import spaceInvaders.logic.Controller;
 
 import java.awt.*;
@@ -24,10 +25,6 @@ public abstract class Unit {
        this.width = width;
        this.height = height;
        this.controller = controller;
-   }
-
-   public void setLife(int life){
-       this.life = life;
    }
 
    public synchronized void setPosition(Position position){

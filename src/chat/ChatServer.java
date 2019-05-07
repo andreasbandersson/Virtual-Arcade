@@ -30,6 +30,7 @@ public class ChatServer {
 		try {
 			System.out.println(Thread.currentThread().getName() + "skickar meddelande");
 			oos.writeObject(obj);
+			oos.flush();
 		} catch (IOException e) {
 			System.err.println(e);
 		}

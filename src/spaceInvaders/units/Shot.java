@@ -1,9 +1,12 @@
 package spaceInvaders.units;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import spaceInvaders.logic.Controller;
 
-import javax.swing.*;
-import java.awt.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 
 /**
  * @author Viktor Altintas
@@ -18,11 +21,19 @@ public class Shot extends Unit implements Runnable {
     private boolean paused = false;
     private boolean flying = true;
 
-    private static Image Shot = new ImageIcon("Sprites/shot.png").getImage().getScaledInstance(width,height,Image.SCALE_DEFAULT);
+    private static Image shot;
+
+    static {
+        try {
+            shot = new Image(new FileInputStream("Sprites/shot.png"),width,height,true,false);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     public Shot(Position position, int speed, boolean direction, Controller controller){
-        super(1,position,Shot, width,height, controller);
+        super(1,position,shot, width,height, controller);
 
         this.speed = speed;
         this.direction = direction;
@@ -67,7 +78,7 @@ public class Shot extends Unit implements Runnable {
             }
             controller.requestRepaint();
             try {
-                Thread.sleep(9/(speed+1));
+                Thread.sleep(7/(speed+1));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

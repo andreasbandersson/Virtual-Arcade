@@ -1,8 +1,10 @@
 package spaceInvaders.units;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import spaceInvaders.logic.Controller;
 
-import java.awt.*;
+
 
 /**
  * @author Viktor Altintas

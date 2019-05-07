@@ -1,9 +1,11 @@
 package application;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+
+import chat.ChatController;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -16,9 +18,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaPlayer.Status;
 import javafx.stage.Stage;
 
 /**
@@ -31,14 +30,23 @@ public class LoginUI extends Application {
 	private ImageView playSoundImageView;
 	private ImageView muteSoundImageView;
 	private Button loginButton;
+	private Button newUserButton = new Button("CREATE USER");
 	private GridPane loginRoot;
 	private Scene scene;
 	private Button soundButton;
-	private MediaPlayer mediaPlayer;
-	private MainUI mainMenu;
-
+	private JukeBox jukebox;
+	private Label responseLabel;
+	private TextField username = new TextField();
+	private PasswordField password = new PasswordField();
+	public static Stage stage = new Stage();
+	private ChatController controller;
+	
 	private final int numOfCols = 48;
 	private final int numOfRows = 24;
+	
+	public LoginUI (ChatController controller) {
+		this.controller = controller;
+	}
 
 	public void start(Stage primaryStage) {
 		
@@ -48,48 +56,57 @@ public class LoginUI extends Application {
 
 		createColumnsandRows();
 		setSoundButtonImages();
-		startSound();
+		
+		jukebox = new JukeBox("sounds/Login-Sound-1.mp3");
+		jukebox.play();
 
 
 		// Adding and setting the Label for Virtual Arcade-header
-		Label virtualArcadeLabel = new Label("VIRTUAL\nARCADE");
+		Label virtualArcadeLabel = new Label("VIRTUAL");
 		Glow glow = new Glow(1.0);
 		Bloom bloom = new Bloom(0.9);
 		virtualArcadeLabel.setId("vaLabel");
 		virtualArcadeLabel.setEffect(bloom);
 		virtualArcadeLabel.setEffect(glow);
-		loginRoot.add(virtualArcadeLabel, 1, 0, 15, 9);
+		loginRoot.add(virtualArcadeLabel, 1, 1, 15, 4);
+		
+		Label virtualArcadeLabel2 = new Label("ARCADE");
+		virtualArcadeLabel2.setId("vaLabel");
+		virtualArcadeLabel2.setEffect(bloom);
+		virtualArcadeLabel2.setEffect(glow);
+		loginRoot.add(virtualArcadeLabel2, 1, 5, 15, 4);
 
 		// Adding and setting the Labels and TextFields for the login
 		Label userNameLabel = new Label("Username:");
 		loginRoot.add(userNameLabel, 18, 8, 10, 1);
 
-		TextField usernameTextField = new TextField();
-		usernameTextField.setPromptText("Enter a username");
-		loginRoot.add(usernameTextField, 18, 9, 10, 2);
+		username.setPromptText("Enter a username");
+		loginRoot.add(username, 18, 9, 10, 2);
 
 		Label passwordLabel = new Label("Password:");
 		loginRoot.add(passwordLabel, 18, 11, 10, 1);
 
-		PasswordField passwordTextField = new PasswordField();
-		passwordTextField.setPromptText("Enter a password");
-		loginRoot.add(passwordTextField, 18, 12, 10, 2);
-
+		password.setPromptText("Enter a password");
+		loginRoot.add(password, 18, 12, 10, 2);
+		
+		responseLabel = new Label();
+		responseLabel.setWrapText(true);
+		responseLabel.setId("responseLabel");
+		loginRoot.add(responseLabel, 18, 15, 10, 3 );
+		
 		// Adding and setting the button for the login
-		loginButton = new Button("LOGIN");
+		loginButton = new Button(" LOGIN ");
 		loginButton.setId("loginButton");
-		loginRoot.add(loginButton, 20, 16, 9, 1);
+		loginRoot.add(loginButton, 16, 20, 9, 1);
 
 		// Adding and setting the button for creating a new user
-		Button newUserButton = new Button("CREATE NEW USER");
 		newUserButton.setId("logOutButton");
-		loginRoot.add(newUserButton, 17, 20, 14, 1);
+		loginRoot.add(newUserButton, 24, 20, 9, 1);
 		
 		//Adding an setting the button for mute and un-mute of login music
 		soundButton = new Button();
 		soundButton.setId("logOutButton");
-		soundButton.setGraphic(playSoundImageView);
-		soundButton.setOnAction(e -> muteUnmuteSound());
+		soundButton.setGraphic(muteSoundImageView);
 		loginRoot.add(soundButton, 42, 2);
 		
 		addActionListeners(primaryStage);
@@ -100,10 +117,11 @@ public class LoginUI extends Application {
 		
 		// Sets the primaryStage
 		primaryStage.setTitle("VIRTUAL ARCADE");
-		primaryStage.setResizable(true);
+		primaryStage.setResizable(false);
 		primaryStage.setScene(scene);
 		primaryStage.centerOnScreen();
 		primaryStage.show();
+		stage = primaryStage;
 	}
 
 	// Sets the number and size-percentage of the rows and columns in the GridPane.
@@ -120,34 +138,6 @@ public class LoginUI extends Application {
 		}
 	}
 
-	// Sets the the login music and starts it.
-	private void startSound() {
-		String musicFile = "sounds/Login-Sound-1.mp3";
-		Media sound = new Media(new File(musicFile).toURI().toString());
-		mediaPlayer = new MediaPlayer(sound);
-		mediaPlayer.play();
-		mediaPlayer.setVolume(0.1);
-	}
-
-	// Mutes the login music if the music is playing, otherwise the function unmutes
-	// the music.
-	private void muteUnmuteSound() {
-		if (mediaPlayer.isMute()) {
-			mediaPlayer.setMute(false);
-			mediaPlayer.setVolume(0.1);
-			soundButton.setGraphic(playSoundImageView);
-		} else {
-			mediaPlayer.setMute(true);
-			soundButton.setGraphic(muteSoundImageView);
-		}
-	}
-	
-	//Stops the music.
-	private void stopSound() {
-		if(mediaPlayer.getStatus()==Status.PLAYING) {
-			mediaPlayer.stop();
-		}
-	}
 	
 	//Sets the sound buttons images.
 	private void setSoundButtonImages() {
@@ -161,17 +151,55 @@ public class LoginUI extends Application {
 		muteSoundImageView = new ImageView(muteSoundImage);
 	}
 	
+	// Måns
+	public void setResponse (String response) {
+		Platform.runLater(new Runnable() {
+			public void run() {
+				responseLabel.setText(response);
+				disableButtons(false);
+			}
+		});
+	}
+	
+	// Måns
+	public void terminate() {
+		stage.close();
+		jukebox.stopSound();
+		try {
+			this.stop();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+	}
+	
+	// Måns
+	private void disableButtons(boolean disabled) {
+		loginButton.setDisable(disabled);
+		newUserButton.setDisable(disabled);
+	}
+	
+
+	
 	//Function for adding and setting Action Listeners to all Buttons.
 	private void addActionListeners(Stage primaryStage) {
-		
+		// Måns
 		loginButton.setOnAction(e -> {
-			mainMenu = new MainUI();
-			mainMenu.start(primaryStage);
-			stopSound();
-			try {
-				this.stop();
-			} catch (Exception e1) {
-				e1.printStackTrace();
+			controller.login(username.getText(), password.getText());
+			disableButtons(true);
+		});
+		// Måns
+		newUserButton.setOnAction(e -> {
+			controller.newUser(username.getText(), password.getText());
+			disableButtons(true);
+		});
+		
+		
+		soundButton.setOnAction(e -> {
+			jukebox.muteUnmute();
+			if(jukebox.isMute()) {
+				soundButton.setGraphic(playSoundImageView);
+			}else {
+				soundButton.setGraphic(muteSoundImageView);
 			}
 		});
 		

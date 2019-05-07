@@ -1,126 +1,144 @@
 package chat;
 
-
-
-import javafx.application.Application;
-import javafx.css.Style;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ScrollPane.ScrollBarPolicy;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 
-public class ChatUI extends Application {
+/**
+ * 
+ * @author Måns Grundberg
+ *
+ */
+public class ChatUI extends Pane {
 	private TextArea messages = new TextArea();
-	private ScrollPane messageScroll;
 	private TextArea newMessage = new TextArea();
-	private ScrollPane newMsgScroll;
 	private Button sendBtn = new Button("Send Message");
 	private Button switchBtn = new Button("Switch");
-	private BorderPane pane = new BorderPane();
 	private VBox vPane = new VBox(4);
-	private TabPane tabPane = new TabPane();
+	private StackPane sPane = new StackPane();
 	private TextArea onlineUsers = new TextArea();
-	private ScrollPane userScroll = new ScrollPane();
+	private Boolean showingMessages = true;
+	private ChatController controller;
 
-	@Override
-	public void start(Stage primaryStage) throws Exception {		
-		messageScroll = new ScrollPane(messages);
-		messageScroll.setHbarPolicy(ScrollBarPolicy.NEVER);
-		messageScroll.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+	public ChatUI(ChatController controller) {
+		this.controller = controller;
+		init();
+	}
+
+	private void init() {
+		setPrefSize(300, 600);
+		
 		messages.setWrapText(true);
-		
 		messages.setEditable(false);
-		
-		
+		onlineUsers.setWrapText(true);
+		onlineUsers.setEditable(false);
 		newMessage.setWrapText(true);
-		newMsgScroll = new ScrollPane(newMessage);
-		newMsgScroll.setHbarPolicy(ScrollBarPolicy.NEVER);
-		newMsgScroll.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
-		
-		userScroll = new ScrollPane(onlineUsers);
-		userScroll.setHbarPolicy(ScrollBarPolicy.NEVER);
-		userScroll.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
-		
-//		messages.setStyle("-fx-background-color: #000000;");
-//		newMessage.setStyle("-fx-background-color: black;");
-//		messageScroll.setStyle("-fx-background-color: #000000");
-//		newMsgScroll.setStyle("-fx-background-color: black;");
-//		onlineUsers.setStyle("-fx-background-color: black;");
-//		userScroll.setStyle("-fx-background-color: black;");
-//		newMessage.setStyle("-fx-text-fill: green");
-		messages.setPrefSize(300, 450);
-//		messages.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
-//		messageScroll.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
-	
-		messageScroll.setPrefSize(300, 450);
-		newMsgScroll.setPrefSize(300, 50);
-		sendBtn.setPrefSize(300, 50);
-		switchBtn.setPrefSize(300, 50);
+		messages.setPrefSize(300, 480);
+		onlineUsers.setPrefSize(300, 480);
+		sendBtn.setPrefSize(300, 25);
+		switchBtn.setPrefSize(300, 25);
+		newMessage.setPrefSize(300, 50);
 
-		newMessage.autosize();
-		
-//		tabPane.getTabs().add(msgTab);
-//		tabPane.getTabs().add(userTab);
-//		
-//		GridPane btmPane = new GridPane();
-//		btmPane.add(newMessage, 0, 0);
-//		btmPane.add(sendBtn, 0, 1);
-		sendBtn.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-		
-		vPane.getChildren().add(messageScroll);
-		vPane.getChildren().add(newMsgScroll);
+		sPane.getChildren().add(messages);
+		vPane.getChildren().add(sPane);
+		vPane.getChildren().add(newMessage);
 		vPane.getChildren().add(sendBtn);
 		vPane.getChildren().add(switchBtn);
-		
-//		addMessage("HEJHEJHejkjaldk askdjfl aksjdflkj lsakdjf", "SYSTEM");
-//		addMessage("private message", "PRIVATE");
-//		
 
 		messages.setId("MessageArea");
-		messageScroll.setId("MessageArea");
 		newMessage.setId("MessageArea");
-		newMsgScroll.setId("MessageArea");
-		messages.appendText("Hejhej");
+		onlineUsers.setId("MessageArea");
+
+
+		vPane.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+		newMessage.setBorder(new Border(
+				new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+		vPane.setBorder(new Border(
+				new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+
+		switchBtn.setOnAction(buttonHandler);
+		sendBtn.setOnAction(buttonHandler);
+
+		newMessage.addEventFilter(KeyEvent.KEY_PRESSED, keyFilter);
+		messages.addEventFilter(KeyEvent.KEY_PRESSED, keyFilter);
+		onlineUsers.addEventFilter(KeyEvent.KEY_PRESSED, keyFilter);
+
+		addMessage("Type @username to send a private message");
+		addMessage("Example: @Aragorn This is a message");
 		
-		Scene scene = new Scene(vPane, 300, 600);
-		scene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-		
-		// vPane.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
-		
-		primaryStage.setTitle("CHATT");
-		primaryStage.setResizable(true);
-		primaryStage.setScene(scene);
-		primaryStage.centerOnScreen();
-		primaryStage.show();
-		
-		
+		getChildren().add(vPane);
+		getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 	}
 
-	public void addMessage(String msg, String type) {
-		if (type.equals("SYSTEM")) {
-			messages.setStyle("-fx-text-fill: red");
-		} else if (type.equals("PRIVATE")) {
-			messages.setStyle("-fx-text-fill: green");
-		} else {
-			messages.setStyle("-fx-text-fill: green");
+	public void addMessage(String msg) {
+		Platform.runLater(new Runnable() {
+			public void run() {
+				messages.appendText(msg + "\n");
+			}
+		});
+	}
+
+	public void updateUserList(UserList userList) {
+		Platform.runLater(new Runnable() {
+			public void run() {
+				onlineUsers.setText("");
+				onlineUsers.appendText("USERS ONLINE:" + "\n");
+				for (int i = 0; i < userList.size(); i++) {
+					onlineUsers.appendText(userList.get(i).getUsername() + "\n");
+				}
+			}
+		});
+	}
+
+	EventHandler<ActionEvent> buttonHandler = new EventHandler<ActionEvent>() {
+		@Override
+		public void handle(ActionEvent event) {
+			if (event.getSource() == sendBtn && !newMessage.getText().isEmpty()) {
+				controller.sendMessage(newMessage.getText().trim());
+				newMessage.setText(null);
+				newMessage.selectPositionCaret(0);
+			} else if (event.getSource() == switchBtn) {
+				if (showingMessages) {
+					sPane.getChildren().clear();
+					sPane.getChildren().add(onlineUsers);
+					switchBtn.setText("Show messages");
+					showingMessages = false;
+				} else if (!showingMessages) {
+					sPane.getChildren().clear();
+					sPane.getChildren().add(messages);
+					switchBtn.setText("Show online users");
+					showingMessages = true;
+				}
+			}
 		}
-		messages.appendText(msg + "\n");
-	}
-	
-	public static void main(String[] args) {
-		launch(args);
-	}
+	};
 
+	EventHandler<KeyEvent> keyFilter = new EventHandler<KeyEvent>() {
+		@Override
+		public void handle(KeyEvent e) {
+			if (e.getCode() == KeyCode.ENTER) {
+				sendBtn.fire();
+				e.consume();
+			} else if (e.getCode() == KeyCode.TAB) {
+				switchBtn.fire();
+				e.consume();
+			}
+		}
+	};
 }

@@ -20,7 +20,7 @@ public class Level1 extends Level {
         for (int i  = 0 ; i < 4; i ++) {
             enemyBlock.add(new ArrayList<>());
             for (int j = 0; j < 8; j++ ) {
-                enemyBlock.get(i).add(new Level1Enemy(new Position((200+ j*60),40+(i*45)),null,Difficulty.EASY));
+                enemyBlock.get(i).add(new Level1Enemy(new Position((200+ j*50),35+(i*30)),null,Difficulty.EASY));
             }
         }
     }
