@@ -1,6 +1,7 @@
 package spaceInvaders.logic;
 
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
 import spaceInvaders.graphics.GameFrame;
 import spaceInvaders.graphics.Painter;
 import spaceInvaders.levels.Difficulty;
@@ -23,7 +24,7 @@ public class Controller implements Runnable {
     private final int enemySpeed = 20;
 
     private Painter painter;
-    private Scene scene;
+    private Canvas canvas;
     private Player player = new Player(this);
     private int score = 0;
     private int levelCounter = 1;
@@ -39,9 +40,9 @@ public class Controller implements Runnable {
 
     private int direction = +1; //+1 = right; -1 = left
 
-    public Controller(Painter painter, Scene scene) {
+    public Controller(Painter painter, Canvas canvas) {
         this.painter = painter;
-        this.scene = scene;
+        this.canvas = canvas;
         allUnits.add(player);
         initializeLevel(new Level1(Difficulty.EASY,this));
     }
@@ -107,7 +108,7 @@ public class Controller implements Runnable {
                     otherUnit.registerHit();
                     break outerLoop;
                 }
-                if (unit.getPosition().getY() > scene.getHeight() || unit.getPosition().getY() < 0){
+                if (unit.getPosition().getY() > canvas.getHeight() || unit.getPosition().getY() < 0){
                     removeUnit(unit);
                 }
             }
@@ -150,7 +151,7 @@ public class Controller implements Runnable {
     private boolean anyEnemyTouchesBorder(){
         for(List<Enemy> row : enemies){
             for(Enemy e : row){
-                if(e.getPosition().getX() + e.getWidth() + direction*enemySpeed > scene.getWidth() ||
+                if(e.getPosition().getX() + e.getWidth() + direction*enemySpeed > canvas.getWidth() ||
                         e.getPosition().getX() + direction*enemySpeed < 0){
                     return true;
                 }
