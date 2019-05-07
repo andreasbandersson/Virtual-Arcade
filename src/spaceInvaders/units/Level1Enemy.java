@@ -1,10 +1,12 @@
 package spaceInvaders.units;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import spaceInvaders.levels.Difficulty;
 import spaceInvaders.logic.Controller;
 
-import javax.swing.*;
-import java.awt.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Random;
 
 /**
@@ -13,18 +15,30 @@ import java.util.Random;
 
 public class Level1Enemy extends Enemy {
 
-    private static final Image sprite = new ImageIcon("Sprites/enemyYellow.png").getImage().getScaledInstance(35,30,Image.SCALE_DEFAULT);;
+
+
+    private static Image enemySprite1;
+    private static Image enemySprite2;
+
+    static {
+        try {
+             enemySprite1 = new Image(new FileInputStream("Sprites/enemyYellow.png"),25,20,false,false);
+            enemySprite2 = new Image(new FileInputStream("Sprites/enemyGreen.png"),25,20,false,false);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
     private Random rand = new Random();
 
     public Level1Enemy(Position position, Controller controller, Difficulty difficulty) {
-        super(1, position, sprite,35,30, controller, 20, difficulty);
+        super(1, position, enemySprite1,enemySprite2,35,30, controller, 20, difficulty);
     }
 
     @Override
     public void shoot() {
         controller.registerShot(this);
     }
-
 
     @Override
     public boolean willShoot() {

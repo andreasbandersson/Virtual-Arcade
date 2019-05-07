@@ -31,7 +31,7 @@ public class SpaceInvaders extends Application {
 	private Scene scene;
 	private GridPane spaceInvadersRoot;
 	private ChatTestUI chatTestUI = new ChatTestUI(new ChatController());
-	private GameFrame spaceInvadersGame = new GameFrame(new Controller());
+	//private GameFrame spaceInvadersGame = new GameFrame(new Controller());
 
 	private final int numOfCols = 48;
 	private final int numOfRows = 24;
@@ -62,7 +62,7 @@ public class SpaceInvaders extends Application {
 		spaceInvadersRoot.add(pane, 36, 0, 12, 24);
 		
 		SwingNode snakeGame = new SwingNode();
-		createSpaceInvadersSwingContent(snakeGame);
+		//createSpaceInvadersSwingContent(snakeGame);
 		StackPane snakePane = new StackPane();
 		snakePane.setId("swingPane");
 		snakePane.setPrefSize(600.0, 600.0);
@@ -109,16 +109,16 @@ public class SpaceInvaders extends Application {
 		});
 	}
 	
-	private void createSpaceInvadersSwingContent(final SwingNode swingNode) {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-			
-				swingNode.setContent(spaceInvadersGame);
-				swingNode.requestFocus();
-			}
-		});
-	}
+//	private void createSpaceInvadersSwingContent(final SwingNode swingNode) {
+//		SwingUtilities.invokeLater(new Runnable() {
+//			@Override
+//			public void run() {
+//
+//				swingNode.setContent(spaceInvadersGame);
+//				swingNode.requestFocus();
+//			}
+//		});
+//	}
 	
 	//Sets and adds the arcade machine image for the Pong game. 
 	public void setArcadeMachineImage() {

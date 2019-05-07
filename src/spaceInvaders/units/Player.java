@@ -1,9 +1,11 @@
 package spaceInvaders.units;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import spaceInvaders.logic.Controller;
 
-import javax.swing.*;
-import java.awt.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 /**
  * @author Viktor Altintas
@@ -11,8 +13,17 @@ import java.awt.*;
 
 public class Player extends Unit {
 
-    private static Image playerSprite = new ImageIcon("Sprites/player.png").getImage().getScaledInstance(50,40,Image.SCALE_DEFAULT);
-    private static Position startPosition = new Position(350,500);
+    private static Image playerSprite;
+
+    static {
+        try {
+            playerSprite = new javafx.scene.image.Image(new FileInputStream("Sprites/player.png"),40,30,true,false);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static Position startPosition = new Position(270,350);
 
     public Player(Controller controller) {
         super(3, new Position(startPosition), playerSprite,50,40, controller);

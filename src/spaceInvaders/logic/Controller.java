@@ -1,5 +1,6 @@
 package spaceInvaders.logic;
 
+import javafx.scene.Scene;
 import spaceInvaders.graphics.GameFrame;
 import spaceInvaders.graphics.Painter;
 import spaceInvaders.levels.Difficulty;
@@ -16,13 +17,13 @@ import java.util.List;
  * @author Viktor Altintas
  */
 
-public class Controller implements Runnable, KeyListener {
+public class Controller implements Runnable {
 
     private final int FPS = 2;
-    private final int enemySpeed = 25;
+    private final int enemySpeed = 20;
 
-    private GameFrame frame;
     private Painter painter;
+    private Scene scene;
     private Player player = new Player(this);
     private int score = 0;
     private int levelCounter = 1;
@@ -37,10 +38,11 @@ public class Controller implements Runnable, KeyListener {
 
     private int direction = +1; //+1 = right; -1 = left
 
-    public Controller() {
-        painter = new Painter(this);
-        painter.showLevelTitle();
+    public Controller(Painter painter, Scene scene) {
+        this.painter = painter;
+        this.scene = scene;
         allUnits.add(player);
+        initializeLevel(new Level1(Difficulty.EASY,this));
     }
 
     public Player getPlayer() {
@@ -61,11 +63,6 @@ public class Controller implements Runnable, KeyListener {
         start();
     }
 
-    public void installFrame(GameFrame frame){
-        this.frame = frame;
-        initializeLevel(new Level1(Difficulty.EASY,this));
-    }
-
     private void start(){
         new Thread(this).start();
     }
@@ -81,35 +78,6 @@ public class Controller implements Runnable, KeyListener {
     public int getScore() {
         return score;
     }
-
-    @Override
-    public void keyTyped(KeyEvent e) {}
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-
-        switch (e.getExtendedKeyCode()){
-
-            case KeyEvent.VK_A:
-            case KeyEvent.VK_LEFT:
-                player.move(player.getPosition().getX()-15,player.getPosition().getY());
-                break;
-
-            case KeyEvent.VK_D:
-            case KeyEvent.VK_RIGHT:
-                player.move(player.getPosition().getX()+15,player.getPosition().getY());
-                break;
-
-            case KeyEvent.VK_SPACE:
-                player.shoot();
-                break;
-        }
-        painter.repaint();
-    }
-    @Override
-    public void keyReleased(KeyEvent e) {
-    }
-
 
     public void registerShot(Unit shooter){
         Shot shot;
@@ -136,12 +104,12 @@ public class Controller implements Runnable, KeyListener {
                     otherUnit.registerHit();
                     break outerLoop;
                 }
-                if (unit.getPosition().getY() > frame.getHeight() || unit.getPosition().getY() < 0){
+                if (unit.getPosition().getY() > scene.getHeight() || unit.getPosition().getY() < 0){
                     removeUnit(unit);
                 }
             }
         }
-        painter.repaint();
+        painter.configureGraphicsContext(painter.getGC());
     }
 
     public void removeUnit(Unit unit){
@@ -179,7 +147,7 @@ public class Controller implements Runnable, KeyListener {
     private boolean anyEnemyTouchesBorder(){
         for(List<Enemy> row : enemies){
             for(Enemy e : row){
-                if(e.getPosition().getX() + e.getWidth() + direction*enemySpeed > frame.getWidth() ||
+                if(e.getPosition().getX() + e.getWidth() + direction*enemySpeed > scene.getWidth() ||
                         e.getPosition().getX() + direction*enemySpeed < 0){
                     return true;
                 }
@@ -200,10 +168,12 @@ public class Controller implements Runnable, KeyListener {
             for (List<Enemy> row : new ArrayList<>(enemies)) {
                 for (Enemy e : row) {
                     enemyFire(e);
+                    e.updateAnimation();
                     if (!moveDown)
                         e.moveRelative(direction * enemySpeed, 0);
-                    else
+                    else {
                         e.moveRelative(0, enemySpeed);
+                    }
                 }
             }
             requestRepaint();
@@ -226,9 +196,10 @@ public class Controller implements Runnable, KeyListener {
         return levelCounter;
     }
 
-    public void levelWin() {
+    public synchronized void levelWin() {
         levelCounter++;
         painter.showLevelTitle();
+        System.out.println(allUnits.size());
         initializeLevel(new Level1(Difficulty.MEDIUM,this)); //should be a list of levels that initialize retrieves from
         System.out.println("U WIN LEL"); //gg
     }
