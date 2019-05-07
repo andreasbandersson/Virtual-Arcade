@@ -2,71 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2a364dd5-066f-46ae-aef7-30ffc42ed323" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/mute.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/pongScreen.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/pongScreen2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/snakeScreen.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/sound.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/spaceScreen.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sounds/Knight-Rider-Theme-Song.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sounds/Lobby-Sound-1.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sounds/Login-Sound-1.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/application/JukeBox.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/application/Leaderboard.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/application/Pong.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/application/Snake.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/application/SpaceInvaders.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/application/styles/NEONEON.OTF" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/application/styles/PRESSSTART2P.TTF" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/application/styles/arcade5.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/application/styles/login2.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/application/styles/login3.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/application/styles/style.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/chat/ChatUI.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/chat/Test.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/chat/style.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/snake/BodyPart.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/snake/Food.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/snake/GamePanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/files/bounce.wav" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/arcadeBg.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/arcadeGreen.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/kramer.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/loginbg.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/pong.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/retroarcade.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/application/LoginUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/application/LoginUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/application/MainUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/application/MainUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/application/arcadeBg.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/application/loginbg3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/application/style.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/chat/ChatClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chat/ChatClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/chat/ChatController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chat/ChatController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/chat/ChatServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chat/ChatServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/chat/ChatTestUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chat/ChatTestUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/chat/ClientStreams.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chat/ClientStreams.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/chat/LoginTestUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chat/LoginTestUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/chat/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chat/Message.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/chat/RegisteredUsers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chat/RegisteredUsers.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/chat/ServerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chat/ServerController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/chat/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chat/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/chat/UserList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chat/UserList.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pong/Ball.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pong/Ball.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pong/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pong/Config.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pong/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pong/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pong/Platform.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pong/Platform.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/snake/RenderPanel.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/snake/SnakeGame.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/spaceInvaders/graphics/Painter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/spaceInvaders/graphics/Painter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/spaceInvaders/levels/Level.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/spaceInvaders/levels/Level.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/spaceInvaders/levels/Level1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/spaceInvaders/levels/Level1.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/spaceInvaders/logic/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/spaceInvaders/logic/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/spaceInvaders/units/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/spaceInvaders/units/Player.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/spaceInvaders/units/Shot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/spaceInvaders/units/Shot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/spaceInvaders/units/Unit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/spaceInvaders/units/Unit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/chat/ChatUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/chat/ChatUI.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -87,11 +25,29 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Painter.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Painter.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/spaceInvaders/graphics/Painter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="224">
-              <caret line="20" column="29" lean-forward="true" selection-start-line="20" selection-start-column="29" selection-end-line="20" selection-end-column="29" />
+            <state relative-caret-position="190">
+              <caret line="18" column="30" lean-forward="true" selection-start-line="18" selection-start-column="30" selection-end-line="18" selection-end-column="30" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Play.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/spaceInvaders/start/Play.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="204">
+              <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ChatUI.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/chat/ChatUI.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-204">
+              <caret line="9" column="55" selection-start-line="9" selection-start-column="55" selection-end-line="9" selection-end-column="55" />
             </state>
           </provider>
         </entry>
@@ -132,19 +88,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="68">
               <caret line="4" column="3" selection-start-line="4" selection-start-column="3" selection-end-line="4" selection-end-column="3" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Player.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/spaceInvaders/units/Player.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="27" column="25" selection-start-line="27" selection-start-column="25" selection-end-line="27" selection-end-column="25" />
-              <folding>
-                <element signature="e#626#627#0" expanded="true" />
-                <element signature="e#671#672#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -222,6 +165,7 @@
         <option value="$PROJECT_DIR$/src/spaceInvaders/units/Shot.java" />
         <option value="$PROJECT_DIR$/src/spaceInvaders/units/Level1Enemy.java" />
         <option value="$PROJECT_DIR$/src/spaceInvaders/graphics/Painter.java" />
+        <option value="$PROJECT_DIR$/src/chat/ChatUI.java" />
       </list>
     </option>
   </component>
@@ -247,6 +191,11 @@
             <path>
               <item name="Virtual-Arcade" type="b2602c69:ProjectViewProjectNode" />
               <item name="Virtual-Arcade" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Virtual-Arcade" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Virtual-Arcade" type="462c0819:PsiDirectoryNode" />
+              <item name=".idea" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Virtual-Arcade" type="b2602c69:ProjectViewProjectNode" />
@@ -474,7 +423,7 @@
       <window_info anchor="bottom" id="Terminal" order="9" />
       <window_info id="Capture Tool" order="6" />
       <window_info id="Designer" order="3" />
-      <window_info content_ui="combo" id="Project" order="0" weight="0.12260128" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.12260128" />
       <window_info anchor="bottom" id="Statistic" order="7" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -523,7 +472,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/Logic/LevelGenerator.java" />
     <entry file="file://$PROJECT_DIR$/src/Units/Blockades.java" />
     <entry file="file://$PROJECT_DIR$/Sprites/shot.png">
       <provider selected="true" editor-type-id="images" />
@@ -652,13 +600,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/spaceInvaders/start/Play.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="16" selection-start-line="16" selection-end-line="16" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/spaceInvaders/States/PauseState.java" />
     <entry file="file://$PROJECT_DIR$/src/spaceInvaders/States/PlayState.java" />
     <entry file="file://$PROJECT_DIR$/src/spaceInvaders/States/State.java" />
@@ -735,8 +676,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/spaceInvaders/graphics/Painter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="224">
-          <caret line="20" column="29" lean-forward="true" selection-start-line="20" selection-start-column="29" selection-end-line="20" selection-end-column="29" />
+        <state relative-caret-position="190">
+          <caret line="18" column="30" lean-forward="true" selection-start-line="18" selection-start-column="30" selection-end-line="18" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/spaceInvaders/start/Play.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/chat/ChatUI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-204">
+          <caret line="9" column="55" selection-start-line="9" selection-start-column="55" selection-end-line="9" selection-end-column="55" />
         </state>
       </provider>
     </entry>
