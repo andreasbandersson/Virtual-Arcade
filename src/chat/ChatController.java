@@ -20,7 +20,7 @@ public class ChatController {
 	private UserList userList;
 
 	public ChatController() {
-		client = new ChatClient(60000, "localhost", this);
+		client = new ChatClient(60000, "10.2.30.63", this);
 		client.connect();
 		initLoginUI();
 		chatUI = new ChatUI(this);

@@ -79,6 +79,9 @@ public class Leaderboard {
 
 		addHighscoreLabels();
 		addActionListeners();
+		
+		 backButton.setFocusTraversable(false);
+	     soundButton.setFocusTraversable(false);
 
 		scene = new Scene(leaderboardRoot, 1200, 600);
 		scene.getStylesheets().addAll(this.getClass().getResource("styles/style.css").toExternalForm());
