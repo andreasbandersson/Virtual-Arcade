@@ -1,6 +1,7 @@
 package spaceInvaders.graphics;
 
 import application.MainUI;
+import chat.ChatUI;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -11,13 +12,12 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -45,6 +45,19 @@ public class Painter {
     private Group root;
     private Canvas canvas;
     private Scene scene;
+    private MainUI mainUI;
+    private ChatUI chatUI;
+    private GridPane spaceInvadersRoot;
+    private Button backButton;
+    private Button soundButton;
+    private Image muteSoundImage;
+    private Image playSoundImage;
+    private ImageView muteSoundImageView;
+    private ImageView playSoundImageView;
+
+    private final int numOfCols = 48;
+    private final int numOfRows = 24;
+
     static {
         try {
             playerLifeSprite = new Image(new FileInputStream("Sprites/player.png"),30,25,true,false);
@@ -54,7 +67,9 @@ public class Painter {
     }
 
 
-    public Painter(MainUI mainUI) {
+    public Painter(MainUI mainUI, ChatUI chatUI) {
+        this.chatUI = chatUI;
+        this.mainUI = mainUI;
         init();
     }
 
@@ -62,7 +77,7 @@ public class Painter {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                root.getChildren().remove(levelTitle);
+                root.getChildren().add(levelTitle);
                 levelTitle.setText("Level " + controller.getLevelCounter());
                 levelTitle.setLayoutX(300);
                 levelTitle.setLayoutY(0);
@@ -89,10 +104,9 @@ public class Painter {
         });
     }
 
-
     public Scene getScene(){
+        spaceInvadersRoot.add(chatUI,36,0,12,24);
         return scene;
-
     }
 
     public void init() {
@@ -102,10 +116,30 @@ public class Painter {
 
         canvas = new Canvas(600.0,400.0);
 
+        spaceInvadersRoot = new GridPane();
         root = new Group();
-        root.getChildren().add(canvas);
+        createColumnsandRows();
+        setSoundButtonImages();
+
+        // Adding and setting the main buttons
+        backButton.setId("logOutButton");
+        spaceInvadersRoot.add(backButton, 1, 21, 6, 2);
+
+        // Adding an setting the button for mute and un-mute of login music
+        soundButton = new Button();
+        soundButton.setId("logOutButton");
+        soundButton.setGraphic(playSoundImageView);
+        spaceInvadersRoot.add(soundButton, 32, 1);
+
+
+        spaceInvadersRoot.setId("spaceInvadersRoot");
+        spaceInvadersRoot.setPrefSize(1200.0, 600.0); // minus chattens bredd (300)
+
         root.getChildren().add(scoreLabel);
-        scene = new Scene(root,600,400,Color.BLACK);
+        root.getChildren().add(canvas);
+        spaceInvadersRoot.add(root,6,4,24,16);
+
+        scene = new Scene(spaceInvadersRoot,600,400,Color.BLACK);
         controller = new Controller(this,scene);
         this.player = controller.getPlayer();
         gc = canvas.getGraphicsContext2D();
@@ -118,6 +152,32 @@ public class Painter {
 
     public GraphicsContext getGC() {
         return gc;
+    }
+
+    private void createColumnsandRows() {
+
+        for (int i = 0; i < numOfCols; i++) {
+            ColumnConstraints colConst = new ColumnConstraints();
+            colConst.setPercentWidth(100.0 / numOfCols);
+            spaceInvadersRoot.getColumnConstraints().add(colConst);
+        }
+        for (int i = 0; i < numOfRows; i++) {
+            RowConstraints rowConst = new RowConstraints();
+            rowConst.setPercentHeight(100.0 / numOfRows);
+            spaceInvadersRoot.getRowConstraints().add(rowConst);
+        }
+    }
+
+    // Sets the sound buttons images.
+    private void setSoundButtonImages() {
+        try {
+            playSoundImage = new Image(new FileInputStream("images/sound.png"));
+            muteSoundImage = new Image(new FileInputStream("images/mute.png"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        playSoundImageView = new ImageView(playSoundImage);
+        muteSoundImageView = new ImageView(muteSoundImage);
     }
 
     public void addListeners(Scene scene) {
