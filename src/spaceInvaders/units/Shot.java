@@ -76,7 +76,7 @@ public class Shot extends Unit implements Runnable {
             else {
                 move(getPosition().getX(), getPosition().getY() + 1);
             }
-            //controller.requestHitboxCheck(); causes nullpointer
+            controller.requestHitboxCheck();
             try {
                 Thread.sleep(7/(speed+1));
             } catch (InterruptedException e) {
