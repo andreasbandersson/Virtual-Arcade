@@ -1,7 +1,9 @@
 package application;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
 
 import chat.ChatUI;
 import javafx.animation.Animation;
@@ -115,7 +117,7 @@ public class MainUI extends Application {
 		mainRoot.add(pongPlayButton, 5, 17, 4, 2);
 
 		spacePlayButton.setId("arcadeButtons");
-		mainRoot.add(spacePlayButton, 16, 20, 4, 2);
+		mainRoot.add(spacePlayButton, 16, 19, 4, 2);
 
 		snakePlayButton.setId("nokiaButton");
 		mainRoot.add(snakePlayButton, 27, 20, 4, 1);
@@ -124,7 +126,11 @@ public class MainUI extends Application {
 
 		// Sets the scene, adds all children nodes and sets the css-style.
 		scene = new Scene(mainRoot, 1200, 600);
-		scene.getStylesheets().addAll(this.getClass().getResource("styles/style.css").toExternalForm());
+		try {
+			scene.getStylesheets().add((new File("styles\\mainStyle.css")).toURI().toURL().toExternalForm());
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
 
 		addActionListeners(primaryStage);
 
@@ -171,9 +177,9 @@ public class MainUI extends Application {
 	// Function that creates and sets the arcade machine images to the main menu.
 	private void setArcadeMachineImage() {
 		try {
-			pongImage = new Image(new FileInputStream("images/pongGame.png"));
-			spaceImage = new Image(new FileInputStream("images/spaceGame.png"));
-			snakeImage = new Image(new FileInputStream("images/snakeGame.png"));
+			pongImage = new Image(new FileInputStream("images/pongGame2.png"));
+			spaceImage = new Image(new FileInputStream("images/spaceGame3.png"));
+			snakeImage = new Image(new FileInputStream("images/snakeGame2.png"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}

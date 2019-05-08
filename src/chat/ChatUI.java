@@ -1,5 +1,8 @@
 package chat;
 
+import java.io.File;
+import java.net.MalformedURLException;
+
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -97,7 +100,11 @@ public class ChatUI extends Pane {
 		addMessage("Example: @Aragorn This is a message", 2);
 		
 		getChildren().add(vPane);
-		getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+		try {
+			getStylesheets().add((new File("styles\\chatStyle.css")).toURI().toURL().toExternalForm());
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void addMessage(String msg, int type) {
