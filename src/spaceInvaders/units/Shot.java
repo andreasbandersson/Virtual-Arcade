@@ -34,7 +34,6 @@ public class Shot extends Unit implements Runnable {
 
     public Shot(Position position, int speed, boolean direction, Controller controller){
         super(1,position,shot, width,height, controller);
-
         this.speed = speed;
         this.direction = direction;
     }
@@ -60,6 +59,9 @@ public class Shot extends Unit implements Runnable {
         new Thread(this).start();
     }
 
+    public void remoteKill(){
+        flying = false;
+    }
 
     public void run() {
         while (flying) {
@@ -83,5 +85,6 @@ public class Shot extends Unit implements Runnable {
                 e.printStackTrace();
             }
         }
+        System.out.println("shot thread died");
     }
 }

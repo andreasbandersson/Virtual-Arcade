@@ -106,7 +106,7 @@ public class Painter extends AnimationTimer {
         
         backButton.setFocusTraversable(false);
         soundButton.setFocusTraversable(false);
-        controller = new Controller(this,canvas);
+        controller = new Controller(canvas);
         this.player = controller.getPlayer();
 
         levelTitle = new Label("Level " + controller.getLevelCounter());

@@ -18,7 +18,7 @@ public abstract class Enemy extends Unit {
     protected Difficulty difficulty;
     private Image sprite1;
     private Image sprite2;
-    private int animationCounter = 1;
+    private int animationCounter = 0;
 
     public Enemy(int life, Position position, Image image1,Image image2, int width, int height, Controller controller, int points, Difficulty difficulty) {
         super(life, position, image1, width, height, controller);
@@ -43,11 +43,12 @@ public abstract class Enemy extends Unit {
 
     public void setSprite(int spriteNumber){
         switch (spriteNumber){
-            case 1:
+            case 0:
                 sprite = sprite1;
                 break;
-            case 2:
+            case 1:
                 sprite  = sprite2;
+
         }
     }
 
@@ -56,16 +57,11 @@ public abstract class Enemy extends Unit {
     }
 
     public void updateAnimation() {
-        if (animationCounter == 2){
-            animationCounter--;
-        }
-        else {
-            animationCounter++;
-        }
         setSprite(animationCounter);
-        //animationCounter = (animationCounter+1) % 2;
-
+        animationCounter++;
+        animationCounter = (animationCounter) % 2;
     }
+
     @Override
     public void die(){
         alive = false;

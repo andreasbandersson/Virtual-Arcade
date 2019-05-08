@@ -2,17 +2,16 @@ package spaceInvaders.logic;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
-import spaceInvaders.graphics.Painter;
 import spaceInvaders.levels.Difficulty;
 import spaceInvaders.levels.Level;
 import spaceInvaders.levels.Level1;
 import spaceInvaders.units.*;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.*;
+import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Semaphore;
+
 
 /**
  * @author Viktor Altintas
@@ -23,7 +22,6 @@ public class Controller implements Runnable {
     private final int FPS = 2;
     private final int enemySpeed = 20;
 
-    private Painter painter;
     private Canvas canvas;
     private Player player = new Player(this);
     private int score = 0;
@@ -50,8 +48,7 @@ public class Controller implements Runnable {
 
     private int direction = +1; //+1 = right; -1 = left
 
-    public Controller(Painter painter, Canvas canvas) {
-        this.painter = painter;
+    public Controller( Canvas canvas) {
         this.canvas = canvas;
         allUnits.add(player);
         initializeLevel(new Level1(Difficulty.EASY,this));
@@ -93,6 +90,7 @@ public class Controller implements Runnable {
         Shot shot;
         if (shooter instanceof Player && !timerActivated) {
             shot = new Shot(new Position(shooter.getPosition().getX()+20,shooter.getPosition().getY()-10),4,true,this);
+            System.out.println(ManagementFactory.getThreadMXBean().getThreadCount() + " threads active");
             timerActivated = true;
             setTimeout( ()-> timerActivated = false,100); //wait 1 second, then say that timerActivated is false
         }else if(shooter instanceof Enemy) {
@@ -106,6 +104,7 @@ public class Controller implements Runnable {
     }
 
     public synchronized void requestHitboxCheck(){
+
         ArrayList<Unit> temp = new ArrayList<>(allUnits);
         outerLoop: for (Unit unit : temp){
             for (Unit otherUnit : temp){
@@ -125,6 +124,7 @@ public class Controller implements Runnable {
         allUnits.remove(unit);
         if(unit instanceof Shot){
             shots.remove(unit);
+            ((Shot) unit).remoteKill();
         }
         if(unit instanceof Enemy){
             for(List<Enemy> row : enemies){
@@ -188,7 +188,7 @@ public class Controller implements Runnable {
                 moveDown = true;
             }
             for (List<Enemy> row : new ArrayList<>(enemies)) {
-                for (Enemy e : row) {
+                for (Enemy e : new ArrayList<>(row)) {
                     enemyFire(e);
                     e.updateAnimation();
                     requestHitboxCheck();
