@@ -1,0 +1,58 @@
+.screen
+{
+     -fx-background-image: url("pongbg.png");
+	 -fx-background-size: cover;
+}
+
+.Welscreen{
+	
+	 -fx-background-image: url("welcomescreen.png");
+	 -fx-background-size: cover;
+  
+}
+
+
+
+  .score, .ball
+{
+   -fx-fill: radial-gradient( focus-angle 0.0deg, focus-distance 0.0%, center 50.0% 50.0%, radius 100.0%, rgb(255,255,255) 0.0, rgb(0,0,0) 100.0 );
+
+}
+
+.paddle{
+	-fx-fill:rgb(255,255,255);
+}
+
+.header,.info
+{
+ -fx-fill: radial-gradient( focus-angle 0.0deg, focus-distance 0.0%, center 50.0% 50.0%, radius 100.0%, rgb(255,255,255) 0.0, rgb(0,0,0) 100.0 );
+ 
+}
+
+
+.score{
+	 -fx-font-family: 'Arial';
+}
+
+
+.header, .info
+{
+    -fx-font-family: 'Arcade Normal';
+    -fx-text-origin: top;
+}
+
+.header
+{
+    -fx-font-size: 48px;
+}
+
+.info
+{
+    -fx-font-size: 13px;
+    -fx-text-alignment: center;
+}
+
+.score
+{
+    -fx-font-size: 32px;
+}
