@@ -128,7 +128,7 @@ public class Painter extends AnimationTimer {
         scene = new Scene(spaceInvadersRoot,1200,600, Color.BLACK);
 
         try {
-			scene.getStylesheets().add((new File("styles\\spaceStyle.css")).toURI().toURL().toExternalForm());
+			scene.getStylesheets().add((new File("styles//spaceStyle.css")).toURI().toURL().toExternalForm());
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}

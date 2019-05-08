@@ -42,7 +42,7 @@ public class ChatController {
 		Platform.runLater(new Runnable() {
 			public void run() {
 				mainUI = new MainUI(chatUI);
-				mainUI.start(MainUI.stage);
+				mainUI.start(MainUI.primaryStage);
 				chatUI.addMessage("Welcome to Virtual Arcade " + ChatController.this.user.getUsername() + "!", 1);
 			}
 		});
