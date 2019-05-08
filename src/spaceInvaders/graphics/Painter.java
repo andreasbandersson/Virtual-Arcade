@@ -3,6 +3,7 @@ package spaceInvaders.graphics;
 import application.JukeBox;
 import application.MainUI;
 import chat.ChatUI;
+import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -31,7 +32,7 @@ import java.net.MalformedURLException;
  * @author Viktor Altintas
  */
 
-public class Painter {
+public class Painter extends AnimationTimer {
 
     private Controller controller;
     private Player player;
@@ -67,7 +68,6 @@ public class Painter {
         }
     }
 
-
     public Painter(MainUI mainUI, ChatUI chatUI, JukeBox jukebox) {
         this.chatUI = chatUI;
         this.mainUI = mainUI;
@@ -75,35 +75,18 @@ public class Painter {
         init();
     }
 
-    public void showLevelTitle() {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                root.getChildren().remove(levelTitle);
-                levelTitle.setText("Level " + controller.getLevelCounter());
-                levelTitle.setLayoutX(300);
-                levelTitle.setLayoutY(0);
-                root.getChildren().add(levelTitle);
-
-            }
-        });
-    }
-
-    public synchronized void configureGraphicsContext(GraphicsContext gc){
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                gc.clearRect(0, 0, 600, 400);
-                gc.drawImage(player.getPlayerSprite(),player.getPosition().getX(), player.getPosition().getY());
-                scoreLabel.setText("Score: " + controller.getScore());
-                for (Unit unit : controller.getAllUnits()) {
-                    gc.drawImage(unit.getSprite(), unit.getPosition().getX(), unit.getPosition().getY());
-                }
-                for (int i = 0; i < player.getLife(); i++){
-                    gc.drawImage(playerLifeSprite,440+((i+1)*39),10);
-                }
-            }
-        });
+    @Override
+    public void handle(long now) {
+        gc.clearRect(0, 0, 600, 400);
+        gc.drawImage(player.getPlayerSprite(),player.getPosition().getX(), player.getPosition().getY());
+        scoreLabel.setText("Score: " + controller.getScore());
+        levelTitle.setText("Level " + controller.getLevelCounter());
+        for (Unit unit : controller.getAllUnits()) {
+            gc.drawImage(unit.getSprite(), unit.getPosition().getX(), unit.getPosition().getY());
+        }
+        for (int i = 0; i < player.getLife(); i++){
+            gc.drawImage(playerLifeSprite,440+((i+1)*39),10);
+        }
     }
 
     public Scene getScene(){
@@ -113,15 +96,14 @@ public class Painter {
     }
 
     public void init() {
+
         scoreLabel = new Label("");
         scoreLabel.setFont(new Font((12)));
-        scoreLabel.setStyle("-fx-background-color:green;");
+        scoreLabel.setStyle("-fx-background-color:black;");
 
         canvas = new Canvas(600.0,400.0);
-        
         canvas.setId("SpaceInvaders");
- 
-        
+
         spaceInvadersRoot = new GridPane();
         root = new Pane();
         createColumnsandRows();
@@ -140,40 +122,42 @@ public class Painter {
         soundButton.setGraphic(playSoundImageView);
         spaceInvadersRoot.add(soundButton, 32, 1);
 
-
         // spaceInvadersRoot.setId("spaceInvadersRoot");
         spaceInvadersRoot.setPrefSize(1200.0, 600.0); // minus chattens bredd (300)
 
-        root.getChildren().add(scoreLabel);
-        root.getChildren().add(canvas);
-        spaceInvadersRoot.add(root,6,4,24,16);
-        
-        spaceInvadersRoot.setId("mainRoot");
-        
         scene = new Scene(spaceInvadersRoot,1200,600, Color.BLACK);
+
         try {
-			scene.getStylesheets().add((new File("C:\\Users\\exmanan\\Virtual-Arcade\\styles\\spaceStyle.css")).toURI().toURL().toExternalForm());
+			scene.getStylesheets().add((new File("Virtual-Arcade\\styles\\spaceStyle.css")).toURI().toURL().toExternalForm());
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
-        controller = new Controller(this,scene);
-        this.player = controller.getPlayer();
+
         gc = canvas.getGraphicsContext2D();
         addListeners(scene);
-        levelTitle = new Label("Level " + controller.getLevelCounter());
-        levelTitle.setFont(new Font(12));
-        levelTitle.setBackground(new Background(new BackgroundFill(Color.YELLOW, CornerRadii.EMPTY, Insets.EMPTY)));
-        showLevelTitle();
         
         backButton.setFocusTraversable(false);
         soundButton.setFocusTraversable(false);
+        controller = new Controller(this,canvas);
+        this.player = controller.getPlayer();
+
+        levelTitle = new Label("Level " + controller.getLevelCounter());
+        levelTitle.setFont(new Font(12));
+        levelTitle.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+        levelTitle.setLayoutX(300);
+        levelTitle.setLayoutY(0);
+
+        root.getChildren().add(scoreLabel);
+        root.getChildren().add(levelTitle);
+        root.getChildren().add(canvas);
+        spaceInvadersRoot.add(root,6,4,24,16);
+
+        spaceInvadersRoot.setId("mainRoot");
         canvas.requestFocus();
         canvas.setOnMouseMoved(e -> canvas.requestFocus());
+           start(); // starts the animation timer
     }
 
-    public GraphicsContext getGC() {
-        return gc;
-    }
 
     private void createColumnsandRows() {
 
@@ -235,8 +219,9 @@ public class Painter {
                     case SPACE:
                         player.shoot();
                         break;
+                    case P:
+                        controller.setGamePaused();
                 }
-                controller.requestRepaint();
             }
         });
         
@@ -254,6 +239,5 @@ public class Painter {
 			}
 		});
     }
-
 }
 

@@ -1,8 +1,22 @@
 #MessageArea {
-    -fx-background-color: black;
+    -fx-background-color: rgba(0, 0, 0, 0.5); 
+    -fx-background-radius: 10;
     -fx-text-fill: #00ff00;
 }
 
 .text-area .content {
     -fx-background-color: black;
 }
+
+.text-flow .content {
+    -fx-background-color: black;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+ }
+
+ .scroll-pane {
+    -fx-background-color: transparent;
+ }
+

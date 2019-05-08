@@ -80,10 +80,13 @@ public class Leaderboard {
 
 		addHighscoreLabels();
 		addActionListeners();
+		
+		backButton.setFocusTraversable(false);
+	    soundButton.setFocusTraversable(false);
 
 		scene = new Scene(leaderboardRoot, 1200, 600);
 		try {
-			scene.getStylesheets().add((new File("C:\\Users\\exmanan\\Virtual-Arcade\\styles\\mainStyle.css")).toURI().toURL().toExternalForm());
+			scene.getStylesheets().add((new File("Virtual-Arcade\\styles\\mainStyle.css")).toURI().toURL().toExternalForm());
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}

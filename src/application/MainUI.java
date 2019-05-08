@@ -9,7 +9,10 @@ import chat.ChatUI;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 import spaceInvaders.graphics.Painter;
 import javafx.scene.Scene;
@@ -27,9 +30,6 @@ import javafx.scene.layout.RowConstraints;
  * @author Andreas Andersson
  */
 
-// TODO: Lägg till "tillbaka"-knapp som syns när spelen visas, för att återvända till main menu. Låt tillbaka-knapp + typ ljudknapp
-// alltid ligga längst ner i framen. Byt resten av pane (förutom chatt) mot respektive spel när dessa startas. Allt som hör till MainUI
-// som nu läggs rakt in i MainRoot måste läggas i en egen pane, för att kunna växla tillbaks till huvudmenyn.
 public class MainUI extends Application {
 	private Image pongImage;
 	private Image spaceImage;
@@ -49,8 +49,7 @@ public class MainUI extends Application {
 	private Scene scene;
 	private GridPane mainRoot;
 	private Leaderboard leaderBoard;
-	private Pong pong;
-	private Snake snake;
+
 	// private SpaceInvaders spaceInvaders;
 	private Painter spaceInvaders;
 	private JukeBox jukebox;
@@ -124,16 +123,24 @@ public class MainUI extends Application {
 		mainRoot.add(snakePlayButton, 27, 20, 4, 1);
 
 		mainRoot.add(chatUI, 36, 0, 12, 24);
-		
+
 		// Sets the scene, adds all children nodes and sets the css-style.
 		scene = new Scene(mainRoot, 1200, 600);
 		try {
-			scene.getStylesheets().add((new File("C:\\Users\\exmanan\\Virtual-Arcade\\styles\\mainStyle.css")).toURI().toURL().toExternalForm());
+			scene.getStylesheets().add((new File("Virtual-Arcade\\styles\\mainStyle.css")).toURI().toURL().toExternalForm());
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
-		
+
 		addActionListeners(primaryStage);
+
+		leaderboardButton.setFocusTraversable(false);
+		soundButton.setFocusTraversable(false);
+		settingsButton.setFocusTraversable(false);
+		logOutButton.setFocusTraversable(false);
+		spacePlayButton.setFocusTraversable(false);
+		snakePlayButton.setFocusTraversable(false);
+		pongPlayButton.setFocusTraversable(false);
 
 		// Sets the primaryStage
 		primaryStage.setTitle("VIRTUAL ARCADE");
@@ -142,6 +149,15 @@ public class MainUI extends Application {
 		primaryStage.centerOnScreen();
 		primaryStage.show();
 		stage = primaryStage;
+
+		primaryStage.setOnCloseRequest((EventHandler<WindowEvent>) new EventHandler<WindowEvent>() {
+			@Override
+			public void handle(WindowEvent e) {
+				Platform.exit();
+				System.exit(0);
+			}
+		});
+
 	}
 
 	// Sets the number and size-percentage of the rows and columns in the GridPane.
@@ -197,12 +213,12 @@ public class MainUI extends Application {
 		muteSoundImageView = new ImageView(muteSoundImage);
 	}
 
-	public void switchToMainUI () {
+	public void switchToMainUI() {
 		mainRoot.add(chatUI, 36, 0, 12, 24);
 		stage.setScene(scene);
 		stage.show();
 	}
-	
+
 	// Function for adding and setting Action Listeners to all Buttons.
 	private void addActionListeners(Stage primaryStage) {
 
@@ -210,7 +226,7 @@ public class MainUI extends Application {
 			if (leaderBoard == null) {
 				leaderBoard = new Leaderboard(this, chatUI, jukebox);
 			}
-			
+
 			mainRoot.getChildren().remove(chatUI);
 			primaryStage.setScene(leaderBoard.getScene());
 			primaryStage.show();
@@ -238,8 +254,8 @@ public class MainUI extends Application {
 
 		// Skriv om. Instansiera pong och lägg in i mainRoot som pane bara
 		pongPlayButton.setOnAction(e -> {
-			pong = new Pong();
-			pong.start(primaryStage);
+			// pong = new Pong();
+			// pong.start(primaryStage);
 			jukebox.stopSound();
 			try {
 				this.stop();
@@ -260,8 +276,8 @@ public class MainUI extends Application {
 
 		// Skriv om. Instansiera Snake och lägg in i mainRoot som pane bara
 		snakePlayButton.setOnAction(e -> {
-			snake = new Snake();
-			snake.start(primaryStage);
+			// snake = new Snake();
+			// snake.start(primaryStage);
 			jukebox.stopSound();
 			try {
 				this.stop();
@@ -270,9 +286,4 @@ public class MainUI extends Application {
 			}
 		});
 	}
-
-	// Main-method
-	// public static void main(String[] args) {
-	// launch(args);
-	// }
 }
