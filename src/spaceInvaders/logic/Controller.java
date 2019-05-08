@@ -12,6 +12,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 /**
  * @author Viktor Altintas
@@ -31,8 +32,8 @@ public class Controller implements Runnable {
 
     private List<Unit> allUnits = new ArrayList<>(); //used in collision
 
-    private List<Boss> bosses = new ArrayList<>(); //not rly used
-    private List<Shot> shots = new ArrayList<>(); //not rly used
+    private List<Boss> bosses = new ArrayList<>();
+    private List<Shot> shots = new ArrayList<>();
     private List<List<Enemy>> enemies = new ArrayList<>(); //List of Lists = grid; used for moving
 
     private Boolean timerActivated = false;
@@ -78,10 +79,6 @@ public class Controller implements Runnable {
 
     private void start(){
         new Thread(this).start();
-    }
-
-    public Painter getPainter() {
-        return painter;
     }
 
     public synchronized List<Unit> getAllUnits() {
@@ -132,7 +129,7 @@ public class Controller implements Runnable {
         if(unit instanceof Enemy){
             for(List<Enemy> row : enemies){
                 if(row.contains(unit)){
-                    unit.setSprite(explosion);
+                  //  unit.setSprite(explosion);
                     row.remove(unit);
                     score += ((Enemy) unit).getPoints();
                     return;
@@ -175,6 +172,7 @@ public class Controller implements Runnable {
 
     @Override
     public void run(){ //moves blocks of enemies
+        System.out.println("runnable started");
         while (!enemies.stream().allMatch(List::isEmpty)){ //if all objects delivered by the stream match the method isEmpty, statement is true
             // stream = take out the elements one by one
             while (gamePaused){
@@ -226,9 +224,7 @@ public class Controller implements Runnable {
 
     public synchronized void levelWin() {
         levelCounter++;
-        System.out.println(allUnits.size());
         System.out.println("U WIN LEL"); //gg
-
         initializeLevel(new Level1(Difficulty.MEDIUM,this)); //should be a list of levels that initialize retrieves from. CAUSES CONCURRENTMODIFICATION ATM
     }
 }

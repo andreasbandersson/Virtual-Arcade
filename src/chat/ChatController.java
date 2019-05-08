@@ -4,6 +4,8 @@ import application.LoginUI;
 import application.MainUI;
 import javafx.application.Platform;
 
+
+
 /**
  * Controller-class for the chat systemts client-side environment.
  * 

@@ -64,15 +64,12 @@ public class Painter extends AnimationTimer {
         }
     }
 
-
     public Painter(MainUI mainUI, ChatUI chatUI, JukeBox jukebox) {
         this.chatUI = chatUI;
         this.mainUI = mainUI;
         this.jukebox = jukebox;
         init();
     }
-
-
 
     @Override
     public void handle(long now) {
@@ -88,24 +85,6 @@ public class Painter extends AnimationTimer {
         }
     }
 
-  //  public synchronized void configureGraphicsContext(GraphicsContext gc){
-  //      Platform.runLater(new Runnable() {
-  //          @Override
-  //          public void run() {
-  //              gc.clearRect(0, 0, 600, 400);
-  //              gc.drawImage(player.getPlayerSprite(),player.getPosition().getX(), player.getPosition().getY());
-  //              scoreLabel.setText("Score: " + controller.getScore());
-  //              for (Unit unit : controller.getAllUnits()) {
-  //                  gc.drawImage(unit.getSprite(), unit.getPosition().getX(), unit.getPosition().getY());
-  //              }
-  //              for (int i = 0; i < player.getLife(); i++){
-  //                  gc.drawImage(playerLifeSprite,440+((i+1)*39),10);
-  //              }
-  //          }
-  //      });
-  //  }
-
-
     public Scene getScene(){
         spaceInvadersRoot.add(chatUI,36,0,12,24);
         chatUI.setFocusTraversable(false);
@@ -114,24 +93,13 @@ public class Painter extends AnimationTimer {
 
     public void init() {
 
-        controller = new Controller(this,canvas);
-        this.player = controller.getPlayer();
-
         scoreLabel = new Label("");
         scoreLabel.setFont(new Font((12)));
         scoreLabel.setStyle("-fx-background-color:black;");
 
-        levelTitle = new Label("Level " + controller.getLevelCounter());
-        levelTitle.setFont(new Font(12));
-        levelTitle.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
-        levelTitle.setLayoutX(300);
-        levelTitle.setLayoutY(0);
-
         canvas = new Canvas(600.0,400.0);
-        
         canvas.setId("SpaceInvaders");
- 
-        
+
         spaceInvadersRoot = new GridPane();
         root = new Pane();
         createColumnsandRows();
@@ -149,17 +117,9 @@ public class Painter extends AnimationTimer {
         soundButton.setGraphic(playSoundImageView);
         spaceInvadersRoot.add(soundButton, 32, 1);
 
-
         // spaceInvadersRoot.setId("spaceInvadersRoot");
         spaceInvadersRoot.setPrefSize(1200.0, 600.0); // minus chattens bredd (300)
 
-        root.getChildren().add(scoreLabel);
-        root.getChildren().add(levelTitle);
-        root.getChildren().add(canvas);
-        spaceInvadersRoot.add(root,6,4,24,16);
-        
-        spaceInvadersRoot.setId("mainRoot");
-        
         scene = new Scene(spaceInvadersRoot,1200,600, Color.BLACK);
         scene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 
@@ -168,15 +128,26 @@ public class Painter extends AnimationTimer {
         
         backButton.setFocusTraversable(false);
         soundButton.setFocusTraversable(false);
+        controller = new Controller(this,canvas);
+        this.player = controller.getPlayer();
+
+        levelTitle = new Label("Level " + controller.getLevelCounter());
+        levelTitle.setFont(new Font(12));
+        levelTitle.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+        levelTitle.setLayoutX(300);
+        levelTitle.setLayoutY(0);
+
+        root.getChildren().add(scoreLabel);
+        root.getChildren().add(levelTitle);
+        root.getChildren().add(canvas);
+        spaceInvadersRoot.add(root,6,4,24,16);
+
+        spaceInvadersRoot.setId("mainRoot");
         canvas.requestFocus();
         canvas.setOnMouseMoved(e -> canvas.requestFocus());
-
            start(); // starts the animation timer
     }
 
-    public GraphicsContext getGC() {
-        return gc;
-    }
 
     private void createColumnsandRows() {
 
