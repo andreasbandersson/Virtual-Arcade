@@ -4,49 +4,64 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Random;
 
+import javafx.scene.canvas.GraphicsContext;
+
 /**
  * Food class that has Setters and Getters for the food and a draw method for drawing the food. 
- * @author max.matthiasson
- *
+ * @author Max Matthiasson
  */
 public class Food 
 {
-	private int x;
-	private int y;
-	private int width;
-	private int height;
+	private int foodX = 10;
+	private int foodY = 10;
+	private int unitWidth = 20;
+	private int unitHeight = 20;
+
 	
-	public Food(int x, int y, int tileSize)
+	public Food(int foodX, int foodY, int unitWidth, int unitHeight)
 	{
-		this.x = x;
-		this.y = y;
-		this.width = tileSize;
-		this.height = tileSize;
+		this.foodX = foodX;
+		this.foodY = foodY;
+		this.unitWidth = unitWidth;
+		this.unitHeight = unitHeight;
 	}
 	
-	public void draw(Graphics g)
+	public void drawFoodPane(GraphicsContext gc)
 	{
-		g.setColor(Color.RED); //Sets color of the food to red.
-		g.fillRect(x * width, y * height, width, height); //Fills a rectangle to draw the piece of food. 
+		gc.setFill(javafx.scene.paint.Color.rgb(75, 75, 75)); //Sets color of the food to red.
+		gc.fillRect(foodX, foodY, unitWidth, unitHeight); //Fills a rectangle to draw the piece of food. 
 	}
 
-	public int getX() 
-	{
-		return x;
+	public int getFoodX() {
+		return foodX;
 	}
 
-	public void setX(int x) 
-	{
-		this.x = x;
+	public void setFoodX(int foodX) {
+		this.foodX = foodX;
 	}
 
-	public int getY() 
-	{
-		return y;
+	public int getFoodY() {
+		return foodY;
 	}
 
-	public void setY(int y) 
-	{
-		this.y = y;
+	public void setFoodY(int foodY) {
+		this.foodY = foodY;
 	}
+
+	public int getUnitWidth() {
+		return unitWidth;
+	}
+
+	public void setUnitWidth(int unitWidth) {
+		this.unitWidth = unitWidth;
+	}
+
+	public int getUnitHeight() {
+		return unitHeight;
+	}
+
+	public void setUnitHeight(int unitHeight) {
+		this.unitHeight = unitHeight;
+	}
+
 }

@@ -4,7 +4,6 @@ import application.JukeBox;
 import application.MainUI;
 import chat.ChatUI;
 import javafx.animation.AnimationTimer;
-import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -75,32 +74,12 @@ public class Painter extends AnimationTimer {
         init();
     }
 
-    @Override
-    public void handle(long now) {
-        gc.clearRect(0, 0, 600, 400);
-        gc.drawImage(player.getPlayerSprite(),player.getPosition().getX(), player.getPosition().getY());
-        scoreLabel.setText("Score: " + controller.getScore());
-        levelTitle.setText("Level " + controller.getLevelCounter());
-        for (Unit unit : controller.getAllUnits()) {
-            gc.drawImage(unit.getSprite(), unit.getPosition().getX(), unit.getPosition().getY());
-        }
-        for (int i = 0; i < player.getLife(); i++){
-            gc.drawImage(playerLifeSprite,440+((i+1)*39),10);
-        }
-    }
-
-    public Scene getScene(){
-        spaceInvadersRoot.add(chatUI,36,0,12,24);
-        chatUI.setFocusTraversable(false);
-        return scene;
-    }
-
-    public void init() {
-
+    private void init() {
         scoreLabel = new Label("");
         scoreLabel.setFont(new Font((12)));
         scoreLabel.setTextFill(Color.WHITE);
         scoreLabel.setStyle("-fx-background-color:black;");
+
 
         canvas = new Canvas(600.0,400.0);
         canvas.setId("SpaceInvaders");
@@ -124,30 +103,21 @@ public class Painter extends AnimationTimer {
         spaceInvadersRoot.add(soundButton, 32, 1);
 
         // spaceInvadersRoot.setId("spaceInvadersRoot");
-        spaceInvadersRoot.setPrefSize(1200.0, 600.0); // minus chattens bredd (300)
-
-        scene = new Scene(spaceInvadersRoot,1200,600, Color.BLACK);
-
-        try {
-			scene.getStylesheets().add((new File("styles\\spaceStyle.css")).toURI().toURL().toExternalForm());
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-
-        gc = canvas.getGraphicsContext2D();
-        addListeners(scene);
+        spaceInvadersRoot.setPrefSize(1200.0, 600.0);
         
         backButton.setFocusTraversable(false);
         soundButton.setFocusTraversable(false);
-        controller = new Controller(this,canvas);
+        controller = new Controller(canvas);
         this.player = controller.getPlayer();
 
         levelTitle = new Label("Level " + controller.getLevelCounter());
         levelTitle.setFont(new Font(12));
         levelTitle.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
         levelTitle.setTextFill(Color.WHITE);
+
         levelTitle.setLayoutX(300);
         levelTitle.setLayoutY(0);
+        levelTitle.setTextFill(Color.WHITE);
 
         root.getChildren().add(scoreLabel);
         root.getChildren().add(levelTitle);
@@ -155,9 +125,42 @@ public class Painter extends AnimationTimer {
         spaceInvadersRoot.add(root,6,4,24,16);
 
         spaceInvadersRoot.setId("mainRoot");
+
+        scene = new Scene(spaceInvadersRoot,1200,600, Color.BLACK);
+
+        try {
+			scene.getStylesheets().add((new File("styles//spaceStyle.css")).toURI().toURL().toExternalForm());
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+
+        gc = canvas.getGraphicsContext2D();
+        addListeners(scene);
+        
+       
         canvas.requestFocus();
         canvas.setOnMouseMoved(e -> canvas.requestFocus());
            start(); // starts the animation timer
+    }
+    
+    @Override
+    public void handle(long now) {
+        gc.clearRect(0, 0, 600, 400);
+        gc.drawImage(player.getPlayerSprite(),player.getPosition().getX(), player.getPosition().getY());
+        scoreLabel.setText("Score: " + controller.getScore());
+        levelTitle.setText("Level " + controller.getLevelCounter());
+        for (Unit unit : controller.getAllUnits()) {
+            gc.drawImage(unit.getSprite(), unit.getPosition().getX(), unit.getPosition().getY());
+        }
+        for (int i = 0; i < player.getLife(); i++){
+            gc.drawImage(playerLifeSprite,440+((i+1)*39),10);
+        }
+    }
+
+    public Scene getScene(){
+        spaceInvadersRoot.add(chatUI,36,0,12,24);
+        chatUI.setFocusTraversable(false);
+        return scene;
     }
 
 
@@ -187,7 +190,7 @@ public class Painter extends AnimationTimer {
         muteSoundImageView = new ImageView(muteSoundImage);
     }
     
-	//Sets and adds the arcade machine image for the Pong game. 
+	//Sets and adds the arcade machine image for the SpaceInvaders game. 
 	public void setSpaceInvadersArcadeMachineImage() {
 		try {
 			spaceInvadersImage = new Image(new FileInputStream("images/spaceScreen.png"));
@@ -195,7 +198,6 @@ public class Painter extends AnimationTimer {
 			e.printStackTrace();
 		}
 		spaceInvadersView = new ImageView(spaceInvadersImage);		
-	//	pongView.setFitWidth(900);
 		spaceInvadersView.setPreserveRatio(true);
 		spaceInvadersRoot.add(spaceInvadersView, 0, 14);
 

@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import chat.ChatController;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -19,8 +20,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * @author Andreas Andersson
@@ -70,12 +73,14 @@ public class LoginUI extends Application {
 		virtualArcadeLabel.setId("vaLabel");
 		virtualArcadeLabel.setEffect(bloom);
 		virtualArcadeLabel.setEffect(glow);
+		virtualArcadeLabel.setMinWidth(Region.USE_PREF_SIZE);
 		loginRoot.add(virtualArcadeLabel, 1, 1, 15, 4);
 		
 		Label virtualArcadeLabel2 = new Label("ARCADE");
 		virtualArcadeLabel2.setId("vaLabel");
 		virtualArcadeLabel2.setEffect(bloom);
 		virtualArcadeLabel2.setEffect(glow);
+		virtualArcadeLabel2.setMinWidth(Region.USE_PREF_SIZE);
 		loginRoot.add(virtualArcadeLabel2, 1, 5, 15, 4);
 
 		// Adding and setting the Labels and TextFields for the login
@@ -103,6 +108,7 @@ public class LoginUI extends Application {
 
 		// Adding and setting the button for creating a new user
 		newUserButton.setId("logOutButton");
+		newUserButton.setMinWidth(Region.USE_PREF_SIZE);
 		loginRoot.add(newUserButton, 24, 20, 9, 1);
 		
 		//Adding an setting the button for mute and un-mute of login music
@@ -117,7 +123,7 @@ public class LoginUI extends Application {
 		scene = new Scene(loginRoot, 700, 400);
 		
 		try {
-			scene.getStylesheets().add((new File("styles\\loginStyle.css")).toURI().toURL().toExternalForm());
+			scene.getStylesheets().add((new File("styles//loginStyle.css")).toURI().toURL().toExternalForm());
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
@@ -129,6 +135,14 @@ public class LoginUI extends Application {
 		primaryStage.centerOnScreen();
 		primaryStage.show();
 		stage = primaryStage;
+		
+		primaryStage.setOnCloseRequest((EventHandler<WindowEvent>) new EventHandler<WindowEvent>() {
+			@Override
+			public void handle(WindowEvent e) {
+				Platform.exit();
+				System.exit(0);
+			}
+		});
 	}
 
 	// Sets the number and size-percentage of the rows and columns in the GridPane.
