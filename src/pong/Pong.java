@@ -36,11 +36,11 @@ public class Pong {
 	private final int numOfRows = 24;
 	private Image muteSoundImage;
 	private Image playSoundImage;
-	private Image spaceInvadersImage;
 	private ImageView muteSoundImageView;
 	private ImageView playSoundImageView;
-	private ImageView spaceInvadersView;
 	private JukeBox jukebox;
+	private int width = 600;
+	private int height = 400;
 
 	public Pong(MainUI mainUI, ChatUI chatUI, JukeBox jukebox) {
 		this.mainUI = mainUI;
@@ -49,8 +49,7 @@ public class Pong {
 	}
 
 	private void init() {
-		Font.loadFont(getClass().getResource("arcade-normal.ttf").toString(),
-				0); /* Font family 'Arcade Normal' in CSS. */
+		Font.loadFont(getClass().getResource("arcade-normal.ttf").toString(), 0);
 
 		Game game = new Game(WinScore);
 		Group content = new Group();
@@ -58,11 +57,11 @@ public class Pong {
 		WelcomeScreen welcomeScreen = new WelcomeScreen();
 		EndScreen endScreen = new EndScreen();
 		content.getChildren().add(welcomeScreen);
+		
 
 		createColumnsandRows();
 
 		root.setPrefSize(1200, 600);
-		
 		root.add(content, 6, 4, 24, 16);
 
 		backButton.setId("logOutButton");
@@ -77,10 +76,9 @@ public class Pong {
 
 		backButton.setFocusTraversable(false);
 		soundButton.setFocusTraversable(false);
-		
+
 		root.setId("mainRoot");
-		
-	
+
 		addActionListeners();
 
 		/*
@@ -105,61 +103,56 @@ public class Pong {
 			game.start();
 		});
 
-		/*
-		 * The content is wrapped in a Group so it can be scaled (the root node itself
-		 * cannot be scaled as it scales with the scene).
-		 */
 		scene = new Scene(root, 1200, 600, Color.BLACK);
-		// scene.getStylesheets().getClass().getResource("styles.css").toExternalForm();
-		 try {
-				scene.getStylesheets().add((new File("styles//pongStyle.css")).toURI().toURL().toExternalForm());
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			}
+		try {
+			scene.getStylesheets().add((new File("styles//pongStyle.css")).toURI().toURL().toExternalForm());
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
 
-		Scale scale = Transform.scale(1, 1, 0, 0);
-		content.getTransforms().add(scale);
+//		Scale scale = Transform.scale(1, 1, 0, 0);
+//		content.getTransforms().add(scale);
 
 		/*
 		 * The following listener is called whenever the scene is resized to update the
 		 * scale and add letter- and pillarboxing.
 		 */
-		InvalidationListener updateScale = value -> {
-			double scaleX = scene.getWidth() / WIDTH;
-			double scaleY = scene.getHeight() / HEIGHT;
+//		InvalidationListener updateScale = value -> {
+//			double scaleX = scene.getWidth() / WIDTH;
+//			double scaleY = scene.getHeight() / HEIGHT;
+//
+//			if (scaleX < scaleY) {
+//				/*
+//				 * Letterboxing.
+//				 */
+//				scale.setX(scaleX);
+//				scale.setY(scaleX);
+//				double remainingHeight = scene.getHeight() - HEIGHT * scaleX;
+//				content.setTranslateX(0);
+//				content.setTranslateY(remainingHeight / 2);
+//			} else if (scaleY < scaleX) {
+//				/*
+//				 * Pillarboxing.
+//				 */
+//				scale.setX(scaleY);
+//				scale.setY(scaleY);
+//				double remainingWidth = scene.getWidth() - WIDTH * scaleY;
+//				content.setTranslateX(remainingWidth / 2);
+//				content.setTranslateY(0);
+//			} else {
+//				/*
+//				 * Regular scaling.
+//				 */
+//				scale.setX(scaleX);
+//				scale.setY(scaleY);
+//				content.setTranslateX(0);
+//				content.setTranslateY(0);
+//			}
+//		};
+//		scene.widthProperty().addListener(updateScale);
+//		scene.heightProperty().addListener(updateScale);
 
-			if (scaleX < scaleY) {
-				/*
-				 * Letterboxing.
-				 */
-				scale.setX(scaleX);
-				scale.setY(scaleX);
-				double remainingHeight = scene.getHeight() - HEIGHT * scaleX;
-				content.setTranslateX(0);
-				content.setTranslateY(remainingHeight / 2);
-			} else if (scaleY < scaleX) {
-				/*
-				 * Pillarboxing.
-				 */
-				scale.setX(scaleY);
-				scale.setY(scaleY);
-				double remainingWidth = scene.getWidth() - WIDTH * scaleY;
-				content.setTranslateX(remainingWidth / 2);
-				content.setTranslateY(0);
-			} else {
-				/*
-				 * Regular scaling.
-				 */
-				scale.setX(scaleX);
-				scale.setY(scaleY);
-				content.setTranslateX(0);
-				content.setTranslateY(0);
-			}
-		};
-		scene.widthProperty().addListener(updateScale);
-		scene.heightProperty().addListener(updateScale);
-		
-//		content.requestFocus();
+		// content.requestFocus();
 		welcomeScreen.setOnMouseMoved(e -> welcomeScreen.requestFocus());
 		gameScreen.setOnMouseMoved(e -> gameScreen.requestFocus());
 		endScreen.setOnMouseMoved(e -> endScreen.requestFocus());
@@ -168,8 +161,8 @@ public class Pong {
 	}
 
 	public Scene getScene() {
-		root.add(chatUI,36,0,12,24);
-	    chatUI.setFocusTraversable(false);
+		root.add(chatUI, 36, 0, 12, 24);
+		chatUI.setFocusTraversable(false);
 		return this.scene;
 	}
 
@@ -186,31 +179,31 @@ public class Pong {
 			root.getRowConstraints().add(rowConst);
 		}
 	}
-	
-	  private void setSoundButtonImages() {
-	        try {
-	            playSoundImage = new Image(new FileInputStream("images/sound.png"));
-	            muteSoundImage = new Image(new FileInputStream("images/mute.png"));
-	        } catch (FileNotFoundException e) {
-	            e.printStackTrace();
-	        }
-	        playSoundImageView = new ImageView(playSoundImage);
-	        muteSoundImageView = new ImageView(muteSoundImage);
-	    }
-	  
-	  private void addActionListeners() {
-		  backButton.setOnAction(e -> {
-				root.getChildren().remove(chatUI);
-				mainUI.switchToMainUI();
-			});
 
-			soundButton.setOnAction(e -> {
-				jukebox.muteUnmute();
-				if (jukebox.isMute()) {
-					soundButton.setGraphic(playSoundImageView);
-				} else {
-					soundButton.setGraphic(muteSoundImageView);
-				}
-			});
-	  }
+	private void setSoundButtonImages() {
+		try {
+			playSoundImage = new Image(new FileInputStream("images/sound.png"));
+			muteSoundImage = new Image(new FileInputStream("images/mute.png"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		playSoundImageView = new ImageView(playSoundImage);
+		muteSoundImageView = new ImageView(muteSoundImage);
+	}
+
+	private void addActionListeners() {
+		backButton.setOnAction(e -> {
+			root.getChildren().remove(chatUI);
+			mainUI.switchToMainUI();
+		});
+
+		soundButton.setOnAction(e -> {
+			jukebox.muteUnmute();
+			if (jukebox.isMute()) {
+				soundButton.setGraphic(playSoundImageView);
+			} else {
+				soundButton.setGraphic(muteSoundImageView);
+			}
+		});
+	}
 }

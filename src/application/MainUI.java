@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 import pong.Pong;
+import snake.GUIPane;
 import spaceInvaders.graphics.Painter;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -51,6 +52,7 @@ public class MainUI extends Application {
 	private GridPane mainRoot;
 	private Leaderboard leaderBoard;
 	private Pong pong;
+	private GUIPane snake;
 
 	// private SpaceInvaders spaceInvaders;
 	private Painter spaceInvaders;
@@ -281,14 +283,12 @@ public class MainUI extends Application {
 
 		// Skriv om. Instansiera Snake och lägg in i mainRoot som pane bara
 		snakePlayButton.setOnAction(e -> {
-			// snake = new Snake();
-			// snake.start(primaryStage);
-			jukebox.stopSound();
-			try {
-				this.stop();
-			} catch (Exception e1) {
-				e1.printStackTrace();
+			if (snake == null) {
+				snake = new GUIPane(this, chatUI, jukebox);
 			}
+			mainRoot.getChildren().remove(chatUI);
+			primaryStage.setScene(snake.getScene());
+			primaryStage.show();
 		});
 	}
 }
