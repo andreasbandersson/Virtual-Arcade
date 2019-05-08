@@ -3,7 +3,6 @@ package chat;
 import application.LoginUI;
 import application.MainUI;
 import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
 
 /**
  * Controller-class for the chat systemts client-side environment.
@@ -21,7 +20,7 @@ public class ChatController {
 	private UserList userList;
 
 	public ChatController() {
-		client = new ChatClient(60000, "10.2.30.63", this);
+		client = new ChatClient(60000, "localhost", this);
 		client.connect();
 		initLoginUI();
 		chatUI = new ChatUI(this);
@@ -41,7 +40,7 @@ public class ChatController {
 			public void run() {
 				mainUI = new MainUI(chatUI);
 				mainUI.start(MainUI.stage);
-				chatUI.addMessage("Welcome to Virtual Arcade " + ChatController.this.user.getUsername() + "!");
+				chatUI.addMessage("Welcome to Virtual Arcade " + ChatController.this.user.getUsername() + "!", 1);
 			}
 		});
 	}
@@ -88,7 +87,7 @@ public class ChatController {
 			} else {
 				message = new Message(user.getUsername(), text);
 				client.sendMessage(message);
-				chatUI.addMessage(message.getTimeStamp() + ": " + "To All: " + message.getText());
+				chatUI.addMessage(message.getTimeStamp() + ": " + "To All: " + message.getText(), 0);
 			}
 		}
 	}
@@ -106,13 +105,13 @@ public class ChatController {
 						text.substring(text.indexOf(' ') + 1));
 				client.sendMessage(message);
 				chatUI.addMessage(message.getTimeStamp() + ": " + "To " + userList.get(i).getUsername() + " : "
-						+ message.getText());
+						+ message.getText(), 2);
 				found = true;
 				break;
 			}
 		}
 		if (!found) { // User not online/doesn't exist
-			chatUI.addMessage("Couldn't send message: " + text.substring(1, text.indexOf(' ')) + " is not online");
+			chatUI.addMessage("Couldn't send message: " + text.substring(1, text.indexOf(' ')) + " is not online", 1);
 		}
 	}
 
@@ -125,9 +124,9 @@ public class ChatController {
 		if (obj instanceof Message) {
 			Message message = (Message) obj;
 			if (message.getSender() != null) {
-				chatUI.addMessage(message.getTimeStamp() + ": " + message.getSender() + ": " + message.getText());
+				chatUI.addMessage(message.getTimeStamp() + ": " + message.getSender() + ": " + message.getText(), 2);
 			} else {
-				chatUI.addMessage(message.getTimeStamp() + ": " + message.getText());
+				chatUI.addMessage(message.getTimeStamp() + ": " + message.getText(), 0);
 			}
 		} else if (obj instanceof String) {
 			checkServerResponse((String) obj);

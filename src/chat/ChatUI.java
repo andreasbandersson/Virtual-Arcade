@@ -5,7 +5,9 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
@@ -19,6 +21,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 /**
  * 
@@ -26,11 +30,12 @@ import javafx.scene.paint.Color;
  *
  */
 public class ChatUI extends Pane {
-	private TextArea messages = new TextArea();
+	private TextFlow messages = new TextFlow();
 	private TextArea newMessage = new TextArea();
 	private Button sendBtn = new Button("Send Message");
-	private Button switchBtn = new Button("Switch");
+	private Button switchBtn = new Button("Show online users");
 	private VBox vPane = new VBox(4);
+	private ScrollPane scroll;
 	private StackPane sPane = new StackPane();
 	private TextArea onlineUsers = new TextArea();
 	private Boolean showingMessages = true;
@@ -44,33 +49,41 @@ public class ChatUI extends Pane {
 	private void init() {
 		setPrefSize(300, 600);
 		
-		messages.setWrapText(true);
-		messages.setEditable(false);
 		onlineUsers.setWrapText(true);
 		onlineUsers.setEditable(false);
 		newMessage.setWrapText(true);
-		messages.setPrefSize(300, 480);
 		onlineUsers.setPrefSize(300, 480);
 		sendBtn.setPrefSize(300, 25);
 		switchBtn.setPrefSize(300, 25);
 		newMessage.setPrefSize(300, 50);
 
-		sPane.getChildren().add(messages);
-		vPane.getChildren().add(sPane);
-		vPane.getChildren().add(newMessage);
-		vPane.getChildren().add(sendBtn);
-		vPane.getChildren().add(switchBtn);
-
-		messages.setId("MessageArea");
-		newMessage.setId("MessageArea");
-		onlineUsers.setId("MessageArea");
-
+		scroll = new ScrollPane(messages);
+		scroll.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+		scroll.setHbarPolicy(ScrollBarPolicy.NEVER);
+		scroll.setPrefSize(300, 480);
+		scroll.viewportBoundsProperty();
+		messages.setPrefSize(300, scroll.getPrefViewportWidth());
+		
+		messages.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
 
 		vPane.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
 		newMessage.setBorder(new Border(
 				new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 		vPane.setBorder(new Border(
 				new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+		
+		sPane.getChildren().add(scroll);
+		vPane.getChildren().add(sPane);
+		vPane.getChildren().add(newMessage);
+		vPane.getChildren().add(sendBtn);
+		vPane.getChildren().add(switchBtn);
+
+		messages.setMaxWidth(300);
+		messages.setMaxHeight(480);
+		
+		messages.setId("MessageArea");
+		newMessage.setId("MessageArea");
+		onlineUsers.setId("MessageArea");
 
 		switchBtn.setOnAction(buttonHandler);
 		sendBtn.setOnAction(buttonHandler);
@@ -78,18 +91,28 @@ public class ChatUI extends Pane {
 		newMessage.addEventFilter(KeyEvent.KEY_PRESSED, keyFilter);
 		messages.addEventFilter(KeyEvent.KEY_PRESSED, keyFilter);
 		onlineUsers.addEventFilter(KeyEvent.KEY_PRESSED, keyFilter);
+		vPane.addEventFilter(KeyEvent.KEY_PRESSED, keyFilter);
 
-		addMessage("Type @username to send a private message");
-		addMessage("Example: @Aragorn This is a message");
+		addMessage("Type @username to send a private message", 2);
+		addMessage("Example: @Aragorn This is a message", 2);
 		
 		getChildren().add(vPane);
 		getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
 	}
 
-	public void addMessage(String msg) {
+	public void addMessage(String msg, int type) {
 		Platform.runLater(new Runnable() {
 			public void run() {
-				messages.appendText(msg + "\n");
+				Text temp = new Text(msg + "\n");
+				if (type == 0) {
+					temp.setStyle("-fx-fill: #00ff00;");
+				} else if (type == 1) {
+					temp.setStyle("-fx-fill: #d30c0c;");
+				} else {
+					temp.setStyle("-fx-fill: #18eef2;");
+				}
+				// messages.appendText(msg + "\n");
+				messages.getChildren().add(temp);
 			}
 		});
 	}
@@ -121,7 +144,7 @@ public class ChatUI extends Pane {
 					showingMessages = false;
 				} else if (!showingMessages) {
 					sPane.getChildren().clear();
-					sPane.getChildren().add(messages);
+					sPane.getChildren().add(scroll);
 					switchBtn.setText("Show online users");
 					showingMessages = true;
 				}
