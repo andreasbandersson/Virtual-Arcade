@@ -1,19 +1,20 @@
-#loginRoot{
-    -fx-background-image: url("login2.jpg");
-    -fx-background-repeat: stretch;   
-    -fx-background-size:  cover;
-    -fx-background-position: center center; 
+@font-face {
+    src: url('../fonts/PressStart2P.ttf');
+}
+
+@font-face {
+    src: url('../fonts/Neoneon.otf');
 }
 
 #mainRoot{
-    -fx-background-image: url("arcade5.jpg");
+    -fx-background-image: url("../images/arcade5.jpg");
     -fx-background-repeat: stretch;   
     -fx-background-size: cover;
     -fx-background-position: center center; 
 }
 
 #leaderboardRoot{
-	 -fx-background-image: url("login3.jpg");
+	 -fx-background-image: url("../images/login3.jpg");
     -fx-background-repeat: stretch;   
     -fx-background-size: cover;
     -fx-background-position: center center; 
@@ -31,29 +32,7 @@
     -fx-font-family: 'Press Start 2P';
 }
 
-#loginButton{
-	-fx-padding: 10.0 22.0 20.0 22.0;
-    -fx-background-insets: 0.0,0.0 0.0 5.0 0.0, 0.0 0.0 6.0 0.0, 0.0 0.0 7.0 0.0;
-    -fx-background-radius: 24.0;
-  -fx-background-color: 
-        linear-gradient(from 0.0% 93.0% to 0.0% 100.0%, #c11111 0.0%, #b50101 100.0%),
-        #b70303,
-        #ff3838,
-        radial-gradient(center 50.0% 50.0%, radius 100.0%, #ff3838, #ce1a1a);
-    -fx-effect: dropshadow( gaussian , rgba(0.0,0.0,0.0,0.25) , 4.0,0.0,0.0,1.0 );
-    -fx-font-weight: normal;
-    -fx-font-size: 1em;
-    -fx-alignment: center;
-}
-#loginButton:pressed {
-    -fx-padding: 14.0 22.0 16.0 22.0;
-    -fx-background-insets: 2.0 0.0 0.0 0.0,2.0 0.0 3.0 0.0, 2.0 0.0 4.0 0.0, 2.0 0.0 5.0 0.0;
-}
-#loginButton .text {
-    -fx-fill: white;
-   
-    -fx-font-family: 'sans-serif';
-}
+
 
 #responseLabel .text{
 	-fx-fill: #fa0404;

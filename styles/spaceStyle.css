@@ -1,6 +1,21 @@
 
+@font-face {
+    src: url('../fonts/PressStart2P.ttf');
+}
+
+@font-face {
+    src: url('../fonts/Neoneon.otf');
+}
+
+#loginRoot{
+    -fx-background-image: url("../images/login2.jpg");
+    -fx-background-repeat: stretch;   
+    -fx-background-size:  cover;
+    -fx-background-position: center center; 
+}
+
 #mainRoot{
-    -fx-background-image: url("arcade5.jpg");
+    -fx-background-image: url("../images/arcade5.jpg");
     -fx-background-repeat: stretch;   
     -fx-background-size: cover;
     -fx-background-position: center center; 
