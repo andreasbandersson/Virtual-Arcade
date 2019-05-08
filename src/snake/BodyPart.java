@@ -2,50 +2,66 @@ package snake;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
+
+import javafx.scene.canvas.GraphicsContext;
 
 /**
  * BodyPart class that has Setters and Getters for the snakes body parts and a draw method for drawing the snakes body parts. 
- * @author max.matthiasson
+ * @author Max Matthiasson
  *
  */
 public class BodyPart 
 {
-	private int x;
-	private int y;
-	private int width;
-	private int height;
 	
-	public BodyPart(int xCoordinate, int yCoordinate, int tileSize)
+	private int snakeX = 0;
+	private int snakeY = 0;
+	private int unitWidth = 20;
+	private int unitHeight = 20;
+	
+	public BodyPart(int snakeX, int snakeY, int unitWidth, int unitHeight)
 	{
-		x = xCoordinate;
-		y = yCoordinate;
-		width = tileSize;
-		height = tileSize;
+		this.snakeX = snakeX;
+		this.snakeY = snakeY;
+		this.unitWidth = unitWidth;
+		this.unitHeight = unitHeight;
 	}
 	
-	public void draw(Graphics g)
+	public void drawSnakePane(GraphicsContext gc)
 	{
-		g.setColor(Color.BLACK); //Sets the color of the snake to green. 
-		g.fillRect(x * width, y * height, width, height); //Fills a rectangle to draw a piece of the snake. 
+		gc.setFill(javafx.scene.paint.Color.BLACK); //Sets color to a lawnGreen
+		gc.fillRect(snakeX, snakeY, unitWidth, unitHeight); //Fills a rectangle to draw a piece of the snake. 
 	}
 
-	public int getX() 
-	{
-		return x;
+	public int getSnakeX() {
+		return snakeX;
 	}
 
-	public void setX(int x) 
-	{
-		this.x = x;
+	public void setSnakeX(int snakeX) {
+		this.snakeX = snakeX;
 	}
 
-	public int getY() 
-	{
-		return y;
+	public int getSnakeY() {
+		return snakeY;
 	}
 
-	public void setY(int y) 
-	{
-		this.y = y;
+	public void setSnakeY(int snakeY) {
+		this.snakeY = snakeY;
+	}
+
+	public int getUnitWidth() {
+		return unitWidth;
+	}
+
+	public void setUnitWidth(int unitWidth) {
+		this.unitWidth = unitWidth;
+	}
+
+	public int getUnitHeight() {
+		return unitHeight;
+	}
+
+	public void setUnitHeight(int unitHeight) {
+		this.unitHeight = unitHeight;
 	}
 }
