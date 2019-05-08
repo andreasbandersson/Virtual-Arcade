@@ -1,7 +1,9 @@
 package application;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
 
 import chat.ChatController;
 import javafx.application.Application;
@@ -113,7 +115,12 @@ public class LoginUI extends Application {
 
 		// Sets the scene, adds all children nodes and sets the css-style.
 		scene = new Scene(loginRoot, 700, 400);
-		scene.getStylesheets().addAll(this.getClass().getResource("styles/style.css").toExternalForm());
+		
+		try {
+			scene.getStylesheets().add((new File("C:\\Users\\exmanan\\Virtual-Arcade\\styles\\loginStyle.css")).toURI().toURL().toExternalForm());
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
 		
 		// Sets the primaryStage
 		primaryStage.setTitle("VIRTUAL ARCADE");

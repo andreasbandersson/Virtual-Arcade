@@ -1,7 +1,9 @@
 package application;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
 
 import chat.ChatUI;
 import javafx.animation.Animation;
@@ -29,7 +31,7 @@ public class Leaderboard {
 	private ImageView muteSoundImageView;
 	private ImageView playSoundImageView;
 	private Button soundButton;
-	private Label headerLabel = new Label("UNDER CONSTRUCTION");
+	private Label headerLabel = new Label("LEADERBOARD");
 	private MainUI mainMenu;
 	private Scene scene;
 	private GridPane leaderboardRoot;
@@ -50,12 +52,11 @@ public class Leaderboard {
 		leaderboardRoot = new GridPane();
 		leaderboardRoot.setId("leaderboardRoot");
 		leaderboardRoot.setPrefSize(1200.0, 600.0); // minus chattens bredd (300)
-		leaderboardRoot.setGridLinesVisible(true);
+//		leaderboardRoot.setGridLinesVisible(true);
 
 		// Setting amount of columns and rows for the GridPane
 		createColumnsandRows();
 		setSoundButtonImages();
-		// startSound();
 
 		// Adding and setting the Label for the Leaderboard.
 		headerLabel.setId("leaderboardLabel");
@@ -81,7 +82,11 @@ public class Leaderboard {
 		addActionListeners();
 
 		scene = new Scene(leaderboardRoot, 1200, 600);
-		scene.getStylesheets().addAll(this.getClass().getResource("styles/style.css").toExternalForm());
+		try {
+			scene.getStylesheets().add((new File("C:\\Users\\exmanan\\Virtual-Arcade\\styles\\mainStyle.css")).toURI().toURL().toExternalForm());
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	// Sets the number and size-percentage of the rows and columns in the GridPane.

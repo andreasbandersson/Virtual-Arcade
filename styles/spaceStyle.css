@@ -1,3 +1,11 @@
+@font-face {
+    src: url('PressStart2P.ttf');
+}
+
+@font-face {
+    src: url('Neoneon.otf');
+}
+
 #loginRoot{
     -fx-background-image: url("login2.jpg");
     -fx-background-repeat: stretch;   

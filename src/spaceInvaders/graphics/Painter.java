@@ -21,8 +21,10 @@ import spaceInvaders.logic.Controller;
 import spaceInvaders.units.Player;
 import spaceInvaders.units.Unit;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
 
 
 /**
@@ -48,8 +50,10 @@ public class Painter {
     private Button soundButton = new Button();
     private Image muteSoundImage;
     private Image playSoundImage;
+    private Image spaceInvadersImage;
     private ImageView muteSoundImageView;
     private ImageView playSoundImageView;
+    private ImageView spaceInvadersView;
     private JukeBox jukebox;
 
     private final int numOfCols = 48;
@@ -122,6 +126,7 @@ public class Painter {
         root = new Pane();
         createColumnsandRows();
         setSoundButtonImages();
+        setSpaceInvadersArcadeMachineImage();
         
         root.setId("SpaceInvaders");
 
@@ -146,7 +151,11 @@ public class Painter {
         spaceInvadersRoot.setId("mainRoot");
         
         scene = new Scene(spaceInvadersRoot,1200,600, Color.BLACK);
-        scene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
+        try {
+			scene.getStylesheets().add((new File("C:\\Users\\exmanan\\Virtual-Arcade\\styles\\spaceStyle.css")).toURI().toURL().toExternalForm());
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
         controller = new Controller(this,scene);
         this.player = controller.getPlayer();
         gc = canvas.getGraphicsContext2D();
@@ -191,6 +200,20 @@ public class Painter {
         playSoundImageView = new ImageView(playSoundImage);
         muteSoundImageView = new ImageView(muteSoundImage);
     }
+    
+	//Sets and adds the arcade machine image for the Pong game. 
+	public void setSpaceInvadersArcadeMachineImage() {
+		try {
+			spaceInvadersImage = new Image(new FileInputStream("images/spaceScreen.png"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		spaceInvadersView = new ImageView(spaceInvadersImage);		
+	//	pongView.setFitWidth(900);
+		spaceInvadersView.setPreserveRatio(true);
+		spaceInvadersRoot.add(spaceInvadersView, 0, 14);
+
+	}
 
     public void addListeners(Scene scene) {
 
