@@ -1,4 +1,4 @@
-package pongUI;
+package pong;
 
 import static pong.Config.*;
 
@@ -7,37 +7,31 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
-public class EndScreen extends Pane
+public class WelcomeScreen extends Pane
 {
-    private Runnable onRestart = () -> {}; /* Do nothing for now. */
+    private Runnable onStart = () -> {}; /* Do nothing for now. */
     
-    public void setOnRestart(Runnable onRestart)
+    public void setOnStart(Runnable onStart)
     {
-        this.onRestart = onRestart;
+        this.onStart = onStart;
     }
     
-    private final Text header = new Text();
-    
-    public void setScore(int playerScore)
+    public WelcomeScreen()
     {
-        header.setText(playerScore == WinScore ? "you win" : "you lose");
-    }
-    
-    public EndScreen()
-    {
-        header.boundsInLocalProperty().addListener(observable ->
-        {
-            /*
-             * When using CSS, the width and height (with CSS applied) aren't available right away.
-             * Therefore, we listen for changes and update the position once the width and height
-             * are available.
-             */
+        Text header = new Text("pong");
+    header.boundsInLocalProperty().addListener(observable ->
+   {
+//            /*
+//             * When using CSS, the width and height (with CSS applied) aren't available right away.
+//             * Therefore, we listen for changes and update the position once the width and height
+//             * are available.
+//             */
             header.setTranslateX((WIDTH - header.getBoundsInLocal().getWidth()) / 2); /* Centered. */
-            header.setTranslateY( TxtMarginTB);
-        });
+           header.setTranslateY(TxtMarginTB);
+      });
         header.getStyleClass().add("header");
         
-        Text info = new Text("press enter to restart\npress escape to quit");
+        Text info = new Text("use arrows to move\npress P to pause\n\npress enter to start\npress escape to quit");
         info.boundsInLocalProperty().addListener(observable ->
         {
             /*
@@ -51,13 +45,14 @@ public class EndScreen extends Pane
         info.getStyleClass().add("info");
         
         setPrefSize(WIDTH, HEIGHT);
-        getChildren().addAll(header, info);
-        getStyleClass().add("screen");
+        getChildren().addAll(info);
+        getChildren().add(header);
+        getStyleClass().add("Welscreen");
         
         setOnKeyPressed(event ->
         {
             if (event.getCode() == KeyCode.ENTER) {
-                onRestart.run();
+                onStart.run();
             } else if (event.getCode() == KeyCode.ESCAPE) {
                 Platform.exit();
             }

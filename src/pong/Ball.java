@@ -49,9 +49,9 @@ public class Ball extends GameObject
     }
     
     /* --- Update --- */
-    //nextStep: Avgör nästa steg för bollen 
-    // DeltaX och DeltaY Ger värde positivt eller negativt
-    //SetX och SetY metoderna tar värdet och skickar bollen åt det vinkel. 
+    //nextStep: Avgï¿½r nï¿½sta steg fï¿½r bollen 
+    // DeltaX och DeltaY Ger vï¿½rde positivt eller negativt
+    //SetX och SetY metoderna tar vï¿½rdet och skickar bollen ï¿½t det vinkel. 
     
     @Override
     public void update(double deltaTime)

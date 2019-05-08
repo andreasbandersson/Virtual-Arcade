@@ -21,7 +21,7 @@ public class Config
     public static final double HEIGHT = 400;
     
     /*
-     * Distans mellan kanten och bollen när den träffar
+     * Distans mellan kanten och bollen nï¿½r den trï¿½ffar
      */
     public static final double MarginTop = 10;
     public static final double MarginBottom = 60;
@@ -35,7 +35,7 @@ public class Config
      * The inner edge of a paddle is aligned with the inner edge of the goal area it defends.
      */
     
-    //Avståndet mellan fönsterkanten och plattformarna
+    //Avstï¿½ndet mellan fï¿½nsterkanten och plattformarna
     public static final double PlatformDistance = 30;
 
     /*
@@ -43,7 +43,7 @@ public class Config
      * playing field.
      */
     
-    //Avståndet mellan "Welcome" texten och kanten
+    //Avstï¿½ndet mellan "Welcome" texten och kanten
     public static final double TxtMarginTB = 30;
     
     /*

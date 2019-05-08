@@ -1,0 +1,95 @@
+.screen
+{
+     -fx-background-image: url("../images/pongbg.png");
+	 -fx-background-size: cover;
+}
+
+.Welscreen{
+	
+	 -fx-background-image: url("../images/welcomescreen.png");
+	 -fx-background-size: cover;
+  
+}
+
+
+
+  .score, .ball
+{
+   -fx-fill: radial-gradient( focus-angle 0.0deg, focus-distance 0.0%, center 50.0% 50.0%, radius 100.0%, rgb(255,255,255) 0.0, rgb(0,0,0) 100.0 );
+
+}
+
+.paddle{
+	-fx-fill:rgb(255,255,255);
+}
+
+.header,.info
+{
+ -fx-fill: radial-gradient( focus-angle 0.0deg, focus-distance 0.0%, center 50.0% 50.0%, radius 100.0%, rgb(255,255,255) 0.0, rgb(0,0,0) 100.0 );
+ 
+}
+
+
+.score{
+	 -fx-font-family: 'Arial';
+}
+
+
+.header, .info
+{
+    -fx-font-family: 'Arcade Normal';
+    -fx-text-origin: top;
+}
+
+.header
+{
+    -fx-font-size: 48px;
+}
+
+.info
+{
+    -fx-font-size: 13px;
+    -fx-text-alignment: center;
+}
+
+.score
+{
+    -fx-font-size: 32px;
+}
+
+#loginRoot{
+    -fx-background-image: url("../images/login2.jpg");
+    -fx-background-repeat: stretch;   
+    -fx-background-size:  cover;
+    -fx-background-position: center center; 
+}
+
+#mainRoot{
+    -fx-background-image: url("../images/arcade5.jpg");
+    -fx-background-repeat: stretch;   
+    -fx-background-size: cover;
+    -fx-background-position: center center; 
+}
+#logOutButton{
+	-fx-padding: 10.0 22.0 20.0 22.0;
+    -fx-background-insets: 0.0,0.0 0.0 5.0 0.0, 0.0 0.0 6.0 0.0, 0.0 0.0 7.0 0.0;
+    -fx-background-radius: 24.0;
+    -fx-background-color: 
+        linear-gradient(from 0.0% 93.0% to 0.0% 100.0%, #BBBBBB 0.0%, #CCCCCC 100.0%),
+        #AAAAAA,
+        #DDDDDD,
+        radial-gradient(center 50.0% 50.0%, radius 100.0%, #DDDDDD, #CCCCCC);
+    -fx-effect: dropshadow( gaussian , rgba(0.0,0.0,0.0,0.25) , 4.0,0.0,0.0,1.0 );
+    -fx-font-weight: normal;
+    -fx-font-size: 1em;
+    -fx-alignment: center;
+}
+#logOutButton:pressed {
+    -fx-padding: 14.0 22.0 16.0 22.0;
+    -fx-background-insets: 2.0 0.0 0.0 0.0,2.0 0.0 3.0 0.0, 2.0 0.0 4.0 0.0, 2.0 0.0 5.0 0.0;
+}
+#logOutButton .text {
+    -fx-fill: grey;
+   
+    -fx-font-family: 'sans-serif';
+}

@@ -1,4 +1,4 @@
-package pongUI;
+package pong;
 
 import static pong.Config.*;
 
@@ -15,7 +15,7 @@ public class GameScreen extends Pane
 {
     private final Game game;
     
-    //ska ändras till en Cirkel 
+    //ska ï¿½ndras till en Cirkel 
    
     private final Rectangle ball = new Rectangle(BallSize, BallSize);
     private final Rectangle player = new Rectangle(PlatformWidth, PlatformHeight);
@@ -28,9 +28,9 @@ public class GameScreen extends Pane
     {
         this.game = game;
     
-        //"Ritar Objekt" Det som händer här är att den ritar inte utan binder ihop knutar i en annan klass 
-        //och sen fyller de i färg så att de ser ut som platformar och boll 
-        //Det är i style klassen som man färger dessa. 
+        //"Ritar Objekt" Det som hï¿½nder hï¿½r ï¿½r att den ritar inte utan binder ihop knutar i en annan klass 
+        //och sen fyller de i fï¿½rg sï¿½ att de ser ut som platformar och boll 
+        //Det ï¿½r i style klassen som man fï¿½rger dessa. 
         
     
        ball.translateXProperty().bind(game.getBall().xProperty());

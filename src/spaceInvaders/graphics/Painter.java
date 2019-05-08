@@ -4,7 +4,6 @@ import application.JukeBox;
 import application.MainUI;
 import chat.ChatUI;
 import javafx.animation.AnimationTimer;
-import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -123,7 +122,7 @@ public class Painter extends AnimationTimer {
         spaceInvadersRoot.add(soundButton, 32, 1);
 
         // spaceInvadersRoot.setId("spaceInvadersRoot");
-        spaceInvadersRoot.setPrefSize(1200.0, 600.0); // minus chattens bredd (300)
+        spaceInvadersRoot.setPrefSize(1200.0, 600.0);
 
         scene = new Scene(spaceInvadersRoot,1200,600, Color.BLACK);
 
