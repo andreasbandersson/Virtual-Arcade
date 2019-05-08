@@ -1,16 +1,15 @@
 package spaceInvaders.logic;
 
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import spaceInvaders.graphics.GameFrame;
+import javafx.scene.image.Image;
 import spaceInvaders.graphics.Painter;
 import spaceInvaders.levels.Difficulty;
 import spaceInvaders.levels.Level;
 import spaceInvaders.levels.Level1;
 import spaceInvaders.units.*;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +36,16 @@ public class Controller implements Runnable {
     private List<List<Enemy>> enemies = new ArrayList<>(); //List of Lists = grid; used for moving
 
     private Boolean timerActivated = false;
+
+    private Image explosion;
+
+    {
+        try {
+            explosion = new Image(new FileInputStream("Sprites/deathExplosion.png"),25,20,false,false);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
     private int direction = +1; //+1 = right; -1 = left
 
@@ -88,7 +97,7 @@ public class Controller implements Runnable {
         if (shooter instanceof Player && !timerActivated) {
             shot = new Shot(new Position(shooter.getPosition().getX()+20,shooter.getPosition().getY()-10),4,true,this);
             timerActivated = true;
-            setTimeout( ()-> timerActivated = false,1000); //wait 1 second, then say that timerActivated is false
+            setTimeout( ()-> timerActivated = false,100); //wait 1 second, then say that timerActivated is false
         }else if(shooter instanceof Enemy) {
             shot = new EnemyShot(new Position(shooter.getPosition()), ((Enemy) shooter).getDifficulty().ordinal(),false,this);
         }else {
@@ -99,7 +108,7 @@ public class Controller implements Runnable {
         allUnits.add(shot);
     }
 
-    public synchronized void requestRepaint(){
+    public synchronized void requestHitboxCheck(){
         ArrayList<Unit> temp = new ArrayList<>(allUnits);
         outerLoop: for (Unit unit : temp){
             for (Unit otherUnit : temp){
@@ -113,7 +122,6 @@ public class Controller implements Runnable {
                 }
             }
         }
-        painter.configureGraphicsContext(painter.getGC());
     }
 
     public void removeUnit(Unit unit){
@@ -124,6 +132,7 @@ public class Controller implements Runnable {
         if(unit instanceof Enemy){
             for(List<Enemy> row : enemies){
                 if(row.contains(unit)){
+                    unit.setSprite(explosion);
                     row.remove(unit);
                     score += ((Enemy) unit).getPoints();
                     return;
@@ -135,7 +144,11 @@ public class Controller implements Runnable {
         }
     }
 
-
+    /**
+     * the timeout for players reload
+     * @param runnable
+     * @param delay
+     */
     private static void setTimeout(Runnable runnable, int delay){
         new Thread(() -> {
             try {
@@ -167,7 +180,6 @@ public class Controller implements Runnable {
             while (gamePaused){
                 try {
                     Thread.sleep(250);
-                    requestRepaint();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -181,17 +193,14 @@ public class Controller implements Runnable {
                 for (Enemy e : row) {
                     enemyFire(e);
                     e.updateAnimation();
+                    requestHitboxCheck();
                     if (!moveDown)
-
                         e.moveRelative(direction * enemySpeed, 0);
                     else {
-
                         e.moveRelative((direction * enemySpeed)-5, 0);
-
                     }
                 }
             }
-            requestRepaint();
             try {
                 Thread.sleep(1500 / FPS);
             } catch (InterruptedException e) {
@@ -207,15 +216,19 @@ public class Controller implements Runnable {
         }
     }
 
+    public void setGamePaused(){
+        gamePaused = !gamePaused;
+    }
+
     public int getLevelCounter() {
         return levelCounter;
     }
 
     public synchronized void levelWin() {
         levelCounter++;
-        painter.showLevelTitle();
         System.out.println(allUnits.size());
-        initializeLevel(new Level1(Difficulty.MEDIUM,this)); //should be a list of levels that initialize retrieves from
         System.out.println("U WIN LEL"); //gg
+
+        initializeLevel(new Level1(Difficulty.MEDIUM,this)); //should be a list of levels that initialize retrieves from. CAUSES CONCURRENTMODIFICATION ATM
     }
 }

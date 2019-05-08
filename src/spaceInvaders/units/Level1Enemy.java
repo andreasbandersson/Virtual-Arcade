@@ -23,7 +23,7 @@ public class Level1Enemy extends Enemy {
     static {
         try {
              enemySprite1 = new Image(new FileInputStream("Sprites/enemyYellow.png"),25,20,false,false);
-            enemySprite2 = new Image(new FileInputStream("Sprites/enemyGreen.png"),25,20,false,false);
+            enemySprite2 = new Image(new FileInputStream("Sprites/enemyYellow2.png"),25,20,false,false);
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();

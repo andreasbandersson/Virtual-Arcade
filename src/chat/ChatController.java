@@ -19,6 +19,7 @@ public class ChatController {
 	private User user;
 	private UserList userList;
 
+
 	public ChatController() {
 		client = new ChatClient(60000, "localhost", this);
 		client.connect();
