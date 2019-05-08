@@ -117,7 +117,7 @@ public class LoginUI extends Application {
 		scene = new Scene(loginRoot, 700, 400);
 		
 		try {
-			scene.getStylesheets().add((new File("Virtual-Arcade\\styles\\loginStyle.css")).toURI().toURL().toExternalForm());
+			scene.getStylesheets().add((new File("styles\\loginStyle.css")).toURI().toURL().toExternalForm());
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}

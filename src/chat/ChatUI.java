@@ -101,7 +101,7 @@ public class ChatUI extends Pane {
 		
 		getChildren().add(vPane);
 		try {
-			getStylesheets().add((new File("Virtual-Arcade\\styles\\chatStyle.css")).toURI().toURL().toExternalForm());
+			getStylesheets().add((new File("styles\\chatStyle.css")).toURI().toURL().toExternalForm());
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}

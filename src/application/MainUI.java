@@ -127,7 +127,7 @@ public class MainUI extends Application {
 		// Sets the scene, adds all children nodes and sets the css-style.
 		scene = new Scene(mainRoot, 1200, 600);
 		try {
-			scene.getStylesheets().add((new File("Virtual-Arcade\\styles\\mainStyle.css")).toURI().toURL().toExternalForm());
+			scene.getStylesheets().add((new File("styles\\mainStyle.css")).toURI().toURL().toExternalForm());
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
