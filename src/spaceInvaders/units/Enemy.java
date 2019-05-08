@@ -50,6 +50,11 @@ public abstract class Enemy extends Unit {
                 sprite  = sprite2;
         }
     }
+
+    public void setSprite(Image image){
+        sprite = image;
+    }
+
     public void updateAnimation() {
         if (animationCounter == 2){
             animationCounter--;

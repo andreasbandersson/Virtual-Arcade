@@ -3,6 +3,7 @@ package spaceInvaders.graphics;
 import application.JukeBox;
 import application.MainUI;
 import chat.ChatUI;
+import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -29,7 +30,7 @@ import java.io.FileNotFoundException;
  * @author Viktor Altintas
  */
 
-public class Painter {
+public class Painter extends AnimationTimer {
 
     private Controller controller;
     private Player player;
@@ -71,36 +72,39 @@ public class Painter {
         init();
     }
 
-    public void showLevelTitle() {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                root.getChildren().remove(levelTitle);
-                levelTitle.setText("Level " + controller.getLevelCounter());
-                levelTitle.setLayoutX(300);
-                levelTitle.setLayoutY(0);
-                root.getChildren().add(levelTitle);
 
-            }
-        });
+
+    @Override
+    public void handle(long now) {
+        gc.clearRect(0, 0, 600, 400);
+        gc.drawImage(player.getPlayerSprite(),player.getPosition().getX(), player.getPosition().getY());
+        scoreLabel.setText("Score: " + controller.getScore());
+        levelTitle.setText("Level " + controller.getLevelCounter());
+        for (Unit unit : controller.getAllUnits()) {
+            gc.drawImage(unit.getSprite(), unit.getPosition().getX(), unit.getPosition().getY());
+        }
+        for (int i = 0; i < player.getLife(); i++){
+            gc.drawImage(playerLifeSprite,440+((i+1)*39),10);
+        }
     }
 
-    public synchronized void configureGraphicsContext(GraphicsContext gc){
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                gc.clearRect(0, 0, 600, 400);
-                gc.drawImage(player.getPlayerSprite(),player.getPosition().getX(), player.getPosition().getY());
-                scoreLabel.setText("Score: " + controller.getScore());
-                for (Unit unit : controller.getAllUnits()) {
-                    gc.drawImage(unit.getSprite(), unit.getPosition().getX(), unit.getPosition().getY());
-                }
-                for (int i = 0; i < player.getLife(); i++){
-                    gc.drawImage(playerLifeSprite,440+((i+1)*39),10);
-                }
-            }
-        });
-    }
+  //  public synchronized void configureGraphicsContext(GraphicsContext gc){
+  //      Platform.runLater(new Runnable() {
+  //          @Override
+  //          public void run() {
+  //              gc.clearRect(0, 0, 600, 400);
+  //              gc.drawImage(player.getPlayerSprite(),player.getPosition().getX(), player.getPosition().getY());
+  //              scoreLabel.setText("Score: " + controller.getScore());
+  //              for (Unit unit : controller.getAllUnits()) {
+  //                  gc.drawImage(unit.getSprite(), unit.getPosition().getX(), unit.getPosition().getY());
+  //              }
+  //              for (int i = 0; i < player.getLife(); i++){
+  //                  gc.drawImage(playerLifeSprite,440+((i+1)*39),10);
+  //              }
+  //          }
+  //      });
+  //  }
+
 
     public Scene getScene(){
         spaceInvadersRoot.add(chatUI,36,0,12,24);
@@ -109,9 +113,19 @@ public class Painter {
     }
 
     public void init() {
+
+        controller = new Controller(this,canvas);
+        this.player = controller.getPlayer();
+
         scoreLabel = new Label("");
         scoreLabel.setFont(new Font((12)));
-        scoreLabel.setStyle("-fx-background-color:green;");
+        scoreLabel.setStyle("-fx-background-color:black;");
+
+        levelTitle = new Label("Level " + controller.getLevelCounter());
+        levelTitle.setFont(new Font(12));
+        levelTitle.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+        levelTitle.setLayoutX(300);
+        levelTitle.setLayoutY(0);
 
         canvas = new Canvas(600.0,400.0);
         
@@ -140,6 +154,7 @@ public class Painter {
         spaceInvadersRoot.setPrefSize(1200.0, 600.0); // minus chattens bredd (300)
 
         root.getChildren().add(scoreLabel);
+        root.getChildren().add(levelTitle);
         root.getChildren().add(canvas);
         spaceInvadersRoot.add(root,6,4,24,16);
         
@@ -147,19 +162,16 @@ public class Painter {
         
         scene = new Scene(spaceInvadersRoot,1200,600, Color.BLACK);
         scene.getStylesheets().addAll(this.getClass().getResource("style.css").toExternalForm());
-        controller = new Controller(this,canvas);
-        this.player = controller.getPlayer();
+
         gc = canvas.getGraphicsContext2D();
         addListeners(scene);
-        levelTitle = new Label("Level " + controller.getLevelCounter());
-        levelTitle.setFont(new Font(12));
-        levelTitle.setBackground(new Background(new BackgroundFill(Color.YELLOW, CornerRadii.EMPTY, Insets.EMPTY)));
-        showLevelTitle();
         
         backButton.setFocusTraversable(false);
         soundButton.setFocusTraversable(false);
         canvas.requestFocus();
         canvas.setOnMouseMoved(e -> canvas.requestFocus());
+
+           start(); // starts the animation timer
     }
 
     public GraphicsContext getGC() {
@@ -212,8 +224,9 @@ public class Painter {
                     case SPACE:
                         player.shoot();
                         break;
+                    case P:
+                        controller.setGamePaused();
                 }
-                controller.requestRepaint();
             }
         });
         
@@ -231,6 +244,5 @@ public class Painter {
 			}
 		});
     }
-
 }
 

@@ -3,7 +3,6 @@ package chat;
 import application.LoginUI;
 import application.MainUI;
 import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
 
 /**
  * Controller-class for the chat systemts client-side environment.
@@ -20,8 +19,9 @@ public class ChatController {
 	private User user;
 	private UserList userList;
 
+
 	public ChatController() {
-		client = new ChatClient(60000, "10.2.30.63", this);
+		client = new ChatClient(60000, "localhost", this);
 		client.connect();
 		initLoginUI();
 		chatUI = new ChatUI(this);
