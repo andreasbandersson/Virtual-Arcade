@@ -45,7 +45,6 @@ public class MainUI extends Application {
 	private Button pongPlayButton = new Button("START");
 	private Button spacePlayButton = new Button("START");
 	private Button snakePlayButton = new Button("START");
-	private GridPane mainPane = new GridPane();
 	private Scene scene;
 	private GridPane mainRoot;
 	private Leaderboard leaderBoard;
