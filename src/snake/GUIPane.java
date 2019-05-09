@@ -123,16 +123,16 @@ public class GUIPane {
 		canvas = new Canvas(GAME_WIDTH, GAME_HEIGHT);
 		gc = canvas.getGraphicsContext2D();
 
-		startButton.setFont(Font.font("Verdana", 14));
+		startButton.setFont(Font.loadFont("file:fonts/lunchds.ttf", 18));
 		startButton.setPrefSize(150, 60);
 
-		instructionsButton.setFont(Font.font("Verdana", 14));
+		instructionsButton.setFont(Font.loadFont("file:fonts/lunchds.ttf", 18));
 		instructionsButton.setPrefSize(150, 60);
 
 		buttonLayout.getChildren().addAll(startButton, instructionsButton);
 		buttonLayout.setAlignment(Pos.CENTER);
 		buttonLayout.setLayoutX(225);
-		buttonLayout.setLayoutY(120);
+		buttonLayout.setLayoutY(140);
 
 		root = new Pane();
 		root.getChildren().addAll(canvas, buttonLayout);
@@ -183,7 +183,7 @@ public class GUIPane {
 			@Override
 			public void handle(long now) {
 				// if-statement that happens every X amount of nanoseconds.
-				if (now - lastUpdate >= 50_000_000) {
+				if (now - lastUpdate >= 75_000_000) {
 					switch (movementQueue.peek()) {
 					case UP:
 						snakeY = snakeY - 20;
@@ -223,8 +223,8 @@ public class GUIPane {
 						}
 					}
 				}
-				// Collision for the edges of the screen.
-				if (snakeX > 600 || snakeX < 0 || snakeY > 400 || snakeY < 0) {
+				//Collision for the edges of the screen.
+				if(snakeX >= 580 || snakeX < 20 || snakeY >= 380 || snakeY < 40){
 					gameState = GAME_OVER_STATE;
 					gameAnimationTimer.stop();
 					System.out.println("Collision with the edge of the screen");
@@ -235,17 +235,39 @@ public class GUIPane {
 					if (snakeX == listFood.get(i).getFoodX() && snakeY == listFood.get(i).getFoodY()) {
 						listFood.remove(i);
 						snakeSize++;
-						score++;
+						score = score + 10;
 						i++;
 					}
 				}
-				// Spawns the food.
-				if (listFood.size() == 0) {
-					int foodPosX = r.nextInt(30) * 20;
-					int foodPosY = r.nextInt(20) * 20;
-					foodPiece = new Food(foodPosX, foodPosY, unitWidth, unitHeight);
-					listFood.add(foodPiece);
-				}
+    			//Spawns the food. 
+    			if(listFood.size() == 0)
+    			{
+    				int foodX = r.nextInt(30) * 20; //Set in range between 20 to 580
+    				int foodY = r.nextInt(20) * 20; //Set in range between 40 to 340.
+    				foodPiece = new Food(foodX, foodY, unitWidth, unitHeight);
+    				listFood.add(foodPiece);
+    				
+        			//Removes the food if it spawns outside the rectangle. 
+    				if(foodX >= 560 || foodX <= 20 || foodY >= 340 || foodY <= 40) //Ändra random så det inte kan spawna utanför. 
+    				{
+    					listFood.remove(0);
+    					System.out.println("Food spawned outside of the rectangle");
+    				}
+    			}
+//				// Spawns the food.
+//				if (listFood.size() == 0) {
+//					int foodPosX = r.nextInt(30) * 20;
+//					int foodPosY = r.nextInt(20) * 20;
+//					foodPiece = new Food(foodPosX, foodPosY, unitWidth, unitHeight);
+//					listFood.add(foodPiece);
+//					
+//        			//Removes the food if it spawns outside the rectangle. 
+//    				if(foodX >= 560 || foodX <= 20 || foodY >= 340 || foodY <= 40) //Ändra random så det inte kan spawna utanför. 
+//    				{
+//    					listFood.remove(0);
+//    					System.out.println("Food spawned outside of the rectangle");
+//    				}
+//				}
 			}
 		};
 
@@ -279,7 +301,7 @@ public class GUIPane {
 
 		gameScene.setOnKeyPressed(e -> {
 			// Pressing the up arrow key or W will change the snakes direction to UP.
-			if (e.getCode() == KeyCode.UP || e.getCode() == KeyCode.W) {
+			if (e.getCode() == KeyCode.W) {
 				// Thread.sleep fixar problemet att man kan ï¿½ka in i sig sjï¿½lv om man trycker pï¿½
 				// knapparna tillrï¿½ckligt snabbt.
 				// Fast det gï¿½r att spelet blir lite mindre "smooth".
@@ -289,21 +311,21 @@ public class GUIPane {
 				}
 			}
 			// Pressing the down arrow key or S will change the snakes direction to DOWN.
-			if (e.getCode() == KeyCode.DOWN || e.getCode() == KeyCode.S) {
+			if (e.getCode() == KeyCode.S) {
 				if (movementQueue.peek() != UP) {
 					movementQueue.remove();
 					movementQueue.add(DOWN);
 				}
 			}
 			// Pressing the left arrow key or A will change the snakes direction to LEFT.
-			if (e.getCode() == KeyCode.LEFT || e.getCode() == KeyCode.A) {
+			if (e.getCode() == KeyCode.A) {
 				if (movementQueue.peek() != RIGHT) {
 					movementQueue.remove();
 					movementQueue.add(LEFT);
 				}
 			}
 			// Pressing the right arrow key or D will change the snakes direction to RIGHT.
-			if (e.getCode() == KeyCode.RIGHT || e.getCode() == KeyCode.D) {
+			if (e.getCode() == KeyCode.D) {
 				if (movementQueue.peek() != LEFT) {
 					movementQueue.remove();
 					movementQueue.add(RIGHT);
@@ -313,18 +335,6 @@ public class GUIPane {
 			if (e.getCode() == KeyCode.P) {
 				System.out.println("Button P pressed");
 				pauseGame();
-			}
-			// Pressing Enter while in the menu screen starts the game.
-			if (e.getCode() == KeyCode.ENTER) {
-				if (gameState == MENU_STATE) {
-					startGame();
-				}
-			}
-			// Remove
-			if (e.getCode() == KeyCode.ESCAPE) {
-				if (gameState == GAME_OVER_STATE) {
-					System.exit(1);
-				}
 			}
 			// Pressing R after you've lost restarts the game.
 			if (e.getCode() == KeyCode.R) {
@@ -345,10 +355,10 @@ public class GUIPane {
 	private void startGame() {
 		gameState = INGAME_STATE;
 		score = 0;
-		snakeX = 0;
-		snakeY = 0;
-		foodX = r.nextInt(30) * 20;
-		foodY = r.nextInt(20) * 20;
+		snakeX = 20;
+		snakeY = 60;
+		foodX = r.nextInt((30) * 20);
+		foodY = r.nextInt((20) * 20);
 		snakeSize = 5;
 		listFood.clear();
 		listSnake.clear();
@@ -365,6 +375,7 @@ public class GUIPane {
 		} else if (paused == false) {
 			paused = true;
 			gameAnimationTimer.stop();
+			drawShapes(gc);
 		}
 	}
 
@@ -373,13 +384,17 @@ public class GUIPane {
 		if (gameState == MENU_STATE) {
 			gc.clearRect(0, 0, 600, 400);
 
-			gc.setFont(Font.font("Verdana", FontWeight.BOLD, 60));
+			gc.setFont(Font.loadFont("file:fonts/lunchds.ttf", 80));
 			gc.setFill(Color.BLACK);
-			gc.fillText("Snake", 200, 60);
+			gc.fillText("Snake", 200, 90);
 		}
 
 		if (gameState == INGAME_STATE) {
 			gc.clearRect(0, 0, 600, 400);
+			
+			// Draws border
+			gc.setStroke(Color.BLACK);
+			gc.strokeRect(20, 40, 560, 340);
 
 			// Draws the snake.
 			for (int i = 0; i < listSnake.size(); i++) {
@@ -390,31 +405,33 @@ public class GUIPane {
 				listFood.get(i).drawFoodPane(gc);
 			}
 
-			gc.setFont(Font.font("Verdana", 15));
+			gc.setFont(Font.loadFont("file:fonts/lunchds.ttf", 20));
 			gc.setFill(Color.BLACK);
-			gc.fillText("Score: " + score, 280, 15);
+			gc.fillText("Score: " + score, 20, 35);
 
 			if (paused) {
-				gc.setFont(Font.font("Verdana", FontWeight.BOLD, 40));
-				gc.setFill(Color.BLACK);
-				gc.fillText("Paused", 240, 200);
+				gc.setFont(Font.loadFont("file:fonts/lunchds.ttf", 60));
+				gc.setFill(Color.WHITE);
+				gc.fillText("Paused", 210, 200);
+				gc.setFont(Font.loadFont("file:fonts/lunchds.ttf", 30));;
+				gc.fillText("Press P to resume", 165, 240);
 			}
 		}
 
 		if (gameState == GAME_OVER_STATE) {
 			gc.clearRect(0, 0, 600, 400);
-
-			gc.setFont(Font.font("Verdana", FontWeight.BOLD, 50));
+			
+			gc.setFont(Font.loadFont("file:fonts/lunchds.ttf", 60));
 			gc.setFill(Color.BLACK);
-			gc.fillText("GAME OVER", 140, 150);
-
-			gc.setFont(Font.font("Verdana", FontWeight.BOLD, 30));
+			gc.fillText("GAME OVER", 160, 150);
+			
+			gc.setFont(Font.loadFont("file:fonts/lunchds.ttf", 30));
 			gc.setFill(Color.BLACK);
-			gc.fillText("Score: " + score, 230, 200);
-
-			gc.setFont(Font.font("Verdana", 20));
+			gc.fillText("Score: " + score, 225, 200);
+			
+			gc.setFont(Font.loadFont("file:fonts/lunchds.ttf", 20));
 			gc.setFill(Color.BLACK);
-			gc.fillText("Press R to restart", 210, 380);
+			gc.fillText("Press R to restart", 200, 380);
 
 		}
 	}
