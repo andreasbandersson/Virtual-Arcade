@@ -217,18 +217,23 @@ public class Painter extends AnimationTimer {
             @Override
             public void handle(KeyEvent event) {
                 switch (event.getCode()) {
-
                     case A:
                     case LEFT:
+                        if (controller.getGamePaused())
+                            break;
                         player.move(player.getPosition().getX()-15,player.getPosition().getY());
                         break;
 
                     case D:
                     case RIGHT:
+                        if (controller.getGamePaused())
+                            break;
                         player.move(player.getPosition().getX()+15,player.getPosition().getY());
                         break;
 
                     case SPACE:
+                        if (controller.getGamePaused())
+                            break;
                         player.shoot();
                         break;
                     case P:
