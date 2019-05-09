@@ -3,13 +3,14 @@ package chat;
 import application.LoginUI;
 import application.MainUI;
 import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
 
 
 
 /**
  * Controller-class for the chat systemts client-side environment.
  * 
- * @author MÃ¥ns Grundberg
+ * @author Måns Grundberg
  *
  */
 
@@ -30,7 +31,8 @@ public class ChatController {
 	}
 
 	private void initLoginUI() {
-		Platform.startup(new Runnable() {
+		new JFXPanel();
+		Platform.runLater(new Runnable() {
 			public void run() {
 				loginUI = new LoginUI(ChatController.this);
 				loginUI.start(LoginUI.stage);
@@ -42,7 +44,7 @@ public class ChatController {
 		Platform.runLater(new Runnable() {
 			public void run() {
 				mainUI = new MainUI(chatUI);
-				mainUI.start(MainUI.stage);
+				mainUI.start(MainUI.primaryStage);
 				chatUI.addMessage("Welcome to Virtual Arcade " + ChatController.this.user.getUsername() + "!", 1);
 			}
 		});

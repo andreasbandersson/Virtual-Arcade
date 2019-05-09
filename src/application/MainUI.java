@@ -14,6 +14,8 @@ import javafx.event.EventHandler;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
+import pong.Pong;
+import snake.GUIPane;
 import spaceInvaders.graphics.Painter;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -24,6 +26,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.RowConstraints;
 
 /**
@@ -48,6 +51,8 @@ public class MainUI extends Application {
 	private Scene scene;
 	private GridPane mainRoot;
 	private Leaderboard leaderBoard;
+	private Pong pong;
+	private GUIPane snake;
 
 	// private SpaceInvaders spaceInvaders;
 	private Painter spaceInvaders;
@@ -55,7 +60,7 @@ public class MainUI extends Application {
 	private final int numOfCols = 48;
 	private final int numOfRows = 24;
 	private ChatUI chatUI;
-	public static Stage stage = new Stage();
+	public static Stage primaryStage = new Stage();
 
 	public MainUI(ChatUI chatUI) {
 		this.chatUI = chatUI;
@@ -83,6 +88,7 @@ public class MainUI extends Application {
 		virtualArcadeLabel.setId("vaLabel");
 		virtualArcadeLabel.setEffect(bloom);
 		virtualArcadeLabel.setEffect(glow);
+		virtualArcadeLabel.setMinWidth(Region.USE_PREF_SIZE);
 		mainRoot.add(virtualArcadeLabel, 1, 0, 10, 6);
 
 		// Adding and setting the Label for the "Choose game"-header
@@ -113,12 +119,15 @@ public class MainUI extends Application {
 
 		// Adding and setting the "Play"-buttons for the different arcade games
 		pongPlayButton.setId("arcadeButtons");
+		pongPlayButton.setMinWidth(Region.USE_PREF_SIZE);
 		mainRoot.add(pongPlayButton, 5, 17, 4, 2);
 
 		spacePlayButton.setId("arcadeButtons");
+		spacePlayButton.setMinWidth(Region.USE_PREF_SIZE);
 		mainRoot.add(spacePlayButton, 16, 19, 4, 2);
 
 		snakePlayButton.setId("nokiaButton");
+		snakePlayButton.setMinWidth(Region.USE_PREF_SIZE);
 		mainRoot.add(snakePlayButton, 27, 20, 4, 1);
 
 		mainRoot.add(chatUI, 36, 0, 12, 24);
@@ -126,7 +135,7 @@ public class MainUI extends Application {
 		// Sets the scene, adds all children nodes and sets the css-style.
 		scene = new Scene(mainRoot, 1200, 600);
 		try {
-			scene.getStylesheets().add((new File("styles\\mainStyle.css")).toURI().toURL().toExternalForm());
+			scene.getStylesheets().add((new File("styles//mainStyle.css")).toURI().toURL().toExternalForm());
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
@@ -147,7 +156,7 @@ public class MainUI extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.centerOnScreen();
 		primaryStage.show();
-		stage = primaryStage;
+		// stage = primaryStage;
 
 		primaryStage.setOnCloseRequest((EventHandler<WindowEvent>) new EventHandler<WindowEvent>() {
 			@Override
@@ -214,8 +223,8 @@ public class MainUI extends Application {
 
 	public void switchToMainUI() {
 		mainRoot.add(chatUI, 36, 0, 12, 24);
-		stage.setScene(scene);
-		stage.show();
+		primaryStage.setScene(scene);
+		primaryStage.show();
 	}
 
 	// Function for adding and setting Action Listeners to all Buttons.
@@ -251,19 +260,18 @@ public class MainUI extends Application {
 			}
 		});
 
-		// Skriv om. Instansiera pong och lÃ¤gg in i mainRoot som pane bara
+		// Skriv om. Instansiera pong och lägg in i mainRoot som pane bara
 		pongPlayButton.setOnAction(e -> {
-			// pong = new Pong();
-			// pong.start(primaryStage);
-			jukebox.stopSound();
-			try {
-				this.stop();
-			} catch (Exception e1) {
-				e1.printStackTrace();
+			if (pong == null) {
+				pong = new Pong(this, chatUI, jukebox);
 			}
+
+			mainRoot.getChildren().remove(chatUI);
+			primaryStage.setScene(pong.getScene());
+			primaryStage.show();
 		});
 
-		// Skriv om. Instansiera Space Invaders och lÃ¤gg in i mainRoot som pane bara
+		// Skriv om. Instansiera Space Invaders och lägg in i mainRoot som pane bara
 		spacePlayButton.setOnAction(e -> {
 			if (spaceInvaders == null) {
 				spaceInvaders = new Painter(this, chatUI, jukebox);
@@ -273,16 +281,14 @@ public class MainUI extends Application {
 			primaryStage.show();
 		});
 
-		// Skriv om. Instansiera Snake och lÃ¤gg in i mainRoot som pane bara
+		// Skriv om. Instansiera Snake och lägg in i mainRoot som pane bara
 		snakePlayButton.setOnAction(e -> {
-			// snake = new Snake();
-			// snake.start(primaryStage);
-			jukebox.stopSound();
-			try {
-				this.stop();
-			} catch (Exception e1) {
-				e1.printStackTrace();
+			if (snake == null) {
+				snake = new GUIPane(this, chatUI, jukebox);
 			}
+			mainRoot.getChildren().remove(chatUI);
+			primaryStage.setScene(snake.getScene());
+			primaryStage.show();
 		});
 	}
 }
