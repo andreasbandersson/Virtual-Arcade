@@ -77,7 +77,8 @@ public class Painter extends AnimationTimer {
     private void init() {
         scoreLabel = new Label("");
         scoreLabel.setFont(new Font((12)));
-        scoreLabel.setStyle("-fx-background-color:black;");
+      //  scoreLabel.setStyle("-fx-background-color:black;");
+        scoreLabel.setTextFill(Color.WHITE);
 
         canvas = new Canvas(600.0,400.0);
         canvas.setId("SpaceInvaders");
@@ -105,14 +106,15 @@ public class Painter extends AnimationTimer {
         
         backButton.setFocusTraversable(false);
         soundButton.setFocusTraversable(false);
-        controller = new Controller(this,canvas);
+        controller = new Controller(canvas);
         this.player = controller.getPlayer();
 
         levelTitle = new Label("Level " + controller.getLevelCounter());
         levelTitle.setFont(new Font(12));
-        levelTitle.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+       // levelTitle.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
         levelTitle.setLayoutX(300);
         levelTitle.setLayoutY(0);
+        levelTitle.setTextFill(Color.WHITE);
 
         root.getChildren().add(scoreLabel);
         root.getChildren().add(levelTitle);
