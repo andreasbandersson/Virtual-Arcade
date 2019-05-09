@@ -195,8 +195,9 @@ public class Controller implements Runnable {
                     if (!moveDown)
                         e.moveRelative(direction * enemySpeed, 0);
                     else {
-                        e.moveRelative((direction * enemySpeed)-5, 0);
+                        e.moveRelative(0, 5);
                     }
+
                 }
             }
             try {
@@ -216,6 +217,9 @@ public class Controller implements Runnable {
 
     public void setGamePaused(){
         gamePaused = !gamePaused;
+        for (Shot shot : shots){
+            shot.setPaused();
+        }
     }
 
     public int getLevelCounter() {

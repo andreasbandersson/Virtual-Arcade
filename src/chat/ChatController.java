@@ -3,7 +3,7 @@ package chat;
 import application.LoginUI;
 import application.MainUI;
 import javafx.application.Platform;
-
+import javafx.embed.swing.JFXPanel;
 
 
 /**
@@ -23,14 +23,15 @@ public class ChatController {
 
 
 	public ChatController() {
-		client = new ChatClient(60000, "localhost", this);
+		client = new ChatClient(60000, "10.2.14.16", this);
 		client.connect();
 		initLoginUI();
 		chatUI = new ChatUI(this);
 	}
 
 	private void initLoginUI() {
-		Platform.startup(new Runnable() {
+		new JFXPanel();
+		Platform.runLater(new Runnable() {
 			public void run() {
 				loginUI = new LoginUI(ChatController.this);
 				loginUI.start(LoginUI.stage);

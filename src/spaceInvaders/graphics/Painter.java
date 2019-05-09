@@ -77,8 +77,9 @@ public class Painter extends AnimationTimer {
     private void init() {
         scoreLabel = new Label("");
         scoreLabel.setFont(new Font((12)));
-      //  scoreLabel.setStyle("-fx-background-color:black;");
         scoreLabel.setTextFill(Color.WHITE);
+        scoreLabel.setStyle("-fx-background-color:black;");
+
 
         canvas = new Canvas(600.0,400.0);
         canvas.setId("SpaceInvaders");
@@ -111,7 +112,9 @@ public class Painter extends AnimationTimer {
 
         levelTitle = new Label("Level " + controller.getLevelCounter());
         levelTitle.setFont(new Font(12));
-       // levelTitle.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+        levelTitle.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+        levelTitle.setTextFill(Color.WHITE);
+
         levelTitle.setLayoutX(300);
         levelTitle.setLayoutY(0);
         levelTitle.setTextFill(Color.WHITE);
