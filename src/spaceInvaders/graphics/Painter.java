@@ -38,6 +38,7 @@ public class Painter extends AnimationTimer {
 
     private Label scoreLabel;
     private Label levelTitle;
+    private Label pauseLabel;
     private static Image playerLifeSprite;
     private GraphicsContext gc;
     private Pane root;
@@ -117,10 +118,17 @@ public class Painter extends AnimationTimer {
 
         levelTitle.setLayoutX(300);
         levelTitle.setLayoutY(0);
-        levelTitle.setTextFill(Color.WHITE);
+
+        pauseLabel = new Label("Press P to Pause/Unpause");
+        pauseLabel.setFont(new Font(12));
+        pauseLabel.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+        pauseLabel.setTextFill(Color.WHITE);
+        pauseLabel.setLayoutX(100);
+        pauseLabel.setLayoutY(0);
 
         root.getChildren().add(scoreLabel);
         root.getChildren().add(levelTitle);
+        root.getChildren().add(pauseLabel);
         root.getChildren().add(canvas);
         spaceInvadersRoot.add(root,6,4,24,16);
 
