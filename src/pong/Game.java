@@ -158,7 +158,7 @@ public class Game {
 		player.update(deltaTime);
 		computer.update(deltaTime);
 
-		// keepPaddleInBounds(player);
+		keepPaddleInBounds(player);
 		keepPaddleInBounds(computer);
 
 		ball.update(deltaTime++);

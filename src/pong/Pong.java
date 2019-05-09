@@ -109,50 +109,54 @@ public class Pong {
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
-
-//		Scale scale = Transform.scale(1, 1, 0, 0);
-//		content.getTransforms().add(scale);
+//ä
+	Scale scale = Transform.scale(1, 1, 0, 0);
+		content.getTransforms().add(scale);
 
 		/*
 		 * The following listener is called whenever the scene is resized to update the
 		 * scale and add letter- and pillarboxing.
 		 */
-//		InvalidationListener updateScale = value -> {
-//			double scaleX = scene.getWidth() / WIDTH;
-//			double scaleY = scene.getHeight() / HEIGHT;
-//
-//			if (scaleX < scaleY) {
-//				/*
-//				 * Letterboxing.
-//				 */
-//				scale.setX(scaleX);
-//				scale.setY(scaleX);
-//				double remainingHeight = scene.getHeight() - HEIGHT * scaleX;
-//				content.setTranslateX(0);
-//				content.setTranslateY(remainingHeight / 2);
-//			} else if (scaleY < scaleX) {
-//				/*
-//				 * Pillarboxing.
-//				 */
-//				scale.setX(scaleY);
-//				scale.setY(scaleY);
-//				double remainingWidth = scene.getWidth() - WIDTH * scaleY;
-//				content.setTranslateX(remainingWidth / 2);
-//				content.setTranslateY(0);
-//			} else {
-//				/*
-//				 * Regular scaling.
-//				 */
-//				scale.setX(scaleX);
-//				scale.setY(scaleY);
-//				content.setTranslateX(0);
-//				content.setTranslateY(0);
-//			}
-//		};
-//		scene.widthProperty().addListener(updateScale);
-//		scene.heightProperty().addListener(updateScale);
+	InvalidationListener updateScale = value -> {
+			double scaleX = scene.getWidth()/1000;
+			double scaleY = scene.getHeight()/500;
 
-		// content.requestFocus();
+			if (scaleX < scaleY) {
+				/*
+				 * Letterboxing.
+				 */
+				scale.setX(scaleX);
+				scale.setY(scaleX);
+				double remainingHeight = scene.getHeight() - HEIGHT * scaleX;
+				content.setTranslateX(0);
+				content.setTranslateY(remainingHeight / 2);
+			} else if (scaleY < scaleX) {
+				/*
+				 * Pillarboxing.
+				 */
+				scale.setX(scaleY);
+				scale.setY(scaleY);
+				double remainingWidth = scene.getWidth() - WIDTH * scaleY;
+				content.setTranslateX(remainingWidth / 2);
+				content.setTranslateY(0);
+			} else {
+				/*
+				 * Regular scaling.
+				 */
+				scale.setX(scaleX);
+				scale.setY(scaleY);
+				content.setTranslateX(0);
+				content.setTranslateY(0);
+			}
+		};
+		
+		
+		scene.widthProperty().addListener(updateScale);
+		scene.heightProperty().addListener(updateScale);
+
+		content.requestFocus();
+		
+//ä
 		welcomeScreen.setOnMouseMoved(e -> welcomeScreen.requestFocus());
 		gameScreen.setOnMouseMoved(e -> gameScreen.requestFocus());
 		endScreen.setOnMouseMoved(e -> endScreen.requestFocus());

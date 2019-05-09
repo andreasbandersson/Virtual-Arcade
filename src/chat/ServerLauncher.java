@@ -7,7 +7,7 @@ import java.net.UnknownHostException;
 public class ServerLauncher {
 	public static void main(String[] args) {
 		ServerController serverController = new ServerController();
-		new ChatServer(60000, serverController);
+		new ChatServer(65000, serverController);
 		System.out.println(Thread.currentThread().getName());
 		
 		// Kontrollera utskrift vid start, den IP som skrivs ut måste justeras i ClientLauncher

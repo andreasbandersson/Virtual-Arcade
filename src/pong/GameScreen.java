@@ -12,6 +12,7 @@ import pong.Platform.Movement;
 import pong.Game;
 
 public class GameScreen extends Pane {
+	
 	private final Game game;
 	private final Rectangle ball = new Rectangle(BallSize, BallSize); // ska �ndras till en Cirkel
 	private final Rectangle player = new Rectangle(PlatformWidth, PlatformHeight);
