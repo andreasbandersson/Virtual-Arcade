@@ -3,7 +3,7 @@ package chat;
 import application.LoginUI;
 import application.MainUI;
 import javafx.application.Platform;
-
+import javafx.embed.swing.JFXPanel;
 
 
 /**
@@ -30,7 +30,8 @@ public class ChatController {
 	}
 
 	private void initLoginUI() {
-		Platform.startup(new Runnable() {
+		new JFXPanel();
+		Platform.runLater(new Runnable() {
 			public void run() {
 				loginUI = new LoginUI(ChatController.this);
 				loginUI.start(LoginUI.stage);
@@ -127,9 +128,10 @@ public class ChatController {
 		if (obj instanceof Message) {
 			Message message = (Message) obj;
 			if (message.getSender() != null) {
-				chatUI.addMessage(message.getTimeStamp() + ": " + message.getSender() + ": " + message.getText(), 2);
+				int type = (message.getReceiver() == null) ? 0 : 2;
+				chatUI.addMessage(message.getTimeStamp() + ": " + message.getSender() + ": " + message.getText(), type);
 			} else {
-				chatUI.addMessage(message.getTimeStamp() + ": " + message.getText(), 0);
+				chatUI.addMessage(message.getTimeStamp() + ": " + message.getText(), 1);
 			}
 		} else if (obj instanceof String) {
 			checkServerResponse((String) obj);

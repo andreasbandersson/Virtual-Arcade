@@ -41,17 +41,19 @@ public class Pong {
 	private JukeBox jukebox;
 	private int width = 600;
 	private int height = 400;
+	private Game game;
 
 	public Pong(MainUI mainUI, ChatUI chatUI, JukeBox jukebox) {
 		this.mainUI = mainUI;
 		this.chatUI = chatUI;
+		this.jukebox = jukebox;
 		init();
 	}
 
 	private void init() {
 		Font.loadFont(getClass().getResource("arcade-normal.ttf").toString(), 0);
 
-		Game game = new Game(WinScore);
+		game = new Game(WinScore);
 		Group content = new Group();
 		GameScreen gameScreen = new GameScreen(game);
 		WelcomeScreen welcomeScreen = new WelcomeScreen();
@@ -110,8 +112,8 @@ public class Pong {
 			e.printStackTrace();
 		}
 
-//		Scale scale = Transform.scale(1, 1, 0, 0);
-//		content.getTransforms().add(scale);
+		Scale scale = Transform.scale(1, 1, 0, 0);
+		content.getTransforms().add(scale);
 
 		/*
 		 * The following listener is called whenever the scene is resized to update the
@@ -194,6 +196,7 @@ public class Pong {
 	private void addActionListeners() {
 		backButton.setOnAction(e -> {
 			root.getChildren().remove(chatUI);
+			game.endedGame();
 			mainUI.switchToMainUI();
 		});
 

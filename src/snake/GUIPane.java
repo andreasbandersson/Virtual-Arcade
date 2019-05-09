@@ -287,6 +287,7 @@ public class GUIPane {
 
 		backButton.setOnAction(e -> {
 			snakePane.getChildren().remove(chatUI);
+			gameAnimationTimer.stop();
 			mainUI.switchToMainUI();
 		});
 

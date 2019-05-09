@@ -7,6 +7,7 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.media.AudioClip;
 import pong.Ball;
 import pong.Platform;
+import pong.Platform.Movement;
 
 public class Game {
 	private static final Random rand = new Random();
@@ -158,7 +159,7 @@ public class Game {
 		player.update(deltaTime);
 		computer.update(deltaTime);
 
-		// keepPaddleInBounds(player);
+		keepPaddleInBounds(player);
 		keepPaddleInBounds(computer);
 
 		ball.update(deltaTime++);
@@ -174,7 +175,7 @@ public class Game {
 
 	private void keepPaddleInBounds(Platform paddle) {
 		if (paddle.getY() < MarginTB) {
-			paddle.setY(MarginTB);
+			paddle.setMovement(Movement.NONE);
 		} else if (paddle.getY() + PlatformHeight > HEIGHT - MarginTB) {
 			paddle.setY(HEIGHT - MarginTB - PlatformHeight);
 		}

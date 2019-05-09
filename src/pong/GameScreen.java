@@ -71,17 +71,17 @@ public class GameScreen extends Pane {
 			game.endedGame();
 		}
 
-		if (game.getPlayer().getMovement() == Platform.Movement.NONE && event.getCode() == KeyCode.UP) {
+		if (game.getPlayer().getMovement() == Movement.NONE && event.getCode() == KeyCode.A) {
 			game.getPlayer().setMovement(Movement.UP);
-		} else if (game.getPlayer().getMovement() == Movement.NONE && event.getCode() == KeyCode.DOWN) {
+		} else if (game.getPlayer().getMovement() == Movement.NONE && event.getCode() == KeyCode.S) {
 			game.getPlayer().setMovement(Movement.DOWN);
 		}
 	}
 
 	private void keyReleased(KeyEvent event) {
-		if (game.getPlayer().getMovement() == Movement.UP && event.getCode() == KeyCode.UP) {
+		if (game.getPlayer().getMovement() == Movement.UP && event.getCode() == KeyCode.A) {
 			game.getPlayer().setMovement(Movement.NONE);
-		} else if (game.getPlayer().getMovement() == Movement.DOWN && event.getCode() == KeyCode.DOWN) {
+		} else if (game.getPlayer().getMovement() == Movement.DOWN && event.getCode() == KeyCode.S) {
 			game.getPlayer().setMovement(Movement.NONE);
 		}
 	}
