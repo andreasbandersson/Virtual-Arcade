@@ -38,6 +38,7 @@ public class Painter extends AnimationTimer {
 
     private Label scoreLabel;
     private Label levelTitle;
+    private Label pauseLabel;
     private static Image playerLifeSprite;
     private GraphicsContext gc;
     private Pane root;
@@ -77,8 +78,9 @@ public class Painter extends AnimationTimer {
     private void init() {
         scoreLabel = new Label("");
         scoreLabel.setFont(new Font((12)));
-      //  scoreLabel.setStyle("-fx-background-color:black;");
         scoreLabel.setTextFill(Color.WHITE);
+        scoreLabel.setStyle("-fx-background-color:black;");
+
 
         canvas = new Canvas(600.0,400.0);
         canvas.setId("SpaceInvaders");
@@ -111,13 +113,22 @@ public class Painter extends AnimationTimer {
 
         levelTitle = new Label("Level " + controller.getLevelCounter());
         levelTitle.setFont(new Font(12));
-       // levelTitle.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+        levelTitle.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+        levelTitle.setTextFill(Color.WHITE);
+
         levelTitle.setLayoutX(300);
         levelTitle.setLayoutY(0);
-        levelTitle.setTextFill(Color.WHITE);
+
+        pauseLabel = new Label("Press P to Pause/Unpause");
+        pauseLabel.setFont(new Font(12));
+        pauseLabel.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+        pauseLabel.setTextFill(Color.WHITE);
+        pauseLabel.setLayoutX(100);
+        pauseLabel.setLayoutY(0);
 
         root.getChildren().add(scoreLabel);
         root.getChildren().add(levelTitle);
+        root.getChildren().add(pauseLabel);
         root.getChildren().add(canvas);
         spaceInvadersRoot.add(root,6,4,24,16);
 
@@ -206,18 +217,23 @@ public class Painter extends AnimationTimer {
             @Override
             public void handle(KeyEvent event) {
                 switch (event.getCode()) {
-
                     case A:
                     case LEFT:
+                        if (controller.getGamePaused())
+                            break;
                         player.move(player.getPosition().getX()-15,player.getPosition().getY());
                         break;
 
                     case D:
                     case RIGHT:
+                        if (controller.getGamePaused())
+                            break;
                         player.move(player.getPosition().getX()+15,player.getPosition().getY());
                         break;
 
                     case SPACE:
+                        if (controller.getGamePaused())
+                            break;
                         player.shoot();
                         break;
                     case P:
