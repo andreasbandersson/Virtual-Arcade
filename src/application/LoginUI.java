@@ -18,6 +18,8 @@ import javafx.scene.effect.Bloom;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
@@ -45,26 +47,25 @@ public class LoginUI extends Application {
 	private PasswordField password = new PasswordField();
 	public static Stage stage = new Stage();
 	private ChatController controller;
-	
+
 	private final int numOfCols = 48;
 	private final int numOfRows = 24;
-	
-	public LoginUI (ChatController controller) {
+
+	public LoginUI(ChatController controller) {
 		this.controller = controller;
 	}
 
 	public void start(Stage primaryStage) {
-		
+
 		// Setting the main Pane for the scene.
 		loginRoot = new GridPane();
 		loginRoot.setId("loginRoot");
 
 		createColumnsandRows();
 		setSoundButtonImages();
-		
+
 		jukebox = new JukeBox("sounds/Login-Sound-1.mp3");
 		jukebox.play();
-
 
 		// Adding and setting the Label for Virtual Arcade-header
 		Label virtualArcadeLabel = new Label("VIRTUAL");
@@ -75,7 +76,7 @@ public class LoginUI extends Application {
 		virtualArcadeLabel.setEffect(glow);
 		virtualArcadeLabel.setMinWidth(Region.USE_PREF_SIZE);
 		loginRoot.add(virtualArcadeLabel, 1, 1, 15, 4);
-		
+
 		Label virtualArcadeLabel2 = new Label("ARCADE");
 		virtualArcadeLabel2.setId("vaLabel");
 		virtualArcadeLabel2.setEffect(bloom);
@@ -95,12 +96,12 @@ public class LoginUI extends Application {
 
 		password.setPromptText("Enter a password");
 		loginRoot.add(password, 18, 12, 10, 2);
-		
+
 		responseLabel = new Label();
 		responseLabel.setWrapText(true);
 		responseLabel.setId("responseLabel");
-		loginRoot.add(responseLabel, 18, 15, 10, 3 );
-		
+		loginRoot.add(responseLabel, 18, 15, 10, 3);
+
 		// Adding and setting the button for the login
 		loginButton = new Button(" LOGIN ");
 		loginButton.setId("loginButton");
@@ -110,24 +111,24 @@ public class LoginUI extends Application {
 		newUserButton.setId("logOutButton");
 		newUserButton.setMinWidth(Region.USE_PREF_SIZE);
 		loginRoot.add(newUserButton, 24, 20, 9, 1);
-		
-		//Adding an setting the button for mute and un-mute of login music
+
+		// Adding an setting the button for mute and un-mute of login music
 		soundButton = new Button();
 		soundButton.setId("logOutButton");
 		soundButton.setGraphic(muteSoundImageView);
 		loginRoot.add(soundButton, 42, 2);
-		
+
 		addActionListeners(primaryStage);
 
 		// Sets the scene, adds all children nodes and sets the css-style.
 		scene = new Scene(loginRoot, 700, 400);
-		
+
 		try {
 			scene.getStylesheets().add((new File("styles//loginStyle.css")).toURI().toURL().toExternalForm());
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
-		
+
 		// Sets the primaryStage
 		primaryStage.setTitle("VIRTUAL ARCADE");
 		primaryStage.setResizable(false);
@@ -135,7 +136,7 @@ public class LoginUI extends Application {
 		primaryStage.centerOnScreen();
 		primaryStage.show();
 		stage = primaryStage;
-		
+
 		primaryStage.setOnCloseRequest((EventHandler<WindowEvent>) new EventHandler<WindowEvent>() {
 			@Override
 			public void handle(WindowEvent e) {
@@ -159,8 +160,7 @@ public class LoginUI extends Application {
 		}
 	}
 
-	
-	//Sets the sound buttons images.
+	// Sets the sound buttons images.
 	private void setSoundButtonImages() {
 		try {
 			playSoundImage = new Image(new FileInputStream("images/sound.png"));
@@ -171,9 +171,9 @@ public class LoginUI extends Application {
 		playSoundImageView = new ImageView(playSoundImage);
 		muteSoundImageView = new ImageView(muteSoundImage);
 	}
-	
+
 	// Måns
-	public void setResponse (String response) {
+	public void setResponse(String response) {
 		Platform.runLater(new Runnable() {
 			public void run() {
 				responseLabel.setText(response);
@@ -181,7 +181,7 @@ public class LoginUI extends Application {
 			}
 		});
 	}
-	
+
 	// Måns
 	public void terminate() {
 		stage.close();
@@ -192,16 +192,14 @@ public class LoginUI extends Application {
 			e1.printStackTrace();
 		}
 	}
-	
+
 	// Måns
 	private void disableButtons(boolean disabled) {
 		loginButton.setDisable(disabled);
 		newUserButton.setDisable(disabled);
 	}
-	
 
-	
-	//Function for adding and setting Action Listeners to all Buttons.
+	// Function for adding and setting Action Listeners to all Buttons.
 	private void addActionListeners(Stage primaryStage) {
 		// Måns
 		loginButton.setOnAction(e -> {
@@ -213,17 +211,29 @@ public class LoginUI extends Application {
 			controller.newUser(username.getText(), password.getText());
 			disableButtons(true);
 		});
-		
-		
+
 		soundButton.setOnAction(e -> {
 			jukebox.muteUnmute();
-			if(jukebox.isMute()) {
+			if (jukebox.isMute()) {
 				soundButton.setGraphic(playSoundImageView);
-			}else {
+			} else {
 				soundButton.setGraphic(muteSoundImageView);
 			}
 		});
-		
+
+	}
+
+	public void addKeyListener(Stage primaryStage) {
+		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
+			@Override
+			public void handle(KeyEvent event) {
+				if (event.getCode() == KeyCode.ENTER) {
+					loginButton.fire();
+					event.consume();
+				}
+			}
+		});
 	}
 
 	// The main-method.
