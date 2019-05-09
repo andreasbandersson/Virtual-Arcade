@@ -110,8 +110,8 @@ public class Pong {
 			e.printStackTrace();
 		}
 
-//		Scale scale = Transform.scale(1, 1, 0, 0);
-//		content.getTransforms().add(scale);
+		Scale scale = Transform.scale(1, 1, 0, 0);
+		content.getTransforms().add(scale);
 
 		/*
 		 * The following listener is called whenever the scene is resized to update the
