@@ -100,6 +100,7 @@ public class LoginUI extends Application {
 		responseLabel.setWrapText(true);
 		responseLabel.setId("responseLabel");
 		loginRoot.add(responseLabel, 18, 15, 10, 3 );
+		responseLabel.setMinWidth(Region.USE_PREF_SIZE);
 		
 		// Adding and setting the button for the login
 		loginButton = new Button(" LOGIN ");

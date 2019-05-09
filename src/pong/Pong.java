@@ -59,7 +59,6 @@ public class Pong {
 		WelcomeScreen welcomeScreen = new WelcomeScreen();
 		EndScreen endScreen = new EndScreen();
 		content.getChildren().add(welcomeScreen);
-		
 
 		createColumnsandRows();
 
