@@ -244,6 +244,7 @@ public class Painter extends AnimationTimer {
         
     	backButton.setOnAction(e -> {
 			spaceInvadersRoot.getChildren().remove(chatUI);
+			controller.setGamePaused();
 			mainUI.switchToMainUI();
 		});
 

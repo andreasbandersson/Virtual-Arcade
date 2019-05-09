@@ -23,7 +23,9 @@ public class ChatController {
 
 
 	public ChatController() {
+
 		client = new ChatClient(60000, "localhost", this);
+
 		client.connect();
 		initLoginUI();
 		chatUI = new ChatUI(this);
