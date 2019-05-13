@@ -64,6 +64,7 @@ public class GUIPane {
 	private static final int MENU_STATE = 1;
 	private static final int INGAME_STATE = 2;
 	private static final int GAME_OVER_STATE = 3;
+	private static final int INSTRUCTIONS_STATE = 4;
 
 	private static final int UP = 1;
 	private static final int DOWN = 2;
@@ -113,6 +114,23 @@ public class GUIPane {
 	private Image playSoundImage;
 	private ImageView muteSoundImageView;
 	private ImageView playSoundImageView;
+	
+	private static Image snakeImage;
+	private static Image foodImage;
+	
+	static 
+	{
+	    try 
+	    {
+	        snakeImage = new Image(new FileInputStream("images/SnakePieceV8.png"));
+	        foodImage = new Image(new FileInputStream("images/FoodPieceV2"));
+	        
+	    } 
+	    catch (FileNotFoundException e) 
+	    {
+	        e.printStackTrace();
+	    }
+	}
 
 	public GUIPane(MainUI mainUI, ChatUI chatUI, JukeBox jukebox) {
 		this.mainUI = mainUI;
@@ -207,7 +225,7 @@ public class GUIPane {
 						break;
 					}
 
-					bodyPart = new BodyPart(snakeX, snakeY, unitWidth, unitHeight);
+					bodyPart = new BodyPart(snakeImage, snakeX, snakeY, unitWidth, unitHeight);
 					listSnake.add(bodyPart);
 
 					// Removes the snakes trail.
@@ -252,7 +270,7 @@ public class GUIPane {
     			{
     				int foodX = r.nextInt(30) * 20;
     				int foodY = r.nextInt(20) * 20;
-    				foodPiece = new Food(foodX, foodY, unitWidth, unitHeight);
+    				foodPiece = new Food(foodImage, foodX, foodY, unitWidth, unitHeight);
     				listFood.add(foodPiece);
     				
         			// Removes the food if it spawns outside the rectangle representing the game screen. 
@@ -334,6 +352,19 @@ public class GUIPane {
 					startGame();
 				}
 			}
+			if(e.getCode() == KeyCode.BACK_SPACE) {
+		    	if(gameState == INSTRUCTIONS_STATE) {
+		    		gameState = MENU_STATE;
+					buttonLayout.getChildren().addAll(startButton, instructionsButton);
+		    		drawShapes(gc);
+		    	}
+		    	
+		    	if(gameState == GAME_OVER_STATE) {
+		    		gameState = MENU_STATE;
+					buttonLayout.getChildren().addAll(startButton, instructionsButton);
+		    		drawShapes(gc);
+		    	}
+		    }
 		});
 	}
 
@@ -387,6 +418,24 @@ public class GUIPane {
 			gc.setFont(Font.loadFont("file:fonts/lunchds.ttf", 80));
 			gc.setFill(Color.BLACK);
 			gc.fillText("Snake", 200, 90);
+		}
+		
+		if(gameState == INSTRUCTIONS_STATE) {
+			gc.clearRect(0, 0, 600, 400);
+			
+			gc.setFont(Font.loadFont("file:fonts/lunchds.ttf", 50));
+			gc.setFill(Color.BLACK);
+			gc.fillText("Instructions", 130, 60);
+			gc.setFont(Font.loadFont("file:fonts/lunchds.ttf", 20));
+			gc.fillText("The goal of the game is to eat as much food as", 20, 120);
+			gc.fillText("possible in order to get as many points as possible.", 20, 140);
+			
+			gc.fillText("W = Makes the snake go up.", 20, 200);
+			gc.fillText("A = Makes the snake go left.", 20, 230);
+			gc.fillText("S = Makes the snake go down.", 20, 260);
+			gc.fillText("D = Makes the snake go right.", 20, 290);
+			gc.fillText("P = Pauses the game.", 20, 320);
+			gc.fillText("Press Backspace to return to the main menu", 20, 380);
 		}
 
 		if (gameState == INGAME_STATE) {
