@@ -36,6 +36,8 @@ public class Pong {
 	private final int numOfRows = 24;
 	private Image muteSoundImage;
 	private Image playSoundImage;
+	private Image pongImage;
+	private ImageView pongView;
 	private ImageView muteSoundImageView;
 	private ImageView playSoundImageView;
 	private JukeBox jukebox;
@@ -59,9 +61,9 @@ public class Pong {
 		WelcomeScreen welcomeScreen = new WelcomeScreen();
 		EndScreen endScreen = new EndScreen();
 		content.getChildren().add(welcomeScreen);
-		
 
 		createColumnsandRows();
+		setPongArcadeMachineImage();
 
 		root.setPrefSize(1200, 600);
 		root.add(content, 6, 4, 24, 16);
@@ -201,6 +203,19 @@ public class Pong {
 		playSoundImageView = new ImageView(playSoundImage);
 		muteSoundImageView = new ImageView(muteSoundImage);
 	}
+	
+	//Sets and adds the arcade machine image for the SpaceInvaders game. 
+	public void setPongArcadeMachineImage() {
+		try {
+			pongImage = new Image(new FileInputStream("images/pongScreen3.png"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		pongView = new ImageView(pongImage);		
+		pongView.setPreserveRatio(true);
+		root.add(pongView, 0, 14);
+
+	}	
 
 	private void addActionListeners() {
 		backButton.setOnAction(e -> {

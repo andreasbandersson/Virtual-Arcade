@@ -9,7 +9,7 @@ import javafx.embed.swing.JFXPanel;
 /**
  * Controller-class for the chat systemts client-side environment.
  * 
- * @author MÃ¥ns Grundberg
+ * @author Måns Grundberg
  *
  */
 
@@ -23,7 +23,8 @@ public class ChatController {
 
 
 	public ChatController() {
-		client = new ChatClient(60000, "10.2.14.16", this);
+
+		client = new ChatClient(60000, "localhost", this);
 
 		client.connect();
 		initLoginUI();

@@ -112,6 +112,8 @@ public class GUIPane {
 	private GridPane snakePane = new GridPane();
 	private Image muteSoundImage;
 	private Image playSoundImage;
+	private Image snakeImage;
+	private ImageView snakeView;
 	private ImageView muteSoundImageView;
 	private ImageView playSoundImageView;
 	
@@ -163,6 +165,7 @@ public class GUIPane {
 
 		createColumnsandRows();
 		setSoundButtonImages();
+		setSnakeArcadeMachineImage();
 
 		// Adding and setting the main buttons
 		backButton.setId("logOutButton");
@@ -510,4 +513,18 @@ public class GUIPane {
 		playSoundImageView = new ImageView(playSoundImage);
 		muteSoundImageView = new ImageView(muteSoundImage);
 	}
+	
+	//Sets and adds the arcade machine image for the SpaceInvaders game. 
+		public void setSnakeArcadeMachineImage() {
+			try {
+				snakeImage = new Image(new FileInputStream("images/snakeScreen.png"));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			snakeView = new ImageView(snakeImage);		
+			snakeView.setPreserveRatio(true);
+			snakePane.add(snakeView, 0, 14);
+
+		}
+	
 }
