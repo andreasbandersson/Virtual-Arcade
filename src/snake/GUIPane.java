@@ -65,7 +65,8 @@ public class GUIPane {
 	private static final int INGAME_STATE = 2;
 	private static final int GAME_OVER_STATE = 3;
 	private static final int INSTRUCTIONS_STATE = 4;
-
+	
+	// Int variables representing the direction the snake is going in. 
 	private static final int UP = 1;
 	private static final int DOWN = 2;
 	private static final int LEFT = 3;
@@ -76,8 +77,8 @@ public class GUIPane {
 
 	private int snakeSize = 5; // Length of the snake.
 	private int score = 0; // Keeps track of the score.
-	public int unitWidth = 20; // Width of the units in the game. (The snakes body parts and the food)
-	public int unitHeight = 20; // Height of the units in the game. (The snakes body parts and the food)
+	public int unitWidth = 15; // Width of the units in the game. (The snakes body parts and the food)
+	public int unitHeight = 15; // Height of the units in the game. (The snakes body parts and the food)
 	public int snakeX = 0; // The snakes X-position. 
 	public int snakeY = 0; // The snakes Y-position.
 	public int foodX = 0; // The foods X-position.
@@ -117,19 +118,14 @@ public class GUIPane {
 	private ImageView muteSoundImageView;
 	private ImageView playSoundImageView;
 	
-	private static Image snakeImage;
+	private static Image snakeCharacterImage;
 	private static Image foodImage;
 	
-	static 
-	{
-	    try 
-	    {
-	        snakeImage = new Image(new FileInputStream("images/SnakePieceV8.png"));
-	        foodImage = new Image(new FileInputStream("images/FoodPieceV2"));
-	        
-	    } 
-	    catch (FileNotFoundException e) 
-	    {
+	static {
+	    try {
+	        snakeCharacterImage = new Image(new FileInputStream("images/SnakePieceV8.png"));
+	        foodImage = new Image(new FileInputStream("images/FoodPieceV2.png"));
+	    } catch (FileNotFoundException e) {
 	        e.printStackTrace();
 	    }
 	}
@@ -209,26 +205,26 @@ public class GUIPane {
 
 			@Override
 			public void handle(long now) {
-				// if-statement that happens every X amount of nanoseconds. (75_000_000)
-				if (now - lastUpdate >= 75_000_000) {
+				// if-statement that happens every X amount of nanoseconds. (100_000_000)
+				if (now - lastUpdate >= 100_000_000) {
 					
 					//Switch statement checking what int value is in the queue and changing the snakes X or Y value accordingly. 
 					switch (movementQueue.peek()) {
 					case UP:
-						snakeY = snakeY - 20;
+						snakeY = snakeY - 15;
 						break;
 					case DOWN:
-						snakeY = snakeY + 20;
+						snakeY = snakeY + 15;
 						break;
 					case LEFT:
-						snakeX = snakeX - 20;
+						snakeX = snakeX - 15;
 						break;
 					case RIGHT:
-						snakeX = snakeX + 20;
+						snakeX = snakeX + 15;
 						break;
 					}
 
-					bodyPart = new BodyPart(snakeImage, snakeX, snakeY, unitWidth, unitHeight);
+					bodyPart = new BodyPart(snakeCharacterImage, snakeX, snakeY, unitWidth, unitHeight);
 					listSnake.add(bodyPart);
 
 					// Removes the snakes trail.
@@ -253,7 +249,7 @@ public class GUIPane {
 					}
 				}
 				// Collision for the edges of the screen.
-				if(snakeX >= 580 || snakeX < 20 || snakeY >= 380 || snakeY < 40){
+				if(snakeX > 570 || snakeX < 15 || snakeY >= 380 || snakeY < 45) {
 					gameState = GAME_OVER_STATE;
 					gameAnimationTimer.stop();
 					System.out.println("Collision with the edge of the screen");
@@ -271,13 +267,13 @@ public class GUIPane {
     			// Spawns the food. 
     			if(listFood.size() == 0)
     			{
-    				int foodX = r.nextInt(30) * 20;
-    				int foodY = r.nextInt(20) * 20;
+    				int foodX = r.nextInt(30) * 15;
+    				int foodY = r.nextInt(20) * 15;
     				foodPiece = new Food(foodImage, foodX, foodY, unitWidth, unitHeight);
     				listFood.add(foodPiece);
     				
         			// Removes the food if it spawns outside the rectangle representing the game screen. 
-    				if(foodX >= 560 || foodX <= 20 || foodY >= 340 || foodY <= 40)
+    				if(foodX >= 570 || foodX <= 15 || foodY >= 380 || foodY <= 45)
     				{
     					listFood.remove(0);
     				}
@@ -300,6 +296,18 @@ public class GUIPane {
 				buttonLayout.getChildren().remove(instructionsButton);
 			}
 		});
+		
+		instructionsButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				System.out.println("InstructionsButton pressed");
+				gameState = INSTRUCTIONS_STATE;
+				buttonLayout.getChildren().remove(startButton);
+				buttonLayout.getChildren().remove(instructionsButton);
+				drawShapes(gc);
+			}
+		});
+
 		// Pressing the backButton brings you back to the main menu. 
 		backButton.setOnAction(e -> {
 			snakePane.getChildren().remove(chatUI);
@@ -355,6 +363,7 @@ public class GUIPane {
 					startGame();
 				}
 			}
+			// Pressing backspace will return you to the main menu if you're not in the game. 
 			if(e.getCode() == KeyCode.BACK_SPACE) {
 		    	if(gameState == INSTRUCTIONS_STATE) {
 		    		gameState = MENU_STATE;
@@ -384,10 +393,10 @@ public class GUIPane {
 	private void startGame() {
 		gameState = INGAME_STATE;
 		score = 0;
-		snakeX = 20;
+		snakeX = 15;
 		snakeY = 60;
-		foodX = r.nextInt((30) * 20);
-		foodY = r.nextInt((20) * 20);
+		foodX = r.nextInt((30) * 15);
+		foodY = r.nextInt((20) * 15);
 		snakeSize = 5;
 		listFood.clear();
 		listSnake.clear();
@@ -415,15 +424,18 @@ public class GUIPane {
 	 * @param gc
 	 */
 	public void drawShapes(GraphicsContext gc) {
-		if (gameState == MENU_STATE) {
+		
+		if(gameState == MENU_STATE)
+		{
 			gc.clearRect(0, 0, 600, 400);
 			
 			gc.setFont(Font.loadFont("file:fonts/lunchds.ttf", 80));
 			gc.setFill(Color.BLACK);
-			gc.fillText("Snake", 200, 90);
+			gc.fillText("Snake", 200, 80);
 		}
 		
-		if(gameState == INSTRUCTIONS_STATE) {
+		if(gameState == INSTRUCTIONS_STATE)
+		{
 			gc.clearRect(0, 0, 600, 400);
 			
 			gc.setFont(Font.loadFont("file:fonts/lunchds.ttf", 50));
@@ -439,29 +451,35 @@ public class GUIPane {
 			gc.fillText("D = Makes the snake go right.", 20, 290);
 			gc.fillText("P = Pauses the game.", 20, 320);
 			gc.fillText("Press Backspace to return to the main menu", 20, 380);
+
 		}
-
-		if (gameState == INGAME_STATE) {
-			gc.clearRect(0, 0, 600, 400);
+		
+		if(gameState == INGAME_STATE)
+		{
+			gc.clearRect(0, 0, 600, 400); //Suddar bort allt på canvas.
 			
-			// Draws the rectangle representing the game screen. 
+			//Draws border
 			gc.setStroke(Color.BLACK);
-			gc.strokeRect(20, 40, 560, 340);
-
-			// Draws the snake.
-			for (int i = 0; i < listSnake.size(); i++) {
+			gc.strokeRect(15, 45, 570, 345);
+			
+			//Draws the snake.
+			for(int i = 0; i < listSnake.size(); i++)
+			{
 				listSnake.get(i).drawSnakePane(gc);
 			}
-			// Draws the food.
-			for (int i = 0; i < listFood.size(); i++) {
+			//Draws the food. 
+			for(int i = 0; i < listFood.size(); i++) 
+			{
 				listFood.get(i).drawFoodPane(gc);
 			}
 			
+			//Draws the score.
 			gc.setFont(Font.loadFont("file:fonts/lunchds.ttf", 20));
 			gc.setFill(Color.BLACK);
-			gc.fillText("Score: " + score, 20, 35);
+			gc.fillText("Score:" + score, 15, 40);
 			
-			if (paused) {
+			if(paused)
+			{
 				gc.setFont(Font.loadFont("file:fonts/lunchds.ttf", 60));
 				gc.setFill(Color.WHITE);
 				gc.fillText("Paused", 210, 200);
@@ -469,22 +487,24 @@ public class GUIPane {
 				gc.fillText("Press P to resume", 165, 240);
 			}
 		}
-
-		if (gameState == GAME_OVER_STATE) {
+		
+		if(gameState == GAME_OVER_STATE)
+		{
 			gc.clearRect(0, 0, 600, 400);
 			
 			gc.setFont(Font.loadFont("file:fonts/lunchds.ttf", 60));
 			gc.setFill(Color.BLACK);
-			gc.fillText("GAME OVER", 160, 150);
+			gc.fillText("GAME OVER", 150, 150);
 			
 			gc.setFont(Font.loadFont("file:fonts/lunchds.ttf", 30));
 			gc.setFill(Color.BLACK);
-			gc.fillText("Score: " + score, 225, 200);
+			gc.fillText("Score:" + score, 225, 200);
 			
 			gc.setFont(Font.loadFont("file:fonts/lunchds.ttf", 20));
 			gc.setFill(Color.BLACK);
-			gc.fillText("Press R to restart", 200, 380);
-
+			gc.fillText("Press R to restart", 200, 340);
+			gc.fillText("Press Backspace to return to the main menu", 60, 380);
+			
 		}
 	}
 

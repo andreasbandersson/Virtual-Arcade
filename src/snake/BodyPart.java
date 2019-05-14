@@ -16,25 +16,23 @@ public class BodyPart {
 	
 	private int snakeX = 0;
 	private int snakeY = 0;
-	private int unitWidth = 20;
-	private int unitHeight = 20;
-	private static Image snakeImage;
+	private int unitWidth = 15;
+	private int unitHeight = 15;
+	private static Image snakeCharacterImage;
 	
-	public BodyPart(Image snakeImage, int snakeX, int snakeY, int unitWidth, int unitHeight) {
-		BodyPart.setSnakeImage(snakeImage);
+	public BodyPart(Image snakeCharacterImage, int snakeX, int snakeY, int unitWidth, int unitHeight) {
+		BodyPart.snakeCharacterImage = snakeCharacterImage;
 		this.snakeX = snakeX;
 		this.snakeY = snakeY;
 		this.unitWidth = unitWidth;
 		this.unitHeight = unitHeight;
 	}
 	/**
-	 * Draws the snake by giving it a color and filling in a rectangle representing a piece of the snake. 
+	 * Method that draws the body parts of the snake.  
 	 * @param gc
 	 */
 	public void drawSnakePane(GraphicsContext gc) {
-		gc.setFill(javafx.scene.paint.Color.BLACK);
-		gc.drawImage(snakeImage, snakeX, snakeY, unitWidth, unitHeight);
-		//gc.fillRect(snakeX, snakeY, unitWidth, unitHeight); 
+		gc.drawImage(snakeCharacterImage, snakeX, snakeY, unitWidth, unitHeight);
 	}
 	
 	public int getSnakeX() {
@@ -69,9 +67,9 @@ public class BodyPart {
 		this.unitHeight = unitHeight;
 	}
 	public static Image getSnakeImage() {
-		return snakeImage;
+		return snakeCharacterImage;
 	}
 	public static void setSnakeImage(Image snakeImage) {
-		BodyPart.snakeImage = snakeImage;
+		BodyPart.snakeCharacterImage = snakeCharacterImage;
 	}
 }

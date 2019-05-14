@@ -13,10 +13,10 @@ import javafx.scene.image.Image;
  */
 public class Food {
 	
-	private int foodX = 10;
-	private int foodY = 10;
-	private int unitWidth = 20;
-	private int unitHeight = 20;
+	private int foodX = 0;
+	private int foodY = 0;
+	private int unitWidth = 15;
+	private int unitHeight = 15;
 	private static Image foodImage;
 
 	public Food(Image foodImage, int foodX, int foodY, int unitWidth, int unitHeight) {
@@ -27,13 +27,11 @@ public class Food {
 		this.unitHeight = unitHeight;
 	}
 	/**
-	 * Draws the pieces of food by giving it a color and filling in a rectangle representing the piece of food.
+	 * Draws the pieces of food.
 	 * @param gc
 	 */
 	public void drawFoodPane(GraphicsContext gc) {
-		gc.setFill(javafx.scene.paint.Color.rgb(75, 75, 75)); //Sets color of the food to dark grey.
 		gc.drawImage(foodImage, foodX, foodY, unitWidth, unitHeight);
-		//gc.fillRect(foodX, foodY, unitWidth, unitHeight); //Fills a rectangle to draw the piece of food. 
 	}
 	
 	public static Image getFoodImage() {
