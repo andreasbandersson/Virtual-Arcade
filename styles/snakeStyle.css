@@ -36,7 +36,7 @@
 }
 
 #SnakeCanvas {
-    -fx-background-color: rgb(124, 252, 0);
+    -fx-background-color: rgb(157, 201, 2);
 }
 #logOutButton:pressed {
     -fx-padding: 14.0 22.0 16.0 22.0;

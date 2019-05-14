@@ -83,7 +83,9 @@ public class GUIPane {
 	public int snakeY = 0; // The snakes Y-position.
 	public int foodX = 0; // The foods X-position.
 	public int foodY = 0; // The foods Y-position.
-	private int gameState = MENU_STATE; // Keeps track of which state the program is in (MENU_STATE, INGAME_STATE or GAME_OVER_STATE).
+	// Keeps track of which state the program is in (MENU_STATE, INGAME_STATE, GAME_OVER_STATE or INSTRUCTIONS_STATE).
+	private int gameState = MENU_STATE; 
+	
 
 	//Queue that holds integers representing the direction the snake is traveling in. (UP, DOWN, LEFT, RIGHT).
 	private Queue<Integer> movementQueue = new ArrayDeque<Integer>(); 
