@@ -51,7 +51,7 @@ public class MainUI extends Application {
 	private Scene scene;
 	private GridPane mainRoot;
 	private Leaderboard leaderBoard;
-	private Pong pong;
+	private pong2.Pong pong;
 	private GUIPane snake;
 
 	// private SpaceInvaders spaceInvaders;
@@ -272,7 +272,7 @@ public class MainUI extends Application {
 		// Skriv om. Instansiera pong och l�gg in i mainRoot som pane bara
 		pongPlayButton.setOnAction(e -> {
 			if (pong == null) {
-				pong = new Pong(this, chatUI, jukebox);
+				pong = new pong2.Pong(this, chatUI, jukebox);
 			}
 
 			mainRoot.getChildren().remove(chatUI);
