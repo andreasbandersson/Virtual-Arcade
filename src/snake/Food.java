@@ -5,33 +5,41 @@ import java.awt.Graphics;
 import java.util.Random;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 
 /**
  * Food class that has Setters and Getters for the food and a draw method for drawing the food. 
  * @author Max Matthiasson
  */
-public class Food 
-{
-	private int foodX = 10;
-	private int foodY = 10;
-	private int unitWidth = 20;
-	private int unitHeight = 20;
-
+public class Food {
 	
-	public Food(int foodX, int foodY, int unitWidth, int unitHeight)
-	{
+	private int foodX = 0;
+	private int foodY = 0;
+	private int unitWidth = 15;
+	private int unitHeight = 15;
+	private static Image foodImage;
+
+	public Food(Image foodImage, int foodX, int foodY, int unitWidth, int unitHeight) {
+		Food.foodImage = foodImage;
 		this.foodX = foodX;
 		this.foodY = foodY;
 		this.unitWidth = unitWidth;
 		this.unitHeight = unitHeight;
 	}
-	
-	public void drawFoodPane(GraphicsContext gc)
-	{
-		gc.setFill(javafx.scene.paint.Color.rgb(75, 75, 75)); //Sets color of the food to red.
-		gc.fillRect(foodX, foodY, unitWidth, unitHeight); //Fills a rectangle to draw the piece of food. 
+	/**
+	 * Draws the pieces of food.
+	 * @param gc
+	 */
+	public void drawFoodPane(GraphicsContext gc) {
+		gc.drawImage(foodImage, foodX, foodY, unitWidth, unitHeight);
 	}
-
+	
+	public static Image getFoodImage() {
+		return foodImage;
+	}
+	public static void setFoodImage(Image foodImage) {
+		Food.foodImage = foodImage;
+	}
 	public int getFoodX() {
 		return foodX;
 	}

@@ -41,28 +41,29 @@ public class Pong {
 	private JukeBox jukebox;
 	private int width = 600;
 	private int height = 400;
+	private Game game;
 
 	public Pong(MainUI mainUI, ChatUI chatUI, JukeBox jukebox) {
 		this.mainUI = mainUI;
 		this.chatUI = chatUI;
+		this.jukebox = jukebox;
 		init();
 	}
 
 	private void init() {
-		Font.loadFont(getClass().getResource("arcade-normal.ttf").toString(), 0);
+		// Font.loadFont(getClass().getResource("arcade-normal.ttf").toString(), 0);
 
-		Game game = new Game(WinScore);
-		Group content = new Group();
-		GameScreen gameScreen = new GameScreen(game);
-		WelcomeScreen welcomeScreen = new WelcomeScreen();
-		EndScreen endScreen = new EndScreen();
-		content.getChildren().add(welcomeScreen);
-		
+		game = new Game();
+//		Group content = new Group();
+//		GameScreen gameScreen = new GameScreen(game);
+//		WelcomeScreen welcomeScreen = new WelcomeScreen();
+//		EndScreen endScreen = new EndScreen();
+//		content.getChildren().add(game);
 
 		createColumnsandRows();
-
+		
 		root.setPrefSize(1200, 600);
-		root.add(content, 6, 4, 24, 16);
+		root.add(game, 6, 4, 24, 16);
 
 		backButton.setId("logOutButton");
 		root.add(backButton, 1, 21, 6, 2);
@@ -84,24 +85,24 @@ public class Pong {
 		/*
 		 * Sk�rm byte.
 		 */
-		welcomeScreen.setOnStart(() -> {
-			content.getChildren().clear();
-			content.getChildren().add(gameScreen);
-			gameScreen.requestFocus();
-			game.start();
-		});
-		game.setOnGameEnd(() -> {
-			content.getChildren().clear();
-			content.getChildren().add(endScreen);
-			endScreen.requestFocus();
-			endScreen.setScore(game.getPlayer().getScore());
-		});
-		endScreen.setOnRestart(() -> {
-			content.getChildren().clear();
-			content.getChildren().add(gameScreen);
-			gameScreen.requestFocus();
-			game.start();
-		});
+//		welcomeScreen.setOnStart(() -> {
+//			content.getChildren().clear();
+//			content.getChildren().add(gameScreen);
+//			gameScreen.requestFocus();
+//			game.start();
+//		});
+//		game.setOnGameEnd(() -> {
+//			content.getChildren().clear();
+//			content.getChildren().add(endScreen);
+//			endScreen.requestFocus();
+//			endScreen.setScore(game.getPlayer().getScore());
+//		});
+//		endScreen.setOnRestart(() -> {
+//			content.getChildren().clear();
+//			content.getChildren().add(gameScreen);
+//			gameScreen.requestFocus();
+//			game.start();
+//		});
 
 		scene = new Scene(root, 1200, 600, Color.BLACK);
 		try {
@@ -110,16 +111,16 @@ public class Pong {
 			e.printStackTrace();
 		}
 
-		Scale scale = Transform.scale(1, 1, 0, 0);
-		content.getTransforms().add(scale);
+//		Scale scale = Transform.scale(1, 1, 0, 0);
+//		content.getTransforms().add(scale);
 
 		/*
 		 * The following listener is called whenever the scene is resized to update the
 		 * scale and add letter- and pillarboxing.
 		 */
-//		InvalidationListener updateScale = value -> {
-//			double scaleX = scene.getWidth() / WIDTH;
-//			double scaleY = scene.getHeight() / HEIGHT;
+//	InvalidationListener updateScale = value -> {
+//			double scaleX = scene.getWidth()/1000;
+//			double scaleY = scene.getHeight()/500;
 //
 //			if (scaleX < scaleY) {
 //				/*
@@ -149,15 +150,19 @@ public class Pong {
 //				content.setTranslateY(0);
 //			}
 //		};
+		
+		
 //		scene.widthProperty().addListener(updateScale);
 //		scene.heightProperty().addListener(updateScale);
 
-		// content.requestFocus();
-		welcomeScreen.setOnMouseMoved(e -> welcomeScreen.requestFocus());
-		gameScreen.setOnMouseMoved(e -> gameScreen.requestFocus());
-		endScreen.setOnMouseMoved(e -> endScreen.requestFocus());
-
-		welcomeScreen.requestFocus(); /* This step is necessary to receive keyboard input. */
+		game.requestFocus();
+		
+//�
+//		welcomeScreen.setOnMouseMoved(e -> welcomeScreen.requestFocus());
+//		gameScreen.setOnMouseMoved(e -> gameScreen.requestFocus());
+//		endScreen.setOnMouseMoved(e -> endScreen.requestFocus());
+//
+//		welcomeScreen.requestFocus(); /* This step is necessary to receive keyboard input. */
 	}
 
 	public Scene getScene() {
@@ -194,6 +199,7 @@ public class Pong {
 	private void addActionListeners() {
 		backButton.setOnAction(e -> {
 			root.getChildren().remove(chatUI);
+			game.setPaused(true);
 			mainUI.switchToMainUI();
 		});
 

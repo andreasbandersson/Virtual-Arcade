@@ -47,11 +47,14 @@ import javafx.stage.Stage;
 import snake.BodyPart;
 import snake.Food;
 
+/**
+ * Class that draws the GUI and contains the logic for the game. 
+ * @author Max Matthiasson
+ */
 public class GUIPane {
+	
 	private Pane root;
 	private Canvas canvas;
-
-	private Color customLawnGreen = Color.rgb(124, 252, 0);
 
 	private VBox buttonLayout = new VBox(30);
 
@@ -61,7 +64,9 @@ public class GUIPane {
 	private static final int MENU_STATE = 1;
 	private static final int INGAME_STATE = 2;
 	private static final int GAME_OVER_STATE = 3;
-
+	private static final int INSTRUCTIONS_STATE = 4;
+	
+	// Int variables representing the direction the snake is going in. 
 	private static final int UP = 1;
 	private static final int DOWN = 2;
 	private static final int LEFT = 3;
@@ -72,27 +77,31 @@ public class GUIPane {
 
 	private int snakeSize = 5; // Length of the snake.
 	private int score = 0; // Keeps track of the score.
-	public int unitWidth = 20;
-	public int unitHeight = 20;
-	public int snakeX = 0;
-	public int snakeY = 0;
-	public int foodX = 0;
-	public int foodY = 0;
-	private int gameState = 1; // Keeps track of which state the program is in (MENUSTATE or INGAMESTATE).
+	public int unitWidth = 15; // Width of the units in the game. (The snakes body parts and the food)
+	public int unitHeight = 15; // Height of the units in the game. (The snakes body parts and the food)
+	public int snakeX = 0; // The snakes X-position. 
+	public int snakeY = 0; // The snakes Y-position.
+	public int foodX = 0; // The foods X-position.
+	public int foodY = 0; // The foods Y-position.
+	// Keeps track of which state the program is in (MENU_STATE, INGAME_STATE, GAME_OVER_STATE or INSTRUCTIONS_STATE).
+	private int gameState = MENU_STATE; 
+	
 
-	private Queue<Integer> movementQueue = new ArrayDeque<Integer>();
+	//Queue that holds integers representing the direction the snake is traveling in. (UP, DOWN, LEFT, RIGHT).
+	private Queue<Integer> movementQueue = new ArrayDeque<Integer>(); 
 
 	private Random r = new Random();
 
-	private boolean paused = false;
+	private boolean paused = false; //Keeps track if the game has been paused or not. 
 
-	private AnimationTimer gameAnimationTimer;
+	private AnimationTimer gameAnimationTimer; //Timer that the game runs on. 
 
 	private BodyPart bodyPart;
 	private ArrayList<BodyPart> listSnake; // List of BodyPart objects.
 
 	private Food foodPiece;
 	private ArrayList<Food> listFood; // List of Food objects.
+	
 	private Scene gameScene;
 
 	private MainUI mainUI;
@@ -106,8 +115,22 @@ public class GUIPane {
 	private GridPane snakePane = new GridPane();
 	private Image muteSoundImage;
 	private Image playSoundImage;
+	private Image snakeImage;
+	private ImageView snakeView;
 	private ImageView muteSoundImageView;
 	private ImageView playSoundImageView;
+	
+	private static Image snakeCharacterImage;
+	private static Image foodImage;
+	
+	static {
+	    try {
+	        snakeCharacterImage = new Image(new FileInputStream("images/SnakePieceV8.png"));
+	        foodImage = new Image(new FileInputStream("images/FoodPieceV2.png"));
+	    } catch (FileNotFoundException e) {
+	        e.printStackTrace();
+	    }
+	}
 
 	public GUIPane(MainUI mainUI, ChatUI chatUI, JukeBox jukebox) {
 		this.mainUI = mainUI;
@@ -123,16 +146,16 @@ public class GUIPane {
 		canvas = new Canvas(GAME_WIDTH, GAME_HEIGHT);
 		gc = canvas.getGraphicsContext2D();
 
-		startButton.setFont(Font.font("Verdana", 14));
+		startButton.setFont(Font.loadFont("file:fonts/lunchds.ttf", 18));
 		startButton.setPrefSize(150, 60);
 
-		instructionsButton.setFont(Font.font("Verdana", 14));
+		instructionsButton.setFont(Font.loadFont("file:fonts/lunchds.ttf", 18));
 		instructionsButton.setPrefSize(150, 60);
 
 		buttonLayout.getChildren().addAll(startButton, instructionsButton);
 		buttonLayout.setAlignment(Pos.CENTER);
 		buttonLayout.setLayoutX(225);
-		buttonLayout.setLayoutY(120);
+		buttonLayout.setLayoutY(140);
 
 		root = new Pane();
 		root.getChildren().addAll(canvas, buttonLayout);
@@ -140,6 +163,7 @@ public class GUIPane {
 
 		createColumnsandRows();
 		setSoundButtonImages();
+		setSnakeArcadeMachineImage();
 
 		// Adding and setting the main buttons
 		backButton.setId("logOutButton");
@@ -174,32 +198,35 @@ public class GUIPane {
 		canvas.requestFocus();
 		root.requestFocus();
 	}
-
+	/**
+	 * Method that creates an AnimationTimer containing all the things that continuously happen during the game.
+	 */
 	private void createAnimationTimer() {
 		gameAnimationTimer = new AnimationTimer() {
 			private long lastUpdate = 0;
-			// private long updateSpeed = 75_000_000;
 
 			@Override
 			public void handle(long now) {
-				// if-statement that happens every X amount of nanoseconds.
-				if (now - lastUpdate >= 50_000_000) {
+				// if-statement that happens every X amount of nanoseconds. (100_000_000)
+				if (now - lastUpdate >= 100_000_000) {
+					
+					//Switch statement checking what int value is in the queue and changing the snakes X or Y value accordingly. 
 					switch (movementQueue.peek()) {
 					case UP:
-						snakeY = snakeY - 20;
+						snakeY = snakeY - 15;
 						break;
 					case DOWN:
-						snakeY = snakeY + 20;
+						snakeY = snakeY + 15;
 						break;
 					case LEFT:
-						snakeX = snakeX - 20;
+						snakeX = snakeX - 15;
 						break;
 					case RIGHT:
-						snakeX = snakeX + 20;
+						snakeX = snakeX + 15;
 						break;
 					}
 
-					bodyPart = new BodyPart(snakeX, snakeY, unitWidth, unitHeight);
+					bodyPart = new BodyPart(snakeCharacterImage, snakeX, snakeY, unitWidth, unitHeight);
 					listSnake.add(bodyPart);
 
 					// Removes the snakes trail.
@@ -224,7 +251,7 @@ public class GUIPane {
 					}
 				}
 				// Collision for the edges of the screen.
-				if (snakeX > 600 || snakeX < 0 || snakeY > 400 || snakeY < 0) {
+				if(snakeX > 570 || snakeX < 15 || snakeY >= 380 || snakeY < 45) {
 					gameState = GAME_OVER_STATE;
 					gameAnimationTimer.stop();
 					System.out.println("Collision with the edge of the screen");
@@ -235,39 +262,61 @@ public class GUIPane {
 					if (snakeX == listFood.get(i).getFoodX() && snakeY == listFood.get(i).getFoodY()) {
 						listFood.remove(i);
 						snakeSize++;
-						score++;
+						score = score + 10;
 						i++;
 					}
 				}
-				// Spawns the food.
-				if (listFood.size() == 0) {
-					int foodPosX = r.nextInt(30) * 20;
-					int foodPosY = r.nextInt(20) * 20;
-					foodPiece = new Food(foodPosX, foodPosY, unitWidth, unitHeight);
-					listFood.add(foodPiece);
-				}
+    			// Spawns the food. 
+    			if(listFood.size() == 0)
+    			{
+    				int foodX = r.nextInt(30) * 15;
+    				int foodY = r.nextInt(20) * 15;
+    				foodPiece = new Food(foodImage, foodX, foodY, unitWidth, unitHeight);
+    				listFood.add(foodPiece);
+    				
+        			// Removes the food if it spawns outside the rectangle representing the game screen. 
+    				if(foodX >= 570 || foodX <= 15 || foodY >= 380 || foodY <= 45)
+    				{
+    					listFood.remove(0);
+    				}
+    			}
 			}
 		};
 
 	}
-
+	/**
+	 * Method that creates ActionListeners for buttons and keys. 
+	 */
 	private void addActionListeners() {
+		// Pressing the startButton starts the game. 
 		startButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				System.out.println("Game started");
 				startGame();
 				canvas.requestFocus();
 				buttonLayout.getChildren().remove(startButton);
 				buttonLayout.getChildren().remove(instructionsButton);
 			}
 		});
-
-		backButton.setOnAction(e -> {
-			snakePane.getChildren().remove(chatUI);
-			mainUI.switchToMainUI();
+		
+		instructionsButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				System.out.println("InstructionsButton pressed");
+				gameState = INSTRUCTIONS_STATE;
+				buttonLayout.getChildren().remove(startButton);
+				buttonLayout.getChildren().remove(instructionsButton);
+				drawShapes(gc);
+			}
 		});
 
+		// Pressing the backButton brings you back to the main menu. 
+		backButton.setOnAction(e -> {
+			snakePane.getChildren().remove(chatUI);
+			gameAnimationTimer.stop();
+			mainUI.switchToMainUI();
+		});
+		// Pressing the soundButton will mute or unmute the game sound. 
 		soundButton.setOnAction(e -> {
 			jukebox.muteUnmute();
 			if (jukebox.isMute()) {
@@ -276,34 +325,31 @@ public class GUIPane {
 				soundButton.setGraphic(muteSoundImageView);
 			}
 		});
-
+		// Keeps track of all the key presses in the gameScene. 
 		gameScene.setOnKeyPressed(e -> {
-			// Pressing the up arrow key or W will change the snakes direction to UP.
-			if (e.getCode() == KeyCode.UP || e.getCode() == KeyCode.W) {
-				// Thread.sleep fixar problemet att man kan ï¿½ka in i sig sjï¿½lv om man trycker pï¿½
-				// knapparna tillrï¿½ckligt snabbt.
-				// Fast det gï¿½r att spelet blir lite mindre "smooth".
+			// Pressing W will change the snakes direction to UP.
+			if (e.getCode() == KeyCode.W) {
 				if (movementQueue.peek() != DOWN) {
 					movementQueue.remove();
 					movementQueue.add(UP);
 				}
 			}
-			// Pressing the down arrow key or S will change the snakes direction to DOWN.
-			if (e.getCode() == KeyCode.DOWN || e.getCode() == KeyCode.S) {
+			// Pressing S will change the snakes direction to DOWN.
+			if (e.getCode() == KeyCode.S) {
 				if (movementQueue.peek() != UP) {
 					movementQueue.remove();
 					movementQueue.add(DOWN);
 				}
 			}
-			// Pressing the left arrow key or A will change the snakes direction to LEFT.
-			if (e.getCode() == KeyCode.LEFT || e.getCode() == KeyCode.A) {
+			// Pressing A will change the snakes direction to LEFT.
+			if (e.getCode() == KeyCode.A) {
 				if (movementQueue.peek() != RIGHT) {
 					movementQueue.remove();
 					movementQueue.add(LEFT);
 				}
 			}
-			// Pressing the right arrow key or D will change the snakes direction to RIGHT.
-			if (e.getCode() == KeyCode.RIGHT || e.getCode() == KeyCode.D) {
+			// Pressing D will change the snakes direction to RIGHT.
+			if (e.getCode() == KeyCode.D) {
 				if (movementQueue.peek() != LEFT) {
 					movementQueue.remove();
 					movementQueue.add(RIGHT);
@@ -311,20 +357,7 @@ public class GUIPane {
 			}
 			// Pressing P pauses the game.
 			if (e.getCode() == KeyCode.P) {
-				System.out.println("Button P pressed");
 				pauseGame();
-			}
-			// Pressing Enter while in the menu screen starts the game.
-			if (e.getCode() == KeyCode.ENTER) {
-				if (gameState == MENU_STATE) {
-					startGame();
-				}
-			}
-			// Remove
-			if (e.getCode() == KeyCode.ESCAPE) {
-				if (gameState == GAME_OVER_STATE) {
-					System.exit(1);
-				}
 			}
 			// Pressing R after you've lost restarts the game.
 			if (e.getCode() == KeyCode.R) {
@@ -332,6 +365,20 @@ public class GUIPane {
 					startGame();
 				}
 			}
+			// Pressing backspace will return you to the main menu if you're not in the game. 
+			if(e.getCode() == KeyCode.BACK_SPACE) {
+		    	if(gameState == INSTRUCTIONS_STATE) {
+		    		gameState = MENU_STATE;
+					buttonLayout.getChildren().addAll(startButton, instructionsButton);
+		    		drawShapes(gc);
+		    	}
+		    	
+		    	if(gameState == GAME_OVER_STATE) {
+		    		gameState = MENU_STATE;
+					buttonLayout.getChildren().addAll(startButton, instructionsButton);
+		    		drawShapes(gc);
+		    	}
+		    }
 		});
 	}
 
@@ -341,14 +388,17 @@ public class GUIPane {
 		// canvas.requestFocus();
 		return gameScene;
 	}
-
+	
+	/**
+	 * Method that resets the game. 
+	 */
 	private void startGame() {
 		gameState = INGAME_STATE;
 		score = 0;
-		snakeX = 0;
-		snakeY = 0;
-		foodX = r.nextInt(30) * 20;
-		foodY = r.nextInt(20) * 20;
+		snakeX = 15;
+		snakeY = 60;
+		foodX = r.nextInt((30) * 15);
+		foodY = r.nextInt((20) * 15);
 		snakeSize = 5;
 		listFood.clear();
 		listSnake.clear();
@@ -357,7 +407,9 @@ public class GUIPane {
 		gameAnimationTimer.start();
 	}
 
-	// Pauses the game.
+	/**
+	 * Method that pauses the game.
+	 */
 	private void pauseGame() {
 		if (paused) {
 			paused = false;
@@ -365,57 +417,96 @@ public class GUIPane {
 		} else if (paused == false) {
 			paused = true;
 			gameAnimationTimer.stop();
+			drawShapes(gc);
 		}
 	}
 
-	// Draws the game.
+	/**
+	 * Method used to draw. It draws different things depending on the gameState.
+	 * @param gc
+	 */
 	public void drawShapes(GraphicsContext gc) {
-		if (gameState == MENU_STATE) {
+		
+		if(gameState == MENU_STATE)
+		{
 			gc.clearRect(0, 0, 600, 400);
-
-			gc.setFont(Font.font("Verdana", FontWeight.BOLD, 60));
+			
+			gc.setFont(Font.loadFont("file:fonts/lunchds.ttf", 80));
 			gc.setFill(Color.BLACK);
-			gc.fillText("Snake", 200, 60);
+			gc.fillText("Snake", 200, 80);
 		}
-
-		if (gameState == INGAME_STATE) {
+		
+		if(gameState == INSTRUCTIONS_STATE)
+		{
 			gc.clearRect(0, 0, 600, 400);
+			
+			gc.setFont(Font.loadFont("file:fonts/lunchds.ttf", 50));
+			gc.setFill(Color.BLACK);
+			gc.fillText("Instructions", 130, 60);
+			gc.setFont(Font.loadFont("file:fonts/lunchds.ttf", 20));
+			gc.fillText("The goal of the game is to eat as much food as", 20, 120);
+			gc.fillText("possible in order to get as many points as possible.", 20, 140);
+			
+			gc.fillText("W = Makes the snake go up.", 20, 200);
+			gc.fillText("A = Makes the snake go left.", 20, 230);
+			gc.fillText("S = Makes the snake go down.", 20, 260);
+			gc.fillText("D = Makes the snake go right.", 20, 290);
+			gc.fillText("P = Pauses the game.", 20, 320);
+			gc.fillText("Press Backspace to return to the main menu", 20, 380);
 
-			// Draws the snake.
-			for (int i = 0; i < listSnake.size(); i++) {
+		}
+		
+		if(gameState == INGAME_STATE)
+		{
+			gc.clearRect(0, 0, 600, 400); //Suddar bort allt på canvas.
+			
+			//Draws border
+			gc.setStroke(Color.BLACK);
+			gc.strokeRect(15, 45, 570, 345);
+			
+			//Draws the snake.
+			for(int i = 0; i < listSnake.size(); i++)
+			{
 				listSnake.get(i).drawSnakePane(gc);
 			}
-			// Draws the food.
-			for (int i = 0; i < listFood.size(); i++) {
+			//Draws the food. 
+			for(int i = 0; i < listFood.size(); i++) 
+			{
 				listFood.get(i).drawFoodPane(gc);
 			}
-
-			gc.setFont(Font.font("Verdana", 15));
+			
+			//Draws the score.
+			gc.setFont(Font.loadFont("file:fonts/lunchds.ttf", 20));
 			gc.setFill(Color.BLACK);
-			gc.fillText("Score: " + score, 280, 15);
-
-			if (paused) {
-				gc.setFont(Font.font("Verdana", FontWeight.BOLD, 40));
-				gc.setFill(Color.BLACK);
-				gc.fillText("Paused", 240, 200);
+			gc.fillText("Score:" + score, 15, 40);
+			
+			if(paused)
+			{
+				gc.setFont(Font.loadFont("file:fonts/lunchds.ttf", 60));
+				gc.setFill(Color.WHITE);
+				gc.fillText("Paused", 210, 200);
+				gc.setFont(Font.loadFont("file:fonts/lunchds.ttf", 30));;
+				gc.fillText("Press P to resume", 165, 240);
 			}
 		}
-
-		if (gameState == GAME_OVER_STATE) {
+		
+		if(gameState == GAME_OVER_STATE)
+		{
 			gc.clearRect(0, 0, 600, 400);
-
-			gc.setFont(Font.font("Verdana", FontWeight.BOLD, 50));
+			
+			gc.setFont(Font.loadFont("file:fonts/lunchds.ttf", 60));
 			gc.setFill(Color.BLACK);
-			gc.fillText("GAME OVER", 140, 150);
-
-			gc.setFont(Font.font("Verdana", FontWeight.BOLD, 30));
+			gc.fillText("GAME OVER", 150, 150);
+			
+			gc.setFont(Font.loadFont("file:fonts/lunchds.ttf", 30));
 			gc.setFill(Color.BLACK);
-			gc.fillText("Score: " + score, 230, 200);
-
-			gc.setFont(Font.font("Verdana", 20));
+			gc.fillText("Score:" + score, 225, 200);
+			
+			gc.setFont(Font.loadFont("file:fonts/lunchds.ttf", 20));
 			gc.setFill(Color.BLACK);
-			gc.fillText("Press R to restart", 210, 380);
-
+			gc.fillText("Press R to restart", 200, 340);
+			gc.fillText("Press Backspace to return to the main menu", 60, 380);
+			
 		}
 	}
 
@@ -444,4 +535,18 @@ public class GUIPane {
 		playSoundImageView = new ImageView(playSoundImage);
 		muteSoundImageView = new ImageView(muteSoundImage);
 	}
+	
+	//Sets and adds the arcade machine image for the SpaceInvaders game. 
+		public void setSnakeArcadeMachineImage() {
+			try {
+				snakeImage = new Image(new FileInputStream("images/snakeScreen.png"));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			snakeView = new ImageView(snakeImage);		
+			snakeView.setPreserveRatio(true);
+			snakePane.add(snakeView, 0, 14);
+
+		}
+	
 }

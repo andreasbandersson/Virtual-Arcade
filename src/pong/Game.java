@@ -1,262 +1,434 @@
 package pong;
 
-import static pong.Config.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import javafx.scene.Group;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
-import java.util.Random;
-import javafx.animation.AnimationTimer;
-import javafx.scene.media.AudioClip;
-import pong.Ball;
-import pong.Platform;
-import pong.Platform.Movement;
+public class Game extends Pane implements Runnable /* , KeyListener, MouseListener */ {
+	private static final long serialVersionUID = 1L;
 
-public class Game {
-	private static final Random rand = new Random();
-	private final int maxPoints;
-	private State game_state = State.GAME_ENDED;
-	private final PlayLoop loop = new PlayLoop();
-	private final Platform player = new Platform(UserPlatformSpeed);
+	private Thread thread;
+	private boolean running, gamePaused;
+	private long lastKeyPressTime, firstGameTime;
+	private Sound mainTheme;
+	private boolean muteSound, muted, firstGame;
+	Group content = new Group();
+	public static int test = 5;
+	public static HashMap<Integer, Boolean> keyDownMap = new HashMap<Integer, Boolean>();
+	private LinkedList<Platform> platforms = new LinkedList<Platform>();
+	// private List<ColorOption> leftPlatformColors = new ArrayList<ColorOption>();
+	private List<ColorOption> rightPlatformColors = new ArrayList<ColorOption>();
+	private javafx.scene.paint.Color rightChosenColor;
+	public static int nextYLerp;
+	private Ball ball;
+	private Canvas canvas = new Canvas(600, 400);
+	// private static GameFrame gFrame;
+	// private Font txtFont;
 
-	public Game(int maxScore) {
-		this.maxPoints = maxScore;
-		loop.start();
-	}
+	// ALL THE KEY LISTENER METHODS AND METHODS DEPENDED ON THIS
 
-	public int getWinPoints() {
-		return maxPoints;
-	}
-
-	/* --- Game loop --- */
-
-	/*
-	 * This is an implementation of a game loop using variable time steps. See the
-	 * blog posts on game loops in JavaFX for more information.
-	 */
-	private class PlayLoop extends AnimationTimer {
-		private long pastTime = 0;
-
-		// Fps updatering av spel
-		@Override
-		public void handle(long currentTime) {
-			/*
-			 * If this is the first frame, simply record an initial time.
-			 */
-			if (pastTime == 0) {
-				pastTime = currentTime;
-				return;
-			}
-
-			double passedTime = (currentTime - pastTime) / 1_000_000_000.0; /* Convert nanoseconds to seconds. */
-
-			/*
-			 * Avoid large time steps by imposing an upper bound.
-			 */
-			if (passedTime > 0.0333) {
-				passedTime = 0.0333;
-			}
-
-			updateGame(passedTime);
-
-			pastTime = currentTime;
-		}
-	}
-
-
-	/* --- State --- */
-
-	public enum State {
-		GAME_PLAYING, GAME_PAUSED, GAME_ENDED;
-	}
-
-
-	public State getStatus() {
-		return game_state;
-	}
-
-	private Runnable onGameEnd = () -> {
-	}; /* Do nothing for now. */
-
-	public void setOnGameEnd(Runnable onGameEnd) {
-		this.onGameEnd = onGameEnd;
+	public Game() {
+		// gFrame = new GameFrame(new Game());
+		start();
 	}
 
 	public void start() {
-		player.setX(MarginLR + PlatformDistance - PlatformWidth); /* Aligned with the goal area. */
-		player.setY((HEIGHT - PlatformHeight) / 2); /* Centered. */
-
-		computer.setX(WIDTH - MarginLR - PlatformDistance); /* Aligned with the goal area. */
-		computer.setY((HEIGHT - PlatformHeight) / 2); /* Centered. */
-
-		player.setScore(0);
-		computer.setScore(0);
-
-		player.setMovement(Platform.Movement.NONE);
-		computer.setMovement(Platform.Movement.NONE);
-
-		ReleaseBall();
-
-		game_state = State.GAME_PLAYING;
-	}
-
-	public void pause() {
-		if (game_state == State.GAME_PAUSED) {
-			game_state = State.GAME_PLAYING;
-		} else if (game_state == State.GAME_PLAYING) {
-			game_state = State.GAME_PAUSED;
+		if (this.thread == null) {
+			this.thread = new Thread(this, "pong");
+			this.thread.start();
 		}
 	}
 
-	public void endedGame() {
-		player.setScore(0);
-		computer.setScore(maxPoints);
-		game_state = State.GAME_ENDED;
-		onGameEnd.run();
-	}
+	public void run() {
+		init();
+		long lastTime = System.nanoTime();
+		long timer = System.currentTimeMillis();
+		final double ns = 1000000000.0 / 30.0;
+		double delta = 0;
+		int frames = 0;
+		int updates = 0;
+		while (running) {
+			content.requestFocus();
 
-	/* --- Ball --- */
+			long now = System.nanoTime();
+			delta += (now - lastTime) / ns;
+			lastTime = now;
+			while (delta >= 1) {
+				update(delta);
+				updates++;
+				delta--;
+			}
 
-	private final Ball ball = new Ball(MaxSpeed);
+			render();
+			frames++;
 
-	public Ball getBall() {
-		return ball;
-	}
-
-	public void ReleaseBall() {
-		boolean towardsOpponent = rand.nextBoolean();
-		double initialAngle = PlatformSectionAngels[rand.nextInt(2) + 1]; /* We don't use the steepest angle. */
-
-		ball.setBallSpeed(towardsOpponent ? -BALL_INITIAL_SPEED : BALL_INITIAL_SPEED);
-		ball.setAngle(towardsOpponent ? -initialAngle : initialAngle);
-		ball.setX((WIDTH - BallSize) / 2); /* Centered. */
-		ball.setY(MarginTB);
-	}
-
-	/* --- Player --- */
-
-
-	public Platform getPlayer() {
-		return player;
-	}
-
-	/* --- Opponent --- */
-
-	private final Platform computer = new Platform(ComputerPlatformSpeed);
-	private final PlatformAi ai = new DefaultAi(computer, this);
-
-	public Platform getComputer() {
-		return computer;
-	}
-
-	/* --- Update --- */
-
-	private void updateGame(double deltaTime) {
-		if (game_state == State.GAME_PAUSED || game_state == State.GAME_ENDED) {
-			return; /*
-					 * This is necessary because the loop keeps running even when the game is paused
-					 * or stopped.
-					 */
-		}
-
-		player.update(deltaTime);
-		computer.update(deltaTime);
-
-		keepPaddleInBounds(player);
-		keepPaddleInBounds(computer);
-
-		ball.update(deltaTime++);
-
-		checkWallCollision();
-		checkPaddleOrEdgeCollision(player);
-		checkPaddleOrEdgeCollision(computer);
-
-		ai.update(deltaTime * 2);
-	}
-
-	/* --- Collision detection --- */
-
-	private void keepPaddleInBounds(Platform paddle) {
-		if (paddle.getY() < MarginTB) {
-			paddle.setMovement(Movement.NONE);
-		} else if (paddle.getY() + PlatformHeight > HEIGHT - MarginTB) {
-			paddle.setY(HEIGHT - MarginTB - PlatformHeight);
+//			if (System.currentTimeMillis() - timer > 1000) {
+//				timer += 1000;
+//				gFrame.updateTitle(updates + " ups, " + frames + " fps");
+//				updates = frames = 0;
+//			}
 		}
 	}
 
-	private void checkWallCollision() {
+	public void init() {
+		/*
+		 * addKeyListener(this); addMouseListener(this);
+		 */
+		System.out.println("Initierias....");
+		setPrefSize(600, 400);
+		getChildren().add(canvas);
+		this.rightChosenColor = javafx.scene.paint.Color.WHITE;
 
-		if (ball.getY() < MarginTop || ball.getY() + BallSize > HEIGHT - MarginBottom) {
-			ball.setAngle(ball.getBallAngle() * -1);
-			new AudioClip(Sounds.HIT_WALL).play();
+		this.running = this.firstGame = true;
+
+		this.muteSound = this.muted = this.gamePaused = false;
+
+		this.lastKeyPressTime = System.currentTimeMillis();
+
+		this.platforms.add(new Platform(true)); // Left platform
+		this.platforms.add(new Platform(false)); // Right platform
+		this.ball = new Ball((Config.Window.width / 2) - (Config.Ball.width / 2),
+				(Config.Window.height / 2) - (Config.Ball.height / 2));
+
+		// txtFont = new Font(Font.MONOSPACED, Font.BOLD, 20);
+
+		int marginLeft = 5;
+
+		for (int i = 0; i < Config.Game.colors.length; i++) {
+			// leftPlatformColors.add(new ColorOption((i * Config.ColorOpt.width +
+			// marginLeft), 10, colors[i]));
+
+			rightPlatformColors.add(new ColorOption((Config.Window.width / 2) - (i * Config.ColorOpt.width)
+					+ (Config.Game.colors.length * Config.ColorOpt.width) / 2, 10, Config.Game.colors[i]));
 		}
 
-		if (ball.getY() < MarginTop) {
-			ball.setY(MarginTop);
-		} else if (ball.getY() + BallSize > HEIGHT - MarginBottom) {
-			ball.setY(HEIGHT - MarginBottom - BallSize);
-		}
+		// Sound.play("files/maintheme.wav");
+		// this.mainTheme = new Sound("files/maintheme.wav");
 	}
 
-	private void checkPaddleOrEdgeCollision(Platform platform) {
-		boolean ballHitEdge;
-		if (platform == player) {
-			ballHitEdge = ball.getX() < MarginLR + PlatformDistance;
-		} else {
-			ballHitEdge = ball.getX() + BallSize > WIDTH - MarginLR - PlatformDistance;
-		}
-		if (!ballHitEdge) {
-			return;
-		}
+	public void update(double dt) {
+		// check if P key was pressed ( PAUSE )
+		canvas.setOnKeyPressed(event -> {
+			if(keyDownMap.containsKey(event.getCode()==KeyCode.PAUSE) 
+					&& (System.currentTimeMillis() - this.lastKeyPressTime >= 200)) {
 
-		boolean ballHitPaddle = ball.getY() + BallSize > platform.getY()
-				&& ball.getY() < platform.getY() + PlatformHeight;
-		if (ballHitPaddle) {
+				if(!this.gamePaused)
+					this.gamePaused = true;
+				else
+					this.gamePaused = false;
 
-			/*
-			 * Find out what section of the paddle was hit (for computer).
-			 */
-			for (int i = 0; i < PlatformSection; i++) {
-				boolean ballHitCurrentSection = ball.getY() < platform.getY() + (i + 1) * PlatformSectionHeight;
-				if (ballHitCurrentSection) {
-					ball.setAngle(PlatformSectionAngels[i] * (platform == computer ? 1 : -1.5));
-					break; /* Found our match. */
-				} else if (i == PlatformSection
-						- 1) { /* If we haven't found our match by now, it must be the last section. */
-					ball.setAngle(PlatformSectionAngels[i] * (platform == computer ? -1 : 1));
+				this.lastKeyPressTime = System.currentTimeMillis();
+			}
+
+			// check if M key was pressed ( MUTE )
+			if(keyDownMap.containsKey(event.getCode()==KeyCode.MUTE)
+					&& (System.currentTimeMillis() - this.lastKeyPressTime >= 200)) {
+				if(!this.muteSound)
+					this.muteSound = true;
+				else
+					this.muteSound = false;
+
+				this.lastKeyPressTime = System.currentTimeMillis();
+
+			}
+
+			if(keyDownMap.containsKey(event.getCode()==KeyCode.ENTER)
+					&& (System.currentTimeMillis() - this.lastKeyPressTime >= 200)) {			
+				if(firstGame) {
+					firstGame = false;
+				}
+				this.lastKeyPressTime = System.currentTimeMillis();
+				this.firstGameTime = System.currentTimeMillis();
+
+
+			}
+
+
+
+			// Update everything while the game is NOT paused.
+			if(!gamePaused && !firstGame) {
+
+				// Update platforms
+				// Check for ROUND WINNER
+				if(this.ball.getX() + this.ball.getWidth() >= Config.Window.width) {
+
+					for(Platform platform: this.platforms) {
+						if(platform.getPlayerId() == 1) {
+
+							System.out.println("increase point for P1");
+							platform.increasePoints();
+						}
+
+						this.ball.resetPos();
+						platform.update(/*keyDownMap, */dt);	
+					}
+
+					nextYLerp = -1;
+
+				} else if(this.ball.getX() <= 0) {
+					System.out.println("BALL OUT <");
+
+					for(Platform platform: this.platforms) {
+						if(platform.getPlayerId() == 2) {
+							System.out.println("increase point for P2");
+							platform.increasePoints();
+						}
+
+						this.ball.resetPos();	
+					}
+
+					nextYLerp = -1;
+
+				}
+
+				for(Platform platform: this.platforms) {
+					// make it follow ball in Y direction
+
+					if(platform.getPlayerId() == 1) {
+						// -1 = currently unknown 
+						if(nextYLerp != -1) {
+							if(this.ball.getX() < Config.Window.width/2) {
+								platform.setY((int)lerp((float)platform.getRect().getY(), (float)nextYLerp, 0.5f));
+							}
+						} else {
+
+							platform.setY((int)lerp((float)platform.getRect().getY(), (float)(Config.Window.height/2-platform.getRect().getHeight()), 0.3f));						
+						}					
+					}
+
+					platform.update(dt);
+					if(platform.getPoints() >= Config.Game.maxWins) {
+						System.out.println("Player " + platform.getPlayerId() + " WINS !");
+						resetGame();
+						break;
+					}
+				}
+
+				// start updating ball after 2 seconds
+				if(System.currentTimeMillis() - this.firstGameTime >= Config.Ball.delayTime){
+					// Update pong ball
+					this.ball.update(this.platforms, dt);	
+				}
+
+
+			} else {
+				// Update Colors
+				/*			for(ColorOption co: leftPlatformColors) {
+				co.update();
+			}
+				 */
+				for(ColorOption co: rightPlatformColors) {
+					co.update();
 				}
 			}
 
-			/*
-			 * Update and reposition the ball.
-			 */
-			ball.setBallSpeed(ball.getBallSpeed() * SpeedIncrease);
-			if (platform == player) {
-				ball.setX(MarginLR + PlatformDistance);
-			} else {
-				ball.setX(WIDTH - MarginLR - PlatformDistance - BallSize);
+
+
+
+			// check if sound should be MUTED
+			if(this.muteSound && !this.muted){
+				this.mainTheme.stopSound();
+				this.muted = true;
+
+				// check if sound should be RESUMED
+			} else if(!this.muteSound && this.muted){
+				this.mainTheme.resumeSound();
+				this.muted = false;
 			}
-			new AudioClip(Sounds.HIT_PADDLE).play();
+		});
+
+		}
+
+	public void render() {
+		// BufferStrategy bufferStrategy = new BufferStrategy();
+		//
+		// // to initialize buffer once
+		// if(bufferStrategy == null) {
+		// this.createBufferStrategy(3);
+		// return;
+		// }
+
+		GraphicsContext gc = canvas.getGraphicsContext2D();
+
+		gc.setFill(javafx.scene.paint.Color.BLACK);
+		gc.fillRect(0, 0, Config.Window.width, Config.Window.height);
+		
+		////////////////////////////////////////////////////////////
+
+		// RENDER ONLY WHEN THE GAME IS _NOT_ PAUSED
+
+		if (firstGame) {
+			displayText(gc, "[ENTER] Start", Color.WHITE, Config.Window.width / 2, 60);
+			displayText(gc, "[M] Mute", Color.WHITE, Config.Window.width / 2, 80);
+			displayText(gc, "[P] Pause", Color.WHITE, Config.Window.width / 2, 100);
+
+			/*
+			 * for(ColorOption co: leftPlatformColors) { co.render(g); }
+			 */
+			for (ColorOption co : rightPlatformColors) {
+				co.render(gc);
+			}
+
+			gc.setFill(this.rightChosenColor);
+			gc.fillRect(Config.Window.width / 2 - 25, Config.Window.height / 2, 50, 50);
 
 		} else {
+			if (!gamePaused) {
 
-			/*
-			 * Update the score.
-			 */
-			if (platform == computer) {
-				player.setScore(player.getScore() + 1);
-				new AudioClip(Sounds.SCORE_PLAYER).play();
-			} else {
-				computer.setScore(computer.getScore() + 1);
-				new AudioClip(Sounds.SCORE_OPPONENT).play();
-			}
+				// Render(draw/paint) platforms
+				for (Platform platform : this.platforms) {
+					platform.render(gc);
+				}
 
-			/*
-			 * Check if the game has ended. If not, play another round.
-			 */
-			if (player.getScore() == maxPoints || computer.getScore() == maxPoints) {
-				game_state = State.GAME_ENDED;
-				onGameEnd.run();
+				// Render pong ball
+				this.ball.render(gc);
+
+				displayPoints(gc);
 			} else {
-				ReleaseBall();
+
+				// DISPLAY "paused" WHEN GAME IS PAUSED
+				displayText(gc, "- Paused -", Color.WHITE, Config.Window.width / 2, 60);
+				displayText(gc, "[P] Resume", Color.WHITE, Config.Window.width / 2, 80);
+
 			}
 		}
+
+		////////////////////////////////////////////////////////////
+		//gc.dispose();
+		//bufferStrategy.show();
 	}
+
+	public static float lerp(float a, float b, float f) {
+		// return (1 - t) * v0 + t * v1;
+		return a + f * (b - a);
+	}
+
+	public void resetGame() {
+
+		// reset player points
+		for (Platform p : this.platforms) {
+			p.resetPoints();
+		}
+
+		// reset ball position
+		this.ball.resetPos();
+
+		this.firstGame = true;
+		this.gamePaused = false;
+		this.muteSound = false;
+		this.muted = false;
+	}
+
+	public void displayPoints(GraphicsContext gc) {
+		gc.setFill(Color.WHITE);
+		gc.setFont(Font.font(20));
+		
+
+		String title = "";
+		for (Platform p : this.platforms) {
+			title += " Player " + p.getPlayerId() + ": " + p.getPoints() + (p.getPlayerId() == 2 ? "" : " |");
+		}
+
+//		int x = (Config.Window.width / 2) - metrics.stringWidth(title) / 2;
+//		int y = 10 + (metrics.getHeight() / 2) + metrics.getAscent();
+
+		gc.fillText(title, 300 - title.length()/2, 25);
+	}
+	
+	public void setPaused(Boolean paused) {
+		this.gamePaused = paused;
+	}
+
+//	public void displayText(GraphicsContext gc, String text, Color textColor) {
+//
+//		gc.setFont(txtFont);
+//
+//		FontMetrics metrics = g.getFontMetrics(txtFont);
+//
+//		int x = (Config.Window.width / 2) - metrics.stringWidth(text) / 2;
+//		int y = 10 + (metrics.getHeight() / 2) + metrics.getAscent();
+//
+//		gc.setColor(textColor);
+//		gc.drawString(text, x, y);
+//	}
+
+	public void displayText(GraphicsContext gc, String text, Color textColor, int posX, int posY) {
+//		gc.setFont(txtFont);
+//
+//		FontMetrics metrics = gc.getFontMetrics(txtFont);
+//
+//		int x = posX - metrics.stringWidth(text) / 2;
+//		int y = posY + (metrics.getHeight() / 2) + metrics.getAscent();
+
+		gc.setFill(textColor);
+		gc.fillText(text, posX, posY);
+	}
+	
+//	public void add mouseListener() {
+//		
+//	}
+//
+//	// LOOK FOR MOUSE CLICKS ON COLORS
+//	public void updatePaddleColor(MouseEvent e) {
+//
+//		for (ColorOption co : rightPlatformColors) {
+//			if (co.getBounds().contains(e.getX(), e.getY())) {
+//
+//				for (Platform p : this.platforms) {
+//					if (p.getPlayerId() == 2) {
+//						rightChosenColor = co.getColor();
+//						p.setColor(co.getColor());
+//					}
+//				}
+//
+//			}
+//		}
+//
+//	}
+
+	/*
+	 * 
+	 * public void keyPressed(KeyEvent e) { keyDownMap.put(e.getKeyCode(), true); }
+	 * 
+	 * public void keyReleased(KeyEvent e) { keyDownMap.remove(e.getKeyCode()); }
+	 * 
+	 * 
+	 * 
+	 * public void keyTyped(KeyEvent arg0) { // TODO Auto-generated method stub
+	 * 
+	 * }
+	 * 
+	 * @Override public void mouseClicked(MouseEvent arg0) { // TODO Auto-generated
+	 * method stub
+	 * 
+	 * }
+	 * 
+	 * @Override public void mouseEntered(MouseEvent arg0) { // TODO Auto-generated
+	 * method stub
+	 * 
+	 * }
+	 * 
+	 * @Override public void mouseExited(MouseEvent arg0) { // TODO Auto-generated
+	 * method stub
+	 * 
+	 * }
+	 * 
+	 * @Override public void mousePressed(MouseEvent arg0) { // TODO Auto-generated
+	 * method stub
+	 * 
+	 * }
+	 * 
+	 * @Override public void mouseReleased(MouseEvent arg0) { // TODO Auto-generated
+	 * method stub
+	 * 
+	 * }
+	 */
 }

@@ -5,11 +5,10 @@ import application.MainUI;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 
-
 /**
  * Controller-class for the chat systemts client-side environment.
  * 
- * @author Måns Grundberg
+ * @author M�ns Grundberg
  *
  */
 
@@ -20,7 +19,6 @@ public class ChatController {
 	private ChatClient client;
 	private User user;
 	private UserList userList;
-
 
 	public ChatController() {
 		client = new ChatClient(60000, "localhost", this);
@@ -164,7 +162,7 @@ public class ChatController {
 	 * @param str The server response
 	 */
 	private void checkServerResponse(String str) {
-		if (str.equals("LOGIN OK")) { // Login successful, open chat
+		if (str.equals("LOGIN OK") || str.equals("USER CREATED")) { // Login successful, open chat
 			Platform.runLater(new Runnable() {
 				public void run() {
 					initMainUI();
@@ -172,16 +170,8 @@ public class ChatController {
 					try {
 						loginUI.stop();
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-				}
-			});
-		} else if (str.equals("USER CREATED")) { // User created successfully, open chat
-			Platform.runLater(new Runnable() {
-				public void run() {
-					initMainUI();
-					loginUI.terminate();
 				}
 			});
 		} else { // Login unsuccessful, e.g. password and/or username incorrect, username taken
