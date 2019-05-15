@@ -13,6 +13,8 @@
 
 
 
+
+
   .score, .ball
 {
    -fx-fill: radial-gradient( focus-angle 0.0deg, focus-distance 0.0%, center 50.0% 50.0%, radius 100.0%, rgb(255,255,255) 0.0, rgb(0,0,0) 100.0 );
@@ -55,6 +57,10 @@
 .score
 {
     -fx-font-size: 32px;
+}
+
+#Pong {
+    -fx-background-color: black;
 }
 
 #loginRoot{
