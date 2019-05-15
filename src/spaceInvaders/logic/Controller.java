@@ -2,6 +2,7 @@ package spaceInvaders.logic;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
+import spaceInvaders.graphics.Painter;
 import spaceInvaders.levels.Difficulty;
 import spaceInvaders.levels.Level;
 import spaceInvaders.levels.Level1;
@@ -35,21 +36,14 @@ public class Controller implements Runnable {
     private List<List<Enemy>> enemies = new ArrayList<>(); //List of Lists = grid; used for moving
 
     private Boolean timerActivated = false;
+    private Painter painter;
 
-    private Image explosion;
-
-    {
-        try {
-            explosion = new Image(new FileInputStream("Sprites/deathExplosion.png"),25,20,false,false);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
 
     private int direction = +1; //+1 = right; -1 = left
 
-    public Controller( Canvas canvas) {
+    public Controller( Canvas canvas, Painter painter) {
         this.canvas = canvas;
+        this.painter = painter;
         allUnits.add(player);
         initializeLevel(new Level1(Difficulty.EASY,this));
     }
@@ -129,8 +123,8 @@ public class Controller implements Runnable {
         if(unit instanceof Enemy){
             for(List<Enemy> row : enemies){
                 if(row.contains(unit)){
-                  //  unit.setSprite(explosion);
                     row.remove(unit);
+                    painter.setExplosionData(unit.getPosition());
                     score += ((Enemy) unit).getPoints();
                     return;
                 }
@@ -141,12 +135,16 @@ public class Controller implements Runnable {
         }
     }
 
+    public void newExplosion(Position position){
+
+    }
+
     /**
      * the timeout for players reload
      * @param runnable
      * @param delay
      */
-    private static void setTimeout(Runnable runnable, int delay){
+    public  void setTimeout(Runnable runnable, int delay){
         new Thread(() -> {
             try {
                 Thread.sleep(delay);
