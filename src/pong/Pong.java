@@ -113,13 +113,9 @@ public class Pong {
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
-<<<<<<< HEAD
-//ä
-	Scale scale = Transform.scale(1, 1, 0, 0);
-=======
+
 
 		Scale scale = Transform.scale(1, 1, 0, 0);
->>>>>>> 2b9751da814539f659bed2617aff75365422b979
 		content.getTransforms().add(scale);
 
 		/*
