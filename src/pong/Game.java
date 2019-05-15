@@ -119,15 +119,6 @@ public class Game extends Canvas implements Runnable /*, KeyListener, MouseListe
 	}
 	
 	public void update(double dt) {
-		
-		setOnKeyPressed(event -> {
-			if(event.getCode() == KeyCode.UP)player.setLayoutY(player.getLayoutY()-30);
-			if(event.getCode() == KeyCode.DOWN)player.setLayoutY(player.getLayoutY()-30);
-		
-		});
-		
-	
-		
 		// check if P key was pressed ( PAUSE )
 		setOnKeyPressed(event -> {
 		if(keyDownMap.containsKey(event.getCode()==KeyCode.PAUSE) 
