@@ -29,7 +29,7 @@ import javafx.scene.text.TextFlow;
 
 /**
  * 
- * @author MÃ¥ns Grundberg
+ * @author Måns Grundberg
  *
  */
 public class ChatUI extends Pane {
@@ -43,10 +43,16 @@ public class ChatUI extends Pane {
 	private TextArea onlineUsers = new TextArea();
 	private Boolean showingMessages = true;
 	private ChatController controller;
+	
+
 
 	public ChatUI(ChatController controller) {
 		this.controller = controller;
 		init();
+	}
+	
+	public static void main(String[] args) {
+		new ChatUI(new ChatController());
 	}
 
 	private void init() {
@@ -170,5 +176,9 @@ public class ChatUI extends Pane {
 				e.consume();
 			}
 		}
+		
+		
 	};
+	
+
 }
