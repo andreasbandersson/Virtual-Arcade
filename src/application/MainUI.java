@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 
+import chat.ChatController;
 import chat.ChatUI;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
@@ -43,7 +44,6 @@ public class MainUI extends Application {
 	private ImageView playSoundImageView;
 	private Button soundButton;
 	private Button leaderboardButton = new Button("LEADERBOARD");
-	private Button settingsButton = new Button("SETTINGS");
 	private Button logOutButton = new Button("LOG OUT");
 	private Button pongPlayButton = new Button("START");
 	private Button spacePlayButton = new Button("START");
@@ -82,14 +82,21 @@ public class MainUI extends Application {
 		jukebox.play();
 
 		// Adding and setting the Label for Virtual Arcade-header
-		Label virtualArcadeLabel = new Label("VIRTUAL\nARCADE");
-		Glow glow = new Glow(1.0);
-		Bloom bloom = new Bloom(0.9);
+		Label virtualArcadeLabel = new Label("VIRTUAL");
+		Glow glow = new Glow(0.1);
+		Bloom bloom = new Bloom(0.1);
 		virtualArcadeLabel.setId("vaLabel");
 		virtualArcadeLabel.setEffect(bloom);
 		virtualArcadeLabel.setEffect(glow);
 		virtualArcadeLabel.setMinWidth(Region.USE_PREF_SIZE);
-		mainRoot.add(virtualArcadeLabel, 1, 0, 10, 6);
+		mainRoot.add(virtualArcadeLabel, 1, 1);
+
+		Label virtualArcadeLabel2 = new Label("ARCADE");
+		virtualArcadeLabel2.setId("vaLabel");
+		virtualArcadeLabel2.setEffect(bloom);
+		virtualArcadeLabel2.setEffect(glow);
+		virtualArcadeLabel2.setMinWidth(Region.USE_PREF_SIZE);
+		mainRoot.add(virtualArcadeLabel2, 1, 4);
 
 		// Adding and setting the Label for the "Choose game"-header
 		Label headerLabel = new Label("CHOOSE YOUR GAME");
@@ -103,10 +110,7 @@ public class MainUI extends Application {
 
 		// Adding and setting the main menu buttons
 		leaderboardButton.setId("mainButtons");
-		mainRoot.add(leaderboardButton, 21, 0, 6, 3);
-
-		settingsButton.setId("mainButtons");
-		mainRoot.add(settingsButton, 27, 0, 5, 3);
+		mainRoot.add(leaderboardButton, 26, 0, 6, 3);
 
 		logOutButton.setId("logOutButton");
 		mainRoot.add(logOutButton, 1, 21, 6, 3);
@@ -114,7 +118,7 @@ public class MainUI extends Application {
 		// Adding an setting the button for mute and un-mute of login music
 		soundButton = new Button();
 		soundButton.setId("logOutButton");
-		soundButton.setGraphic(muteSoundImageView);
+		soundButton.setGraphic(playSoundImageView);
 		mainRoot.add(soundButton, 32, 1);
 
 		// Adding and setting the "Play"-buttons for the different arcade games
@@ -144,7 +148,6 @@ public class MainUI extends Application {
 
 		leaderboardButton.setFocusTraversable(false);
 		soundButton.setFocusTraversable(false);
-		settingsButton.setFocusTraversable(false);
 		logOutButton.setFocusTraversable(false);
 		spacePlayButton.setFocusTraversable(false);
 		snakePlayButton.setFocusTraversable(false);
@@ -229,6 +232,16 @@ public class MainUI extends Application {
 		primaryStage.show();
 	}
 
+	public void terminate() {
+		primaryStage.close();
+		jukebox.stopSound();
+		try {
+			this.stop();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+	}
+
 	// Function for adding and setting Action Listeners to all Buttons.
 	private void addActionListeners(Stage primaryStage) {
 
@@ -242,23 +255,17 @@ public class MainUI extends Application {
 			primaryStage.show();
 		});
 
-		// logOutButton.setOnAction(e -> {
-		// login = new LoginUI();
-		// login.start(primaryStage);
-		// jukebox.stopSound();
-		// try {
-		// this.stop();
-		// } catch (Exception e1) {
-		// e1.printStackTrace();
-		// }
-		// });
+		logOutButton.setOnAction(e -> {
+			this.terminate();
+			new ChatController();
+		});
 
 		soundButton.setOnAction(e -> {
 			jukebox.muteUnmute();
 			if (jukebox.isMute()) {
-				soundButton.setGraphic(playSoundImageView);
-			} else {
 				soundButton.setGraphic(muteSoundImageView);
+			} else {
+				soundButton.setGraphic(playSoundImageView);
 			}
 		});
 

@@ -82,7 +82,7 @@ public class Leaderboard {
 		// Adding an setting the button for mute and un-mute of login music
 		soundButton = new Button();
 		soundButton.setId("logOutButton");
-		soundButton.setGraphic(muteSoundImageView);
+		soundButton.setGraphic(playSoundImageView);
 		leaderboardRoot.add(soundButton, 32, 1);
 
 		addHighscoreLabels();
@@ -204,9 +204,9 @@ public class Leaderboard {
 		soundButton.setOnAction(e -> {
 			jukebox.muteUnmute();
 			if (jukebox.isMute()) {
-				soundButton.setGraphic(playSoundImageView);
-			} else {
 				soundButton.setGraphic(muteSoundImageView);
+			} else {
+				soundButton.setGraphic(playSoundImageView);
 			}
 		});
 

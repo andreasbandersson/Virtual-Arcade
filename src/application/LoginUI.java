@@ -69,20 +69,20 @@ public class LoginUI extends Application {
 
 		// Adding and setting the Label for Virtual Arcade-header
 		Label virtualArcadeLabel = new Label("VIRTUAL");
-		Glow glow = new Glow(1.0);
-		Bloom bloom = new Bloom(0.9);
+		Glow glow = new Glow(0.2);
+		Bloom bloom = new Bloom(0.2);
 		virtualArcadeLabel.setId("vaLabel");
 		virtualArcadeLabel.setEffect(bloom);
 		virtualArcadeLabel.setEffect(glow);
 		virtualArcadeLabel.setMinWidth(Region.USE_PREF_SIZE);
-		loginRoot.add(virtualArcadeLabel, 1, 1, 15, 4);
+		loginRoot.add(virtualArcadeLabel, 1, 1, 15, 3);
 
 		Label virtualArcadeLabel2 = new Label("ARCADE");
 		virtualArcadeLabel2.setId("vaLabel");
 		virtualArcadeLabel2.setEffect(bloom);
 		virtualArcadeLabel2.setEffect(glow);
 		virtualArcadeLabel2.setMinWidth(Region.USE_PREF_SIZE);
-		loginRoot.add(virtualArcadeLabel2, 1, 5, 15, 4);
+		loginRoot.add(virtualArcadeLabel2, 1, 4, 15, 3);
 
 		// Adding and setting the Labels and TextFields for the login
 		Label userNameLabel = new Label("Username:");
@@ -117,7 +117,7 @@ public class LoginUI extends Application {
 		// Adding an setting the button for mute and un-mute of login music
 		soundButton = new Button();
 		soundButton.setId("logOutButton");
-		soundButton.setGraphic(muteSoundImageView);
+		soundButton.setGraphic(playSoundImageView);
 		loginRoot.add(soundButton, 42, 2);
 
 		addActionListeners(primaryStage);
@@ -217,9 +217,9 @@ public class LoginUI extends Application {
 		soundButton.setOnAction(e -> {
 			jukebox.muteUnmute();
 			if (jukebox.isMute()) {
-				soundButton.setGraphic(playSoundImageView);
-			} else {
 				soundButton.setGraphic(muteSoundImageView);
+			} else {
+				soundButton.setGraphic(playSoundImageView);
 			}
 		});
 
@@ -231,6 +231,7 @@ public class LoginUI extends Application {
 			@Override
 			public void handle(KeyEvent event) {
 				if (event.getCode() == KeyCode.ENTER) {
+					loginButton.requestFocus();
 					loginButton.fire();
 					event.consume();
 				}
