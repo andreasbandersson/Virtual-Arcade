@@ -18,8 +18,8 @@ public class Config {
 	}
 
 	public static class Window {
-		public static final int width = 800;
-		public static final int height = 500;
+		public static final int width = 600;
+		public static final int height = 400;
 		public static final String title = "Pong";
 	} 
 	

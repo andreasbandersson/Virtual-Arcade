@@ -165,6 +165,8 @@ public class MainUI extends Application {
 				System.exit(0);
 			}
 		});
+		
+		virtualArcadeLabel.requestFocus();
 
 	}
 
@@ -260,7 +262,7 @@ public class MainUI extends Application {
 			}
 		});
 
-		// Skriv om. Instansiera pong och lägg in i mainRoot som pane bara
+		// Skriv om. Instansiera pong och lï¿½gg in i mainRoot som pane bara
 		pongPlayButton.setOnAction(e -> {
 			if (pong == null) {
 				pong = new Pong(this, chatUI, jukebox);
@@ -271,7 +273,7 @@ public class MainUI extends Application {
 			primaryStage.show();
 		});
 
-		// Skriv om. Instansiera Space Invaders och lägg in i mainRoot som pane bara
+		// Skriv om. Instansiera Space Invaders och lï¿½gg in i mainRoot som pane bara
 		spacePlayButton.setOnAction(e -> {
 			if (spaceInvaders == null) {
 				spaceInvaders = new Painter(this, chatUI, jukebox);
@@ -281,7 +283,7 @@ public class MainUI extends Application {
 			primaryStage.show();
 		});
 
-		// Skriv om. Instansiera Snake och lägg in i mainRoot som pane bara
+		// Skriv om. Instansiera Snake och lï¿½gg in i mainRoot som pane bara
 		snakePlayButton.setOnAction(e -> {
 			if (snake == null) {
 				snake = new GUIPane(this, chatUI, jukebox);

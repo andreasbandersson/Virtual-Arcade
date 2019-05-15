@@ -26,16 +26,16 @@ public class Ball {
 		this.height = Config.Ball.height;
 		this.speed = Config.Ball.speed;
 
-		//Vilket håll bollen ska röra sig mot
+		//Vilket hï¿½ll bollen ska rï¿½ra sig mot
 		Random rand = new Random();
 		directions = new int[]{-1, 1};
 		this.dirX = directions[rand.nextInt(directions.length)];
 		this.dirY = this.directions[rand.nextInt(this.directions.length)];
 
-		//Bollen startar i mitten och träffar ingen platform 
+		//Bollen startar i mitten och trï¿½ffar ingen platform 
 		this.hitPlatform = this.resetBall = false;
 		
-		//Bollens Färg
+		//Bollens Fï¿½rg
 		this.ballColor = Config.Ball.defaultColor;
 	}
 
@@ -48,7 +48,7 @@ public class Ball {
 		}
 
 		for(Platform platform: platforms) {
-			if(platform.getBounds().intersects(getBounds())) {
+			if(platform.getRect().intersects(getRect().getX(), getRect().getY(), getRect().getWidth(), getRect().getHeight())); {
 				if(platform.getPlayerId() == 1) {
 					// reset nextYLerp to -1 because the ball is going to away
 					Game.nextYLerp = -1;
@@ -117,7 +117,7 @@ public class Ball {
 		return this.height;
 	}
 
-	public Rectangle getBounds() {
+	public Rectangle getRect() {
 		return new Rectangle(x, y, width, height);
 	}
 

@@ -13,23 +13,23 @@ public class GameFrame extends JFrame {
 
 	public GameFrame(Game game) {
 		super("Pong Game");
-
-		this.game = game;
-		this.game.setSize(new Dimension2D(Config.Window.width, Config.Window.height));
-
-		this.gamePanel = new JPanel();
-		
-		gamePanel.add(this.game);
-		add(gamePanel);
-		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    setResizable(false);
-	    setVisible(true);
-	    setSize(new Dimension2D(Config.Window.width, Config.Window.height));
-		pack();
-		setLocationRelativeTo(null);
-		
-		startGame();
+//
+//		this.game = game;
+//		this.game.setSize(new Dimension2D(Config.Window.width, Config.Window.height));
+//
+//		this.gamePanel = new JPanel();
+//		
+//		gamePanel.add(this.game);
+//		add(gamePanel);
+//		
+//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//	    setResizable(false);
+//	    setVisible(true);
+//	    setSize(new Dimension2D(Config.Window.width, Config.Window.height));
+//		pack();
+//		setLocationRelativeTo(null);
+//		
+//		startGame();
 		
 	}
 	

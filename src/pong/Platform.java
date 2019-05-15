@@ -38,7 +38,7 @@ public class Platform {
 			
 			Random rand = new Random();
 			int colorIndex = rand.nextInt(Config.Game.colors.length-1);
-			System.out.println(colorIndex);
+			System.out.println(colorIndex + "AHSKLJDHKAJHSDKJ");
 			this.platformColor = Config.Game.colors[colorIndex];
 			
 		} else {
@@ -130,7 +130,7 @@ public class Platform {
 		this.points = 0;
 	}
 	
-	public Rectangle getBounds() {
+	public Rectangle getRect() {
 		return new Rectangle(x, y, width, height);
 	}
 }
