@@ -180,26 +180,30 @@ public class ServerController {
 			if (highscore.getScore() > snakeScore[0].getScore()) {
 				snakeScore[0] = highscore;
 				Arrays.sort(snakeScore);
-				sendHighscoreList(highscore, snakeScore);
+				newHighscore(highscore, snakeScore);
 			}
 		} else {
 			if (highscore.getScore() > spaceScore[0].getScore()) {
 				spaceScore[0] = highscore;
 				Arrays.sort(spaceScore);
-				sendHighscoreList(highscore, spaceScore);
+				newHighscore(highscore, spaceScore);
 			}
 		}
 	}
 
-	private void sendHighscoreList(Highscore highscore, Highscore[] array) {
-		String str = highscore.getUser() + " made it onto the " + highscore.getGame() + " Leaderboard with "
-				+ highscore.getScore() + "points!";
+	private void sendHighscoreList(Highscore[] array) {
 		UserList temp = new UserList(clientStreams.getKeySet());
 
 		for (int i = 0; i < temp.size(); i++) {
 			server.sendObject(array, clientStreams.getOutputStream(temp.get(i)));
 		}
+	}
+	
+	private void newHighscore(Highscore highscore, Highscore[] array) {
+		String str = highscore.getUser() + " made it onto the " + highscore.getGame() + " Leaderboard with "
+				+ highscore.getScore() + "points!";
 		newMessage(new Message(str));
+		sendHighscoreList(array);
 	}
 
 }
