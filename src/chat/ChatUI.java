@@ -29,7 +29,7 @@ import javafx.scene.text.TextFlow;
 
 /**
  * 
- * @author Måns Grundberg
+ * @author Mï¿½ns Grundberg
  *
  */
 public class ChatUI extends Pane {
@@ -58,6 +58,7 @@ public class ChatUI extends Pane {
 	private void init() {
 		setPrefSize(300, 600);
 		
+		newMessage.setPromptText("Type @username to send a private message");
 		onlineUsers.setWrapText(true);
 		onlineUsers.setEditable(false);
 		newMessage.setWrapText(true);
@@ -102,6 +103,7 @@ public class ChatUI extends Pane {
 		onlineUsers.addEventFilter(KeyEvent.KEY_PRESSED, keyFilter);
 		vPane.addEventFilter(KeyEvent.KEY_PRESSED, keyFilter);
 
+		addMessage("Messages are public by default", 2);
 		addMessage("Type @username to send a private message", 2);
 		addMessage("Example: @Aragorn This is a message", 2);
 		
