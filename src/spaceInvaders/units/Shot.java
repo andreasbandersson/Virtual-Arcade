@@ -85,6 +85,5 @@ public class Shot extends Unit implements Runnable {
                 e.printStackTrace();
             }
         }
-        System.out.println("shot thread died");
     }
 }

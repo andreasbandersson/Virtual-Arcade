@@ -11,9 +11,11 @@ import java.io.FileNotFoundException;
  * @author Viktor Altintas
  */
 
-public class Player extends Unit {
+public class Player extends Unit implements Runnable {
 
     private static Image playerSprite;
+    private boolean travelingLeft = false;
+    private boolean standStill = true;
 
     static {
         try {
@@ -27,6 +29,7 @@ public class Player extends Unit {
 
     public Player(Controller controller) {
         super(3, new Position(startPosition), playerSprite,50,40, controller);
+        new Thread(this).start();
 
     }
 
@@ -37,6 +40,32 @@ public class Player extends Unit {
     @Override
     public void shoot() {
         controller.registerShot(this);
+    }
+
+    public void setDirection(String direction){
+        switch (direction){
+            case "LEFT":
+                travelingLeft = true;
+                standStill = false;
+                break;
+            case "RIGHT":
+                travelingLeft = false;
+                standStill  = false;
+                break;
+        }
+    }
+
+    public void run() {
+        while (true){
+            if (!standStill){
+                if (travelingLeft){
+                    move(getPosition().getX()-1,getPosition().getY());
+                }
+                else {
+                    move(getPosition().getX()+1,getPosition().getY());
+                }
+            }
+        }
     }
 
     @Override

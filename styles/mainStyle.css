@@ -6,6 +6,10 @@
     src: url('../fonts/Neoneon.otf');
 }
 
+@font-face {
+    src: url('../fonts/GAMEPLAYED.OTF');
+}
+
 #mainRoot{
     -fx-background-image: url("../images/arcade5.jpg");
     -fx-background-repeat: stretch;   
@@ -21,18 +25,16 @@
 }
 
 #highscoreLabel{
-	-fx-background-color: #000000; 
+	-fx-background-color: transparent; 
 	
 }
 #highscoreLabel .text{
 	-fx-fill: linear-gradient(#ffffff 0%, #ffff00 40%, #dd6000 70%);
-    -fx-font-size: 0.6em;
+    -fx-font-size: 1em;
     -fx-effect: dropshadow( three-pass-box , rgba(0.0,0.0,0.0,0.90) , 4.0,0.0,0.0,0.90 );
     -fx-font-weight: bold;
     -fx-font-family: 'Press Start 2P';
 }
-
-
 
 #responseLabel .text{
 	-fx-fill: #fa0404;
@@ -67,12 +69,16 @@
 }
 
 #vaLabel .text{
-	-fx-fill: linear-gradient(#fc3f91 0%, #ff006e 40%, #ff569f 70%);
-    -fx-font-size: 5em;
+	-fx-fill: linear-gradient(#002641 0%, #2989cc 7%, #58baff 27%, #ffffff 47%, #ffffff 50%, #6b004c 54%, #c60488 75%, #ff2abb 100%);
+   	-fx-stroke: linear-gradient(#918c85 0%, #c9c2b7 12%, #fffdfa 18%, #c9c6c1 30%, #918c85 35%, #c9c2b7 45%, #fffdfa 50%, #c9c6c1 62%, #918c85 68%, #c9c2b7 80%, #fdfaf7 86%, #d1ceca 100%);
+   	-fx-stroke-width: 2px; 
+   	-fx-stroke-type: outside;
+    -fx-font-size: 6em;
     -fx-effect: dropshadow( three-pass-box , rgba(0.0,0.0,0.0,0.90) , 4.0,0.0,0.0,0.90 );
     -fx-font-weight: bold;
-    -fx-font-family: 'NeoNeon';
+    -fx-font-family: 'Game Played';
 }
+
 #leaderboardLabel .text{
 	-fx-fill: linear-gradient(#ffffff 0%, #ffff00 40%, #dd6000 70%);
     -fx-font-size: 4em;

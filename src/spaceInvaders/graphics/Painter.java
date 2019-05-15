@@ -3,6 +3,7 @@ package spaceInvaders.graphics;
 import application.JukeBox;
 import application.MainUI;
 import chat.ChatUI;
+import spaceInvaders.Explosion;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -19,12 +20,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import spaceInvaders.logic.Controller;
 import spaceInvaders.units.Player;
+import spaceInvaders.units.Position;
 import spaceInvaders.units.Unit;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 
 
 /**
@@ -56,13 +59,19 @@ public class Painter extends AnimationTimer {
     private ImageView playSoundImageView;
     private ImageView spaceInvadersView;
     private JukeBox jukebox;
+    private boolean explosionMade = false;
 
     private final int numOfCols = 48;
     private final int numOfRows = 24;
 
+    private static Image explosion;
+    private ArrayList<Explosion> explosions = new ArrayList<>();
+
     static {
         try {
             playerLifeSprite = new Image(new FileInputStream("Sprites/player.png"),30,25,true,false);
+            explosion = new Image(new FileInputStream("Sprites/deathExplosion.png"),25,20,false,false);
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -108,7 +117,7 @@ public class Painter extends AnimationTimer {
         
         backButton.setFocusTraversable(false);
         soundButton.setFocusTraversable(false);
-        controller = new Controller(canvas);
+        controller = new Controller(canvas,this);
         this.player = controller.getPlayer();
 
         levelTitle = new Label("Level " + controller.getLevelCounter());
@@ -163,6 +172,20 @@ public class Painter extends AnimationTimer {
         for (int i = 0; i < player.getLife(); i++){
             gc.drawImage(playerLifeSprite,440+((i+1)*39),10);
         }
+        for (Explosion e : new ArrayList<>(explosions)){
+            if (!e.exploding()){
+                explosions.remove(e);
+            }
+        }
+        if (explosions.stream().anyMatch(Explosion::exploding)){
+            for (Explosion e : new ArrayList<>(explosions)){
+                gc.drawImage(explosion, e.getPosition().getX(), e.getPosition().getY());
+
+            }
+
+        }
+
+
     }
 
     public Scene getScene(){
@@ -171,6 +194,9 @@ public class Painter extends AnimationTimer {
         return scene;
     }
 
+    public void setExplosionData(Position position){
+        explosions.add(new Explosion(position));
+    }
 
     private void createColumnsandRows() {
 
@@ -221,14 +247,14 @@ public class Painter extends AnimationTimer {
                     case LEFT:
                         if (controller.getGamePaused())
                             break;
-                        player.move(player.getPosition().getX()-15,player.getPosition().getY());
+                        player.setDirection("LEFT");
                         break;
 
                     case D:
                     case RIGHT:
                         if (controller.getGamePaused())
                             break;
-                        player.move(player.getPosition().getX()+15,player.getPosition().getY());
+                        player.setDirection("RIGHT");
                         break;
 
                     case SPACE:
