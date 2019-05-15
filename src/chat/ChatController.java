@@ -9,7 +9,7 @@ import javafx.embed.swing.JFXPanel;
 /**
  * Controller-class for the chat systemts client-side environment.
  * 
- * @author Måns Grundberg
+ * @author Mï¿½ns Grundberg
  *
  */
 

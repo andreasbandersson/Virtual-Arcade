@@ -1,4 +1,4 @@
-package pong;;
+package pong;
 	
 import javafx.application.Application;
 import javafx.stage.Stage;
