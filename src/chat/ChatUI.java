@@ -124,7 +124,6 @@ public class ChatUI extends Pane {
 				} else {
 					temp.setStyle("-fx-fill: #18eef2;");
 				}
-				// messages.appendText(msg + "\n");
 				messages.getChildren().add(temp);
 			}
 		});
