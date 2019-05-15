@@ -174,7 +174,7 @@ public class LoginUI extends Application {
 		muteSoundImageView = new ImageView(muteSoundImage);
 	}
 
-	// Måns
+	// Mans
 	public void setResponse(String response) {
 		Platform.runLater(new Runnable() {
 			public void run() {
@@ -184,7 +184,7 @@ public class LoginUI extends Application {
 		});
 	}
 
-	// Måns
+	// Mans
 	public void terminate() {
 		stage.close();
 		jukebox.stopSound();
@@ -195,7 +195,7 @@ public class LoginUI extends Application {
 		}
 	}
 
-	// Måns
+	// Mans
 	private void disableButtons(boolean disabled) {
 		loginButton.setDisable(disabled);
 		newUserButton.setDisable(disabled);
@@ -203,12 +203,12 @@ public class LoginUI extends Application {
 
 	// Function for adding and setting Action Listeners to all Buttons.
 	private void addActionListeners(Stage primaryStage) {
-		// Måns
+		// Mans
 		loginButton.setOnAction(e -> {
 			controller.login(username.getText(), password.getText());
 			disableButtons(true);
 		});
-		// Måns
+		// Mans
 		newUserButton.setOnAction(e -> {
 			controller.newUser(username.getText(), password.getText());
 			disableButtons(true);

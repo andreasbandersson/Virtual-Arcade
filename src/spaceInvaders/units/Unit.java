@@ -17,6 +17,8 @@ public abstract class Unit {
    private int width;
    private int height;
    protected Controller controller;
+   protected Position shotThatHitYouPosition;
+   protected boolean paused = false;
 
    public Unit(int life, Position position, Image image, int width, int height, Controller controller) {
        this.life = life;
@@ -27,7 +29,16 @@ public abstract class Unit {
        this.controller = controller;
    }
 
-   public synchronized void setPosition(Position position){
+    public void setPaused() {
+        paused = !paused;
+    }
+
+    public boolean getPaused(){
+       return paused;
+    }
+
+
+    public synchronized void setPosition(Position position){
        this.position = position;
    }
 
@@ -63,6 +74,10 @@ public abstract class Unit {
 
    public void pause() {
 
+   }
+
+   public void sendShotPositionData(Position position){
+       shotThatHitYouPosition = new Position(position);
    }
 
    public synchronized void move(int x, int y){

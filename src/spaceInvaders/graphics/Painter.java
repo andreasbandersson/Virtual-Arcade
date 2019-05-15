@@ -3,7 +3,7 @@ package spaceInvaders.graphics;
 import application.JukeBox;
 import application.MainUI;
 import chat.ChatUI;
-import spaceInvaders.Explosion;
+import spaceInvaders.Effects.Explosion;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -18,6 +18,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import spaceInvaders.Effects.ShotCollision;
 import spaceInvaders.logic.Controller;
 import spaceInvaders.units.Player;
 import spaceInvaders.units.Position;
@@ -59,18 +60,25 @@ public class Painter extends AnimationTimer {
     private ImageView playSoundImageView;
     private ImageView spaceInvadersView;
     private JukeBox jukebox;
-    private boolean explosionMade = false;
+    private ImageView backgroundImageView;
+    private Pane backgroundLayer;
 
     private final int numOfCols = 48;
     private final int numOfRows = 24;
 
     private static Image explosion;
+    private static Image shotCollision;
+    private static Image backgroundImage;
+
     private ArrayList<Explosion> explosions = new ArrayList<>();
+    private ArrayList<ShotCollision> shotCollisions = new ArrayList<>();
 
     static {
         try {
             playerLifeSprite = new Image(new FileInputStream("Sprites/player.png"),30,25,true,false);
+            backgroundImage = new Image(new FileInputStream("Sprites/SIBackground.png"),900,600,true,false);
             explosion = new Image(new FileInputStream("Sprites/deathExplosion.png"),25,20,false,false);
+            shotCollision = new Image(new FileInputStream("Sprites/smallExplosion.png"),10,10,false,false);
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -90,12 +98,21 @@ public class Painter extends AnimationTimer {
         scoreLabel.setTextFill(Color.WHITE);
         scoreLabel.setStyle("-fx-background-color:black;");
 
+      //  backgroundLayer = new Pane();
 
         canvas = new Canvas(600.0,400.0);
         canvas.setId("SpaceInvaders");
 
         spaceInvadersRoot = new GridPane();
+
+       // ImageView backgroundImageView = new ImageView(backgroundImage);
+
+      //  backgroundLayer.getChildren().add((backgroundImageView));
+
+
         root = new Pane();
+       // root.getChildren().add(backgroundLayer);
+
         createColumnsandRows();
         setSoundButtonImages();
         setSpaceInvadersArcadeMachineImage();
@@ -162,12 +179,21 @@ public class Painter extends AnimationTimer {
     
     @Override
     public void handle(long now) {
+
         gc.clearRect(0, 0, 600, 400);
-        gc.drawImage(player.getPlayerSprite(),player.getPosition().getX(), player.getPosition().getY());
+
         scoreLabel.setText("Score: " + controller.getScore());
         levelTitle.setText("Level " + controller.getLevelCounter());
         for (Unit unit : controller.getAllUnits()) {
-            gc.drawImage(unit.getSprite(), unit.getPosition().getX(), unit.getPosition().getY());
+            if (unit.getPaused()){
+                gc.setGlobalAlpha(0.50);
+                gc.drawImage(unit.getSprite(), unit.getPosition().getX(), unit.getPosition().getY());
+            }
+            else {
+                gc.setGlobalAlpha(100);
+                gc.drawImage(unit.getSprite(), unit.getPosition().getX(), unit.getPosition().getY());
+            }
+
         }
         for (int i = 0; i < player.getLife(); i++){
             gc.drawImage(playerLifeSprite,440+((i+1)*39),10);
@@ -177,12 +203,20 @@ public class Painter extends AnimationTimer {
                 explosions.remove(e);
             }
         }
+        for (ShotCollision e : new ArrayList<>(shotCollisions)){
+            if (!e.enemyHitHappening()){
+                shotCollisions.remove(e);
+            }
+        }
         if (explosions.stream().anyMatch(Explosion::exploding)){
             for (Explosion e : new ArrayList<>(explosions)){
                 gc.drawImage(explosion, e.getPosition().getX(), e.getPosition().getY());
-
             }
-
+        }
+        if (shotCollisions.stream().anyMatch(ShotCollision::enemyHitHappening)){
+            for (ShotCollision e : new ArrayList<>(shotCollisions)){
+                gc.drawImage(shotCollision,e.getPosition().getX(),e.getPosition().getY()-10);
+            }
         }
 
 
@@ -196,6 +230,10 @@ public class Painter extends AnimationTimer {
 
     public void setExplosionData(Position position){
         explosions.add(new Explosion(position));
+    }
+
+    public void setShotCollisionData(Position position){
+        shotCollisions.add(new ShotCollision(position));
     }
 
     private void createColumnsandRows() {
@@ -247,14 +285,14 @@ public class Painter extends AnimationTimer {
                     case LEFT:
                         if (controller.getGamePaused())
                             break;
-                        player.setDirection("LEFT");
+                        player.setTravelingLeftTrue();
                         break;
 
                     case D:
                     case RIGHT:
                         if (controller.getGamePaused())
                             break;
-                        player.setDirection("RIGHT");
+                        player.setTravelingRightTrue();
                         break;
 
                     case SPACE:
@@ -264,6 +302,28 @@ public class Painter extends AnimationTimer {
                         break;
                     case P:
                         controller.setGamePaused();
+                }
+            }
+        });
+
+        scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                switch (event.getCode()) {
+                    case A:
+                    case LEFT:
+                        if (controller.getGamePaused())
+                            break;
+                        player.setTravelingLeftF();
+                        break;
+
+                    case D:
+                    case RIGHT:
+                        if (controller.getGamePaused())
+                            break;
+                        player.setTravelingRightF();
+                        break;
+
                 }
             }
         });
@@ -282,6 +342,7 @@ public class Painter extends AnimationTimer {
 				soundButton.setGraphic(muteSoundImageView);
 			}
 		});
+
     }
 }
 

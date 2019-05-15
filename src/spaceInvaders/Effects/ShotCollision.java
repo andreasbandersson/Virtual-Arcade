@@ -1,15 +1,14 @@
-package spaceInvaders;
-
+package spaceInvaders.Effects;
 
 import spaceInvaders.units.Position;
 
-public class Explosion extends Thread{
+public class ShotCollision extends Thread{
     private Position position;
-    private boolean explosionHappening;
+    private boolean enemyHitHappened;
 
-    public Explosion(Position position){
+    public ShotCollision(Position position){
         this.position = position;
-        explosionHappening = true;
+        enemyHitHappened = true;
         start();
     }
 
@@ -17,14 +16,14 @@ public class Explosion extends Thread{
         return position;
     }
 
-    public boolean exploding() {
-        return explosionHappening;
+    public boolean enemyHitHappening() {
+        return enemyHitHappened;
     }
 
     public void run() {
         try {
             this.sleep(300);
-            explosionHappening = false;
+            enemyHitHappened = false;
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

@@ -15,6 +15,7 @@ public class Player extends Unit implements Runnable {
 
     private static Image playerSprite;
     private boolean travelingLeft = false;
+    private boolean travelingRight = false;
     private boolean standStill = true;
 
     static {
@@ -42,30 +43,45 @@ public class Player extends Unit implements Runnable {
         controller.registerShot(this);
     }
 
-    public void setDirection(String direction){
-        switch (direction){
-            case "LEFT":
-                travelingLeft = true;
-                standStill = false;
-                break;
-            case "RIGHT":
-                travelingLeft = false;
-                standStill  = false;
-                break;
-        }
+
+    public void setTravelingLeftTrue(){
+        travelingLeft = true;
+    }
+
+    public void setTravelingRightTrue(){
+        travelingRight = true;
+    }
+
+    public void setTravelingLeftF() {
+        this.travelingLeft = false;
+    }
+
+    public void setTravelingRightF() {
+        travelingRight = false;
     }
 
     public void run() {
         while (true){
-            if (!standStill){
-                if (travelingLeft){
-                    move(getPosition().getX()-1,getPosition().getY());
-                }
-                else {
-                    move(getPosition().getX()+1,getPosition().getY());
+            while (!travelingLeft && !travelingRight || paused) {
+                try {
+                    Thread.sleep(5);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
+                if (travelingLeft){
+                    this.move(getPosition().getX()-1,getPosition().getY());
+                }
+               if (travelingRight){
+                    this.move(getPosition().getX()+1,getPosition().getY());
+                }
+            try {
+                Thread.sleep(5);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
+
     }
 
     @Override

@@ -12,6 +12,7 @@ public class JukeBox {
 	private MediaPlayer mediaPlayer;
 	private ArrayList<String> songList = new ArrayList<>();
 	private Iterator<String> itr;
+	private double volume;
 
 	
 	public JukeBox(String song1) {
@@ -55,6 +56,25 @@ public class JukeBox {
 			}
 		});
 	}
+
+
+	public void playWithCustomVol(double volume) {
+		this.volume = volume;
+		Media sound = new Media(new File(itr.next()).toURI().toString());
+		mediaPlayer = new MediaPlayer(sound);
+		mediaPlayer.play();
+		mediaPlayer.setVolume(volume);
+		mediaPlayer.setOnEndOfMedia(new Runnable() {
+			@Override
+			public void run() {
+				mediaPlayer.stop();
+				if(itr.hasNext()) {
+					mediaPlayer.play();
+				}
+			}
+		});
+	}
+
 
 	// Mutes the login music if the music is playing, otherwise the function unmutes
 	// the music.

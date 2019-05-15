@@ -14,11 +14,10 @@ import java.io.FileNotFoundException;
 
 public class Shot extends Unit implements Runnable {
 
-    private static int width = 2;
+    private static int width = 3;
     private static int height = 15;
     private int speed;
     private boolean direction;
-    private boolean paused = false;
     private boolean flying = true;
 
     private static Image shot;
@@ -32,7 +31,7 @@ public class Shot extends Unit implements Runnable {
     }
 
 
-    public Shot(Position position, int speed, boolean direction, Controller controller){
+    public Shot(Position position,int speed, boolean direction, Controller controller){
         super(1,position,shot, width,height, controller);
         this.speed = speed;
         this.direction = direction;
@@ -51,9 +50,6 @@ public class Shot extends Unit implements Runnable {
         flying = false;
         controller.removeUnit(this);
     }
-    public void setPaused() {
-        paused = !paused;
-    }
 
     public void start(){
         new Thread(this).start();
@@ -67,7 +63,7 @@ public class Shot extends Unit implements Runnable {
         while (flying) {
             while (paused){
                 try {
-                    Thread.sleep(250);
+                    Thread.sleep(50);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -80,7 +76,7 @@ public class Shot extends Unit implements Runnable {
             }
             controller.requestHitboxCheck();
             try {
-                Thread.sleep(7/(speed+1));
+                Thread.sleep(1 + speed);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

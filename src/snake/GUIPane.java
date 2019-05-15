@@ -458,7 +458,7 @@ public class GUIPane {
 		
 		if(gameState == INGAME_STATE)
 		{
-			gc.clearRect(0, 0, 600, 400); //Suddar bort allt på canvas.
+			gc.clearRect(0, 0, 600, 400); //Suddar bort allt pÃ¥ canvas.
 			
 			//Draws border
 			gc.setStroke(Color.BLACK);

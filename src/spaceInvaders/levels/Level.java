@@ -3,6 +3,7 @@ package spaceInvaders.levels;
 import spaceInvaders.logic.Controller;
 import spaceInvaders.units.Boss;
 import spaceInvaders.units.Enemy;
+import spaceInvaders.units.Unit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,13 +16,14 @@ public abstract class Level {
 
     private List<List<Enemy>> enemyGrid;
     private Difficulty difficulty;
-    private Controller controller;
+    protected Controller controller;
 
     public Level(Difficulty difficulty, List<List<Enemy>> enemies, Controller controller) {
         this.difficulty = difficulty;
         this.enemyGrid = enemies;
         this.controller = controller;
     }
+
 
     public List<List<Enemy>> getEnemyGrid() {
         List<List<Enemy>> enemyGridClone = new ArrayList<>(); //makes a list that takes listobjects
