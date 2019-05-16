@@ -1,6 +1,7 @@
 package application;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -14,7 +15,11 @@ public class JukeBox {
 	private Iterator<String> itr;
 	private double volume;
 
-	
+
+
+	public JukeBox(){
+
+	}
 	public JukeBox(String song1) {
 		songList.add(song1);
 		itr = songList.iterator();
@@ -97,4 +102,6 @@ public class JukeBox {
 	public boolean isMute() {
 		return mediaPlayer.isMute();
 	}
+
+
 }

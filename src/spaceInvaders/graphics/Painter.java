@@ -3,6 +3,9 @@ package spaceInvaders.graphics;
 import application.JukeBox;
 import application.MainUI;
 import chat.ChatUI;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
+import javafx.scene.text.Text;
 import spaceInvaders.Effects.Explosion;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
@@ -18,6 +21,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import spaceInvaders.Effects.ScoreUp;
 import spaceInvaders.Effects.ShotCollision;
 import spaceInvaders.logic.Controller;
 import spaceInvaders.units.Player;
@@ -29,6 +33,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.TimerTask;
 
 
 /**
@@ -62,6 +67,9 @@ public class Painter extends AnimationTimer {
     private JukeBox jukebox;
     private ImageView backgroundImageView;
     private Pane backgroundLayer;
+    private Text newScoreText;
+    private Label scoreNumberFloating;
+    private int gradualColor = 255;
 
     private final int numOfCols = 48;
     private final int numOfRows = 24;
@@ -72,6 +80,7 @@ public class Painter extends AnimationTimer {
 
     private ArrayList<Explosion> explosions = new ArrayList<>();
     private ArrayList<ShotCollision> shotCollisions = new ArrayList<>();
+    private ArrayList<ScoreUp> scoreFloats = new ArrayList<>();
 
     static {
         try {
@@ -94,9 +103,8 @@ public class Painter extends AnimationTimer {
 
     private void init() {
         scoreLabel = new Label("");
-        scoreLabel.setFont(new Font((12)));
-        scoreLabel.setTextFill(Color.WHITE);
-        scoreLabel.setStyle("-fx-background-color:black;");
+        scoreLabel.setTextFill(Color.rgb(255,255,255));
+        scoreLabel.setFont(Font.loadFont("file:fonts/ARCADE.TTF", 25));
 
       //  backgroundLayer = new Pane();
 
@@ -138,23 +146,22 @@ public class Painter extends AnimationTimer {
         this.player = controller.getPlayer();
 
         levelTitle = new Label("Level " + controller.getLevelCounter());
-        levelTitle.setFont(new Font(12));
+        levelTitle.setFont(Font.loadFont("file:fonts/ARCADE.TTF", 24));
         levelTitle.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
         levelTitle.setTextFill(Color.WHITE);
 
-        levelTitle.setLayoutX(300);
+        levelTitle.setLayoutX(250);
         levelTitle.setLayoutY(0);
 
-        pauseLabel = new Label("Press P to Pause/Unpause");
-        pauseLabel.setFont(new Font(12));
+        pauseLabel = new Label("Game Paused\n[P] to Resume");
+        pauseLabel.setFont(Font.loadFont("file:fonts/ARCADE.TTF", 30));
         pauseLabel.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
         pauseLabel.setTextFill(Color.WHITE);
-        pauseLabel.setLayoutX(100);
-        pauseLabel.setLayoutY(0);
+        pauseLabel.setLayoutX(210);
+        pauseLabel.setLayoutY(210);
 
         root.getChildren().add(scoreLabel);
         root.getChildren().add(levelTitle);
-        root.getChildren().add(pauseLabel);
         root.getChildren().add(canvas);
         spaceInvadersRoot.add(root,6,4,24,16);
 
@@ -170,8 +177,7 @@ public class Painter extends AnimationTimer {
 
         gc = canvas.getGraphicsContext2D();
         addListeners(scene);
-        
-       
+
         canvas.requestFocus();
         canvas.setOnMouseMoved(e -> canvas.requestFocus());
            start(); // starts the animation timer
@@ -184,6 +190,9 @@ public class Painter extends AnimationTimer {
 
         scoreLabel.setText("Score: " + controller.getScore());
         levelTitle.setText("Level " + controller.getLevelCounter());
+
+
+
         for (Unit unit : controller.getAllUnits()) {
             if (unit.getPaused()){
                 gc.setGlobalAlpha(0.50);
@@ -198,16 +207,9 @@ public class Painter extends AnimationTimer {
         for (int i = 0; i < player.getLife(); i++){
             gc.drawImage(playerLifeSprite,440+((i+1)*39),10);
         }
-        for (Explosion e : new ArrayList<>(explosions)){
-            if (!e.exploding()){
-                explosions.remove(e);
-            }
-        }
-        for (ShotCollision e : new ArrayList<>(shotCollisions)){
-            if (!e.enemyHitHappening()){
-                shotCollisions.remove(e);
-            }
-        }
+
+       checkDeadObjects();
+
         if (explosions.stream().anyMatch(Explosion::exploding)){
             for (Explosion e : new ArrayList<>(explosions)){
                 gc.drawImage(explosion, e.getPosition().getX(), e.getPosition().getY());
@@ -234,6 +236,36 @@ public class Painter extends AnimationTimer {
 
     public void setShotCollisionData(Position position){
         shotCollisions.add(new ShotCollision(position));
+    }
+
+    public void addNewScoreFloat(int score){
+        ScoreUp scoreUp = new ScoreUp(score);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                root.getChildren().add(scoreUp);
+            }
+        });
+        scoreFloats.add(scoreUp);
+    }
+
+    public void checkDeadObjects(){
+        for (ScoreUp e : new ArrayList<>(scoreFloats)){
+            if (!e.floating()){
+                scoreFloats.remove(e);
+                root.getChildren().remove(e);
+            }
+        }
+        for (Explosion e : new ArrayList<>(explosions)){
+            if (!e.exploding()){
+                explosions.remove(e);
+            }
+        }
+        for (ShotCollision e : new ArrayList<>(shotCollisions)){
+            if (!e.enemyHitHappening()){
+                shotCollisions.remove(e);
+            }
+        }
     }
 
     private void createColumnsandRows() {
@@ -301,6 +333,13 @@ public class Painter extends AnimationTimer {
                         player.shoot();
                         break;
                     case P:
+                        if (controller.getGamePaused())
+                        {
+                            root.getChildren().remove(pauseLabel);
+                        }
+                        else {
+                            root.getChildren().add(pauseLabel);
+                        }
                         controller.setGamePaused();
                 }
             }
@@ -331,6 +370,7 @@ public class Painter extends AnimationTimer {
     	backButton.setOnAction(e -> {
 			spaceInvadersRoot.getChildren().remove(chatUI);
 			controller.setGamePaused();
+			root.getChildren().add(pauseLabel);
 			mainUI.switchToMainUI();
 		});
 
