@@ -21,7 +21,6 @@ public class Controller implements Runnable {
     private final int enemySpeed = 20;
 
     private Canvas canvas;
-    private Player player = new Player(this);
     private int score = 0;
     private int levelCounter = 0;
     private boolean gamePaused = false;
@@ -35,6 +34,8 @@ public class Controller implements Runnable {
     private Boolean timerActivated = false;
     private Painter painter;
 
+    private Player player;
+
     private JukeBox jukeBox;
     private ArrayList<Level> levelList = new ArrayList<>();
 
@@ -44,6 +45,7 @@ public class Controller implements Runnable {
     public Controller( Canvas canvas, Painter painter) {
         this.canvas = canvas;
         this.painter = painter;
+         player = new Player(this, painter);
         allUnits.add(player);
         createLevelList();
         initializeLevel(levelList.get(levelCounter));
@@ -157,7 +159,7 @@ public class Controller implements Runnable {
         }
     }
 
-   public void remotePainterAccess(Position position){
+   public void remotePainterAccess(Position position) {
         painter.setShotCollisionData(position);
    }
 

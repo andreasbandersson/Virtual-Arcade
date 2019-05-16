@@ -1,7 +1,9 @@
 package spaceInvaders.units;
 
+import application.JukeBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import spaceInvaders.graphics.Painter;
 import spaceInvaders.logic.Controller;
 
 import java.io.FileInputStream;
@@ -16,7 +18,8 @@ public class Player extends Unit implements Runnable {
     private static Image playerSprite;
     private boolean travelingLeft = false;
     private boolean travelingRight = false;
-    private boolean standStill = true;
+    private Painter painter;
+
 
     static {
         try {
@@ -28,8 +31,9 @@ public class Player extends Unit implements Runnable {
 
     private static Position startPosition = new Position(270,350);
 
-    public Player(Controller controller) {
+    public Player(Controller controller, Painter painter) {
         super(3, new Position(startPosition), playerSprite,50,40, controller);
+        this.painter = painter;
         new Thread(this).start();
 
     }
@@ -88,9 +92,17 @@ public class Player extends Unit implements Runnable {
     public void registerHit() {
         life--;
         if (life > 0){
+            painter.setExplosionData(new Position(position));
+            JukeBox jukeBox = new JukeBox("sounds/Explosion.mp3");
+            jukeBox.playWithCustomVol(0.4);
             move(Player.startPosition);
         }
         if (life == 0){
+            life = 3;
+            painter.setExplosionData(new Position(position));
+            JukeBox jukeBox = new JukeBox("sounds/Explosion.mp3");
+            jukeBox.playWithCustomVol(0.4);
+            move(Player.startPosition);
            die();
         }
     }
