@@ -8,12 +8,30 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
 
+/**
+ * 
+ * @author Andreas Andersson
+ *
+ */
+
 public class JukeBox {
 	private MediaPlayer mediaPlayer;
+	private MediaPlayer mediaPlayer2;
 	private ArrayList<String> songList = new ArrayList<>();
 	private Iterator<String> itr;
 	private double volume;
-
+	private static String song1 = "sounds/Lobby-Sound-1.mp3";
+	private static String song2 = "sounds/Lobby-Sound-2.mp3";
+	private static String song3 = "sounds/Lobby-Sound-3.mp3";
+	private static String intro = "sounds/Welcome-Sound.wav";
+	
+	public JukeBox() {
+		songList.add(intro);
+		songList.add(song2);
+		songList.add(song3);
+		songList.add(song1);
+		itr = songList.iterator();
+	}
 	
 	public JukeBox(String song1) {
 		songList.add(song1);
@@ -39,7 +57,6 @@ public class JukeBox {
 
 	// Sets the the music and starts it.
 	public void play() {
-		
 		Media sound = new Media(new File(itr.next()).toURI().toString());
 		mediaPlayer = new MediaPlayer(sound);
 		mediaPlayer.play();
@@ -50,13 +67,12 @@ public class JukeBox {
 			public void run() {
 				mediaPlayer.stop();
 				if(itr.hasNext()) {
-					mediaPlayer.play();
+					play();
 				}
 				return;
 			}
 		});
 	}
-
 
 	public void playWithCustomVol(double volume) {
 		this.volume = volume;

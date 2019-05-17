@@ -78,7 +78,7 @@ public class MainUI extends Application {
 		setArcadeMachineImage();
 		setSoundButtonImages();
 
-		jukebox = new JukeBox("sounds/Lobby-Sound-1.mp3");
+		jukebox = new JukeBox();
 		jukebox.play();
 
 		// Adding and setting the Label for Virtual Arcade-header

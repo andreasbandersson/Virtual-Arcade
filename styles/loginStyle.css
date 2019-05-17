@@ -75,7 +75,7 @@
 #vaLabel .text{
 	-fx-fill: linear-gradient(#002641 0%, #2989cc 7%, #58baff 27%, #ffffff 47%, #ffffff 50%, #6b004c 54%, #c60488 75%, #ff2abb 100%);
    	-fx-stroke: linear-gradient(#918c85 0%, #c9c2b7 12%, #fffdfa 18%, #c9c6c1 30%, #918c85 35%, #c9c2b7 45%, #fffdfa 50%, #c9c6c1 62%, #918c85 68%, #c9c2b7 80%, #fdfaf7 86%, #d1ceca 100%);
-   	-fx-stroke-width: 2px; 
+   	-fx-stroke-width: 1px; 
    	-fx-stroke-type: outside;
     -fx-font-size: 4.5em;
     -fx-effect: dropshadow( three-pass-box , rgba(0.0,0.0,0.0,0.90) , 4.0,0.0,0.0,0.90 );
