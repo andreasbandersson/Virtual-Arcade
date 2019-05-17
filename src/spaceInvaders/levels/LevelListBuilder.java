@@ -11,7 +11,7 @@ public class LevelListBuilder {
 
     public LevelListBuilder(Controller controller) {
         levelList.add(new Level2(Difficulty.EASY,controller));
-        levelList.add(new Level3(Difficulty.EASY,controller));
+        levelList.add(new Level2(Difficulty.EASY,controller));
     }
 
     public ArrayList getLevelList(){

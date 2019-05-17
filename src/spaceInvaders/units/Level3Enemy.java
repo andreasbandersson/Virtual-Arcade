@@ -23,7 +23,7 @@ public class Level3Enemy extends Enemy {  private static Image enemySprite1;
     private Random rand = new Random();
 
     public Level3Enemy(Position position, Controller controller, Difficulty difficulty) {
-        super(2, position, enemySprite1,enemySprite2,35,30, controller, 20, difficulty);
+        super(2, position, enemySprite1,enemySprite2,35,30, controller, 50, difficulty);
     }
 
     @Override
