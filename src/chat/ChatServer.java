@@ -98,7 +98,12 @@ public class ChatServer {
 				while (true) { // Listens for incoming messages aslong as the client is connected
 					try {
 						System.out.println(Thread.currentThread().getName() + "tar emot meddelande");
+						Object obj = ois.readObject();
+						if (obj instanceof Message) {
 						controller.newMessage((Message) ois.readObject());
+						} else {
+							controller.checkHighscore((Highscore) ois.readObject());
+						}
 					} catch (ClassNotFoundException e) {
 						System.err.println(e);
 					}
