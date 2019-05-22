@@ -12,11 +12,11 @@ public class HighscoreList {
 		if (list.size() < maxSize) {
 			list.add(highscore);
 			System.out.println("Highscore: highscore added" + list.getLast().getScore() + " " + list.size());
-		//	sort();
+			sort();
 		} else if (list.size() >= maxSize && highscore.getScore() > list.getLast().getScore())  {
 			list.removeLast();
 			list.add(highscore);
-		//	sort();
+			sort();
 		}
 	}
 	
