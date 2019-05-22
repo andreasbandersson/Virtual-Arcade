@@ -64,7 +64,7 @@ public class ChatUI extends Pane {
 
 	private void init() {
 		setPrefSize(300, 600);
-		setId("pane");
+		
 		
 		newMessage.setPromptText("Type @username to send a private message");
 		onlineUsers.setWrapText(true);
@@ -108,7 +108,6 @@ public class ChatUI extends Pane {
 		messages.setId("messageArea");
 		onlineUsers.setId("messageArea");
 		vPane.setId("vPane");
-		newMessage.setId("messageArea");
 
 		switchBtn.setOnAction(buttonHandler);
 		sendBtn.setOnAction(buttonHandler);
