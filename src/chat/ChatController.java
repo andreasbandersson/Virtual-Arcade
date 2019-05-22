@@ -1,5 +1,6 @@
 package chat;
 
+import application.Leaderboard;
 import application.LoginUI;
 import application.MainUI;
 import javafx.application.Platform;
@@ -19,12 +20,17 @@ public class ChatController {
 	private ChatClient client;
 	private User user;
 	private UserList userList;
+	private Leaderboard leaderboard;
 
 	public ChatController() {
 		client = new ChatClient(60000, "localhost", this);
 		client.connect();
 		initLoginUI();
 		chatUI = new ChatUI(this);
+	}
+	
+	public void addLeaderboard(Leaderboard leaderboard) {
+		this.leaderboard = leaderboard;
 	}
 
 	private void initLoginUI() {
@@ -40,7 +46,7 @@ public class ChatController {
 	private void initMainUI() {
 		Platform.runLater(new Runnable() {
 			public void run() {
-				mainUI = new MainUI(chatUI);
+				mainUI = new MainUI(chatUI, ChatController.this);
 				mainUI.start(MainUI.primaryStage);
 				chatUI.addMessage("Welcome to Virtual Arcade " + ChatController.this.user.getUsername() + "!", 1);
 			}
@@ -143,17 +149,17 @@ public class ChatController {
 				}
 			});
 		} else {
-			updateHighscores((Highscore[]) obj);
+			updateHighscores((HighscoreList) obj);
 		}
 	}
 
 	// TODO
-	private void updateHighscores(Highscore[] highscores) {
-		if (highscores[9].getGame().equals("Snake")) {
-			// update UI with snake leaderboard
-		} else {
-			// update ui with spaceinvaders leaderboard
-		}
+	private void updateHighscores(HighscoreList highscores) {
+		leaderboard.updateHighscores(highscores);
+	}
+	
+	public void newHighscore(String game, int score) {
+		client.sendHighscore(new Highscore(this.user,game,score));
 	}
 
 	/**
