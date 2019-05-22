@@ -52,7 +52,6 @@ public class ChatUI extends Pane {
 	private TextArea onlineUsers = new TextArea();
 	private Boolean showingMessages = true;
 	private ChatController controller;
-	private GridPane group = new GridPane();
 
 	public ChatUI(ChatController controller) {
 		this.controller = controller;
@@ -71,7 +70,7 @@ public class ChatUI extends Pane {
 		onlineUsers.setWrapText(true);
 		onlineUsers.setEditable(false);
 		newMessage.setWrapText(true);
-		onlineUsers.setPrefSize(300, 480);
+		onlineUsers.setPrefSize(300, 460);
 		sendBtn.setPrefSize(280, 25);
 		switchBtn.setPrefSize(280, 25);
 		newMessage.setPrefSize(300, 50);
@@ -83,9 +82,9 @@ public class ChatUI extends Pane {
 		scroll = new ScrollPane(messages);
 		scroll.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
 		scroll.setHbarPolicy(ScrollBarPolicy.NEVER);
-		scroll.setPrefSize(300, 480);
+		scroll.setPrefSize(260, 460);
 		scroll.viewportBoundsProperty();
-		messages.setPrefSize(300, scroll.getPrefViewportWidth());
+		messages.setPrefSize(300, scroll.getPrefViewportHeight());
 		
 //		messages.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
 //		vPane.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
@@ -95,6 +94,7 @@ public class ChatUI extends Pane {
 //				new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 //		
 		vPane.setAlignment(Pos.CENTER);
+		vPane.setPrefSize(300.0, 600.0);
 		
 		sPane.getChildren().add(scroll);
 		vPane.getChildren().add(sPane);
@@ -103,12 +103,12 @@ public class ChatUI extends Pane {
 		vPane.getChildren().add(switchBtn);
 		
 		messages.setMaxWidth(300);
-		messages.setMaxHeight(450);
+		messages.setMaxHeight(460);
 		
-		messages.setId("MessageArea");
-		onlineUsers.setId("MessageArea");
+		messages.setId("messageArea");
+		onlineUsers.setId("messageArea");
 		vPane.setId("vPane");
-		newMessage.setId("newMessage");
+		newMessage.setId("messageArea");
 
 		switchBtn.setOnAction(buttonHandler);
 		sendBtn.setOnAction(buttonHandler);
