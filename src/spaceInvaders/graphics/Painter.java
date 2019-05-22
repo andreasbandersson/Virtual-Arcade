@@ -192,10 +192,12 @@ public class Painter extends AnimationTimer {
         canvas.setOnMouseMoved(e -> canvas.requestFocus());
         start(); // starts the animation timer
     }
-        public void gameEnd(){
-                chatController.newHighscore("Space Invaders",controller.getScore());
-            System.out.println("just registered new highscore");
-        }
+
+    public void gameEnd(){
+        chatController.newHighscore("Space Invaders",controller.getScore());
+        System.out.println("just registered new highscore");
+    }
+
     @Override
     public void handle(long now) {
 
@@ -231,8 +233,6 @@ public class Painter extends AnimationTimer {
                 gc.drawImage(shotCollision,e.getPosition().getX(),e.getPosition().getY()-10);
             }
         }
-
-
     }
 
     public Scene getScene(){
