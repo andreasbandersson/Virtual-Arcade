@@ -181,6 +181,7 @@ public class ServerController {
 	// TODO: Check/save highscores
 
 	public void checkHighscore(Highscore highscore) {
+		System.out.println("Server: new highscore");
 		if (highscore.getGame().equals("Snake")) {
 			if (snakeScore.add(highscore) == true) {
 				newHighscore(highscore, snakeScore);
@@ -198,11 +199,12 @@ public class ServerController {
 		for (int i = 0; i < temp.size(); i++) {
 			server.sendObject(highscoreList, clientStreams.getOutputStream(temp.get(i)));
 		}
+		System.out.println("Server: Lista skickad");
 	}
 	
 	private void newHighscore(Highscore highscore, HighscoreList highscoreList) {
-		String str = highscore.getUser() + " made it onto the " + highscore.getGame() + " Leaderboard with "
-				+ highscore.getScore() + "points!";
+		String str = highscore.getUser().getUsername() + " made it onto the " + highscore.getGame() + " Leaderboard with "
+				+ highscore.getScore() + " points!";
 		newMessage(new Message(str));
 		sendHighscoreList(highscoreList);
 	}

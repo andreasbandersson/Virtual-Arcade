@@ -178,21 +178,22 @@ public class Leaderboard {
 	}
 
 	public void updateHighscores(HighscoreList highscores) {
+		System.out.println("Leadboard: uppdaterar listor");
 		if (highscores.size() > 0) {
 		if (highscores.get(0).getGame().equals("Snake")) {
 			String snakeHighscoreString = "";
 			for (int i = 0; i < highscores.size(); i++) {
 				snakeHighscoreString += i + 1 + " " + highscores.get(i).getUser().getUsername() + " "
 						+ highscores.get(i).getScore() + "\n";
-				snakeHighscoreLabel.setText("SNAKE HIGHSCORES\n\n" + snakeHighscoreString);
 			}
+			snakeHighscoreLabel.setText("SNAKE HIGHSCORES\n\n" + snakeHighscoreString);
 		} else {
 			String spaceHighscoreString = "";
 			for (int i = 0; i < highscores.size(); i++) {
 				spaceHighscoreString += i + 1 + " " + highscores.get(i).getUser().getUsername() + " "
 						+ highscores.get(i).getScore() + "\n";
-				spaceHighscoreLabel.setText("SPACE INVADERS HIGHSCORES\n\n" + spaceHighscoreString);
 			}
+			spaceHighscoreLabel.setText("SPACE INVADERS HIGHSCORES\n\n" + spaceHighscoreString);
 		}
 		}
 	}

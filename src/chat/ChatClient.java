@@ -108,6 +108,7 @@ public class ChatClient {
 	}
 	
 	public void sendHighscore(Highscore highscore) {
+		System.out.println("Client: skickar highscore");
 		try {
 			oos.writeObject(highscore);
 		} catch (IOException e) {

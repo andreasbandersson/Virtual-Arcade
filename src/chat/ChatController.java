@@ -28,7 +28,7 @@ public class ChatController {
 		initLoginUI();
 		chatUI = new ChatUI(this);
 	}
-	
+
 	public void addLeaderboard(Leaderboard leaderboard) {
 		this.leaderboard = leaderboard;
 	}
@@ -155,11 +155,20 @@ public class ChatController {
 
 	// TODO
 	private void updateHighscores(HighscoreList highscores) {
-		leaderboard.updateHighscores(highscores);
+		System.out.println("Controller: uppdaterar highscorelista");
+		if (highscores.size() > 0) {
+		System.out.println(highscores.get(0).getScore());
+		}
+		Platform.runLater(new Runnable() {
+			public void run() {
+				leaderboard.updateHighscores(highscores);
+			}
+		});
 	}
-	
+
 	public void newHighscore(String game, int score) {
-		client.sendHighscore(new Highscore(this.user, game,  score));
+		System.out.println("Controller: new highscore");
+		client.sendHighscore(new Highscore(this.user, game, score));
 	}
 
 	/**

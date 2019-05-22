@@ -100,9 +100,9 @@ public class ChatServer {
 						System.out.println(Thread.currentThread().getName() + "tar emot meddelande");
 						Object obj = ois.readObject();
 						if (obj instanceof Message) {
-						controller.newMessage((Message) ois.readObject());
+						controller.newMessage((Message) obj);
 						} else {
-							controller.checkHighscore((Highscore) ois.readObject());
+							controller.checkHighscore((Highscore) obj);
 						}
 					} catch (ClassNotFoundException e) {
 						System.err.println(e);
