@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 
 /**
  * Handles the logic of the chat/login systems server side
@@ -107,8 +108,8 @@ public class ServerController {
 			server.sendObject(user, oos);
 			server.sendObject("LOGIN OK", oos);
 			sendUserList(user);
-			sendHighscoreList(snakeScore);
-			sendHighscoreList(spaceScore);
+			sendHighscoreList(snakeScore.getList());
+			sendHighscoreList(spaceScore.getList());
 			return true;
 		} else {
 			server.sendObject("Username and/or password is incorrect", oos);
@@ -183,30 +184,37 @@ public class ServerController {
 	public void checkHighscore(Highscore highscore) {
 		System.out.println("Server: new highscore");
 		if (highscore.getGame().equals("Snake")) {
-			if (snakeScore.add(highscore) == true) {
-				newHighscore(highscore, snakeScore);
+			if (snakeScore.checkScore(highscore) == true) {
+				snakeScore.add(highscore);
+				newHighscore(highscore, snakeScore.getList());
 			}
 		} else {
-			if (spaceScore.add(highscore) == true) {
-				newHighscore(highscore, spaceScore);
+			if (spaceScore.checkScore(highscore) == true) {
+				spaceScore.add(highscore);
+				System.out.println("Server: highscore tillagt");
+				newHighscore(highscore, spaceScore.getList());
 			}
 		}
 	}
+	
 
-	private void sendHighscoreList(HighscoreList highscoreList) {
+	private void sendHighscoreList(LinkedList<Highscore> list) {
 		UserList temp = new UserList(clientStreams.getKeySet());
-
+		
+		if (list.size() > 0) {
+		System.out.println("SendHighscoreList: " + list.get(0).getScore());
+		}
 		for (int i = 0; i < temp.size(); i++) {
-			server.sendObject(highscoreList, clientStreams.getOutputStream(temp.get(i)));
+			server.sendHighscore(list, clientStreams.getOutputStream(temp.get(i)));
 		}
 		System.out.println("Server: Lista skickad");
 	}
 	
-	private void newHighscore(Highscore highscore, HighscoreList highscoreList) {
+	private void newHighscore(Highscore highscore, LinkedList<Highscore> list) {
 		String str = highscore.getUser().getUsername() + " made it onto the " + highscore.getGame() + " Leaderboard with "
 				+ highscore.getScore() + " points!";
 		newMessage(new Message(str));
-		sendHighscoreList(highscoreList);
+		sendHighscoreList(list);
 	}
 	
 	
