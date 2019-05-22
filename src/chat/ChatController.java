@@ -159,7 +159,7 @@ public class ChatController {
 	}
 	
 	public void newHighscore(String game, int score) {
-		client.sendHighscore(new Highscore(this.user, game, score));
+		client.sendHighscore(new Highscore(this.user, game,  score));
 	}
 
 	/**
