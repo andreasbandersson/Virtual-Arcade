@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.LinkedList;
 
 /**
  * Handles all communication with the chat- and login systems client.
@@ -30,6 +31,16 @@ public class ChatServer {
 		try {
 			System.out.println(Thread.currentThread().getName() + "skickar meddelande");
 			oos.writeObject(obj);
+			oos.flush();
+		} catch (IOException e) {
+			System.err.println(e);
+		}
+	}
+	
+	public void sendHighscore(LinkedList<Highscore> list, ObjectOutputStream oos) {
+		try {
+			System.out.println(Thread.currentThread().getName() + "skickar meddelande");
+			oos.writeUnshared(list);
 			oos.flush();
 		} catch (IOException e) {
 			System.err.println(e);

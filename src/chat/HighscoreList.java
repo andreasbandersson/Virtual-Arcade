@@ -4,18 +4,26 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedList;
 
-public class HighscoreList implements Serializable {
+public class HighscoreList {
 	private int maxSize = 10;
 	private LinkedList<Highscore> list = new LinkedList<Highscore>();
 	
-	public synchronized boolean add(Highscore highscore) {
+	public synchronized void add(Highscore highscore) {
 		if (list.size() < maxSize) {
-			list.addLast(highscore);
-			sort();
-			return true;
+			list.add(highscore);
+			System.out.println("Highscore: highscore added" + list.getLast().getScore() + " " + list.size());
+		//	sort();
 		} else if (list.size() >= maxSize && highscore.getScore() > list.getLast().getScore())  {
 			list.removeLast();
-			list.addLast(highscore);
+			list.add(highscore);
+		//	sort();
+		}
+	}
+	
+	public synchronized boolean checkScore(Highscore highscore) {
+		if (list.size() < maxSize) {
+			return true;
+		} else if (list.size() >= maxSize && highscore.getScore() > list.getLast().getScore()) {
 			return true;
 		} else return false;
 	}
@@ -34,6 +42,10 @@ public class HighscoreList implements Serializable {
 	
 	public synchronized int size() {
 		return list.size();
+	}
+	
+	public synchronized LinkedList<Highscore> getList() {
+		return this.list;
 	}
 
 }

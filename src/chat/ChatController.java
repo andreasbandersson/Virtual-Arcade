@@ -1,5 +1,7 @@
 package chat;
 
+import java.util.LinkedList;
+
 import application.Leaderboard;
 import application.LoginUI;
 import application.MainUI;
@@ -149,19 +151,19 @@ public class ChatController {
 				}
 			});
 		} else {
-			updateHighscores((HighscoreList) obj);
+			updateHighscores((LinkedList<Highscore>) obj);
 		}
 	}
 
 	// TODO
-	private void updateHighscores(HighscoreList highscores) {
+	private void updateHighscores(LinkedList<Highscore> list) {
 		System.out.println("Controller: uppdaterar highscorelista");
-		if (highscores.size() > 0) {
-		System.out.println(highscores.get(0).getScore());
+		for (int i = 0; i < list.size(); i++) {
+			System.out.println(list.get(i).getScore());
 		}
 		Platform.runLater(new Runnable() {
 			public void run() {
-				leaderboard.updateHighscores(highscores);
+				leaderboard.updateHighscores(list);
 			}
 		});
 	}

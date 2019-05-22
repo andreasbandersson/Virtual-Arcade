@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
+import java.util.LinkedList;
 
 import chat.ChatUI;
 import chat.Highscore;
@@ -177,7 +178,7 @@ public class Leaderboard {
 
 	}
 
-	public void updateHighscores(HighscoreList highscores) {
+	public void updateHighscores(LinkedList<Highscore> highscores) {
 		System.out.println("Leadboard: uppdaterar listor");
 		if (highscores.size() > 0) {
 		if (highscores.get(0).getGame().equals("Snake")) {
