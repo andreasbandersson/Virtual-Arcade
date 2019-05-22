@@ -158,8 +158,8 @@ public class ChatController {
 		leaderboard.updateHighscores(highscores);
 	}
 	
-	public void newHighscore(Highscore highscore) {
-		client.sendHighscore(highscore);
+	public void newHighscore(String game, int score) {
+		client.sendHighscore(new Highscore(this.user, game, score));
 	}
 
 	/**
