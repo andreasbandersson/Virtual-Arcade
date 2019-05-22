@@ -10,7 +10,6 @@ public class ScoreUp extends Label implements Runnable{
     private boolean scoreFloating;
     private int score;
     private int y = 35;
-    private Thread thread;
 
     public ScoreUp(int score){
         this.score = score;
@@ -27,8 +26,6 @@ public class ScoreUp extends Label implements Runnable{
         else {
             setTextFill(Color.ORANGE);
         }
-        thread = new Thread(this);
-        thread.start();
     }
 
     public int getScore(){
@@ -44,16 +41,16 @@ public class ScoreUp extends Label implements Runnable{
     }
 
     public void run() {
-        try {
-            for (int i = 0; i < 13; i++) {
-                y -= 3;
+
+            for (int i = 0; i < 30; i++) {
+                y -= 1;
                 setTranslateY(y);
-                thread.sleep(30);
+                try {
+                    Thread.sleep(5);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
             scoreFloating = false;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
     }
 }

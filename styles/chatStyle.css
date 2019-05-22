@@ -1,16 +1,59 @@
-#MessageArea {
-    -fx-background-color: rgba(0, 0, 0, 0.5); 
-    -fx-background-radius: 10;
+
+#messageArea {
+    -fx-background-color: transparent;
     -fx-text-fill: #00ff00;
 }
 
-.text-area .content {
-    -fx-background-color: black;
+#vPane{
+	-fx-background-color: rgba(0.0,0.0,0.0, 0.9);
+	-fx-border-color: grey;
+	-fx-border-width: 2.0px;
+	-fx-border-type: outside;
 }
 
-.text-flow .content {
-    -fx-background-color: black;
+.text-area {
+	-fx-background-color: transparent;
+	-fx-text-fill: #00ff00;
 }
+
+.text-area .scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.text-area .scroll-pane .viewport{
+    -fx-background-color: transparent;
+}
+
+
+.text-area .scroll-pane .content{
+    -fx-background-color: transparent;
+}
+
+#buttons{
+	-fx-padding: 5.0 11.0 10.0 11.0;
+    -fx-background-insets: 0.0,0.0 0.0 5.0 0.0, 0.0 0.0 6.0 0.0, 0.0 0.0 7.0 0.0;
+    -fx-background-radius: 3.0;
+ 	-fx-background-color: 
+        linear-gradient(from 0.0% 93.0% to 0.0% 100.0%, #088800 0.0%, #024400 100.0%),
+        #024400,
+        #51c300,
+        radial-gradient(center 50.0% 50.0%, radius 100.0%, #51c300, #137e08);
+    -fx-effect: dropshadow( gaussian , rgba(0.0,0.0,0.0,0.25) , 4.0,0.0,0.0,1.0 );
+    -fx-font-weight: normal;
+    -fx-font-size: 1.0em;
+    -fx-alignment: center;
+}
+
+#buttons:pressed {
+    -fx-padding: 7.0 11.0 8.0 11.0;
+    -fx-background-insets: 2.0 0.0 0.0 0.0,2.0 0.0 3.0 0.0, 2.0 0.0 4.0 0.0, 2.0 0.0 5.0 0.0;
+}
+
+#buttons .text {
+    -fx-fill: white;
+    -fx-font-family: 'sans-serif';
+}
+
 
 .scroll-pane > .viewport {
     -fx-background-color: transparent;
@@ -18,5 +61,6 @@
 
  .scroll-pane {
     -fx-background-color: transparent;
+    -fx-padding: 10.0;
  }
 

@@ -98,17 +98,12 @@ public class Player extends Unit implements Runnable {
             move(Player.startPosition);
         }
         if (life == 0){
-            life = 3;
-            painter.setExplosionData(new Position(position));
-            JukeBox jukeBox = new JukeBox("sounds/Explosion.mp3");
-            jukeBox.playWithCustomVol(0.4);
-            move(Player.startPosition);
-           die();
+           painter.gameEnd();
         }
     }
 
     @Override
     public void die() {
-        //game ends
+
     }
 }

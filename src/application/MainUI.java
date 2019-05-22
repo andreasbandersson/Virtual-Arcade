@@ -50,20 +50,25 @@ public class MainUI extends Application {
 	private Button snakePlayButton = new Button("START");
 	private Scene scene;
 	private GridPane mainRoot;
-	private Leaderboard leaderBoard;
+	private Leaderboard leaderboard;
 	private pong2.Pong pong;
 	private GUIPane snake;
 
 	// private SpaceInvaders spaceInvaders;
 	private Painter spaceInvaders;
 	private JukeBox jukebox;
+	private ChatController controller;
 	private final int numOfCols = 48;
 	private final int numOfRows = 24;
 	private ChatUI chatUI;
 	public static Stage primaryStage = new Stage();
 
-	public MainUI(ChatUI chatUI) {
+	public MainUI(ChatUI chatUI, ChatController controller) {
 		this.chatUI = chatUI;
+		this.controller = controller;
+		jukebox = new JukeBox();
+		this.leaderboard = new Leaderboard(this, this.chatUI, this.jukebox);
+		controller.addLeaderboard(leaderboard);
 	}
 
 	// Function that initiates the main menu and its components.
@@ -78,7 +83,6 @@ public class MainUI extends Application {
 		setArcadeMachineImage();
 		setSoundButtonImages();
 
-		jukebox = new JukeBox();
 		jukebox.play();
 
 		// Adding and setting the Label for Virtual Arcade-header
@@ -246,12 +250,8 @@ public class MainUI extends Application {
 	private void addActionListeners(Stage primaryStage) {
 
 		leaderboardButton.setOnAction(e -> {
-			if (leaderBoard == null) {
-				leaderBoard = new Leaderboard(this, chatUI, jukebox);
-			}
-
 			mainRoot.getChildren().remove(chatUI);
-			primaryStage.setScene(leaderBoard.getScene());
+			primaryStage.setScene(leaderboard.getScene());
 			primaryStage.show();
 		});
 
@@ -272,7 +272,7 @@ public class MainUI extends Application {
 		// Skriv om. Instansiera pong och l�gg in i mainRoot som pane bara
 		pongPlayButton.setOnAction(e -> {
 			if (pong == null) {
-				pong = new pong2.Pong(this, chatUI, jukebox);
+				pong = new pong2.Pong(this, chatUI, jukebox, controller);
 			}
 
 			mainRoot.getChildren().remove(chatUI);
@@ -283,7 +283,7 @@ public class MainUI extends Application {
 		// Skriv om. Instansiera Space Invaders och l�gg in i mainRoot som pane bara
 		spacePlayButton.setOnAction(e -> {
 			if (spaceInvaders == null) {
-				spaceInvaders = new Painter(this, chatUI, jukebox);
+				spaceInvaders = new Painter(this, chatUI, jukebox, controller);
 			}
 			mainRoot.getChildren().remove(chatUI);
 			primaryStage.setScene(spaceInvaders.getScene());

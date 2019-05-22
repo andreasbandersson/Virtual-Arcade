@@ -6,7 +6,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
 
 /**
  * Handles the logic of the chat/login systems server side
@@ -19,8 +22,10 @@ public class ServerController {
 	private ClientStreams clientStreams = new ClientStreams();
 	private RegisteredUsers users;
 	private ChatServer server;
-	private Highscore[] snakeScore = new Highscore[10];
-	private Highscore[] spaceScore = new Highscore[10];
+//	private Highscore[] snakeScore = new Highscore[10];
+//	private Highscore[] spaceScore = new Highscore[10];
+	private HighscoreList snakeScore = new HighscoreList();
+	private HighscoreList spaceScore = new HighscoreList();
 
 	public ServerController() {
 		loadUsers();
@@ -103,6 +108,8 @@ public class ServerController {
 			server.sendObject(user, oos);
 			server.sendObject("LOGIN OK", oos);
 			sendUserList(user);
+			sendHighscoreList(snakeScore.getList());
+			sendHighscoreList(spaceScore.getList());
 			return true;
 		} else {
 			server.sendObject("Username and/or password is incorrect", oos);
@@ -156,14 +163,13 @@ public class ServerController {
 			} catch (IOException | ClassNotFoundException e) {
 				e.printStackTrace();
 			}
-		}
-		if (users == null) {
+		} else if (users == null) {
 			users = new RegisteredUsers();
 		}
 	}
 
 	/**
-	 * Writes list registered users to file
+	 * Writes list of registered users to file
 	 */
 	private void saveUsers() {
 		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("files/registeredUsers.dat"))) {
@@ -175,35 +181,42 @@ public class ServerController {
 
 	// TODO: Check/save highscores
 
-	private void checkHighscore(Highscore highscore) {
+	public void checkHighscore(Highscore highscore) {
+		System.out.println("Server: new highscore");
 		if (highscore.getGame().equals("Snake")) {
-			if (highscore.getScore() > snakeScore[0].getScore()) {
-				snakeScore[0] = highscore;
-				Arrays.sort(snakeScore);
-				newHighscore(highscore, snakeScore);
+			if (snakeScore.checkScore(highscore) == true) {
+				snakeScore.add(highscore);
+				newHighscore(highscore, snakeScore.getList());
 			}
 		} else {
-			if (highscore.getScore() > spaceScore[0].getScore()) {
-				spaceScore[0] = highscore;
-				Arrays.sort(spaceScore);
-				newHighscore(highscore, spaceScore);
+			if (spaceScore.checkScore(highscore) == true) {
+				spaceScore.add(highscore);
+				System.out.println("Server: highscore tillagt");
+				newHighscore(highscore, spaceScore.getList());
 			}
-		}
-	}
-
-	private void sendHighscoreList(Highscore[] array) {
-		UserList temp = new UserList(clientStreams.getKeySet());
-
-		for (int i = 0; i < temp.size(); i++) {
-			server.sendObject(array, clientStreams.getOutputStream(temp.get(i)));
 		}
 	}
 	
-	private void newHighscore(Highscore highscore, Highscore[] array) {
-		String str = highscore.getUser() + " made it onto the " + highscore.getGame() + " Leaderboard with "
-				+ highscore.getScore() + "points!";
-		newMessage(new Message(str));
-		sendHighscoreList(array);
+
+	private void sendHighscoreList(LinkedList<Highscore> list) {
+		UserList temp = new UserList(clientStreams.getKeySet());
+		
+		if (list.size() > 0) {
+		System.out.println("SendHighscoreList: " + list.get(0).getScore());
+		}
+		for (int i = 0; i < temp.size(); i++) {
+			server.sendHighscore(list, clientStreams.getOutputStream(temp.get(i)));
+		}
+		System.out.println("Server: Lista skickad");
 	}
+	
+	private void newHighscore(Highscore highscore, LinkedList<Highscore> list) {
+		String str = highscore.getUser().getUsername() + " made it onto the " + highscore.getGame() + " Leaderboard with "
+				+ highscore.getScore() + " points!";
+		newMessage(new Message(str));
+		sendHighscoreList(list);
+	}
+	
+	
 
 }
