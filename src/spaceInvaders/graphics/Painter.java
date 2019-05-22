@@ -4,6 +4,7 @@ import application.JukeBox;
 import application.MainUI;
 import chat.ChatController;
 import chat.ChatUI;
+import chat.Highscore;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.text.Text;
@@ -191,7 +192,10 @@ public class Painter extends AnimationTimer {
         canvas.setOnMouseMoved(e -> canvas.requestFocus());
         start(); // starts the animation timer
     }
-
+        public void gameEnd(){
+                chatController.newHighscore("Space Invaders",controller.getScore());
+            System.out.println("just registered new highscore");
+        }
     @Override
     public void handle(long now) {
 
@@ -382,8 +386,10 @@ public class Painter extends AnimationTimer {
 
         backButton.setOnAction(e -> {
             spaceInvadersRoot.getChildren().remove(chatUI);
-            controller.setGamePaused();
-            root.getChildren().add(pauseLabel);
+            if (!controller.getGamePaused()) {
+                controller.setGamePaused();
+                root.getChildren().add(pauseLabel);
+            }
             mainUI.switchToMainUI();
         });
 
