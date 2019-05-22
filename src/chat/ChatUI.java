@@ -3,10 +3,14 @@ package chat;
 import java.io.File;
 import java.net.MalformedURLException;
 
+import javax.swing.GroupLayout.SequentialGroup;
+
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
@@ -20,12 +24,17 @@ import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import spaceInvaders.units.Position;
 
 /**
  * 
@@ -43,8 +52,7 @@ public class ChatUI extends Pane {
 	private TextArea onlineUsers = new TextArea();
 	private Boolean showingMessages = true;
 	private ChatController controller;
-	
-
+	private GridPane group = new GridPane();
 
 	public ChatUI(ChatController controller) {
 		this.controller = controller;
@@ -57,15 +65,20 @@ public class ChatUI extends Pane {
 
 	private void init() {
 		setPrefSize(300, 600);
+		setId("pane");
 		
 		newMessage.setPromptText("Type @username to send a private message");
 		onlineUsers.setWrapText(true);
 		onlineUsers.setEditable(false);
 		newMessage.setWrapText(true);
 		onlineUsers.setPrefSize(300, 480);
-		sendBtn.setPrefSize(300, 25);
-		switchBtn.setPrefSize(300, 25);
+		sendBtn.setPrefSize(280, 25);
+		switchBtn.setPrefSize(280, 25);
 		newMessage.setPrefSize(300, 50);
+		
+		//Andreas
+		sendBtn.setId("buttons");
+		switchBtn.setId("buttons");
 
 		scroll = new ScrollPane(messages);
 		scroll.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
@@ -74,26 +87,28 @@ public class ChatUI extends Pane {
 		scroll.viewportBoundsProperty();
 		messages.setPrefSize(300, scroll.getPrefViewportWidth());
 		
-		messages.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
-
-		vPane.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
-		newMessage.setBorder(new Border(
-				new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-		vPane.setBorder(new Border(
-				new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+//		messages.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+//		vPane.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+//		newMessage.setBorder(new Border(
+//				new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+//		vPane.setBorder(new Border(
+//				new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+//		
+		vPane.setAlignment(Pos.CENTER);
 		
 		sPane.getChildren().add(scroll);
 		vPane.getChildren().add(sPane);
 		vPane.getChildren().add(newMessage);
 		vPane.getChildren().add(sendBtn);
 		vPane.getChildren().add(switchBtn);
-
+		
 		messages.setMaxWidth(300);
-		messages.setMaxHeight(480);
+		messages.setMaxHeight(450);
 		
 		messages.setId("MessageArea");
-		newMessage.setId("MessageArea");
 		onlineUsers.setId("MessageArea");
+		vPane.setId("vPane");
+		newMessage.setId("newMessage");
 
 		switchBtn.setOnAction(buttonHandler);
 		sendBtn.setOnAction(buttonHandler);
@@ -106,6 +121,7 @@ public class ChatUI extends Pane {
 		addMessage("Messages are public by default", 2);
 		addMessage("Type @username to send a private message", 2);
 		addMessage("Example: @Aragorn This is a message", 2);
+		
 		
 		getChildren().add(vPane);
 		try {

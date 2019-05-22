@@ -112,7 +112,7 @@ public class Painter extends AnimationTimer {
         canvas.setId("SpaceInvaders");
 
         spaceInvadersRoot = new GridPane();
-
+        
        // ImageView backgroundImageView = new ImageView(backgroundImage);
 
       //  backgroundLayer.getChildren().add((backgroundImageView));
@@ -137,7 +137,6 @@ public class Painter extends AnimationTimer {
         soundButton.setGraphic(playSoundImageView);
         spaceInvadersRoot.add(soundButton, 32, 1);
 
-        // spaceInvadersRoot.setId("spaceInvadersRoot");
         spaceInvadersRoot.setPrefSize(1200.0, 600.0);
         
         backButton.setFocusTraversable(false);
