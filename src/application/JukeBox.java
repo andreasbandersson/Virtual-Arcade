@@ -24,7 +24,7 @@ public class JukeBox {
 	private static String song1 = "sounds/Lobby-Sound-1.mp3";
 	private static String song2 = "sounds/Lobby-Sound-2.mp3";
 	private static String song3 = "sounds/Lobby-Sound-3.mp3";
-	private static String intro = "sounds/Welcome-Sound.wav";
+	private static String intro = "sounds/Welcome-Sound.mp3";
 	
 	public JukeBox() {
 		songList.add(intro);
