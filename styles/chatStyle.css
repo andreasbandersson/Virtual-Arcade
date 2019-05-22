@@ -1,16 +1,52 @@
+#pane{
+	   -fx-background-image: url("../images/terminal.png");
+    -fx-background-repeat: stretch;   
+    -fx-background-size:  cover;
+    -fx-background-position: center center; 
+}
+
 #MessageArea {
-    -fx-background-color: rgba(0, 0, 0, 0.5); 
-    -fx-background-radius: 10;
+    -fx-background-color: transparent;
     -fx-text-fill: #00ff00;
 }
 
-.text-area .content {
-    -fx-background-color: black;
+#vPane{
+	-fx-background-color: radial-gradient(center 50.0% 50.0%, radius 100%, #0e1406, #000000);
+	-fx-border-color: green;
+	-fx-border-width: 1px;
+	-fx-border-type: outside;
 }
 
-.text-flow .content {
-    -fx-background-color: black;
+#newMessage{
+	-fx-background-color: transparent;
+	-fx-text-fill: #00ff00;
 }
+
+#buttons{
+	-fx-padding: 5.0 11.0 10.0 11.0;
+    -fx-background-insets: 0.0,0.0 0.0 5.0 0.0, 0.0 0.0 6.0 0.0, 0.0 0.0 7.0 0.0;
+    -fx-background-radius: 3.0;
+ 	-fx-background-color: 
+        linear-gradient(from 0.0% 93.0% to 0.0% 100.0%, #088800 0.0%, #024400 100.0%),
+        #024400,
+        #51c300,
+        radial-gradient(center 50.0% 50.0%, radius 100.0%, #51c300, #137e08);
+    -fx-effect: dropshadow( gaussian , rgba(0.0,0.0,0.0,0.25) , 4.0,0.0,0.0,1.0 );
+    -fx-font-weight: normal;
+    -fx-font-size: 1em;
+    -fx-alignment: center;
+}
+
+#buttons:pressed {
+    -fx-padding: 7.0 11.0 8.0 11.0;
+    -fx-background-insets: 2.0 0.0 0.0 0.0,2.0 0.0 3.0 0.0, 2.0 0.0 4.0 0.0, 2.0 0.0 5.0 0.0;
+}
+
+#buttons .text {
+    -fx-fill: white;
+    -fx-font-family: 'sans-serif';
+}
+
 
 .scroll-pane > .viewport {
     -fx-background-color: transparent;

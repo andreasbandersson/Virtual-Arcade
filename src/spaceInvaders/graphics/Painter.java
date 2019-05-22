@@ -123,7 +123,6 @@ public class Painter extends AnimationTimer {
 
         spaceInvadersRoot = new GridPane();
 
-        // ImageView backgroundImageView = new ImageView(backgroundImage);
 
         //  backgroundLayer.getChildren().add((backgroundImageView));
 
@@ -147,7 +146,6 @@ public class Painter extends AnimationTimer {
         soundButton.setGraphic(playSoundImageView);
         spaceInvadersRoot.add(soundButton, 32, 1);
 
-        // spaceInvadersRoot.setId("spaceInvadersRoot");
         spaceInvadersRoot.setPrefSize(1200.0, 600.0);
 
         backButton.setFocusTraversable(false);
@@ -192,10 +190,12 @@ public class Painter extends AnimationTimer {
         canvas.setOnMouseMoved(e -> canvas.requestFocus());
         start(); // starts the animation timer
     }
-        public void gameEnd(){
-                chatController.newHighscore("Space Invaders",controller.getScore());
-            System.out.println("just registered new highscore");
-        }
+
+    public void gameEnd(){
+        chatController.newHighscore("Space Invaders",controller.getScore());
+        System.out.println("just registered new highscore");
+    }
+
     @Override
     public void handle(long now) {
 
@@ -231,8 +231,6 @@ public class Painter extends AnimationTimer {
                 gc.drawImage(shotCollision,e.getPosition().getX(),e.getPosition().getY()-10);
             }
         }
-
-
     }
 
     public Scene getScene(){
