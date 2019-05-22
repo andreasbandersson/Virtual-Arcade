@@ -106,6 +106,14 @@ public class ChatClient {
 			System.err.println(e);
 		}
 	}
+	
+	public void sendHighscore(Highscore highscore) {
+		try {
+			oos.writeObject(highscore);
+		} catch (IOException e) {
+			System.err.println(e);
+		}
+	}
 
 	/**
 	 * Listens for input from server, sending it along to controller

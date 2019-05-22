@@ -7,6 +7,7 @@ import java.net.MalformedURLException;
 
 import chat.ChatUI;
 import chat.Highscore;
+import chat.HighscoreList;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.geometry.Insets;
@@ -59,7 +60,7 @@ public class Leaderboard {
 		leaderboardRoot = new GridPane();
 		leaderboardRoot.setId("leaderboardRoot");
 		leaderboardRoot.setPrefSize(1200.0, 600.0); // minus chattens bredd (300)
-//		leaderboardRoot.setGridLinesVisible(true);
+		// leaderboardRoot.setGridLinesVisible(true);
 
 		// Setting amount of columns and rows for the GridPane
 		createColumnsandRows();
@@ -87,12 +88,12 @@ public class Leaderboard {
 
 		addHighscoreLabels();
 		addActionListeners();
-		
-		backButton.setFocusTraversable(false);
-	    soundButton.setFocusTraversable(false);
 
-	    System.out.println(System.getProperty("os.name").toString());
-	    
+		backButton.setFocusTraversable(false);
+		soundButton.setFocusTraversable(false);
+
+		System.out.println(System.getProperty("os.name").toString());
+
 		scene = new Scene(leaderboardRoot, 1200, 600);
 		try {
 			scene.getStylesheets().add((new File("styles//mainStyle.css")).toURI().toURL().toExternalForm());
@@ -124,61 +125,76 @@ public class Leaderboard {
 	private void addChatUI(ChatUI chatUI) {
 		leaderboardRoot.add(chatUI, 36, 0, 12, 24);
 	}
-	
-	public void updateHighscoreLabels(Highscore[] snakeList) {
-		String snake = "";
-		int count = 1;
-		for (int i = snakeList.length; i > 0; i--) {
-			snake += count + " " + snakeList[i].getUser().getUsername() + " " + snakeList[i].getScore();
-			count++;
-		}
-	}
+
+//	public void updateHighscoreLabels(Highscore[] snakeList) {
+//		String snake = "";
+//		int count = 1;
+//		for (int i = snakeList.length; i > 0; i--) {
+//			snake += count + " " + snakeList[i].getUser().getUsername() + " " + snakeList[i].getScore();
+//			count++;
+//		}
+//	}
 
 	private void addHighscoreLabels() {
-//		String pongHighscoreString = "";
-//		pongHighscoreLabel.setId("highscoreLabel");
-//		pongHighscoreLabel.setPrefSize(400.0, 200.00);
-//		pongHighscoreLabel.setPadding(new Insets(0.0, 5.0, 0.0, 10.0));
-//		for (int i = 0; i < 10; i++) {
-//			pongHighscoreString += i + 1 + " Andreas		" + "1000\n\n";
-//			pongHighscoreLabel.setText("PONG HIGHSCORES\n\n" + pongHighscoreString);
-//		}
-//		leaderboardRoot.add(pongHighscoreLabel, 8, 4, 9, 8);
+		// String pongHighscoreString = "";
+		// pongHighscoreLabel.setId("highscoreLabel");
+		// pongHighscoreLabel.setPrefSize(400.0, 200.00);
+		// pongHighscoreLabel.setPadding(new Insets(0.0, 5.0, 0.0, 10.0));
+		// for (int i = 0; i < 10; i++) {
+		// pongHighscoreString += i + 1 + " Andreas " + "1000\n\n";
+		// pongHighscoreLabel.setText("PONG HIGHSCORES\n\n" + pongHighscoreString);
+		// }
+		// leaderboardRoot.add(pongHighscoreLabel, 8, 4, 9, 8);
 
-		String snakeHighscoreString = "";
 		snakeHighscoreLabel.setId("highscoreLabel");
 		snakeHighscoreLabel.setPrefSize(300.0, 400.00);
 		snakeHighscoreLabel.setPadding(new Insets(0.0, 5.0, 0.0, 10.0));
-		for (int i = 0; i < 10; i++) {
-			snakeHighscoreString += i + 1 + " Masse		" + "900\n\n";
-			snakeHighscoreLabel.setText("SNAKE HIGHSCORES\n\n" + snakeHighscoreString);
-		}
-		//snakeHighscoreLabel.setMinWidth(Region.USE_PREF_SIZE);
+
+		// snakeHighscoreLabel.setMinWidth(Region.USE_PREF_SIZE);
 		snakeHighscoreLabel.setTextAlignment(TextAlignment.LEFT);
+		snakeHighscoreLabel.setText("SNAKE HIGHSCORES: ");
 		leaderboardRoot.add(snakeHighscoreLabel, 20, 4, 14, 16);
 
-		String spaceHighscoreString = "";
 		spaceHighscoreLabel.setId("highscoreLabel");
 		spaceHighscoreLabel.setPrefSize(300.0, 400.00);
 		spaceHighscoreLabel.setPadding(new Insets(0.0, 5.0, 0.0, 10.0));
-		for (int i = 0; i < 10; i++) {
-			spaceHighscoreString += i + 1 + " Viktor 	" + "1000\n\n";
-			spaceHighscoreLabel.setText("SPACE INVADERS HIGHSCORES\n\n" + spaceHighscoreString);
-		}
-		//spaceHighscoreLabel.setMinWidth(Region.USE_PREF_SIZE);
+
+		// spaceHighscoreLabel.setMinWidth(Region.USE_PREF_SIZE);
 		spaceHighscoreLabel.setTextAlignment(TextAlignment.LEFT);
+		spaceHighscoreLabel.setText("SPACE HIGHSCORES");
 		leaderboardRoot.add(spaceHighscoreLabel, 4, 4, 14, 16);
 
-//		String globalHighscoreString = "";
-//		globalHighscoreLabel.setId("highscoreLabel");
-//		globalHighscoreLabel.setPrefSize(400.0, 200.00);
-//		globalHighscoreLabel.setPadding(new Insets(0.0, 5.0, 0.0, 10.0));
-//		for (int i = 0; i < 10; i++) {
-//			globalHighscoreString += i + 1 + " Gulcin			" + "900\n\n";
-//			globalHighscoreLabel.setText("GLOBAL HIGHSCORES\n\n" + globalHighscoreString);
-//		}
-//		leaderboardRoot.add(globalHighscoreLabel, 20, 13, 9, 8);
+		// String globalHighscoreString = "";
+		// globalHighscoreLabel.setId("highscoreLabel");
+		// globalHighscoreLabel.setPrefSize(400.0, 200.00);
+		// globalHighscoreLabel.setPadding(new Insets(0.0, 5.0, 0.0, 10.0));
+		// for (int i = 0; i < 10; i++) {
+		// globalHighscoreString += i + 1 + " Gulcin " + "900\n\n";
+		// globalHighscoreLabel.setText("GLOBAL HIGHSCORES\n\n" +
+		// globalHighscoreString);
+		// }
+		// leaderboardRoot.add(globalHighscoreLabel, 20, 13, 9, 8);
 
+	}
+
+	public void updateHighscores(HighscoreList highscores) {
+		if (highscores.size() > 0) {
+		if (highscores.get(0).getGame().equals("Snake")) {
+			String snakeHighscoreString = "";
+			for (int i = 0; i < highscores.size(); i++) {
+				snakeHighscoreString += i + 1 + " " + highscores.get(i).getUser().getUsername() + " "
+						+ highscores.get(i).getScore() + "\n";
+				snakeHighscoreLabel.setText("SNAKE HIGHSCORES\n\n" + snakeHighscoreString);
+			}
+		} else {
+			String spaceHighscoreString = "";
+			for (int i = 0; i < highscores.size(); i++) {
+				spaceHighscoreString += i + 1 + " " + highscores.get(i).getUser().getUsername() + " "
+						+ highscores.get(i).getScore() + "\n";
+				spaceHighscoreLabel.setText("SPACE INVADERS HIGHSCORES\n\n" + spaceHighscoreString);
+			}
+		}
+		}
 	}
 
 	// Sets the sound buttons images.
