@@ -2,14 +2,13 @@ package spaceInvaders.Effects;
 
 import spaceInvaders.units.Position;
 
-public class ShotCollision extends Thread{
+public class ShotCollision implements Runnable{
     private Position position;
     private boolean enemyHitHappened;
 
     public ShotCollision(Position position){
         this.position = position;
         enemyHitHappened = true;
-        start();
     }
 
     public Position getPosition(){
@@ -22,7 +21,7 @@ public class ShotCollision extends Thread{
 
     public void run() {
         try {
-            this.sleep(300);
+            Thread.sleep(300);
             enemyHitHappened = false;
         } catch (InterruptedException e) {
             e.printStackTrace();

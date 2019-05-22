@@ -9,6 +9,8 @@ import spaceInvaders.units.*;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 
 /**
@@ -35,7 +37,7 @@ public class Controller implements Runnable {
     private Painter painter;
 
     private Player player;
-
+    private Executor executor;
     private JukeBox jukeBox;
     private ArrayList<Level> levelList = new ArrayList<>();
 
@@ -46,6 +48,7 @@ public class Controller implements Runnable {
         this.canvas = canvas;
         this.painter = painter;
          player = new Player(this, painter);
+        executor = Executors.newFixedThreadPool(15);
         allUnits.add(player);
         createLevelList();
         initializeLevel(levelList.get(levelCounter));
@@ -108,7 +111,7 @@ public class Controller implements Runnable {
         }else {
             return;
         }
-        shot.start();
+        executor.execute(shot);
         shots.add(shot);
         allUnits.add(shot);
     }

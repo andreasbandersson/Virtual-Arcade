@@ -51,9 +51,6 @@ public class Shot extends Unit implements Runnable {
         controller.removeUnit(this);
     }
 
-    public void start(){
-        new Thread(this).start();
-    }
 
     public void remoteKill(){
         flying = false;
