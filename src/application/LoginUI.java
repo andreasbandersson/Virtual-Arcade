@@ -62,7 +62,6 @@ public class LoginUI extends Application {
 		loginRoot.setId("loginRoot");
 
 		createColumnsandRows();
-		setSoundButtonImages();
 
 		jukebox = new JukeBox("sounds/Login-Sound-1.mp3");
 		jukebox.play();
@@ -122,6 +121,8 @@ public class LoginUI extends Application {
 		loginRoot.add(soundButton, 42, 2);
 
 		addActionListeners(primaryStage);
+		setSoundButtonImages();
+		checkSound();
 
 		// Sets the scene, adds all children nodes and sets the css-style.
 		scene = new Scene(loginRoot, 700, 400);
@@ -173,6 +174,14 @@ public class LoginUI extends Application {
 		}
 		playSoundImageView = new ImageView(playSoundImage);
 		muteSoundImageView = new ImageView(muteSoundImage);
+	}
+	
+	public void checkSound() {
+		if (jukebox.isMute()) {
+			soundButton.setGraphic(muteSoundImageView);
+		} else {
+			soundButton.setGraphic(playSoundImageView);
+		}
 	}
 
 	// Mans

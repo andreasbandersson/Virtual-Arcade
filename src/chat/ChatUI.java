@@ -59,8 +59,8 @@ public class ChatUI extends Pane {
 		newMessage.setPrefSize(300, 50);
 		
 		//Andreas
-		sendBtn.setId("buttons");
-		switchBtn.setId("buttons");
+		sendBtn.setId("sendButton");
+		switchBtn.setId("checkButton");
 
 		scroll = new ScrollPane(messages);
 		scroll.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);

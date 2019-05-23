@@ -1,8 +1,12 @@
 package pong2;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -24,6 +28,7 @@ public class Game extends AnimationTimer {
 	private boolean paused = false;
 	private boolean gameOver = false;
 	private boolean started = false;
+	private Image pongBg;
 
 	public Game() {
 		init();
@@ -33,10 +38,15 @@ public class Game extends AnimationTimer {
 	public Canvas getCanvas() {
 		return this.canvas;
 	}
-
+	
 	private void init() {
 		canvas = new Canvas(Pong.WIDTH, Pong.HEIGHT);
 		canvas.setId("Pong");
+		try {
+			pongBg = new Image(new FileInputStream("images/pongGridBg.png"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 		gc = canvas.getGraphicsContext2D();
 		ball = new Ball();
 		player = new Paddle(10, 5);
@@ -85,8 +95,9 @@ public class Game extends AnimationTimer {
 	// Anropar draw-metoder
 	private void draw() {
 		gc.clearRect(0, 0, 600, 400);
-		gc.setFill(Color.BLACK);
-		gc.fill();
+//		gc.setFill(Color.BLACK);
+//		gc.fill();
+		gc.drawImage(pongBg, 0, 0);
 		drawBall();
 		drawPaddles();
 		drawScoreBoard();

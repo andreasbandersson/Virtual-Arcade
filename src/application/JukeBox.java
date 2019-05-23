@@ -3,6 +3,8 @@ package application;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 
 import javafx.scene.media.Media;
@@ -28,18 +30,19 @@ public class JukeBox {
 	private static String song5 = "sounds/Lobby-Sound-5.mp3";
 	private static String song6 = "sounds/Lobby-Sound-6.mp3";
 	private static String song7 = "sounds/Lobby-Sound-7.mp3";
-	private static String intro = "sounds/Welcome-Sound.wav";
+	private static String intro = "sounds/Welcome-Sound.mp3";
 
 	
 	public JukeBox() {
-		songList.add(intro);
-		songList.add(song3);
-		songList.add(song2);
 		songList.add(song1);
+		songList.add(song2);
+		songList.add(song3);
 		songList.add(song4);
 		songList.add(song5);
 		songList.add(song6);
 		songList.add(song7);
+		Collections.shuffle(songList);
+		songList.add(0, intro);
 		itr = songList.iterator();
 	}
 
@@ -72,7 +75,6 @@ public class JukeBox {
 		mediaPlayer.play();
 		mediaPlayer.setVolume(0.1);
 		mediaPlayer.setOnEndOfMedia(new Runnable() {
-			
 			@Override
 			public void run() {
 				mediaPlayer.stop();
@@ -95,8 +97,9 @@ public class JukeBox {
 			public void run() {
 				mediaPlayer.stop();
 				if(itr.hasNext()) {
-					mediaPlayer.play();
+					play();
 				}
+				return;
 			}
 		});
 	}

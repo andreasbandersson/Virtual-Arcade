@@ -136,7 +136,7 @@ public class Painter extends AnimationTimer {
         // root.getChildren().add(backgroundLayer);
 
         createColumnsandRows();
-        setSoundButtonImages();
+       
         setSpaceInvadersArcadeMachineImage();
 
         root.setId("SpaceInvaders");
@@ -148,10 +148,11 @@ public class Painter extends AnimationTimer {
         // Adding an setting the button for mute and un-mute of login music
         soundButton = new Button();
         soundButton.setId("logOutButton");
-        soundButton.setGraphic(playSoundImageView);
         spaceInvadersRoot.add(soundButton, 32, 1);
-
         spaceInvadersRoot.setPrefSize(1200.0, 600.0);
+        
+        setSoundButtonImages();
+        checkSound();
 
         backButton.setFocusTraversable(false);
         soundButton.setFocusTraversable(false);
@@ -325,6 +326,15 @@ public class Painter extends AnimationTimer {
         playSoundImageView = new ImageView(playSoundImage);
         muteSoundImageView = new ImageView(muteSoundImage);
     }
+    
+    //Checks if sound is muted or playing and sets image accordingly.
+	public void checkSound() {
+		if (jukebox.isMute()) {
+			soundButton.setGraphic(muteSoundImageView);
+		} else {
+			soundButton.setGraphic(playSoundImageView);
+		}
+	}
 
     //Sets and adds the arcade machine image for the SpaceInvaders game.
     public void setSpaceInvadersArcadeMachineImage() {
@@ -425,9 +435,9 @@ public class Painter extends AnimationTimer {
         soundButton.setOnAction(e -> {
             jukebox.muteUnmute();
             if (jukebox.isMute()) {
-                soundButton.setGraphic(playSoundImageView);
-            } else {
                 soundButton.setGraphic(muteSoundImageView);
+            } else {
+                soundButton.setGraphic(playSoundImageView);
             }
         });
 
