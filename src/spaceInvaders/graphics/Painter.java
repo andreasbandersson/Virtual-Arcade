@@ -369,7 +369,7 @@ public class Painter extends AnimationTimer {
                         player.shoot();
                         break;
                     case P:
-                        if (controller.getGamePaused())
+                        if (controller.getGamePaused() && !gameEnded)
                         {
                             root.getChildren().remove(pauseLabel);
                         }
