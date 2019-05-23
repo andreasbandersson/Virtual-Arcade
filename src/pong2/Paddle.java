@@ -47,12 +47,11 @@ public class Paddle {
 
 	public void moveUp() {
 
-		if (this.yPos > 30) {
+		if (this.yPos > 0) {
 			this.yPos -= this.dy + acceleration;
       return;
 		}
-    
-	  this.yPos = 30;
+
 		
 	}
 
