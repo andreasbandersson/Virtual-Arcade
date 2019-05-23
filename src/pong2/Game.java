@@ -2,8 +2,10 @@ package pong2;
 
 
 
+import application.JukeBox2;
 import chat.ChatController;
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
@@ -11,7 +13,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-public class Game extends AnimationTimer {
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
+public class Game extends AnimationTimer implements Runnable {
 	private Canvas canvas;
 	private Paddle player;
 	private Paddle computer;
@@ -28,6 +33,8 @@ public class Game extends AnimationTimer {
 	private boolean gameOver = false;
 	private boolean started = false;
 	private boolean firstGame = true;
+	private JukeBox2 jukeBox2 = new JukeBox2();
+	private Executor executor = Executors.newFixedThreadPool(2);
 	private ChatController controller;
 
 	// private Image pongBg;
@@ -312,6 +319,8 @@ public class Game extends AnimationTimer {
 		}
 	}
 
+
+
 	// Kollar om bollen kolliderar med racket eller vägg
 	private void checkCollision() {
 
@@ -328,11 +337,24 @@ public class Game extends AnimationTimer {
 			}
 			ball.reset();
 		} else if (ball.getXpos() >= Pong.WIDTH) {
-			playerScore += 50;
+			executor.execute(this);
 			// scored = true;
 			ball.reset();
 		}
-		playerScoreStr = "Score: " + Integer.toString(playerScore);
+	}
+
+	public void run() {
+		for (int i = 0; i < 25; i++) {
+			playerScore += 2;
+			jukeBox2.playMP3(JukeBox2.POINTSBLIP);
+			playerScoreStr = "Score: " + Integer.toString(playerScore);
+			try {
+				Thread.sleep(20);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 	// public void endGame() {

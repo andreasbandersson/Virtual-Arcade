@@ -27,6 +27,7 @@ public class Ball {
 		ypos += dy + acceleration;
 	}
 	public void setAcceleration(int acceleration){
+		if (acceleration < 2)
 		this.acceleration = acceleration;
 	}
 
