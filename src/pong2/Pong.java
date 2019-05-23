@@ -22,7 +22,7 @@ import javafx.scene.paint.Color;
 
 /**
  * 
- * @author Andreas och Måns
+ * @author Andreas och Mï¿½ns
  *
  */
 
@@ -58,7 +58,7 @@ public class Pong {
 	}
 
 	private void init() {
-		game = new Game();
+		game = new Game(controller);
 		createColumnsandRows();
 		setPongArcadeMachineImage();
 		
