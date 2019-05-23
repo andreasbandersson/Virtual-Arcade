@@ -5,6 +5,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
@@ -18,12 +19,13 @@ public class Game extends AnimationTimer {
 	private Boolean moveCompUp = false;
 	private Boolean moveCompDown = false;
 	private GraphicsContext gc;
-	private String playerScoreStr = "SCORE: ";
-	private int playerScore = 0;
+	private String playerScoreStr = "SCORE: ", computerScoreStr = "SCORE: ";
+	private int playerScore = 0, computerScore = 0;
 	private long timeSinceLastUpdate = 0;
 	private boolean paused = false;
 	private boolean gameOver = false;
 	private boolean started = false;
+	private boolean firstGame = true;
 
 	public Game() {
 		init();
@@ -39,9 +41,10 @@ public class Game extends AnimationTimer {
 		canvas.setId("Pong");
 		gc = canvas.getGraphicsContext2D();
 		ball = new Ball();
-		player = new Paddle(10, 5);
-		computer = new Paddle(Pong.WIDTH - 20, 2.9);
-		addActionListeners();
+		player = new Paddle(30, 5);
+		computer = new Paddle(Pong.WIDTH - 30, 2.9);
+		addActionListeners();		
+		
 	}
 
 	public void handle(long now) {
@@ -72,24 +75,45 @@ public class Game extends AnimationTimer {
 	}
 	
 	private void drawStart() {
+		
+		if(firstGame) {
+			clearBackground();
+			drawInstructions();
+			return;
+		}
+		
 		draw();
 		Text temp = new Text("GAME OVER");
 		temp.setFont(Font.font(20));
 		gc.setFont(Font.font(20));
-		gc.fillText("Control Padle with A + D", Pong.WIDTH / 2 - (temp.getLayoutBounds().getWidth() / 2), Pong.HEIGHT / 2);
-		gc.fillText("PRESS [SPACE] TO START", Pong.WIDTH / 2 - (temp.getLayoutBounds().getWidth() / 2),
-				(Pong.HEIGHT / 2) + 50);
+		//gc.fillText("Control Padle with A + D", Pong.WIDTH / 2 - (temp.getLayoutBounds().getWidth() / 2), Pong.HEIGHT / 2);
+		//gc.fillText("PRESS [SPACE] TO START", Pong.WIDTH / 2 - (temp.getLayoutBounds().getWidth() / 2),
+				//(Pong.HEIGHT / 2) + 50);
 		
 	}
 
 	// Anropar draw-metoder
 	private void draw() {
-		gc.clearRect(0, 0, 600, 400);
-		gc.setFill(Color.BLACK);
-		gc.fill();
+		clearBackground();
+
+		gc.setLineWidth(2);
+		gc.setLineDashes(10);
+		gc.strokeLine(Pong.WIDTH/2, 0, Pong.WIDTH/2, Pong.HEIGHT);
+		gc.setLineDashes(0);
+
+		
+		//gc.fill();
 		drawBall();
 		drawPaddles();
 		drawScoreBoard();
+	}
+	
+	private void clearBackground() {
+		gc.setFill(Color.DARKGREEN);
+		gc.fillRect(0, 0, 600, 400);
+		gc.setStroke(Color.WHITE);
+        gc.setLineWidth(5);
+		gc.strokeRect(0, 0, 600, 400);
 	}
 
 	private void drawBall() {
@@ -103,21 +127,64 @@ public class Game extends AnimationTimer {
 		gc.fillRect(computer.getXpos(), computer.getYpos(), computer.getWidth(), computer.getHeight());
 	}
 
+	private void drawInstructions() {
+		clearBackground();		
+		
+		Text temp = new Text("Instructions");
+
+		gc.setFill(Color.WHITE);
+
+		gc.setFont(new Font(40));
+		gc.fillText("Instructions", temp.getLayoutBounds().getWidth(), 50);
+		
+		gc.setFont(new Font(30));
+		
+		int centerY = (int) (Pong.HEIGHT/3 + gc.getFont().getSize());
+		gc.fillText("Press [SPACE] to Start Game", temp.getLayoutBounds().getWidth(), centerY);
+		centerY += gc.getFont().getSize();
+		
+		gc.fillText("Press [R] to Reset", temp.getLayoutBounds().getWidth(), centerY);
+		centerY += gc.getFont().getSize();
+
+		gc.fillText("Press [P] to Pause", temp.getLayoutBounds().getWidth(), centerY);
+		centerY += gc.getFont().getSize();
+
+		gc.fillText("Use 'W' and 'S' to move the paddle", temp.getLayoutBounds().getWidth(), centerY);
+
+		
+	}
+	
 	private void drawScoreBoard() {
 		Text temp = new Text(playerScoreStr);
 		temp.setFont(Font.font(20));
 		gc.setFont(Font.font(20));
 		gc.setFill(Color.WHITE);
-		gc.fillText(playerScoreStr, (Pong.WIDTH / 2) - temp.getLayoutBounds().getWidth() / 2, 20);
+		gc.fillText(playerScoreStr, 100, 25);
+		
+		
+		Text computerScore = new Text(computerScoreStr);
+		computerScore.setFont(Font.font(20));
+		gc.setFont(Font.font(20));
+		gc.setFill(Color.WHITE);
+		gc.fillText(computerScoreStr, (Pong.WIDTH - 200), 25);
+		
+
 	}
 
 	private void drawGameOver() {
-		Text temp = new Text("GAME OVER - SCORE    ");
-		temp.setFont(Font.font(20));
-		gc.setFont(Font.font(20));
-		gc.fillText("GAME OVER - SCORE: " + playerScore, Pong.WIDTH / 2 - (temp.getLayoutBounds().getWidth() / 2), Pong.HEIGHT / 2);
-		gc.fillText("PRESS [R] TO RESTART", Pong.WIDTH / 2 - (temp.getLayoutBounds().getWidth() / 2),
-				(Pong.HEIGHT / 2) + 50);
+		clearBackground();
+
+	
+		int centerY = Pong.HEIGHT/2;
+		
+		gc.setFont(Font.font(50));
+		gc.setFill(Color.WHITE);
+		gc.fillText("Game Over :(", Pong.WIDTH/4, centerY);
+		
+		gc.setFont(Font.font(40));
+		gc.fillText("Your Score is: "+Integer.toString(playerScore), Pong.WIDTH/4, centerY+60);
+		
+		
 	}
 
 	private void drawPaused() {
@@ -125,15 +192,15 @@ public class Game extends AnimationTimer {
 		temp.setFont(Font.font(20));
 		gc.setFont(Font.font(20));
 		gc.fillText("GAME PAUSED", Pong.WIDTH / 2 - (temp.getLayoutBounds().getWidth() / 2), Pong.HEIGHT / 2);
-		gc.fillText("PRESS [P] TO UNPAUSE", Pong.WIDTH / 2 - (temp.getLayoutBounds().getWidth() / 2),
-				(Pong.HEIGHT / 2) + 50);
+		//gc.fillText("PRESS [P] TO UNPAUSE", Pong.WIDTH / 2 - (temp.getLayoutBounds().getWidth() / 2),
+			//	(Pong.HEIGHT / 2) + 50);
 	}
 
 	public void addActionListeners() {
 		canvas.setOnKeyPressed(e -> {
-			if (e.getCode() == KeyCode.A) {
+			if (e.getCode() == KeyCode.S) {
 				movePlayerDown = true;
-			} else if (e.getCode() == KeyCode.D) {
+			} else if (e.getCode() == KeyCode.W) {
 				movePlayerUp = true;
 			} else if (e.getCode() == KeyCode.P && gameOver == false) {
 				if (paused) {
@@ -148,16 +215,29 @@ public class Game extends AnimationTimer {
 				ball.reset();
 				this.start();
 				gameOver = false;
+				
+				if(firstGame)
+					firstGame = false;
+				
 			} else if (e.getCode() == KeyCode.SPACE && !started) {
+				if(firstGame)
+					firstGame = false;
+				
+				if(gameOver == true) {					
+					ball.reset();
+					gameOver = false;
+				}
 				this.start();
+			} else if(e.getCode() == KeyCode.I && (!started || gameOver)) {
+				drawInstructions();
 			}
 			e.consume();
 		});
 
 		canvas.setOnKeyReleased(e -> {
-			if (e.getCode() == KeyCode.A) {
+			if (e.getCode() == KeyCode.S) {
 				movePlayerDown = false;
-			} else if (e.getCode() == KeyCode.D) {
+			} else if (e.getCode() == KeyCode.W) {
 				movePlayerUp = false;
 			}
 		});
@@ -203,19 +283,37 @@ public class Game extends AnimationTimer {
 		} else if (ball.getYpos() <= 0 || ball.getYpos() + ball.getRadius() >= Pong.HEIGHT) {
 			ball.bounceWall();
 		} else if (ball.getXpos() <= 0) {
-			if (gameOver == false) {
-				this.stop();
-				player.reset(10);
-				computer.reset(Pong.WIDTH - 20);
-				drawGameOver();
-				playerScore = 0;
-				gameOver = true;
+			
+			computerScore += 50;
+			
+//			if (gameOver == false) {
+			if(computerScore >= 150) {
+				endGame();
 			}
+			
+			ball.reset();
+			
 		} else if (ball.getXpos() >= Pong.WIDTH) {
 			playerScore += 50;
+			
+			if(playerScore >= 150) {
+				endGame();
+			}
+			
 			ball.reset();
 		}
-		playerScoreStr = "PLAYER: " + Integer.toString(playerScore);
+		playerScoreStr = "Player: " + Integer.toString(playerScore);
+		computerScoreStr = "Computer: " + Integer.toString(computerScore);
+	}
+	
+	public void endGame() {
+		this.stop();
+		player.reset(10);
+		computer.reset(Pong.WIDTH - 20);
+		drawGameOver();
+		playerScore = 0;
+		computerScore = 0;
+		gameOver = true;
 	}
 
 }

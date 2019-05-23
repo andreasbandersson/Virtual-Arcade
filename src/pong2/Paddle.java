@@ -12,7 +12,7 @@ public class Paddle {
 	
 	public Paddle(int xPos, double dy) {
 		this.dy = dy;
-		this.height = 40;
+		this.height = 60;
 		this.width = 10;
 		this.xPos = xPos;
 		this.yPos = (Pong.HEIGHT / 2) - height / 2;
@@ -36,13 +36,17 @@ public class Paddle {
 	
 	public void moveUp() {
 		if (this.yPos > 0) {
-		this.yPos -= this.dy;
+			this.yPos -= this.dy;
+		} else {
+			this.yPos = 0;
 		}
 	}
 	
 	public void moveDown() {
 		if (this.yPos < Pong.HEIGHT - this.height) {
-		this.yPos += this.dy;
+			this.yPos += this.dy;
+		} else {
+			this.yPos = Pong.HEIGHT - this.height;
 		}
 	}
 	
