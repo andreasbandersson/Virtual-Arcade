@@ -24,13 +24,22 @@ public class JukeBox {
 	private static String song1 = "sounds/Lobby-Sound-1.mp3";
 	private static String song2 = "sounds/Lobby-Sound-2.mp3";
 	private static String song3 = "sounds/Lobby-Sound-3.mp3";
-	private static String intro = "sounds/Welcome-Sound.mp3";
+	private static String song4 = "sounds/Lobby-Sound-4.mp3";
+	private static String song5 = "sounds/Lobby-Sound-5.mp3";
+	private static String song6 = "sounds/Lobby-Sound-6.mp3";
+	private static String song7 = "sounds/Lobby-Sound-7.mp3";
+	private static String intro = "sounds/Welcome-Sound.wav";
+
 	
 	public JukeBox() {
 		songList.add(intro);
-		songList.add(song2);
 		songList.add(song3);
+		songList.add(song2);
 		songList.add(song1);
+		songList.add(song4);
+		songList.add(song5);
+		songList.add(song6);
+		songList.add(song7);
 		itr = songList.iterator();
 	}
 

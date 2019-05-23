@@ -1,5 +1,7 @@
 package pong2;
 
+import java.util.Random;
+
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -18,17 +20,19 @@ public class Game extends AnimationTimer {
 	private Boolean moveCompUp = false;
 	private Boolean moveCompDown = false;
 	private GraphicsContext gc;
-	private String playerScoreStr = "PLAYER: ";
-	private String computerScoreStr = "COMPUTER: ";
+	private String playerScoreStr = "SCORE: ";
 	private int playerScore = 0;
-	private int computerScore = 0;
 	private long timeSinceLastUpdate = 0;
-	private Boolean paused = false;
+	private boolean paused = false;
+	private boolean gameOver = false;
+	private boolean started = false;
+	private boolean scored = false;
+	private int count = 0;
+	private Random rand = new Random();
 
 	public Game() {
 		init();
-		start();
-
+		drawStart();
 	}
 
 	public Canvas getCanvas() {
@@ -40,18 +44,26 @@ public class Game extends AnimationTimer {
 		canvas.setId("Pong");
 		gc = canvas.getGraphicsContext2D();
 		ball = new Ball();
-		player = new Paddle(10);
-		computer = new Paddle(Pong.WIDTH - 20);
+		player = new Paddle(10, 5, 40);
+		computer = new Paddle(Pong.WIDTH - 20, 2.9, 40);
 		addActionListeners();
 	}
 
 	public void handle(long now) {
 		if (now - timeSinceLastUpdate >= 8000000) {
+			draw();
 			ball.move();
 			moveComputer();
 			checkPaddles();
 			checkCollision();
-			draw();
+			if (scored && count < 20) {
+				drawScore();
+				count++;
+				if (count == 20) {
+					count = 0;
+					scored = false;
+				}
+			}
 			timeSinceLastUpdate = now;
 		}
 	}
@@ -70,6 +82,18 @@ public class Game extends AnimationTimer {
 			moveCompDown = false;
 			computer.moveDown();
 		}
+	}
+	
+	
+	private void drawStart() {
+		draw();
+		Text temp = new Text("GAME OVER");
+		temp.setFont(Font.font(20));
+		gc.setFont(Font.font(20));
+		gc.fillText("Control Padle with UP ARROW KEY & DOWN ARROW KEY", Pong.WIDTH / 10 - (temp.getLayoutBounds().getWidth() / 10), Pong.HEIGHT / 2);
+		gc.fillText("PRESS [SPACE] TO START", Pong.WIDTH / 2.6 - (temp.getLayoutBounds().getWidth() / 2.6),
+				(Pong.HEIGHT / 2) + 50);
+		
 	}
 
 	// Anropar draw-metoder
@@ -94,26 +118,48 @@ public class Game extends AnimationTimer {
 	}
 
 	private void drawScoreBoard() {
-		gc.setFont(Font.font(12));
+		Text temp = new Text(playerScoreStr);
+		temp.setFont(Font.font(20));
+		gc.setFont(Font.font(20));
 		gc.setFill(Color.WHITE);
-		gc.fillText(playerScoreStr, (Pong.WIDTH / 2) - 100, 20);
-		gc.fillText(computerScoreStr, (Pong.WIDTH / 2) + 50, 20);
+		gc.fillText(playerScoreStr, (Pong.WIDTH / 2) - temp.getLayoutBounds().getWidth() / 2, 20);
 	}
-	
+
+	private void drawGameOver() {
+		Text temp = new Text("GAME OVER - SCORE    ");
+		temp.setFont(Font.font(20));
+		gc.setFont(Font.font(20));
+		gc.fillText("GAME OVER - SCORE: " + playerScore, (Pong.WIDTH / 2) - (temp.getLayoutBounds().getWidth() / 2), Pong.HEIGHT / 2);
+		temp.setText("PRESS [R] TO RESTART");
+		gc.fillText("PRESS [R] TO RESTART", (Pong.WIDTH / 2) - (temp.getLayoutBounds().getWidth() / 2),
+				(Pong.HEIGHT / 2) + 50);
+	}
+
 	private void drawPaused() {
 		Text temp = new Text("GAME PAUSED");
 		temp.setFont(Font.font(20));
 		gc.setFont(Font.font(20));
-		gc.fillText("GAME PAUSED", Pong.WIDTH / 2 - temp.getLayoutBounds().getWidth() / 2, Pong.HEIGHT / 2);
+		gc.fillText("GAME PAUSED", (Pong.WIDTH / 2) - (temp.getLayoutBounds().getWidth() / 2), Pong.HEIGHT / 2);
+		temp.setText("PRESS [P] TO UNPAUSE");
+		gc.fillText("PRESS [P] TO UNPAUSE", (Pong.WIDTH / 2) - (temp.getLayoutBounds().getWidth() / 2),
+				(Pong.HEIGHT / 2) + 50);
+	}
+	
+	private void drawScore() {
+		Text temp = new Text("SCORE!!");
+		temp.setFont(Font.font(20));
+		gc.setFont(Font.font(20));
+		gc.setFill(Color.FIREBRICK);
+		gc.fillText("SCORE!!", (Pong.WIDTH / 2) - (temp.getLayoutBounds().getWidth() / 2), 50);
 	}
 
-	public void addActionListeners() {
+	private void addActionListeners() {
 		canvas.setOnKeyPressed(e -> {
-			if (e.getCode() == KeyCode.A) {
+			if (e.getCode() == KeyCode.DOWN) {
 				movePlayerDown = true;
-			} else if (e.getCode() == KeyCode.D) {
+			} else if (e.getCode() == KeyCode.UP) {
 				movePlayerUp = true;
-			} else if (e.getCode() == KeyCode.P) {
+			} else if (e.getCode() == KeyCode.P && gameOver == false) {
 				if (paused) {
 					this.start();
 					paused = false;
@@ -122,19 +168,42 @@ public class Game extends AnimationTimer {
 					paused = true;
 					drawPaused();
 				}
+			} else if (e.getCode() == KeyCode.R && gameOver == true) {
+				ball.reset();
+				this.start();
+				gameOver = false;
+			} else if (e.getCode() == KeyCode.SPACE && !started) {
+				this.start();
+				started = true;
 			}
+			e.consume();
 		});
 
 		canvas.setOnKeyReleased(e -> {
-			if (e.getCode() == KeyCode.A) {
+			if (e.getCode() == KeyCode.DOWN) {
 				movePlayerDown = false;
-			} else if (e.getCode() == KeyCode.D) {
+			} else if (e.getCode() == KeyCode.UP) {
 				movePlayerUp = false;
 			}
 		});
 	}
 	
 	
+	public void setPaused() {
+		if (!paused && !gameOver) {
+		this.stop();
+		paused = true;
+		drawPaused();
+		} else if (gameOver) {
+			ball.reset();
+			drawStart();
+			started = false;
+			gameOver = false;
+		}
+	}
+	
+	
+
 	// Datorn rör sig mot bollen
 	private void moveComputer() {
 		if (ball.getDx() > 0) {
@@ -157,18 +226,23 @@ public class Game extends AnimationTimer {
 		if ((ball.getRect().intersects(player.getRect()) && ball.getDx() < 0)
 				|| (ball.getRect().intersects(computer.getRect()) && ball.getDx() > 0)) {
 			ball.changeDirection();
-		} else if (ball.getYpos() <= 0 || ball.getYpos() + ball.getRadius() >= Pong.HEIGHT) {
+		} else if (ball.getYpos() <= 0 && ball.getDy() < 0 || ball.getYpos() + ball.getRadius() >= Pong.HEIGHT) {
 			ball.bounceWall();
 		} else if (ball.getXpos() <= 0) {
-			computerScore++;
-			ball.reset();
+			if (gameOver == false) {
+				this.stop();
+				player.reset(10);
+				computer.reset(Pong.WIDTH - 20);
+				drawGameOver();
+				playerScore = 0;
+				gameOver = true;
+			}
 		} else if (ball.getXpos() >= Pong.WIDTH) {
-			playerScore++;
-			ball.reset();
+			playerScore += 50;
+			ball.changeDirection();
+			scored = true;
 		}
-
-		playerScoreStr = "PLAYER: " + Integer.toString(playerScore);
-		computerScoreStr = "COMPUTER: " + Integer.toString(computerScore);
+		playerScoreStr = "SCORE: " + Integer.toString(playerScore);
 	}
 
 }

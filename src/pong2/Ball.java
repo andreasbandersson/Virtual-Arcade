@@ -12,8 +12,8 @@ public class Ball {
 	private int height;
 	
 	public Ball() {
-		dx = 4;
-		dy = 2;
+		dx = 6;
+		dy = 3;
 		width = 10;
 		height = 10;
 		radius = 5;
@@ -58,10 +58,14 @@ public class Ball {
 		return this.dx;
 	}
 	
+	public int getDy() {
+		return this.dy;
+	}
+	
 	public void reset() {
-		this.xpos = Pong.WIDTH / 2;
+		this.xpos = Pong.WIDTH - 100;
 		this.ypos = Pong.HEIGHT / 2;
-		this.dx = -4;
+		this.dx = -6;
 	}
 	
 	public Rectangle getRect() {

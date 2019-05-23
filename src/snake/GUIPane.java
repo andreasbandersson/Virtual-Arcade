@@ -487,6 +487,7 @@ public class GUIPane implements Runnable{
 					drawShapes(gc);
 				}
 			}
+			e.consume();
 		});
 	}
 

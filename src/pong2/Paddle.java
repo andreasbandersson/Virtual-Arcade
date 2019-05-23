@@ -8,11 +8,11 @@ public class Paddle {
 	private int width;
 	private int xPos;
 	private int yPos;
-	private int dy;
+	private double dy;
 	
-	public Paddle(int xPos) {
-		this.dy = 5;
-		this.height = 40;
+	public Paddle(int xPos, double dy, int height) {
+		this.dy = dy;
+		this.height = height;
 		this.width = 10;
 		this.xPos = xPos;
 		this.yPos = (Pong.HEIGHT / 2) - height / 2;
@@ -44,6 +44,11 @@ public class Paddle {
 		if (this.yPos < Pong.HEIGHT - this.height) {
 		this.yPos += this.dy;
 		}
+	}
+	
+	public void reset(int xpos) {
+		this.xPos = xPos;
+		this.yPos = (Pong.HEIGHT / 2) - height / 2;
 	}
 	
 	public Rectangle getRect() {
