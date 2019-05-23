@@ -30,10 +30,11 @@
 }
 #highscoreLabel .text{
 	-fx-fill: linear-gradient(#ffffff 0%, #ffff00 40%, #dd6000 70%);
-    -fx-font-size: 1em;
+    -fx-font-size: 1.25em;
     -fx-effect: dropshadow( three-pass-box , rgba(0.0,0.0,0.0,0.90) , 4.0,0.0,0.0,0.90 );
     -fx-font-weight: bold;
     -fx-font-family: 'Press Start 2P';
+    -fx-line-spacing: 0.5em;
 }
 
 #responseLabel .text{
