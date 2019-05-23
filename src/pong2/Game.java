@@ -76,8 +76,8 @@ public class Game extends AnimationTimer {
 		Text temp = new Text("GAME OVER");
 		temp.setFont(Font.font(20));
 		gc.setFont(Font.font(20));
-		gc.fillText("Control Padle with A + D", Pong.WIDTH / 2 - (temp.getLayoutBounds().getWidth() / 2), Pong.HEIGHT / 2);
-		gc.fillText("PRESS [SPACE] TO START", Pong.WIDTH / 2 - (temp.getLayoutBounds().getWidth() / 2),
+		gc.fillText("Control Padle with UP ARROW KEY & DOWN ARROW KEY", Pong.WIDTH / 10 - (temp.getLayoutBounds().getWidth() / 10), Pong.HEIGHT / 2);
+		gc.fillText("PRESS [SPACE] TO START", Pong.WIDTH / 2.6 - (temp.getLayoutBounds().getWidth() / 2.6),
 				(Pong.HEIGHT / 2) + 50);
 		
 	}
@@ -131,9 +131,9 @@ public class Game extends AnimationTimer {
 
 	public void addActionListeners() {
 		canvas.setOnKeyPressed(e -> {
-			if (e.getCode() == KeyCode.A) {
+			if (e.getCode() == KeyCode.DOWN) {
 				movePlayerDown = true;
-			} else if (e.getCode() == KeyCode.D) {
+			} else if (e.getCode() == KeyCode.UP) {
 				movePlayerUp = true;
 			} else if (e.getCode() == KeyCode.P && gameOver == false) {
 				if (paused) {
@@ -155,9 +155,9 @@ public class Game extends AnimationTimer {
 		});
 
 		canvas.setOnKeyReleased(e -> {
-			if (e.getCode() == KeyCode.A) {
+			if (e.getCode() == KeyCode.DOWN) {
 				movePlayerDown = false;
-			} else if (e.getCode() == KeyCode.D) {
+			} else if (e.getCode() == KeyCode.UP) {
 				movePlayerUp = false;
 			}
 		});
