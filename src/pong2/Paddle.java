@@ -35,10 +35,10 @@ public class Paddle {
 	}
 
 	public void moveUp() {
-		if (this.yPos > 0) {
+		if (this.yPos > 30) {
 			this.yPos -= this.dy;
 		} else {
-			this.yPos = 0;
+			this.yPos = 30;
 		}
 	}
 

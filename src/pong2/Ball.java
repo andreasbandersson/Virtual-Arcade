@@ -67,8 +67,8 @@ public class Ball {
 		if(this.dx < 0) {
 			this.dx -= 1;
 			return;
-		} 
-		
+		}
+
 		this.dx += 1;
 	}
 	

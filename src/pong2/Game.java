@@ -177,12 +177,13 @@ public class Game extends AnimationTimer {
 	}
 
 	private void drawScoreBoard() {
-		Text temp = new Text(playerScoreStr);
-		temp.setFont(Font.font(20));
-		gc.setFont(Font.font(20));
-		gc.setFill(Color.WHITE);
-		gc.fillText(playerScoreStr, 100, 25);
+		/*Text temp = new Text(playerScoreStr);
+		temp.setStyle("-fx-font-weight: bold");
 
+		temp.setFont(Font.font(20));*/
+		gc.setFont(Font.font("Verdana", 20));
+		gc.setFill(Color.WHITE);
+		gc.fillText(playerScoreStr, 10, 25);
 		// Text computerScore = new Text(computerScoreStr);
 		// computerScore.setFont(Font.font(20));
 		// gc.setFont(Font.font(20));
@@ -330,7 +331,7 @@ public class Game extends AnimationTimer {
 			// scored = true;
 			ball.reset();
 		}
-		playerScoreStr = "Player: " + Integer.toString(playerScore);
+		playerScoreStr = "Score: " + Integer.toString(playerScore);
 	}
 
 	// public void endGame() {
