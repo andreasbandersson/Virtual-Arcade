@@ -22,13 +22,13 @@ public class ServerController {
 	private ClientStreams clientStreams = new ClientStreams();
 	private RegisteredUsers users;
 	private ChatServer server;
-//	private Highscore[] snakeScore = new Highscore[10];
-//	private Highscore[] spaceScore = new Highscore[10];
-	private HighscoreList snakeScore = new HighscoreList();
-	private HighscoreList spaceScore = new HighscoreList();
+	private HighscoreList snakeScore;
+	private HighscoreList spaceScore;
 
 	public ServerController() {
 		loadUsers();
+		loadHighscores(snakeScore, "snake");
+		loadHighscores(spaceScore, "space");
 	}
 
 	public void addServer(ChatServer server) {
@@ -108,8 +108,12 @@ public class ServerController {
 			server.sendObject(user, oos);
 			server.sendObject("LOGIN OK", oos);
 			sendUserList(user);
+			if (snakeScore != null) {
 			sendHighscoreList(snakeScore.getList());
+			}
+			if (spaceScore != null) {
 			sendHighscoreList(spaceScore.getList());
+			}
 			return true;
 		} else {
 			server.sendObject("Username and/or password is incorrect", oos);
@@ -187,12 +191,14 @@ public class ServerController {
 			if (snakeScore.checkScore(highscore) == true) {
 				snakeScore.add(highscore);
 				newHighscore(highscore, snakeScore.getList());
+				saveHighscores(snakeScore, "snake");
 			}
 		} else {
 			if (spaceScore.checkScore(highscore) == true) {
 				spaceScore.add(highscore);
 				System.out.println("Server: highscore tillagt");
 				newHighscore(highscore, spaceScore.getList());
+				saveHighscores(spaceScore, "space");
 			}
 		}
 	}
@@ -217,6 +223,31 @@ public class ServerController {
 		sendHighscoreList(list);
 	}
 	
-	
+	private void loadHighscores(HighscoreList list, String name) {
+		File highscoreFile = new File("files/" + name + ".dat");
+		if (highscoreFile.exists()) {
+			try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(highscoreFile))) {
+				if (name.equals("space")) {
+				spaceScore = (HighscoreList) ois.readObject();
+				} else if (name.equals("snake")) {
+					snakeScore = (HighscoreList) ois.readObject();
+				}
+			} catch (IOException | ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+		} else if (name.equals("snake")) {
+			snakeScore = new HighscoreList();
+			System.out.println("Initierat highscorelist");
+		} else if (name.equals("space")) {
+			spaceScore = new HighscoreList();
+		}
+	}
 
+	private void saveHighscores(HighscoreList list, String name) {
+		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("files/" + name + ".dat"))) {
+			oos.writeObject(list);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }
