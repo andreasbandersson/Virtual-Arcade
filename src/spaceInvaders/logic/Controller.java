@@ -54,6 +54,12 @@ public class Controller implements Runnable {
         initializeLevel(levelList.get(levelCounter));
     }
 
+    public void restart(){
+        allUnits.add(player);
+        createLevelList();
+        initializeLevel(levelList.get(levelCounter));
+    }
+
     public void createLevelList(){
        levelList = new LevelListBuilder(this).getLevelList();
     }
@@ -99,11 +105,14 @@ public class Controller implements Runnable {
         return score;
     }
 
+    public void setScore(int score){
+        this.score = score;
+    }
+
     public void registerShot(Unit shooter){
         Shot shot;
         if (shooter instanceof Player && !timerActivated) {
             shot = new Shot(new Position(shooter.getPosition().getX()+20,shooter.getPosition().getY()-10),0,true,this);
-            System.out.println(ManagementFactory.getThreadMXBean().getThreadCount() + " threads active");
             timerActivated = true;
             setTimeout( ()-> timerActivated = false,150); //wait 1 second, then say that timerActivated is false
         }else if(shooter instanceof Enemy) {
@@ -221,6 +230,9 @@ public class Controller implements Runnable {
                 e.printStackTrace();
             }
         }
+        if (painter.getGameEnded()){
+            return;
+        }
         levelWin();
     }
 
@@ -275,7 +287,13 @@ public class Controller implements Runnable {
 
     public synchronized void levelWin() {
         levelCounter = (levelCounter+1) % levelList.size();
-        System.out.println("U WIN LEL"); //gg
         initializeLevel(levelList.get(levelCounter));
+    }
+
+    public void clearGameField(){
+        allUnits.clear();
+        bosses.clear();
+        shots.clear();
+        enemies.clear();
     }
 }
