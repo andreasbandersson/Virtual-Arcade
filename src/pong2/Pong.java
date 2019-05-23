@@ -23,7 +23,6 @@ import javafx.scene.paint.Color;
 /**
  * 
  * @author Andreas och Måns
- *
  */
 
 // Integrerar Pong med MainUI -> lägger till chatt osv
@@ -58,7 +57,7 @@ public class Pong {
 	}
 
 	private void init() {
-		game = new Game();
+		game = new Game(controller);
 		createColumnsandRows();
 		setPongArcadeMachineImage();
 		
@@ -80,7 +79,7 @@ public class Pong {
 		soundButton = new Button();
 		setSoundButtonImages();
 		soundButton.setId("logOutButton");
-		soundButton.setGraphic(playSoundImageView);
+		checkSound();
 		root.add(soundButton, 32, 1);
 
 		backButton.setFocusTraversable(false);
@@ -134,6 +133,14 @@ public class Pong {
 		playSoundImageView = new ImageView(playSoundImage);
 		muteSoundImageView = new ImageView(muteSoundImage);
 	}
+	
+	public void checkSound() {
+		if (jukebox.isMute()) {
+			soundButton.setGraphic(muteSoundImageView);
+		} else {
+			soundButton.setGraphic(playSoundImageView);
+		}
+	}
 
 	// Sets and adds the arcade machine image for the SpaceInvaders game.
 	public void setPongArcadeMachineImage() {
@@ -157,9 +164,9 @@ public class Pong {
 		soundButton.setOnAction(e -> {
 			jukebox.muteUnmute();
 			if (jukebox.isMute()) {
-				soundButton.setGraphic(playSoundImageView);
-			} else {
 				soundButton.setGraphic(muteSoundImageView);
+			} else {
+				soundButton.setGraphic(playSoundImageView);
 			}
 		});
 	}

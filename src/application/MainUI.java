@@ -67,6 +67,7 @@ public class MainUI extends Application {
 		this.chatUI = chatUI;
 		this.controller = controller;
 		jukebox = new JukeBox();
+		jukebox.play();
 		this.leaderboard = new Leaderboard(this, this.chatUI, this.jukebox);
 		controller.addLeaderboard(leaderboard);
 	}
@@ -78,12 +79,9 @@ public class MainUI extends Application {
 		mainRoot = new GridPane();
 		mainRoot.setId("mainRoot");
 		mainRoot.setPrefSize(1200.0, 600.0);
-
+		
 		setColumnsandRows();
 		setArcadeMachineImage();
-		setSoundButtonImages();
-
-		jukebox.play();
 
 		// Adding and setting the Label for Virtual Arcade-header
 		Label virtualArcadeLabel = new Label("VIRTUAL");
@@ -122,7 +120,6 @@ public class MainUI extends Application {
 		// Adding an setting the button for mute and un-mute of login music
 		soundButton = new Button();
 		soundButton.setId("logOutButton");
-		soundButton.setGraphic(playSoundImageView);
 		mainRoot.add(soundButton, 32, 1);
 
 		// Adding and setting the "Play"-buttons for the different arcade games
@@ -147,7 +144,8 @@ public class MainUI extends Application {
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
-
+		setSoundButtonImages();
+		checkSound();
 		addActionListeners(primaryStage);
 
 		leaderboardButton.setFocusTraversable(false);
@@ -226,14 +224,25 @@ public class MainUI extends Application {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+		
 		playSoundImageView = new ImageView(playSoundImage);
 		muteSoundImageView = new ImageView(muteSoundImage);
+
+	}
+	
+	public void checkSound() {
+		if (jukebox.isMute()) {
+			soundButton.setGraphic(muteSoundImageView);
+		} else {
+			soundButton.setGraphic(playSoundImageView);
+		}
 	}
 
 	public void switchToMainUI() {
 		mainRoot.add(chatUI, 36, 0, 12, 24);
 		primaryStage.setScene(scene);
 		primaryStage.show();
+		checkSound();
 	}
 
 	public void terminate() {
@@ -253,6 +262,7 @@ public class MainUI extends Application {
 			mainRoot.getChildren().remove(chatUI);
 			primaryStage.setScene(leaderboard.getScene());
 			primaryStage.show();
+			leaderboard.checkSound();
 		});
 
 		logOutButton.setOnAction(e -> {
@@ -280,6 +290,7 @@ public class MainUI extends Application {
 			mainRoot.getChildren().remove(chatUI);
 			primaryStage.setScene(pong.getScene());
 			primaryStage.show();
+			pong.checkSound();
 		});
 
 		// Skriv om. Instansiera Space Invaders och l�gg in i mainRoot som pane bara
@@ -290,6 +301,7 @@ public class MainUI extends Application {
 			mainRoot.getChildren().remove(chatUI);
 			primaryStage.setScene(spaceInvaders.getScene());
 			primaryStage.show();
+			spaceInvaders.checkSound();
 		});
 
 		// Skriv om. Instansiera Snake och l�gg in i mainRoot som pane bara
@@ -300,6 +312,7 @@ public class MainUI extends Application {
 			mainRoot.getChildren().remove(chatUI);
 			primaryStage.setScene(snake.getScene());
 			primaryStage.show();
+			snake.checkSound();
 		});
 	}
 }
