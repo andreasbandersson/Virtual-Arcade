@@ -128,6 +128,7 @@ public class Pong {
 
 	private void addActionListeners() {
 		backButton.setOnAction(e -> {
+			game.setPaused();
 			root.getChildren().remove(chatUI);
 			mainUI.switchToMainUI();
 		});
