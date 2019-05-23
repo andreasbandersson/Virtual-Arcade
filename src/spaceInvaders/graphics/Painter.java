@@ -45,7 +45,7 @@ import java.util.concurrent.Executors;
  * @author Viktor Altintas
  */
 
-public class Painter extends AnimationTimer {
+public class Painter extends AnimationTimer implements Runnable{
 
     private Controller controller;
     private Player player;
@@ -206,7 +206,19 @@ public class Painter extends AnimationTimer {
                 root.getChildren().add(endLabel);
             }
         });
+    }
 
+    public void run(){
+        for (Explosion e : new ArrayList<>(explosions)){
+            if (!e.exploding()){
+                explosions.remove(e);
+            }
+        }
+        for (ShotCollision e : new ArrayList<>(shotCollisions)){
+            if (!e.enemyHitHappening()){
+                shotCollisions.remove(e);
+            }
+        }
     }
 
     @Override
@@ -232,17 +244,17 @@ public class Painter extends AnimationTimer {
                 gc.drawImage(playerLifeSprite, 440 + ((i + 1) * 39), 10);
             }
 
-            checkDeadObjects();
+           checkDeadObjects();
 
-            if (explosions.stream().anyMatch(Explosion::exploding)) {
+           // if (explosions.stream().anyMatch(Explosion::exploding)) {
                 for (Explosion e : new ArrayList<>(explosions)) {
                     gc.drawImage(explosion, e.getPosition().getX(), e.getPosition().getY());
-                }
+             //   }
             }
-            if (shotCollisions.stream().anyMatch(ShotCollision::enemyHitHappening)) {
+            //if (shotCollisions.stream().anyMatch(ShotCollision::enemyHitHappening)) {
                 for (ShotCollision e : new ArrayList<>(shotCollisions)) {
                     gc.drawImage(shotCollision, e.getPosition().getX(), e.getPosition().getY() - 10);
-                }
+              //  }
             }
         }
         else {
@@ -288,16 +300,8 @@ public class Painter extends AnimationTimer {
      //         root.getChildren().remove(e);
      //     }
      // }
-        for (Explosion e : new ArrayList<>(explosions)){
-            if (!e.exploding()){
-                explosions.remove(e);
-            }
-        }
-        for (ShotCollision e : new ArrayList<>(shotCollisions)){
-            if (!e.enemyHitHappening()){
-                shotCollisions.remove(e);
-            }
-        }
+        executor.execute(this);
+
     }
 
     private void createColumnsandRows() {
@@ -364,7 +368,7 @@ public class Painter extends AnimationTimer {
                         break;
 
                     case SPACE:
-                        if (controller.getGamePaused())
+                        if (controller.getGamePaused() || controller.getLevelLoading())
                             break;
                         player.shoot();
                         break;

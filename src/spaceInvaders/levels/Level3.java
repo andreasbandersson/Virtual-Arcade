@@ -10,7 +10,7 @@ public class Level3 extends Level {
 
     private static final List<List<Enemy>> enemyBlock = new ArrayList<>();
     static {
-        for (int i  = 0 ; i < 4; i ++) {
+        for (int i  = 0 ; i < 2; i ++) {
             enemyBlock.add(new ArrayList<>());
             for (int j = 0; j < 8; j++ ) {
                 if ( i % 2 == 1)

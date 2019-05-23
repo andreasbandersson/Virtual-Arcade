@@ -10,13 +10,13 @@ public class Level4  extends Level {
 
     private static final List<List<Enemy>> enemyBlock = new ArrayList<>();
     static {
-        for (int i  = 0 ; i < 4; i ++) {
+        for (int i  = 0 ; i < 2; i ++) {
             enemyBlock.add(new ArrayList<>());
             for (int j = 0; j < 8; j++ ) {
                 if (j < 4)
-                    enemyBlock.get(i).add(new Level3Enemy(new Position((200+ j*50),35+(i*30)),null,Difficulty.EASY));
+                    enemyBlock.get(i).add(new Level3Enemy(new Position((200+ j*50),35+(i*30)),null,Difficulty.HARD));
                 else {
-                    enemyBlock.get(i).add(new Level4Enemy(new Position((200+ j*50),35+(i*30)),null,Difficulty.EASY));
+                    enemyBlock.get(i).add(new Level4Enemy(new Position((200+ j*50),35+(i*30)),null,Difficulty.HARD));
 
                 }
             }

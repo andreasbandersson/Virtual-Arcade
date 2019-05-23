@@ -14,9 +14,9 @@ public class Level5  extends Level {
             enemyBlock.add(new ArrayList<>());
             for (int j = 0; j < 8; j++ ) {
                 if (j % 2 == 1)
-                    enemyBlock.get(i).add(new Level3Enemy(new Position((200+ j*50),35+(i*30)),null,Difficulty.EASY));
+                    enemyBlock.get(i).add(new Level3Enemy(new Position((200+ j*50),35+(i*30)),null,Difficulty.MEDIUM));
                 else {
-                    enemyBlock.get(i).add(new Level4Enemy(new Position((200+ j*50),35+(i*30)),null,Difficulty.EASY));
+                    enemyBlock.get(i).add(new Level4Enemy(new Position((200+ j*50),35+(i*30)),null,Difficulty.MEDIUM));
 
                 }
             }

@@ -6,21 +6,17 @@ import spaceInvaders.units.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Level2 extends Level {
+public class Boss2  extends Level {
 
     private static final List<List<Enemy>> enemyBlock = new ArrayList<>();
     static {
-        for (int i  = 0 ; i < 4; i ++) {
-            enemyBlock.add(new ArrayList<>());
-            for (int j = 0; j < 4; j++ ) {
-                    enemyBlock.get(i).add(new Level3Enemy(new Position((200+ j*50),35+(i*30)),null,Difficulty.MEDIUM));
 
+        enemyBlock.add(new ArrayList<>());
+        enemyBlock.get(0).add(new Level2Boss(new Position((200),100),null,Difficulty.HARD));
 
-            }
-        }
     }
 
-    public Level2(Difficulty difficulty, Controller controller) {
+    public Boss2(Difficulty difficulty, Controller controller) {
         super(difficulty, enemyBlock, controller);
     }
 
@@ -28,4 +24,5 @@ public class Level2 extends Level {
     public List<Boss> getBosses() {
         return new ArrayList<>();
     }
+
 }

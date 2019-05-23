@@ -12,6 +12,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import application.JukeBox;
+import application.JukeBox2;
 import application.MainUI;
 import chat.ChatController;
 import chat.ChatUI;
@@ -29,9 +30,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import snake.BodyPart;
-import snake.Food;
-import snake.Obstacle;
 
 /**
  * Class that draws the GUI and contains the logic for the game. 
@@ -96,7 +94,8 @@ public class GUIPane implements Runnable{
 
 	private MainUI mainUI;
 	private ChatUI chatUI;
-	private JukeBox jukebox;
+	private JukeBox2 jukeBox2 = new JukeBox2();
+	private JukeBox jukeBox;
 	private Button backButton = new Button("BACK");
 	private Button soundButton = new Button();
 	private GraphicsContext gc;
@@ -129,10 +128,10 @@ public class GUIPane implements Runnable{
 		}
 	}
 
-	public GUIPane(MainUI mainUI, ChatUI chatUI, JukeBox jukebox, ChatController controller) {
+	public GUIPane(MainUI mainUI, ChatUI chatUI, JukeBox jukeBox, ChatController controller) {
 		this.mainUI = mainUI;
 		this.chatUI = chatUI;
-		this.jukebox = jukebox;
+		this.jukeBox = jukeBox;
 		this.controller = controller;
 
 		init();
@@ -304,8 +303,7 @@ public class GUIPane implements Runnable{
 						if (i != listSnake.size() - 1) {
 							gameOver();
 							gameAnimationTimer.stop();
-							jukebox = new JukeBox("sounds/Hit2.wav");
-							jukebox.playWithCustomVol(0.4);
+							jukeBox2.playMP3(JukeBox2.SNAKEHIT2);
 							drawShapes(gc);
 						}	
 					}
@@ -314,8 +312,7 @@ public class GUIPane implements Runnable{
 				if(snakeX > 570 || snakeX < 15 || snakeY >= 380 || snakeY < 45) {
 					gameOver();
 					gameAnimationTimer.stop();
-					jukebox = new JukeBox("sounds/Hit2.wav");
-					jukebox.playWithCustomVol(0.4);
+					jukeBox2.playMP3(JukeBox2.SNAKEHIT2);
 					drawShapes(gc);
 				}
 				// Collision for the snake eating the food.
@@ -324,8 +321,6 @@ public class GUIPane implements Runnable{
 						listFood.remove(i);
 						snakeSize++;
 						activateThreadPool();
-						jukebox = new JukeBox("sounds/Beep1.mp3");
-						jukebox.playWithCustomVol(0.4);
 						i++;
 					}
 				}
@@ -367,8 +362,7 @@ public class GUIPane implements Runnable{
 					if(snakeX == listObstacle.get(i).getObstacleX() && snakeY == listObstacle.get(i).getObstacleY()) {
 						listObstacle.remove(i);
 						score = score - 50;
-						jukebox = new JukeBox("sounds/Hit1.wav");
-						jukebox.playWithCustomVol(0.4);
+						jukeBox2.playMP3(JukeBox2.SNAKEHIT);
 						i++;
 
 						if(score < 0) {
@@ -400,8 +394,8 @@ public class GUIPane implements Runnable{
 		});
 		// Pressing the soundButton will mute or unmute the game sound. 
 		soundButton.setOnAction(e -> {
-			jukebox.muteUnmute();
-			if (jukebox.isMute()) {
+			jukeBox.muteUnmute();
+			if (jukeBox.isMute()) {
 				soundButton.setGraphic(playSoundImageView);
 			} else {
 				soundButton.setGraphic(muteSoundImageView);
@@ -495,8 +489,7 @@ public class GUIPane implements Runnable{
 
 		for (int i = 0; i < 10; i++) {
 			score++;
-			jukebox = new JukeBox("sounds/Beep1.mp3");
-			jukebox.playWithCustomVol(0.4);
+			jukeBox2.playMP3(JukeBox2.POINTSBLIP);
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException e) {
@@ -538,6 +531,7 @@ public class GUIPane implements Runnable{
 	 */
 	private void gameOver() {
 		gameState = GAME_OVER_STATE;
+		jukeBox2.playMP3(JukeBox2.GAMEOVER);
 		controller.newHighscore("Snake", this.score);
 		
 	}

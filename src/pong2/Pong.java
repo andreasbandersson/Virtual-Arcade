@@ -22,7 +22,7 @@ import javafx.scene.paint.Color;
 
 /**
  * 
- * @author Andreas och Måns
+ * @author Andreas och MÃ¥ns
  *
  */
 

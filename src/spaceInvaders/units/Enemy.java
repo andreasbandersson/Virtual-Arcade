@@ -2,6 +2,7 @@ package spaceInvaders.units;
 
 
 import application.JukeBox;
+import application.JukeBox2;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import spaceInvaders.levels.Difficulty;
@@ -20,7 +21,7 @@ public abstract class Enemy extends Unit {
     private Image sprite1;
     private Image sprite2;
     private int animationCounter = 0;
-    JukeBox jukebox;
+    private JukeBox2 jukebox = new JukeBox2();
 
     public Enemy(int life, Position position, Image image1,Image image2, int width, int height, Controller controller, int points, Difficulty difficulty) {
         super(life, position, image1, width, height, controller);
@@ -34,8 +35,7 @@ public abstract class Enemy extends Unit {
         life--;
         if (life != 0) {
             controller.remotePainterAccess(new Position(shotThatHitYouPosition));
-            jukebox = new JukeBox("sounds/enemyHit.mp3");
-            jukebox.playWithCustomVol(0.2);
+           jukebox.playMP3(JukeBox2.ENEMYHIT);
         }
         else
             die();
