@@ -13,14 +13,9 @@ import java.util.concurrent.Executors;
 
 import application.JukeBox;
 import application.MainUI;
+import chat.ChatController;
 import chat.ChatUI;
 import javafx.animation.AnimationTimer;
-import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -28,26 +23,12 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.RowConstraints;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
-import javafx.stage.Stage;
 import snake.BodyPart;
 import snake.Food;
 import snake.Obstacle;
@@ -128,15 +109,14 @@ public class GUIPane implements Runnable{
 	private ImageView snakeView;
 	private ImageView muteSoundImageView;
 	private ImageView playSoundImageView;
-	private int startCounter = 0;
 
 	private static Image snakeCharacterImage;
 	private static Image foodImage;
 	private static Image obstacleImage;
 	private Executor executor = Executors.newFixedThreadPool(2);
 
-	//private JukeBox jb;
-
+	private ChatController controller;
+	
 	static {
 		try {
 			snakeCharacterImage = new Image(new FileInputStream("images/SnakePieceV8.png"));
@@ -149,10 +129,11 @@ public class GUIPane implements Runnable{
 		}
 	}
 
-	public GUIPane(MainUI mainUI, ChatUI chatUI, JukeBox jukebox) {
+	public GUIPane(MainUI mainUI, ChatUI chatUI, JukeBox jukebox, ChatController controller) {
 		this.mainUI = mainUI;
 		this.chatUI = chatUI;
 		this.jukebox = jukebox;
+		this.controller = controller;
 
 		init();
 	}
@@ -412,6 +393,10 @@ public class GUIPane implements Runnable{
 			snakePane.getChildren().remove(chatUI);
 			gameAnimationTimer.stop();
 			mainUI.switchToMainUI();
+			if (gameState == GAME_OVER_STATE) {
+			gameState = MENU_STATE;
+			drawShapes(gc);
+			}
 		});
 		// Pressing the soundButton will mute or unmute the game sound. 
 		soundButton.setOnAction(e -> {
@@ -552,6 +537,8 @@ public class GUIPane implements Runnable{
 	 */
 	private void gameOver() {
 		gameState = GAME_OVER_STATE;
+		controller.newHighscore("Snake", this.score);
+		
 	}
 
 	/**

@@ -4,6 +4,8 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import chat.User;
+
 /**
  * Stores the ObjectOutputStreams for all connected users.
  * @author Mans

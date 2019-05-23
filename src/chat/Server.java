@@ -7,16 +7,20 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.LinkedList;
 
+import chat.Highscore;
+import chat.Message;
+import chat.User;
+
 /**
  * Handles all communication with the chat- and login systems client.
  * @author Mans
  *
  */
 
-public class ChatServer {
+public class Server {
 	private ServerController controller;
 
-	public ChatServer(int chatPort, ServerController controller) {
+	public Server(int chatPort, ServerController controller) {
 		this.controller = controller;
 		controller.addServer(this);
 		new ConnectionListener(chatPort).start();
