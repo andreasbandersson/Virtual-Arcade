@@ -11,6 +11,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 
+import chat.Highscore;
+import chat.Message;
+import chat.User;
+import chat.UserList;
+
 /**
  * Handles the logic of the chat/login systems server side
  * 
@@ -21,7 +26,7 @@ import java.util.LinkedList;
 public class ServerController {
 	private ClientStreams clientStreams = new ClientStreams();
 	private RegisteredUsers users;
-	private ChatServer server;
+	private Server server;
 	private HighscoreList snakeScore;
 	private HighscoreList spaceScore;
 
@@ -31,7 +36,7 @@ public class ServerController {
 		loadHighscores(spaceScore, "space");
 	}
 
-	public void addServer(ChatServer server) {
+	public void addServer(Server server) {
 		this.server = server;
 	}
 
@@ -84,7 +89,6 @@ public class ServerController {
 				server.sendObject("User already logged in", oos);
 				return false;
 			} else {
-				System.out.println("Kollar lösenord");
 				return checkPassword(user, password, oos);
 			}
 		} else {
@@ -109,10 +113,10 @@ public class ServerController {
 			server.sendObject("LOGIN OK", oos);
 			sendUserList(user);
 			if (snakeScore != null) {
-			sendHighscoreList(snakeScore.getList());
+				sendHighscoreList(snakeScore.getList());
 			}
 			if (spaceScore != null) {
-			sendHighscoreList(spaceScore.getList());
+				sendHighscoreList(spaceScore.getList());
 			}
 			return true;
 		} else {
@@ -143,6 +147,12 @@ public class ServerController {
 			server.sendObject("USER CREATED", oos);
 			sendUserList(user);
 			saveUsers();
+			if (snakeScore != null) {
+				sendHighscoreList(snakeScore.getList());
+			}
+			if (spaceScore != null) {
+				sendHighscoreList(spaceScore.getList());
+			}
 			return true;
 		}
 	}
@@ -186,7 +196,6 @@ public class ServerController {
 	// TODO: Check/save highscores
 
 	public void checkHighscore(Highscore highscore) {
-		System.out.println("Server: new highscore");
 		if (highscore.getGame().equals("Snake")) {
 			if (snakeScore.checkScore(highscore) == true) {
 				snakeScore.add(highscore);
@@ -202,33 +211,27 @@ public class ServerController {
 			}
 		}
 	}
-	
 
 	private void sendHighscoreList(LinkedList<Highscore> list) {
 		UserList temp = new UserList(clientStreams.getKeySet());
-		
-		if (list.size() > 0) {
-		System.out.println("SendHighscoreList: " + list.get(0).getScore());
-		}
 		for (int i = 0; i < temp.size(); i++) {
 			server.sendHighscore(list, clientStreams.getOutputStream(temp.get(i)));
 		}
-		System.out.println("Server: Lista skickad");
 	}
-	
+
 	private void newHighscore(Highscore highscore, LinkedList<Highscore> list) {
-		String str = highscore.getUser().getUsername() + " made it onto the " + highscore.getGame() + " Leaderboard with "
-				+ highscore.getScore() + " points!";
+		String str = highscore.getUser().getUsername() + " made it onto the " + highscore.getGame()
+				+ " Leaderboard with " + highscore.getScore() + " points!";
 		newMessage(new Message(str));
 		sendHighscoreList(list);
 	}
-	
+
 	private void loadHighscores(HighscoreList list, String name) {
 		File highscoreFile = new File("files/" + name + ".dat");
 		if (highscoreFile.exists()) {
 			try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(highscoreFile))) {
 				if (name.equals("space")) {
-				spaceScore = (HighscoreList) ois.readObject();
+					spaceScore = (HighscoreList) ois.readObject();
 				} else if (name.equals("snake")) {
 					snakeScore = (HighscoreList) ois.readObject();
 				}
@@ -237,7 +240,6 @@ public class ServerController {
 			}
 		} else if (name.equals("snake")) {
 			snakeScore = new HighscoreList();
-			System.out.println("Initierat highscorelist");
 		} else if (name.equals("space")) {
 			spaceScore = new HighscoreList();
 		}

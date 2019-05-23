@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedList;
 
+import chat.Highscore;
+
 public class HighscoreList implements Serializable {
 	private int maxSize = 10;
 	private LinkedList<Highscore> list = new LinkedList<Highscore>();
@@ -11,7 +13,6 @@ public class HighscoreList implements Serializable {
 	public synchronized void add(Highscore highscore) {
 		if (list.size() < maxSize) {
 			list.add(highscore);
-			System.out.println("Highscore: highscore added" + list.getLast().getScore() + " " + list.size());
 			sort();
 		} else if (list.size() >= maxSize && highscore.getScore() > list.getLast().getScore())  {
 			list.removeLast();

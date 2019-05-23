@@ -8,23 +8,19 @@ import java.util.LinkedList;
 
 import chat.ChatUI;
 import chat.Highscore;
-import chat.HighscoreList;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
-import javafx.geometry.HPos;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.util.Duration;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.TextAlignment;
@@ -47,10 +43,9 @@ public class Leaderboard {
 	private GridPane leaderboardRoot;
 	private ChatUI chatUI;
 	private JukeBox jukebox;
-	private Label pongHighscoreLabel = new Label();
 	private Label snakeHighscoreLabel = new Label();
 	private Label spaceHighscoreLabel = new Label();
-	private Label globalHighscoreLabel = new Label();
+	private Pane pane = new Pane();
 
 	private final int numOfCols = 48;
 	private final int numOfRows = 24;
@@ -66,7 +61,6 @@ public class Leaderboard {
 		leaderboardRoot = new GridPane();
 		leaderboardRoot.setId("leaderboardRoot");
 		leaderboardRoot.setPrefSize(1200.0, 600.0); // minus chattens bredd (300)
-		// leaderboardRoot.setGridLinesVisible(true);
 
 		// Setting amount of columns and rows for the GridPane
 		createColumnsandRows();
@@ -97,8 +91,6 @@ public class Leaderboard {
 
 		backButton.setFocusTraversable(false);
 		soundButton.setFocusTraversable(false);
-
-		System.out.println(System.getProperty("os.name").toString());
 
 		scene = new Scene(leaderboardRoot, 1200, 600);
 		try {
@@ -161,19 +153,31 @@ public class Leaderboard {
 		snakeHighscoreLabel.setTextAlignment(TextAlignment.LEFT);
 		snakeHighscoreLabel.setMinHeight(400);
 		snakeHighscoreLabel.setText("SNAKE");
-		leaderboardRoot.add(snakeHighscoreLabel, 20, 4, 10, 16);
 		snakeHighscoreLabel.setMinWidth(Region.USE_PREF_SIZE);
 		snakeHighscoreLabel.setMinHeight(Region.USE_PREF_SIZE);
+		snakeHighscoreLabel.setContentDisplay(ContentDisplay.CENTER);
+		snakeHighscoreLabel.setLayoutX(0);
+		snakeHighscoreLabel.setLayoutY(0);
+		snakeHighscoreLabel.setAlignment(Pos.TOP_CENTER);
+		pane.getChildren().add(snakeHighscoreLabel);
+		//leaderboardRoot.add(snakeHighscoreLabel, 20, 4, 10, 16);
+
 
 		spaceHighscoreLabel.setId("highscoreLabel");
 		spaceHighscoreLabel.setPrefSize(300.0, 400.00);
-
+		
+		spaceHighscoreLabel.setAlignment(Pos.TOP_CENTER);
 		spaceHighscoreLabel.setTextAlignment(TextAlignment.LEFT);
 		spaceHighscoreLabel.setText("SPACE INVADERS");
 		spaceHighscoreLabel.setMinHeight(400);
 		spaceHighscoreLabel.setMinWidth(Region.USE_PREF_SIZE);
 		spaceHighscoreLabel.setMinHeight(Region.USE_PREF_SIZE);
-		leaderboardRoot.add(spaceHighscoreLabel, 6, 4, 10, 16);
+		spaceHighscoreLabel.setLayoutX(350);
+		spaceHighscoreLabel.setLayoutY(0);
+		spaceHighscoreLabel.setContentDisplay(ContentDisplay.CENTER);
+		pane.getChildren().add(spaceHighscoreLabel);
+		pane.setId("highscoreLabel");
+		leaderboardRoot.add(pane, 4, 6);
 	}
 
 	public void updateHighscores(LinkedList<Highscore> highscores) {
@@ -185,7 +189,7 @@ public class Leaderboard {
 					snakeHighscoreString += i + 1 + " " + highscores.get(i).getUser().getUsername() + " "
 							+ highscores.get(i).getScore() + "\n";
 					} else {
-						snakeHighscoreString += i + 1 + " " + highscores.get(i).getUser().getUsername() + " "
+						snakeHighscoreString += i + 1 + "  " + highscores.get(i).getUser().getUsername() + " "
 								+ highscores.get(i).getScore() + "\n";
 					}
 				}

@@ -54,6 +54,10 @@ public class ChatController {
 			}
 		});
 	}
+	
+	public void disconnect() {
+		client.disconnect();
+	}
 
 	/**
 	 * Called when a user tries to login
@@ -155,12 +159,7 @@ public class ChatController {
 		}
 	}
 
-	// TODO
 	private void updateHighscores(LinkedList<Highscore> list) {
-		System.out.println("Controller: uppdaterar highscorelista");
-		for (int i = 0; i < list.size(); i++) {
-			System.out.println(list.get(i).getScore());
-		}
 		Platform.runLater(new Runnable() {
 			public void run() {
 				leaderboard.updateHighscores(list);
@@ -169,7 +168,6 @@ public class ChatController {
 	}
 
 	public void newHighscore(String game, int score) {
-		System.out.println("Controller: new highscore");
 		client.sendHighscore(new Highscore(this.user, game, score));
 	}
 
