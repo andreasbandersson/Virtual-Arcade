@@ -1,4 +1,4 @@
-package server;
+package chat;
 
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
