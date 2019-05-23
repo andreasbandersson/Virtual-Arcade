@@ -26,7 +26,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.TextAlignment;
 
 /**
- * @author Andreas Andersson
+ * @author Andreas Andersson / Måns Grundberg
  */
 
 public class Leaderboard {
@@ -125,22 +125,12 @@ public class Leaderboard {
 		leaderboardRoot.add(chatUI, 36, 0, 12, 24);
 	}
 
-	// public void updateHighscoreLabels(Highscore[] snakeList) {
-	// String snake = "";
-	// int count = 1;
-	// for (int i = snakeList.length; i > 0; i--) {
-	// snake += count + " " + snakeList[i].getUser().getUsername() + " " +
-	// snakeList[i].getScore();
-	// count++;
-	// }
-	// }
-
 	private void addHighscoreLabels() {
 		pongHighscoreLabel.setId("highscoreLabel");
-		pongHighscoreLabel.setPrefSize(300.0, 400.00);
+		pongHighscoreLabel.setPrefSize(300.0, 350.00);
 
 		snakeHighscoreLabel.setId("highscoreLabel");
-		snakeHighscoreLabel.setPrefSize(300.0, 400.00);
+		snakeHighscoreLabel.setPrefSize(300.0, 350.00);
 
 		pongHighscoreLabel.setTextAlignment(TextAlignment.LEFT);
 		pongHighscoreLabel.setMinHeight(400);
@@ -165,7 +155,7 @@ public class Leaderboard {
 		pane.getChildren().add(snakeHighscoreLabel);
 
 		spaceHighscoreLabel.setId("highscoreLabel");
-		spaceHighscoreLabel.setPrefSize(300.0, 400.00);
+		spaceHighscoreLabel.setPrefSize(300.0, 350.00);
 
 		spaceHighscoreLabel.setAlignment(Pos.TOP_CENTER);
 		spaceHighscoreLabel.setTextAlignment(TextAlignment.LEFT);
@@ -246,7 +236,6 @@ public class Leaderboard {
 
 	// Function for adding and setting Action Listeners to all Buttons.
 	private void addActionListeners() {
-
 		backButton.setOnAction(e -> {
 			leaderboardRoot.getChildren().remove(chatUI);
 			mainMenu.switchToMainUI();
