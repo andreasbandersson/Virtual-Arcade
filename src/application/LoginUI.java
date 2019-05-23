@@ -107,6 +107,7 @@ public class LoginUI extends Application {
 		// Adding and setting the button for the login
 		loginButton = new Button(" LOGIN ");
 		loginButton.setId("loginButton");
+		loginButton.setDefaultButton(true);
 		loginRoot.add(loginButton, 16, 20, 9, 1);
 
 		// Adding and setting the button for creating a new user
