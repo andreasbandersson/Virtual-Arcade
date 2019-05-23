@@ -53,7 +53,7 @@ public class Game extends AnimationTimer {
 		gc = canvas.getGraphicsContext2D();
 		ball = new Ball();
 		player = new Paddle(10, 5, 60);
-		computer = new Paddle(Pong.WIDTH - 20, 2.9, 60);
+		computer = new Paddle(Pong.WIDTH - 20, 3, 60);
 		addActionListeners();
 	}
 

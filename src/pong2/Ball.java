@@ -10,7 +10,7 @@ public class Ball {
 	private int dy; // Bollens vertikala färdriktning
 	private int width;
 	private int height;
-	
+
 	public Ball() {
 		dx = 6;
 		dy = 3;
@@ -20,66 +20,66 @@ public class Ball {
 		xpos = Pong.WIDTH / 2;
 		ypos = Pong.HEIGHT / 2;
 	}
-	
+
 	public void move() {
 		xpos += dx;
 		ypos += dy;
 	}
-	
+
 	public int getWidht() {
 		return this.width;
 	}
-	
+
 	public int getHeight() {
 		return this.height;
 	}
-	
+
 	public int getXpos() {
 		return this.xpos;
 	}
-	
+
 	public int getYpos() {
 		return this.ypos;
 	}
-	
+
 	public int getRadius() {
 		return this.radius;
 	}
-	
+
 	public void bounceWall() {
 		this.dy = -this.dy;
 	}
-	
+
 	public void changeDirection() {
 		this.dx = -this.dx;
 		increaseSpeed();
 	}
-	
-	public int getDx( ) {
+
+	public int getDx() {
 		return this.dx;
 	}
-	
+
 	public int getDy() {
 		return this.dy;
 	}
-	
-	public void increaseSpeed() {
-		if(this.dx < 0) {
-			this.dx -= 1;
-			return;
-		}
 
-		this.dx += 1;
+	public void increaseSpeed() {
+		if (this.dx < 0) {
+			this.dx -= 1;
+
+		} else {
+			this.dx++;
+		}
 	}
-	
+
 	public void reset() {
 		this.xpos = Pong.WIDTH - 100;
 		this.ypos = Pong.HEIGHT / 2;
 		this.dx = -6;
 	}
-	
+
 	public Rectangle getRect() {
-		return new Rectangle (xpos, ypos, width, height);
+		return new Rectangle(xpos, ypos, width, height);
 	}
 
 }
