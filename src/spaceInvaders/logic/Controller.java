@@ -1,6 +1,7 @@
 package spaceInvaders.logic;
 
 import application.JukeBox;
+import application.JukeBox2;
 import javafx.scene.canvas.Canvas;
 import spaceInvaders.graphics.Painter;
 import spaceInvaders.levels.*;
@@ -24,8 +25,10 @@ public class Controller implements Runnable {
 
     private Canvas canvas;
     private int score = 0;
-    private int levelCounter = 0;
+    private int levelCounter = 1;
+    private  int levelCounter2 = 0;
     private boolean gamePaused = false;
+    private boolean levelLoading = false;
 
     private List<Unit> allUnits = new ArrayList<>(); //used in collision
 
@@ -38,7 +41,7 @@ public class Controller implements Runnable {
 
     private Player player;
     private Executor executor;
-    private JukeBox jukeBox;
+    private JukeBox2 jukeBox2 = new JukeBox2();
     private ArrayList<Level> levelList = new ArrayList<>();
 
 
@@ -47,21 +50,22 @@ public class Controller implements Runnable {
     public Controller( Canvas canvas, Painter painter) {
         this.canvas = canvas;
         this.painter = painter;
-         player = new Player(this, painter);
+        player = new Player(this, painter);
         executor = Executors.newFixedThreadPool(15);
         allUnits.add(player);
         createLevelList();
-        initializeLevel(levelList.get(levelCounter));
+        initializeLevel(levelList.get(levelCounter2));
     }
 
     public void restart(){
         allUnits.add(player);
-        createLevelList();
-        initializeLevel(levelList.get(levelCounter));
+        levelCounter = 1;
+        levelCounter2 = 0;
+        initializeLevel(levelList.get(levelCounter2));
     }
 
     public void createLevelList(){
-       levelList = new LevelListBuilder(this).getLevelList();
+        levelList = new LevelListBuilder(this).getLevelList();
     }
 
     public boolean getGamePaused() {
@@ -73,23 +77,14 @@ public class Controller implements Runnable {
     }
 
     private void initializeLevel(Level level){
-        jukeBox = new JukeBox("sounds/newLevel.mp3");
-        jukeBox.playWithCustomVol(0.3);
+        jukeBox2.playMP3(JukeBox2.NEWLEVEL);
 
-            bosses = level.getBosses();
-            bosses.forEach(Boss::start);
-            allUnits.addAll(bosses);
-
-
-            enemies = level.getEnemyGrid();
-            enemies.forEach(allUnits::addAll); //calling addAll of allUnits with every row in enemies
-
-        for (Unit unit : allUnits){
-            if (unit instanceof BossOne){
-                new Thread(((BossOne) unit)::run).start();
-            }
-            System.out.println(unit.getClass().getSimpleName()); //testing to see what units were added
-        }
+        bosses = level.getBosses();
+        enemies = level.getEnemyGrid();
+        enemies.forEach(allUnits::addAll); //calling addAll of allUnits with every row in enemies
+        bosses.forEach(Boss::start);
+        allUnits.addAll(bosses);
+        levelLoading = true;
         start();
     }
 
@@ -116,13 +111,18 @@ public class Controller implements Runnable {
             timerActivated = true;
             setTimeout( ()-> timerActivated = false,150); //wait 1 second, then say that timerActivated is false
         }else if(shooter instanceof Enemy) {
-            shot = new EnemyShot(new Position(shooter.getPosition()), ((Enemy) shooter).getDifficulty().ordinal()*2,false,this);
-        }else {
+            shot = new EnemyShot(new Position(shooter.getPosition().getX() + (shooter.getWidth()/2),shooter.getPosition().getY()+shooter.getHeight()), ((Enemy) shooter).getDifficulty().ordinal()*2,false,this);
+        }
+        else {
             return;
         }
         executor.execute(shot);
         shots.add(shot);
         allUnits.add(shot);
+    }
+
+    public boolean getLevelLoading(){
+        return levelLoading;
     }
 
     public synchronized void requestHitboxCheck(){
@@ -159,10 +159,9 @@ public class Controller implements Runnable {
                 if(row.contains(unit)){
                     row.remove(unit);
                     painter.setExplosionData(unit.getPosition());
-                    jukeBox = new JukeBox("sounds/Explosion.mp3");
-                    jukeBox.playWithCustomVol(0.4);
+                    jukeBox2.playMP3(JukeBox2.EXPLOSION);
                     score += ((Enemy) unit).getPoints();
-                   // painter.addNewScoreFloat(((Enemy) unit).getPoints());
+                    // painter.addNewScoreFloat(((Enemy) unit).getPoints());
                     return;
                 }
             }
@@ -172,9 +171,9 @@ public class Controller implements Runnable {
         }
     }
 
-   public void remotePainterAccess(Position position) {
+    public void remotePainterAccess(Position position) {
         painter.setShotCollisionData(position);
-   }
+    }
 
     /**
      * the timeout for players reload
@@ -207,6 +206,12 @@ public class Controller implements Runnable {
 
     @Override
     public void run(){ //moves blocks of enemies
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        levelLoading = false;
         new Thread(this::movementRun).start();
         while (!enemies.stream().allMatch(List::isEmpty)){ //if all objects delivered by the stream match the method isEmpty, statement is true
             // stream = take out the elements one by one
@@ -286,8 +291,9 @@ public class Controller implements Runnable {
     }
 
     public synchronized void levelWin() {
-        levelCounter = (levelCounter+1) % levelList.size();
-        initializeLevel(levelList.get(levelCounter));
+        levelCounter++;
+        levelCounter2 = (levelCounter2+1) % levelList.size();
+        initializeLevel(levelList.get(levelCounter2));
     }
 
     public void clearGameField(){
@@ -295,5 +301,6 @@ public class Controller implements Runnable {
         bosses.clear();
         shots.clear();
         enemies.clear();
+        jukeBox2.playMP3(JukeBox2.GAMEOVER);
     }
 }

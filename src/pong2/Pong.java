@@ -22,8 +22,7 @@ import javafx.scene.paint.Color;
 
 /**
  * 
- * @author Andreas och M�ns
- *
+ * @author Andreas och Måns
  */
 
 // Integrerar Pong med MainUI -> lägger till chatt osv

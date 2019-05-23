@@ -12,6 +12,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import application.JukeBox;
+import application.JukeBox2;
 import application.MainUI;
 import chat.ChatController;
 import chat.ChatUI;
@@ -29,13 +30,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import snake.BodyPart;
-import snake.Food;
-import snake.Obstacle;
 
 /**
  * Class that draws the GUI and contains the logic for the game.
- * 
+ *
  * @author Max Matthiasson
  */
 public class GUIPane implements Runnable {
@@ -99,7 +97,8 @@ public class GUIPane implements Runnable {
 
 	private MainUI mainUI;
 	private ChatUI chatUI;
-	private JukeBox jukebox;
+	private JukeBox2 jukeBox2 = new JukeBox2();
+	private JukeBox jukeBox;
 	private JukeBox jukeboxEffects;
 	private Button backButton = new Button("BACK");
 	private Button soundButton = new Button();
@@ -132,12 +131,11 @@ public class GUIPane implements Runnable {
 		}
 	}
 
-	public GUIPane(MainUI mainUI, ChatUI chatUI, JukeBox jukebox, ChatController controller) {
+	public GUIPane(MainUI mainUI, ChatUI chatUI, JukeBox jukeBox, ChatController controller) {
 		this.mainUI = mainUI;
 		this.chatUI = chatUI;
-		this.jukebox = jukebox;
+		this.jukeBox = jukeBox;
 		this.controller = controller;
-
 		init();
 	}
 
@@ -208,18 +206,18 @@ public class GUIPane implements Runnable {
 					// Switch statement checking what int value is in the queue and changing the
 					// snakes X or Y value accordingly.
 					switch (movementQueue.peek()) {
-					case UP:
-						snakeY = snakeY - 15;
-						break;
-					case DOWN:
-						snakeY = snakeY + 15;
-						break;
-					case LEFT:
-						snakeX = snakeX - 15;
-						break;
-					case RIGHT:
-						snakeX = snakeX + 15;
-						break;
+						case UP:
+							snakeY = snakeY - 15;
+							break;
+						case DOWN:
+							snakeY = snakeY + 15;
+							break;
+						case LEFT:
+							snakeX = snakeX - 15;
+							break;
+						case RIGHT:
+							snakeX = snakeX + 15;
+							break;
 					}
 
 					directionChangeAllowed = true; // Allows the user to change direction of the snake.
@@ -252,26 +250,26 @@ public class GUIPane implements Runnable {
 						// Switch-statement moving the spider depending on the int value of
 						// spiderDirection that is random.
 						switch (spiderDirection) {
-						case 0:
-							if (obstacleX < 570) {
-								obstacleX = obstacleX + 15;
-							}
-							break;
-						case 1:
-							if (obstacleX > 15) {
-								obstacleX = obstacleX - 15;
-							}
-							break;
-						case 2:
-							if (obstacleY < 379) {
-								obstacleY = obstacleY + 15;
-							}
-							break;
-						case 3:
-							if (obstacleY > 45) {
-								obstacleY = obstacleY - 15;
-							}
-							break;
+							case 0:
+								if (obstacleX < 570) {
+									obstacleX = obstacleX + 15;
+								}
+								break;
+							case 1:
+								if (obstacleX > 15) {
+									obstacleX = obstacleX - 15;
+								}
+								break;
+							case 2:
+								if (obstacleY < 379) {
+									obstacleY = obstacleY + 15;
+								}
+								break;
+							case 3:
+								if (obstacleY > 45) {
+									obstacleY = obstacleY - 15;
+								}
+								break;
 						}
 
 						spiderTicks = 0;
@@ -306,8 +304,9 @@ public class GUIPane implements Runnable {
 						if (i != listSnake.size() - 1) {
 							gameOver();
 							gameAnimationTimer.stop();
-							jukeboxEffects = new JukeBox("sounds/Hit2.wav");
-							jukeboxEffects.playWithCustomVol(0.4);
+
+							jukeBox2.playMP3(JukeBox2.SNAKEHIT2);
+
 							drawShapes(gc);
 						}
 					}
@@ -316,8 +315,8 @@ public class GUIPane implements Runnable {
 				if (snakeX > 570 || snakeX < 15 || snakeY >= 380 || snakeY < 45) {
 					gameOver();
 					gameAnimationTimer.stop();
-					jukeboxEffects = new JukeBox("sounds/Hit2.wav");
-					jukeboxEffects.playWithCustomVol(0.4);
+					jukeBox2.playMP3(JukeBox2.SNAKEHIT2);
+
 					drawShapes(gc);
 				}
 				// Collision for the snake eating the food.
@@ -326,8 +325,6 @@ public class GUIPane implements Runnable {
 						listFood.remove(i);
 						snakeSize++;
 						activateThreadPool();
-						jukeboxEffects = new JukeBox("sounds/Beep1.mp3");
-						jukeboxEffects.playWithCustomVol(0.4);
 						i++;
 					}
 				}
@@ -371,8 +368,8 @@ public class GUIPane implements Runnable {
 					if (snakeX == listObstacle.get(i).getObstacleX() && snakeY == listObstacle.get(i).getObstacleY()) {
 						listObstacle.remove(i);
 						score = score - 50;
-						jukeboxEffects = new JukeBox("sounds/Hit1.wav");
-						jukeboxEffects.playWithCustomVol(0.4);
+						jukeBox2.playMP3(JukeBox2.SNAKEHIT);
+
 						i++;
 
 						if (score < 0) {
@@ -404,11 +401,16 @@ public class GUIPane implements Runnable {
 		});
 		// Pressing the soundButton will mute or unmute the game sound.
 		soundButton.setOnAction(e -> {
-			jukebox.muteUnmute();
-			if (jukebox.isMute()) {
-				soundButton.setGraphic(muteSoundImageView);
-			} else {
+			jukeBox.muteUnmute();
+			if (jukeBox.isMute()) {
 				soundButton.setGraphic(playSoundImageView);
+			} else {
+				jukeBox.muteUnmute();
+				if (jukeBox.isMute()) {
+					soundButton.setGraphic(muteSoundImageView);
+				} else {
+					soundButton.setGraphic(playSoundImageView);
+				}
 			}
 		});
 		// Keeps track of all the key presses in the gameScene.
@@ -486,14 +488,15 @@ public class GUIPane implements Runnable {
 			}
 			e.consume();
 		});
+
 	}
 
 	public void run() {
 
 		for (int i = 0; i < 10; i++) {
 			score++;
-			jukeboxEffects = new JukeBox("sounds/Beep1.mp3");
-			jukeboxEffects.playWithCustomVol(0.4);
+			jukeBox2.playMP3(JukeBox2.POINTSBLIP);
+
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException e) {
@@ -536,6 +539,7 @@ public class GUIPane implements Runnable {
 	 */
 	private void gameOver() {
 		gameState = GAME_OVER_STATE;
+		jukeBox2.playMP3(JukeBox2.GAMEOVER);
 		controller.newHighscore("Snake", this.score);
 
 	}
@@ -556,7 +560,7 @@ public class GUIPane implements Runnable {
 
 	/**
 	 * Method used to draw. It draws different things depending on the gameState.
-	 * 
+	 *
 	 * @param gc
 	 */
 	public void drawShapes(GraphicsContext gc) {
@@ -687,7 +691,7 @@ public class GUIPane implements Runnable {
 
 	// Checks if sound is muted or playing and sets image accordingly.
 	public void checkSound() {
-		if (jukebox.isMute()) {
+		if (jukeBox.isMute()) {
 			soundButton.setGraphic(muteSoundImageView);
 		} else {
 			soundButton.setGraphic(playSoundImageView);
@@ -706,3 +710,4 @@ public class GUIPane implements Runnable {
 		snakePane.add(snakeView, 0, 14);
 	}
 }
+

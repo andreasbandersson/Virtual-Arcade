@@ -1,15 +1,11 @@
 package pong2;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
-import java.util.Random;
 
 import chat.ChatController;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -84,8 +80,10 @@ public class Game extends AnimationTimer {
 	private void checkPaddles() {
 		if (movePlayerUp == true) {
 			player.moveUp();
+			player.setAcceleration(player.getAcceleration()+1);
 		} else if (movePlayerDown == true) {
 			player.moveDown();
+			player.setAcceleration(player.getAcceleration()+1);
 		}
 		if (moveCompUp == true) {
 			computer.moveUp();
@@ -265,8 +263,10 @@ public class Game extends AnimationTimer {
 
 		canvas.setOnKeyReleased(e -> {
 			if (e.getCode() == KeyCode.S) {
+				player.setAcceleration(0);
 				movePlayerDown = false;
 			} else if (e.getCode() == KeyCode.W) {
+				player.setAcceleration(0);
 				movePlayerUp = false;
 			}
 		});
