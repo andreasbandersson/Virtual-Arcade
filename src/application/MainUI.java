@@ -293,7 +293,7 @@ public class MainUI extends Application {
 		// Skriv om. Instansiera Snake och l�gg in i mainRoot som pane bara
 		snakePlayButton.setOnAction(e -> {
 			if (snake == null) {
-				snake = new GUIPane(this, chatUI, jukebox);
+				snake = new GUIPane(this, chatUI, jukebox, controller);
 			}
 			mainRoot.getChildren().remove(chatUI);
 			primaryStage.setScene(snake.getScene());

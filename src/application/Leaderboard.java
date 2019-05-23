@@ -11,11 +11,16 @@ import chat.Highscore;
 import chat.HighscoreList;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.util.Duration;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
@@ -147,40 +152,31 @@ public class Leaderboard {
 		// pongHighscoreLabel.setText("PONG HIGHSCORES\n\n" + pongHighscoreString);
 		// }
 		// leaderboardRoot.add(pongHighscoreLabel, 8, 4, 9, 8);
+		
+		
 
 		snakeHighscoreLabel.setId("highscoreLabel");
 		snakeHighscoreLabel.setPrefSize(300.0, 400.00);
-		snakeHighscoreLabel.setPadding(new Insets(0.0, 5.0, 0.0, 10.0));
 
-		// snakeHighscoreLabel.setMinWidth(Region.USE_PREF_SIZE);
 		snakeHighscoreLabel.setTextAlignment(TextAlignment.LEFT);
-		snakeHighscoreLabel.setText("SNAKE HIGHSCORES: ");
-		leaderboardRoot.add(snakeHighscoreLabel, 20, 4, 14, 16);
+		snakeHighscoreLabel.setMinHeight(400);
+		snakeHighscoreLabel.setText("SNAKE");
+		leaderboardRoot.add(snakeHighscoreLabel, 20, 4, 10, 16);
+		snakeHighscoreLabel.setMinWidth(Region.USE_PREF_SIZE);
+		snakeHighscoreLabel.setMinHeight(Region.USE_PREF_SIZE);
 
 		spaceHighscoreLabel.setId("highscoreLabel");
 		spaceHighscoreLabel.setPrefSize(300.0, 400.00);
-		spaceHighscoreLabel.setPadding(new Insets(0.0, 5.0, 0.0, 10.0));
 
-		// spaceHighscoreLabel.setMinWidth(Region.USE_PREF_SIZE);
 		spaceHighscoreLabel.setTextAlignment(TextAlignment.LEFT);
-		spaceHighscoreLabel.setText("SPACE HIGHSCORES");
-		leaderboardRoot.add(spaceHighscoreLabel, 4, 4, 14, 16);
-
-		// String globalHighscoreString = "";
-		// globalHighscoreLabel.setId("highscoreLabel");
-		// globalHighscoreLabel.setPrefSize(400.0, 200.00);
-		// globalHighscoreLabel.setPadding(new Insets(0.0, 5.0, 0.0, 10.0));
-		// for (int i = 0; i < 10; i++) {
-		// globalHighscoreString += i + 1 + " Gulcin " + "900\n\n";
-		// globalHighscoreLabel.setText("GLOBAL HIGHSCORES\n\n" +
-		// globalHighscoreString);
-		// }
-		// leaderboardRoot.add(globalHighscoreLabel, 20, 13, 9, 8);
-
+		spaceHighscoreLabel.setText("SPACE INVADERS");
+		spaceHighscoreLabel.setMinHeight(400);
+		spaceHighscoreLabel.setMinWidth(Region.USE_PREF_SIZE);
+		spaceHighscoreLabel.setMinHeight(Region.USE_PREF_SIZE);
+		leaderboardRoot.add(spaceHighscoreLabel, 6, 4, 10, 16);
 	}
 
 	public void updateHighscores(LinkedList<Highscore> highscores) {
-		System.out.println("Leadboard: uppdaterar listor");
 		if (highscores.size() > 0) {
 			if (highscores.get(0).getGame().equals("Snake")) {
 				String snakeHighscoreString = "";
@@ -193,7 +189,8 @@ public class Leaderboard {
 								+ highscores.get(i).getScore() + "\n";
 					}
 				}
-				snakeHighscoreLabel.setText("SNAKE HIGHSCORES\n\n" + snakeHighscoreString);
+				snakeHighscoreLabel.setText("SNAKE\n\n" + snakeHighscoreString);
+				
 			} else {
 				String spaceHighscoreString = "";
 				for (int i = 0; i < highscores.size(); i++) {
@@ -205,7 +202,7 @@ public class Leaderboard {
 								+ highscores.get(i).getScore() + "\n";
 					}
 				}
-				spaceHighscoreLabel.setText("SPACE INVADERS HIGHSCORES\n\n" + spaceHighscoreString);
+				spaceHighscoreLabel.setText("SPACE INVADERS\n\n" + spaceHighscoreString);
 			}
 		}
 	}
