@@ -84,8 +84,10 @@ public class Game extends AnimationTimer {
 	private void checkPaddles() {
 		if (movePlayerUp == true) {
 			player.moveUp();
+			player.setAcceleration(player.getAcceleration()+1);
 		} else if (movePlayerDown == true) {
 			player.moveDown();
+			player.setAcceleration(player.getAcceleration()+1);
 		}
 		if (moveCompUp == true) {
 			computer.moveUp();
@@ -264,8 +266,10 @@ public class Game extends AnimationTimer {
 
 		canvas.setOnKeyReleased(e -> {
 			if (e.getCode() == KeyCode.S) {
+				player.setAcceleration(0);
 				movePlayerDown = false;
 			} else if (e.getCode() == KeyCode.W) {
+				player.setAcceleration(0);
 				movePlayerUp = false;
 			}
 		});
