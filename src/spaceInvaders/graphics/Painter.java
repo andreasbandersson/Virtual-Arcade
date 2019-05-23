@@ -53,6 +53,7 @@ public class Painter extends AnimationTimer {
     private Label scoreLabel;
     private Label levelTitle;
     private Label pauseLabel;
+    private Label endLabel;
     private static Image playerLifeSprite;
     private GraphicsContext gc;
     private Pane root;
@@ -70,11 +71,8 @@ public class Painter extends AnimationTimer {
     private ImageView playSoundImageView;
     private ImageView spaceInvadersView;
     private JukeBox jukebox;
-    private ImageView backgroundImageView;
-    private Pane backgroundLayer;
-    private Text newScoreText;
-    private Label scoreNumberFloating;
-    private int gradualColor = 255;
+
+
 
     private final int numOfCols = 48;
     private final int numOfRows = 24;
@@ -83,6 +81,7 @@ public class Painter extends AnimationTimer {
     private static Image shotCollision;
     private static Image backgroundImage;
     private ChatController chatController;
+    private boolean gameEnded = false;
 
     Executor executor;
 
@@ -115,6 +114,12 @@ public class Painter extends AnimationTimer {
         scoreLabel = new Label("");
         scoreLabel.setTextFill(Color.rgb(255,255,255));
         scoreLabel.setFont(Font.loadFont("file:fonts/ARCADE.TTF", 25));
+
+        endLabel = new Label("Game Over\nTo Restart:\nPress [R]");
+        endLabel.setTextFill(Color.rgb(255,255,255));
+        endLabel.setFont(Font.loadFont("file:fonts/ARCADE.TTF", 30));
+        endLabel.setLayoutX(210);
+        endLabel.setLayoutY(150);
 
         //  backgroundLayer = new Pane();
 
@@ -193,7 +198,15 @@ public class Painter extends AnimationTimer {
 
     public void gameEnd(){
         chatController.newHighscore("Space Invaders",controller.getScore());
-        System.out.println("just registered new highscore");
+        gameEnded = true;
+        controller.clearGameField();
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                root.getChildren().add(endLabel);
+            }
+        });
+
     }
 
     @Override
@@ -204,32 +217,36 @@ public class Painter extends AnimationTimer {
         scoreLabel.setText("Score: " + controller.getScore());
         levelTitle.setText("Level " + controller.getLevelCounter());
 
-        for (Unit unit : controller.getAllUnits()) {
-            if (unit.getPaused()){
-                gc.setGlobalAlpha(0.50);
-                gc.drawImage(unit.getSprite(), unit.getPosition().getX(), unit.getPosition().getY());
+        if (!gameEnded) {
+            for (Unit unit : controller.getAllUnits()) {
+                if (unit.getPaused()) {
+                    gc.setGlobalAlpha(0.50);
+                    gc.drawImage(unit.getSprite(), unit.getPosition().getX(), unit.getPosition().getY());
+                } else {
+                    gc.setGlobalAlpha(100);
+                    gc.drawImage(unit.getSprite(), unit.getPosition().getX(), unit.getPosition().getY());
+                }
+
             }
-            else {
-                gc.setGlobalAlpha(100);
-                gc.drawImage(unit.getSprite(), unit.getPosition().getX(), unit.getPosition().getY());
+            for (int i = 0; i < player.getLife(); i++) {
+                gc.drawImage(playerLifeSprite, 440 + ((i + 1) * 39), 10);
             }
 
-        }
-        for (int i = 0; i < player.getLife(); i++){
-            gc.drawImage(playerLifeSprite,440+((i+1)*39),10);
-        }
+            checkDeadObjects();
 
-        checkDeadObjects();
-
-        if (explosions.stream().anyMatch(Explosion::exploding)){
-            for (Explosion e : new ArrayList<>(explosions)){
-                gc.drawImage(explosion, e.getPosition().getX(), e.getPosition().getY());
+            if (explosions.stream().anyMatch(Explosion::exploding)) {
+                for (Explosion e : new ArrayList<>(explosions)) {
+                    gc.drawImage(explosion, e.getPosition().getX(), e.getPosition().getY());
+                }
+            }
+            if (shotCollisions.stream().anyMatch(ShotCollision::enemyHitHappening)) {
+                for (ShotCollision e : new ArrayList<>(shotCollisions)) {
+                    gc.drawImage(shotCollision, e.getPosition().getX(), e.getPosition().getY() - 10);
+                }
             }
         }
-        if (shotCollisions.stream().anyMatch(ShotCollision::enemyHitHappening)){
-            for (ShotCollision e : new ArrayList<>(shotCollisions)){
-                gc.drawImage(shotCollision,e.getPosition().getX(),e.getPosition().getY()-10);
-            }
+        else {
+
         }
     }
 
@@ -253,24 +270,24 @@ public class Painter extends AnimationTimer {
     }
 
     public void addNewScoreFloat(int score){
-        ScoreUp scoreUp = new ScoreUp(score);
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                root.getChildren().add(scoreUp);
-            }
-        });
-        scoreFloats.add(scoreUp);
-        executor.execute(scoreUp);
+   //     ScoreUp scoreUp = new ScoreUp(score);
+   //     Platform.runLater(new Runnable() {
+   //         @Override
+   //         public void run() {
+   //             root.getChildren().add(scoreUp);
+   //         }
+   //     });
+   //     scoreFloats.add(scoreUp);
+   //     executor.execute(scoreUp);
     }
 
     public void checkDeadObjects(){
-        for (ScoreUp e : new ArrayList<>(scoreFloats)){
-            if (!e.floating()){
-                scoreFloats.remove(e);
-                root.getChildren().remove(e);
-            }
-        }
+     // for (ScoreUp e : new ArrayList<>(scoreFloats)){
+     //     if (!e.floating()){
+     //         scoreFloats.remove(e);
+     //         root.getChildren().remove(e);
+     //     }
+     // }
         for (Explosion e : new ArrayList<>(explosions)){
             if (!e.exploding()){
                 explosions.remove(e);
@@ -322,6 +339,10 @@ public class Painter extends AnimationTimer {
 
     }
 
+    public boolean getGameEnded(){
+        return gameEnded;
+    }
+
     public void addListeners(Scene scene) {
 
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -348,7 +369,7 @@ public class Painter extends AnimationTimer {
                         player.shoot();
                         break;
                     case P:
-                        if (controller.getGamePaused())
+                        if (controller.getGamePaused() && !gameEnded)
                         {
                             root.getChildren().remove(pauseLabel);
                         }
@@ -356,7 +377,17 @@ public class Painter extends AnimationTimer {
                             root.getChildren().add(pauseLabel);
                         }
                         controller.setGamePaused();
+                        break;
+                    case R:
+                        if (gameEnded){
+                            root.getChildren().remove(endLabel);
+                            gameEnded = false;
+                            controller.setScore(0);
+                            player.renewLife(3);
+                            controller.restart();
+                        }
                 }
+                event.consume();
             }
         });
 
@@ -384,7 +415,7 @@ public class Painter extends AnimationTimer {
 
         backButton.setOnAction(e -> {
             spaceInvadersRoot.getChildren().remove(chatUI);
-            if (!controller.getGamePaused()) {
+            if (!controller.getGamePaused() && !gameEnded) {
                 controller.setGamePaused();
                 root.getChildren().add(pauseLabel);
             }

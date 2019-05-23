@@ -88,6 +88,10 @@ public class Player extends Unit implements Runnable {
 
     }
 
+    public void renewLife(int healthpoints){
+        life += healthpoints;
+    }
+
     @Override
     public void registerHit() {
         life--;
@@ -95,7 +99,7 @@ public class Player extends Unit implements Runnable {
             painter.setExplosionData(new Position(position));
             JukeBox jukeBox = new JukeBox("sounds/Explosion.mp3");
             jukeBox.playWithCustomVol(0.4);
-            move(Player.startPosition);
+           // move(Player.startPosition);
         }
         if (life == 0){
            painter.gameEnd();

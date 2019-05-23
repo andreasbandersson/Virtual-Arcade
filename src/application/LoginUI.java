@@ -88,13 +88,13 @@ public class LoginUI extends Application {
 		Label userNameLabel = new Label("Username:");
 		loginRoot.add(userNameLabel, 18, 8, 10, 1);
 
-		username.setPromptText("Enter a username");
+		username.setPromptText("Min. 3 characters");
 		loginRoot.add(username, 18, 9, 10, 2);
 
 		Label passwordLabel = new Label("Password:");
 		loginRoot.add(passwordLabel, 18, 11, 10, 1);
 
-		password.setPromptText("Enter a password");
+		password.setPromptText("Min. 6 characters");
 		loginRoot.add(password, 18, 12, 10, 2);
 
 		responseLabel = new Label();
@@ -240,16 +240,11 @@ public class LoginUI extends Application {
 		});
 	}
 	
-	public boolean permissionToCreateUser() {
-		if(username.getText().length() >= 4 && password.getText().length() >= 6) {
-			return false;
-		}else {
-			return true;
-		}
-	}
-
-	// The main-method.
-	public static void main(String[] args) {
-		launch(args);
-	}
+//	public boolean permissionToCreateUser() {
+//		if(username.getText().length() >= 4 && password.getText().length() >= 6) {
+//			return false;
+//		}else {
+//			return true;
+//		}
+//	}
 }

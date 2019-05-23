@@ -8,18 +8,19 @@ import java.util.LinkedList;
 
 import chat.ChatUI;
 import chat.Highscore;
-import chat.HighscoreList;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
-import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.util.Duration;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.TextAlignment;
@@ -42,10 +43,9 @@ public class Leaderboard {
 	private GridPane leaderboardRoot;
 	private ChatUI chatUI;
 	private JukeBox jukebox;
-	private Label pongHighscoreLabel = new Label();
 	private Label snakeHighscoreLabel = new Label();
 	private Label spaceHighscoreLabel = new Label();
-	private Label globalHighscoreLabel = new Label();
+	private Pane pane = new Pane();
 
 	private final int numOfCols = 48;
 	private final int numOfRows = 24;
@@ -61,7 +61,6 @@ public class Leaderboard {
 		leaderboardRoot = new GridPane();
 		leaderboardRoot.setId("leaderboardRoot");
 		leaderboardRoot.setPrefSize(1200.0, 600.0); // minus chattens bredd (300)
-		// leaderboardRoot.setGridLinesVisible(true);
 
 		// Setting amount of columns and rows for the GridPane
 		createColumnsandRows();
@@ -92,8 +91,6 @@ public class Leaderboard {
 
 		backButton.setFocusTraversable(false);
 		soundButton.setFocusTraversable(false);
-
-		System.out.println(System.getProperty("os.name").toString());
 
 		scene = new Scene(leaderboardRoot, 1200, 600);
 		try {
@@ -147,40 +144,43 @@ public class Leaderboard {
 		// pongHighscoreLabel.setText("PONG HIGHSCORES\n\n" + pongHighscoreString);
 		// }
 		// leaderboardRoot.add(pongHighscoreLabel, 8, 4, 9, 8);
+		
+		
 
 		snakeHighscoreLabel.setId("highscoreLabel");
 		snakeHighscoreLabel.setPrefSize(300.0, 400.00);
-		snakeHighscoreLabel.setPadding(new Insets(0.0, 5.0, 0.0, 10.0));
 
-		// snakeHighscoreLabel.setMinWidth(Region.USE_PREF_SIZE);
 		snakeHighscoreLabel.setTextAlignment(TextAlignment.LEFT);
-		snakeHighscoreLabel.setText("SNAKE HIGHSCORES: ");
-		leaderboardRoot.add(snakeHighscoreLabel, 20, 4, 14, 16);
+		snakeHighscoreLabel.setMinHeight(400);
+		snakeHighscoreLabel.setText("SNAKE");
+		snakeHighscoreLabel.setMinWidth(Region.USE_PREF_SIZE);
+		snakeHighscoreLabel.setMinHeight(Region.USE_PREF_SIZE);
+		snakeHighscoreLabel.setContentDisplay(ContentDisplay.CENTER);
+		snakeHighscoreLabel.setLayoutX(0);
+		snakeHighscoreLabel.setLayoutY(0);
+		snakeHighscoreLabel.setAlignment(Pos.TOP_CENTER);
+		pane.getChildren().add(snakeHighscoreLabel);
+		//leaderboardRoot.add(snakeHighscoreLabel, 20, 4, 10, 16);
+
 
 		spaceHighscoreLabel.setId("highscoreLabel");
 		spaceHighscoreLabel.setPrefSize(300.0, 400.00);
-		spaceHighscoreLabel.setPadding(new Insets(0.0, 5.0, 0.0, 10.0));
-
-		// spaceHighscoreLabel.setMinWidth(Region.USE_PREF_SIZE);
+		
+		spaceHighscoreLabel.setAlignment(Pos.TOP_CENTER);
 		spaceHighscoreLabel.setTextAlignment(TextAlignment.LEFT);
-		spaceHighscoreLabel.setText("SPACE HIGHSCORES");
-		leaderboardRoot.add(spaceHighscoreLabel, 4, 4, 14, 16);
-
-		// String globalHighscoreString = "";
-		// globalHighscoreLabel.setId("highscoreLabel");
-		// globalHighscoreLabel.setPrefSize(400.0, 200.00);
-		// globalHighscoreLabel.setPadding(new Insets(0.0, 5.0, 0.0, 10.0));
-		// for (int i = 0; i < 10; i++) {
-		// globalHighscoreString += i + 1 + " Gulcin " + "900\n\n";
-		// globalHighscoreLabel.setText("GLOBAL HIGHSCORES\n\n" +
-		// globalHighscoreString);
-		// }
-		// leaderboardRoot.add(globalHighscoreLabel, 20, 13, 9, 8);
-
+		spaceHighscoreLabel.setText("SPACE INVADERS");
+		spaceHighscoreLabel.setMinHeight(400);
+		spaceHighscoreLabel.setMinWidth(Region.USE_PREF_SIZE);
+		spaceHighscoreLabel.setMinHeight(Region.USE_PREF_SIZE);
+		spaceHighscoreLabel.setLayoutX(350);
+		spaceHighscoreLabel.setLayoutY(0);
+		spaceHighscoreLabel.setContentDisplay(ContentDisplay.CENTER);
+		pane.getChildren().add(spaceHighscoreLabel);
+		pane.setId("highscoreLabel");
+		leaderboardRoot.add(pane, 4, 6);
 	}
 
 	public void updateHighscores(LinkedList<Highscore> highscores) {
-		System.out.println("Leadboard: uppdaterar listor");
 		if (highscores.size() > 0) {
 			if (highscores.get(0).getGame().equals("Snake")) {
 				String snakeHighscoreString = "";
@@ -189,11 +189,12 @@ public class Leaderboard {
 					snakeHighscoreString += i + 1 + " " + highscores.get(i).getUser().getUsername() + " "
 							+ highscores.get(i).getScore() + "\n";
 					} else {
-						snakeHighscoreString += i + 1 + " " + highscores.get(i).getUser().getUsername() + " "
+						snakeHighscoreString += i + 1 + "  " + highscores.get(i).getUser().getUsername() + " "
 								+ highscores.get(i).getScore() + "\n";
 					}
 				}
-				snakeHighscoreLabel.setText("SNAKE HIGHSCORES\n\n" + snakeHighscoreString);
+				snakeHighscoreLabel.setText("SNAKE\n\n" + snakeHighscoreString);
+				
 			} else {
 				String spaceHighscoreString = "";
 				for (int i = 0; i < highscores.size(); i++) {
@@ -205,7 +206,7 @@ public class Leaderboard {
 								+ highscores.get(i).getScore() + "\n";
 					}
 				}
-				spaceHighscoreLabel.setText("SPACE INVADERS HIGHSCORES\n\n" + spaceHighscoreString);
+				spaceHighscoreLabel.setText("SPACE INVADERS\n\n" + spaceHighscoreString);
 			}
 		}
 	}

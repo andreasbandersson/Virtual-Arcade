@@ -28,7 +28,7 @@ public class BodyPart {
 		this.unitHeight = unitHeight;
 	}
 	/**
-	 * Method that draws the body parts of the snake.  
+	 * Draws the body parts of the snake.  
 	 * @param gc
 	 */
 	public void drawSnakePane(GraphicsContext gc) {
