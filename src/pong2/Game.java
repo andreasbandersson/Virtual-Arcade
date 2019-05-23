@@ -75,14 +75,14 @@ public class Game extends AnimationTimer {
 			moveComputer();
 			checkPaddles();
 			checkCollision();
-			if (scored && count < 20) {
-				drawScore();
-				count++;
-				if (count == 20) {
-					count = 0;
-					scored = false;
-				}
-			}
+//			if (scored && count < 20) {
+//				drawScore();
+//				count++;
+//				if (count == 20) {
+//					count = 0;
+//					scored = false;
+//				}
+//			}
 			timeSinceLastUpdate = now;
 		}
 	}
@@ -192,11 +192,11 @@ public class Game extends AnimationTimer {
 		gc.fillText(playerScoreStr, 100, 25);
 
 
-		Text computerScore = new Text(computerScoreStr);
-		computerScore.setFont(Font.font(20));
-		gc.setFont(Font.font(20));
-		gc.setFill(Color.WHITE);
-		gc.fillText(computerScoreStr, (Pong.WIDTH - 200), 25);
+//		Text computerScore = new Text(computerScoreStr);
+//		computerScore.setFont(Font.font(20));
+//		gc.setFont(Font.font(20));
+//		gc.setFill(Color.WHITE);
+//		gc.fillText(computerScoreStr, (Pong.WIDTH - 200), 25);
 
 
 	}
@@ -212,7 +212,7 @@ public class Game extends AnimationTimer {
 		gc.fillText("Game Over :(", Pong.WIDTH/4, centerY);
 
 		gc.setFont(Font.font(40));
-		gc.fillText("Your Score is: "+Integer.toString(playerScore), Pong.WIDTH/4, centerY+60);
+		gc.fillText("Your Score: "+Integer.toString(playerScore), Pong.WIDTH/4, centerY+60);
 
 
 	}
@@ -226,13 +226,13 @@ public class Game extends AnimationTimer {
 			//	(Pong.HEIGHT / 2) + 50);
 	}
 
-	private void drawScore() {
-		Text temp = new Text("SCORE!!");
-		temp.setFont(Font.font(20));
-		gc.setFont(Font.font(20));
-		gc.setFill(Color.FIREBRICK);
-		gc.fillText("SCORE!!", (Pong.WIDTH / 2) - (temp.getLayoutBounds().getWidth() / 2), 50);
-	}
+//	private void drawScore() {
+//		Text temp = new Text("SCORE!!");
+//		temp.setFont(Font.font(20));
+//		gc.setFont(Font.font(20));
+//		gc.setFill(Color.FIREBRICK);
+//		gc.fillText("SCORE!!", (Pong.WIDTH / 2) - (temp.getLayoutBounds().getWidth() / 2), 50);
+//	}
 
 	private void addActionListeners() {
 		canvas.setOnKeyPressed(e -> {
@@ -281,7 +281,6 @@ public class Game extends AnimationTimer {
 		});
 	}
 
-
 	public void setPaused() {
 		if (!paused && !gameOver) {
 		this.stop();
@@ -290,6 +289,7 @@ public class Game extends AnimationTimer {
 		} else if (gameOver) {
 			ball.reset();
 			drawStart();
+			drawInstructions();
 			started = false;
 			gameOver = false;
 		}
@@ -304,8 +304,6 @@ public class Game extends AnimationTimer {
 		playerScore = 0;
 		gameOver = true;
 	}
-
-
 
 	// Datorn rör sig mot bollen
 	private void moveComputer() {
@@ -333,36 +331,30 @@ public class Game extends AnimationTimer {
 			ball.bounceWall();
 		} else if (ball.getXpos() <= 0) {
 
-			computerScore += 50;
 
-//			if (gameOver == false) {
-			if(computerScore >= 150) {
-				endGame();
+			if (gameOver == false) {
+				gameOver();
+				gameOver = true;
 			}
 
 			ball.reset();
 
 		} else if (ball.getXpos() >= Pong.WIDTH) {
 			playerScore += 50;
-
-			if(playerScore >= 150) {
-				endGame();
-			}
-
+			// scored = true;
 			ball.reset();
 		}
 		playerScoreStr = "Player: " + Integer.toString(playerScore);
-		computerScoreStr = "Computer: " + Integer.toString(computerScore);
 	}
 
-	public void endGame() {
-		this.stop();
-		player.reset(10);
-		computer.reset(Pong.WIDTH - 20);
-		drawGameOver();
-		playerScore = 0;
-		computerScore = 0;
-		gameOver = true;
-	}
+//	public void endGame() {
+//		this.stop();
+//		player.reset(10);
+//		computer.reset(Pong.WIDTH - 20);
+//		drawGameOver();
+//		playerScore = 0;
+//		computerScore = 0;
+//		gameOver = true;
+//	}
 
 }
