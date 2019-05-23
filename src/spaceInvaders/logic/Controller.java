@@ -162,7 +162,7 @@ public class Controller implements Runnable {
                     jukeBox = new JukeBox("sounds/Explosion.mp3");
                     jukeBox.playWithCustomVol(0.4);
                     score += ((Enemy) unit).getPoints();
-                    painter.addNewScoreFloat(((Enemy) unit).getPoints());
+                   // painter.addNewScoreFloat(((Enemy) unit).getPoints());
                     return;
                 }
             }
