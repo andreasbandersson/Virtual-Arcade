@@ -1,25 +1,32 @@
-#pane{
-	   -fx-background-image: url("../images/terminal.png");
-    -fx-background-repeat: stretch;   
-    -fx-background-size:  cover;
-    -fx-background-position: center center; 
-}
 
-#MessageArea {
+#messageArea {
     -fx-background-color: transparent;
     -fx-text-fill: #00ff00;
 }
 
 #vPane{
-	-fx-background-color: radial-gradient(center 50.0% 50.0%, radius 100%, #0e1406, #000000);
-	-fx-border-color: green;
-	-fx-border-width: 1px;
+	-fx-background-color: rgba(0.0,0.0,0.0, 0.9);
+	-fx-border-color: grey;
+	-fx-border-width: 2.0px;
 	-fx-border-type: outside;
 }
 
-#newMessage{
+.text-area {
 	-fx-background-color: transparent;
 	-fx-text-fill: #00ff00;
+}
+
+.text-area .scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.text-area .scroll-pane .viewport{
+    -fx-background-color: transparent;
+}
+
+
+.text-area .scroll-pane .content{
+    -fx-background-color: transparent;
 }
 
 #buttons{
@@ -33,7 +40,7 @@
         radial-gradient(center 50.0% 50.0%, radius 100.0%, #51c300, #137e08);
     -fx-effect: dropshadow( gaussian , rgba(0.0,0.0,0.0,0.25) , 4.0,0.0,0.0,1.0 );
     -fx-font-weight: normal;
-    -fx-font-size: 1em;
+    -fx-font-size: 1.0em;
     -fx-alignment: center;
 }
 
@@ -54,5 +61,6 @@
 
  .scroll-pane {
     -fx-background-color: transparent;
+    -fx-padding: 10.0;
  }
 
