@@ -1,8 +1,10 @@
-package chat;
+package server;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import chat.User;
 
 /**
  * Stores all registered users and their passwords.

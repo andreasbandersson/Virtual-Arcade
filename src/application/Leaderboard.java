@@ -8,19 +8,14 @@ import java.util.LinkedList;
 
 import chat.ChatUI;
 import chat.Highscore;
-import chat.HighscoreList;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
-import javafx.geometry.HPos;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.util.Duration;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
@@ -48,10 +43,8 @@ public class Leaderboard {
 	private GridPane leaderboardRoot;
 	private ChatUI chatUI;
 	private JukeBox jukebox;
-	private Label pongHighscoreLabel = new Label();
 	private Label snakeHighscoreLabel = new Label();
 	private Label spaceHighscoreLabel = new Label();
-	private Label globalHighscoreLabel = new Label();
 	private Pane pane = new Pane();
 
 	private final int numOfCols = 48;
@@ -68,7 +61,6 @@ public class Leaderboard {
 		leaderboardRoot = new GridPane();
 		leaderboardRoot.setId("leaderboardRoot");
 		leaderboardRoot.setPrefSize(1200.0, 600.0); // minus chattens bredd (300)
-		// leaderboardRoot.setGridLinesVisible(true);
 
 		// Setting amount of columns and rows for the GridPane
 		createColumnsandRows();
@@ -99,8 +91,6 @@ public class Leaderboard {
 
 		backButton.setFocusTraversable(false);
 		soundButton.setFocusTraversable(false);
-
-		System.out.println(System.getProperty("os.name").toString());
 
 		scene = new Scene(leaderboardRoot, 1200, 600);
 		try {

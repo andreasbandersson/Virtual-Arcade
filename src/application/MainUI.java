@@ -257,6 +257,8 @@ public class MainUI extends Application {
 
 		logOutButton.setOnAction(e -> {
 			this.terminate();
+			controller.disconnect();
+			controller = null;
 			new ChatController();
 		});
 

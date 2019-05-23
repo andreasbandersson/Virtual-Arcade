@@ -367,6 +367,10 @@ public class GUIPane {
 			snakePane.getChildren().remove(chatUI);
 			gameAnimationTimer.stop();
 			mainUI.switchToMainUI();
+			if (gameState == GAME_OVER_STATE) {
+			gameState = MENU_STATE;
+			drawShapes(gc);
+			}
 		});
 		// Pressing the soundButton will mute or unmute the game sound. 
 		soundButton.setOnAction(e -> {
