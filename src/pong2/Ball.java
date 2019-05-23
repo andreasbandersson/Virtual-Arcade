@@ -58,6 +58,10 @@ public class Ball {
 		return this.dx;
 	}
 	
+	public int getDy() {
+		return this.dy;
+	}
+	
 	public void reset() {
 		this.xpos = Pong.WIDTH - 100;
 		this.ypos = Pong.HEIGHT / 2;
