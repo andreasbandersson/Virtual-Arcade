@@ -20,7 +20,7 @@ public class Paddle {
 	}
 
 	public void setAcceleration(int acceleration){
-		if (acceleration < 8){
+		if (acceleration < 4){
 			this.acceleration = acceleration;
 		}
 	}
@@ -46,11 +46,14 @@ public class Paddle {
 	}
 
 	public void moveUp() {
-		if (this.yPos > 0) {
+
+		if (this.yPos > 30) {
 			this.yPos -= this.dy + acceleration;
-		} else {
-			this.yPos = 0;
+      return;
 		}
+    
+	  this.yPos = 30;
+		
 	}
 
 	public void moveDown() {

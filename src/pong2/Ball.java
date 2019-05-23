@@ -59,6 +59,7 @@ public class Ball {
 
 	public void changeDirection() {
 		this.dx = -this.dx;
+		increaseSpeed();
 	}
 
 	public int getDx( ) {
@@ -67,6 +68,14 @@ public class Ball {
 
 	public int getDy() {
 		return this.dy;
+	}
+	public void increaseSpeed() {
+		if(this.dx < 0) {
+			this.dx -= 1;
+			return;
+		}
+
+		this.dx += 1;
 	}
 
 	public void reset() {
