@@ -151,6 +151,7 @@ public class Game extends AnimationTimer {
 			} else if (e.getCode() == KeyCode.SPACE && !started) {
 				this.start();
 			}
+			e.consume();
 		});
 
 		canvas.setOnKeyReleased(e -> {

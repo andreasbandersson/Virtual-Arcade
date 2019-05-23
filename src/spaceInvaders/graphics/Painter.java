@@ -387,6 +387,7 @@ public class Painter extends AnimationTimer {
                             controller.restart();
                         }
                 }
+                event.consume();
             }
         });
 
