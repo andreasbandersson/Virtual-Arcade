@@ -27,7 +27,7 @@ public class Level2Boss  extends Enemy {
     }
 
     public Level2Boss(Position position, Controller controller, Difficulty difficulty) {
-        super(70, position, enemySprite1,enemySprite2,width,height, controller, 100, difficulty);
+        super(70, position, enemySprite1,enemySprite2,width,height, controller, 200, difficulty);
     }
 
     @Override
