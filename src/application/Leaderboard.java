@@ -64,7 +64,7 @@ public class Leaderboard {
 
 		// Setting amount of columns and rows for the GridPane
 		createColumnsandRows();
-		setSoundButtonImages();
+		
 
 		// Adding and setting the Label for the Leaderboard.
 		headerLabel.setId("leaderboardLabel");
@@ -83,11 +83,12 @@ public class Leaderboard {
 		// Adding an setting the button for mute and un-mute of login music
 		soundButton = new Button();
 		soundButton.setId("logOutButton");
-		soundButton.setGraphic(playSoundImageView);
 		leaderboardRoot.add(soundButton, 32, 1);
 
 		addHighscoreLabels();
 		addActionListeners();
+		setSoundButtonImages();
+		checkSound();
 
 		backButton.setFocusTraversable(false);
 		soundButton.setFocusTraversable(false);
@@ -221,6 +222,15 @@ public class Leaderboard {
 		}
 		playSoundImageView = new ImageView(playSoundImage);
 		muteSoundImageView = new ImageView(muteSoundImage);
+	}
+	
+	
+	public void checkSound() {
+		if (jukebox.isMute()) {
+			soundButton.setGraphic(muteSoundImageView);
+		} else {
+			soundButton.setGraphic(playSoundImageView);
+		}
 	}
 
 	// Function for adding and setting Action Listeners to all Buttons.

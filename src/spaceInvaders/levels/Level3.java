@@ -13,7 +13,12 @@ public class Level3 extends Level {
         for (int i  = 0 ; i < 4; i ++) {
             enemyBlock.add(new ArrayList<>());
             for (int j = 0; j < 8; j++ ) {
-                enemyBlock.get(i).add(new Level2Enemy(new Position((200+ j*50),35+(i*30)),null,Difficulty.EASY));
+                if ( i % 2 == 1)
+                enemyBlock.get(i).add(new Level3Enemy(new Position((200+ j*50),35+(i*30)),null,Difficulty.EASY));
+                else {
+                    enemyBlock.get(i).add(new Level4Enemy(new Position((200+ j*50),35+(i*30)),null,Difficulty.EASY));
+
+                }
             }
         }
     }

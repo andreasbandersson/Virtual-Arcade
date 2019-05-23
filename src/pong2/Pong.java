@@ -20,6 +20,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 
+/**
+ * 
+ * @author Andreas och Måns
+ *
+ */
+
 // Integrerar Pong med MainUI -> lÃ¤gger till chatt osv
 public class Pong {
 	private MainUI mainUI;
@@ -34,6 +40,8 @@ public class Pong {
 	private Image playSoundImage;
 	private ImageView muteSoundImageView;
 	private ImageView playSoundImageView;
+	private Image pongCabinettImage;
+	private ImageView pongCabinettView;
 	private JukeBox jukebox;
 	public static final int WIDTH = 600;
 	public static final int HEIGHT = 400;
@@ -52,12 +60,14 @@ public class Pong {
 	private void init() {
 		game = new Game();
 		createColumnsandRows();
+		setPongArcadeMachineImage();
+		
 		Pane pane = new Pane();
 		pane.setPrefSize(600, 400);
 		canvas = game.getCanvas();
-		
+
 		pane.getChildren().add(canvas);
-		
+
 		pane.setId("Pong");
 
 		root.setPrefSize(1200, 600);
@@ -70,7 +80,7 @@ public class Pong {
 		soundButton = new Button();
 		setSoundButtonImages();
 		soundButton.setId("logOutButton");
-		soundButton.setGraphic(playSoundImageView);
+		checkSound();
 		root.add(soundButton, 32, 1);
 
 		backButton.setFocusTraversable(false);
@@ -86,13 +96,12 @@ public class Pong {
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
-		
 
 		backButton.setFocusTraversable(false);
 		soundButton.setFocusTraversable(false);
-		
+
 		canvas.requestFocus();
-	    canvas.setOnMouseMoved(e -> canvas.requestFocus());
+		canvas.setOnMouseMoved(e -> canvas.requestFocus());
 	}
 
 	public Scene getScene() {
@@ -125,6 +134,26 @@ public class Pong {
 		playSoundImageView = new ImageView(playSoundImage);
 		muteSoundImageView = new ImageView(muteSoundImage);
 	}
+	
+	public void checkSound() {
+		if (jukebox.isMute()) {
+			soundButton.setGraphic(muteSoundImageView);
+		} else {
+			soundButton.setGraphic(playSoundImageView);
+		}
+	}
+
+	// Sets and adds the arcade machine image for the SpaceInvaders game.
+	public void setPongArcadeMachineImage() {
+		try {
+			pongCabinettImage = new Image(new FileInputStream("images/pongScreen3.png"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		pongCabinettView = new ImageView(pongCabinettImage);
+		pongCabinettView.setPreserveRatio(true);
+		root.add(pongCabinettView, 0, 14);
+	}
 
 	private void addActionListeners() {
 		backButton.setOnAction(e -> {
@@ -136,9 +165,9 @@ public class Pong {
 		soundButton.setOnAction(e -> {
 			jukebox.muteUnmute();
 			if (jukebox.isMute()) {
-				soundButton.setGraphic(playSoundImageView);
-			} else {
 				soundButton.setGraphic(muteSoundImageView);
+			} else {
+				soundButton.setGraphic(playSoundImageView);
 			}
 		});
 	}

@@ -1,8 +1,16 @@
 package pong2;
 
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
+import java.util.Random;
+
+
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -27,6 +35,13 @@ public class Game extends AnimationTimer {
 	private boolean started = false;
 	private boolean firstGame = true;
 
+	private Image pongBg;
+
+	private boolean scored = false;
+	private int count = 0;
+	private Random rand = new Random();
+
+
 	public Game() {
 		init();
 		drawStart();
@@ -39,12 +54,16 @@ public class Game extends AnimationTimer {
 	private void init() {
 		canvas = new Canvas(Pong.WIDTH, Pong.HEIGHT);
 		canvas.setId("Pong");
+		try {
+			pongBg = new Image(new FileInputStream("images/pongGridBg.png"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 		gc = canvas.getGraphicsContext2D();
 		ball = new Ball();
-		player = new Paddle(30, 5);
-		computer = new Paddle(Pong.WIDTH - 30, 2.9);
-		addActionListeners();		
-		
+		player = new Paddle(10, 5, 60);
+		computer = new Paddle(Pong.WIDTH - 20, 2.9, 60);
+		addActionListeners();
 	}
 
 	public void handle(long now) {
@@ -54,6 +73,14 @@ public class Game extends AnimationTimer {
 			moveComputer();
 			checkPaddles();
 			checkCollision();
+			if (scored && count < 20) {
+				drawScore();
+				count++;
+				if (count == 20) {
+					count = 0;
+					scored = false;
+				}
+			}
 			timeSinceLastUpdate = now;
 		}
 	}
@@ -73,15 +100,16 @@ public class Game extends AnimationTimer {
 			computer.moveDown();
 		}
 	}
-	
+
+
 	private void drawStart() {
-		
+
 		if(firstGame) {
 			clearBackground();
 			drawInstructions();
 			return;
 		}
-		
+
 		draw();
 		Text temp = new Text("GAME OVER");
 		temp.setFont(Font.font(20));
@@ -89,7 +117,7 @@ public class Game extends AnimationTimer {
 		//gc.fillText("Control Padle with A + D", Pong.WIDTH / 2 - (temp.getLayoutBounds().getWidth() / 2), Pong.HEIGHT / 2);
 		//gc.fillText("PRESS [SPACE] TO START", Pong.WIDTH / 2 - (temp.getLayoutBounds().getWidth() / 2),
 				//(Pong.HEIGHT / 2) + 50);
-		
+
 	}
 
 	// Anropar draw-metoder
@@ -101,13 +129,13 @@ public class Game extends AnimationTimer {
 		gc.strokeLine(Pong.WIDTH/2, 0, Pong.WIDTH/2, Pong.HEIGHT);
 		gc.setLineDashes(0);
 
-		
+
 		//gc.fill();
 		drawBall();
 		drawPaddles();
 		drawScoreBoard();
 	}
-	
+
 	private void clearBackground() {
 		gc.setFill(Color.DARKGREEN);
 		gc.fillRect(0, 0, 600, 400);
@@ -128,21 +156,21 @@ public class Game extends AnimationTimer {
 	}
 
 	private void drawInstructions() {
-		clearBackground();		
-		
+		clearBackground();
+
 		Text temp = new Text("Instructions");
 
 		gc.setFill(Color.WHITE);
 
 		gc.setFont(new Font(40));
 		gc.fillText("Instructions", temp.getLayoutBounds().getWidth(), 50);
-		
+
 		gc.setFont(new Font(30));
-		
+
 		int centerY = (int) (Pong.HEIGHT/3 + gc.getFont().getSize());
 		gc.fillText("Press [SPACE] to Start Game", temp.getLayoutBounds().getWidth(), centerY);
 		centerY += gc.getFont().getSize();
-		
+
 		gc.fillText("Press [R] to Reset", temp.getLayoutBounds().getWidth(), centerY);
 		centerY += gc.getFont().getSize();
 
@@ -151,40 +179,40 @@ public class Game extends AnimationTimer {
 
 		gc.fillText("Use 'W' and 'S' to move the paddle", temp.getLayoutBounds().getWidth(), centerY);
 
-		
+
 	}
-	
+
 	private void drawScoreBoard() {
 		Text temp = new Text(playerScoreStr);
 		temp.setFont(Font.font(20));
 		gc.setFont(Font.font(20));
 		gc.setFill(Color.WHITE);
 		gc.fillText(playerScoreStr, 100, 25);
-		
-		
+
+
 		Text computerScore = new Text(computerScoreStr);
 		computerScore.setFont(Font.font(20));
 		gc.setFont(Font.font(20));
 		gc.setFill(Color.WHITE);
 		gc.fillText(computerScoreStr, (Pong.WIDTH - 200), 25);
-		
+
 
 	}
 
 	private void drawGameOver() {
 		clearBackground();
 
-	
+
 		int centerY = Pong.HEIGHT/2;
-		
+
 		gc.setFont(Font.font(50));
 		gc.setFill(Color.WHITE);
 		gc.fillText("Game Over :(", Pong.WIDTH/4, centerY);
-		
+
 		gc.setFont(Font.font(40));
 		gc.fillText("Your Score is: "+Integer.toString(playerScore), Pong.WIDTH/4, centerY+60);
-		
-		
+
+
 	}
 
 	private void drawPaused() {
@@ -196,7 +224,15 @@ public class Game extends AnimationTimer {
 			//	(Pong.HEIGHT / 2) + 50);
 	}
 
-	public void addActionListeners() {
+	private void drawScore() {
+		Text temp = new Text("SCORE!!");
+		temp.setFont(Font.font(20));
+		gc.setFont(Font.font(20));
+		gc.setFill(Color.FIREBRICK);
+		gc.fillText("SCORE!!", (Pong.WIDTH / 2) - (temp.getLayoutBounds().getWidth() / 2), 50);
+	}
+
+	private void addActionListeners() {
 		canvas.setOnKeyPressed(e -> {
 			if (e.getCode() == KeyCode.S) {
 				movePlayerDown = true;
@@ -215,15 +251,15 @@ public class Game extends AnimationTimer {
 				ball.reset();
 				this.start();
 				gameOver = false;
-				
+
 				if(firstGame)
 					firstGame = false;
-				
+
 			} else if (e.getCode() == KeyCode.SPACE && !started) {
 				if(firstGame)
 					firstGame = false;
-				
-				if(gameOver == true) {					
+
+				if(gameOver == true) {
 					ball.reset();
 					gameOver = false;
 				}
@@ -242,7 +278,8 @@ public class Game extends AnimationTimer {
 			}
 		});
 	}
-	
+
+
 	public void setPaused() {
 		if (!paused && !gameOver) {
 		this.stop();
@@ -255,8 +292,8 @@ public class Game extends AnimationTimer {
 			gameOver = false;
 		}
 	}
-	
-	
+
+
 
 	// Datorn rör sig mot bollen
 	private void moveComputer() {
@@ -280,32 +317,32 @@ public class Game extends AnimationTimer {
 		if ((ball.getRect().intersects(player.getRect()) && ball.getDx() < 0)
 				|| (ball.getRect().intersects(computer.getRect()) && ball.getDx() > 0)) {
 			ball.changeDirection();
-		} else if (ball.getYpos() <= 0 || ball.getYpos() + ball.getRadius() >= Pong.HEIGHT) {
+		} else if (ball.getYpos() <= 0 && ball.getDy() < 0 || ball.getYpos() + ball.getRadius() >= Pong.HEIGHT) {
 			ball.bounceWall();
 		} else if (ball.getXpos() <= 0) {
-			
+
 			computerScore += 50;
-			
+
 //			if (gameOver == false) {
 			if(computerScore >= 150) {
 				endGame();
 			}
-			
+
 			ball.reset();
-			
+
 		} else if (ball.getXpos() >= Pong.WIDTH) {
 			playerScore += 50;
-			
+
 			if(playerScore >= 150) {
 				endGame();
 			}
-			
+
 			ball.reset();
 		}
 		playerScoreStr = "Player: " + Integer.toString(playerScore);
 		computerScoreStr = "Computer: " + Integer.toString(computerScore);
 	}
-	
+
 	public void endGame() {
 		this.stop();
 		player.reset(10);
