@@ -12,6 +12,7 @@ public class Ball {
 	private int height;
 	private int acceleration = 0;
 
+
 	public Ball() {
 		dx = 6;
 		dy = 3;
@@ -34,6 +35,7 @@ public class Ball {
 	public int getAcceleration() {
 		return acceleration;
 	}
+	
 	public int getWidht() {
 		return this.width;
 	}
@@ -70,13 +72,14 @@ public class Ball {
 	public int getDy() {
 		return this.dy;
 	}
-	public void increaseSpeed() {
-		if(this.dx < 0) {
-			this.dx -= 1;
-			return;
-		}
 
-		this.dx += 1;
+	public void increaseSpeed() {
+		if (this.dx < 0) {
+			this.dx -= 1;
+
+		} else {
+			this.dx++;
+		}
 	}
 
 	public void reset() {
@@ -86,7 +89,7 @@ public class Ball {
 	}
 
 	public Rectangle getRect() {
-		return new Rectangle (xpos, ypos, width, height);
+		return new Rectangle(xpos, ypos, width, height);
 	}
 
 }
