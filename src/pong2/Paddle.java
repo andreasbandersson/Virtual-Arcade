@@ -20,7 +20,7 @@ public class Paddle {
 	}
 
 	public void setAcceleration(int acceleration){
-		if (acceleration < 8){
+		if (acceleration < 4){
 			this.acceleration = acceleration;
 		}
 	}

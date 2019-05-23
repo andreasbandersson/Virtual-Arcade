@@ -10,6 +10,8 @@ public class Ball {
 	private int dy; // Bollens vertikala färdriktning
 	private int width;
 	private int height;
+	private int acceleration = 0;
+
 
 	public Ball() {
 		dx = 6;
@@ -22,10 +24,17 @@ public class Ball {
 	}
 
 	public void move() {
-		xpos += dx;
-		ypos += dy;
+		xpos += dx + acceleration;
+		ypos += dy + acceleration;
+	}
+	public void setAcceleration(int acceleration){
+		this.acceleration = acceleration;
 	}
 
+	public int getAcceleration() {
+		return acceleration;
+	}
+	
 	public int getWidht() {
 		return this.width;
 	}
@@ -55,7 +64,7 @@ public class Ball {
 		increaseSpeed();
 	}
 
-	public int getDx() {
+	public int getDx( ) {
 		return this.dx;
 	}
 
