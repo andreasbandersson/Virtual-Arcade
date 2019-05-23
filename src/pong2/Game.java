@@ -1,5 +1,7 @@
 package pong2;
 
+import java.util.Random;
+
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -24,6 +26,9 @@ public class Game extends AnimationTimer {
 	private boolean paused = false;
 	private boolean gameOver = false;
 	private boolean started = false;
+	private boolean scored = false;
+	private int count = 0;
+	private Random rand = new Random();
 
 	public Game() {
 		init();
@@ -39,8 +44,8 @@ public class Game extends AnimationTimer {
 		canvas.setId("Pong");
 		gc = canvas.getGraphicsContext2D();
 		ball = new Ball();
-		player = new Paddle(10, 5);
-		computer = new Paddle(Pong.WIDTH - 20, 2.9);
+		player = new Paddle(10, 5, 40);
+		computer = new Paddle(Pong.WIDTH - 20, 2.9, 40);
 		addActionListeners();
 	}
 
@@ -51,6 +56,14 @@ public class Game extends AnimationTimer {
 			moveComputer();
 			checkPaddles();
 			checkCollision();
+			if (scored && count < 20) {
+				drawScore();
+				count++;
+				if (count == 20) {
+					count = 0;
+					scored = false;
+				}
+			}
 			timeSinceLastUpdate = now;
 		}
 	}
@@ -70,6 +83,7 @@ public class Game extends AnimationTimer {
 			computer.moveDown();
 		}
 	}
+	
 	
 	private void drawStart() {
 		draw();
@@ -115,8 +129,9 @@ public class Game extends AnimationTimer {
 		Text temp = new Text("GAME OVER - SCORE    ");
 		temp.setFont(Font.font(20));
 		gc.setFont(Font.font(20));
-		gc.fillText("GAME OVER - SCORE: " + playerScore, Pong.WIDTH / 2 - (temp.getLayoutBounds().getWidth() / 2), Pong.HEIGHT / 2);
-		gc.fillText("PRESS [R] TO RESTART", Pong.WIDTH / 2 - (temp.getLayoutBounds().getWidth() / 2),
+		gc.fillText("GAME OVER - SCORE: " + playerScore, (Pong.WIDTH / 2) - (temp.getLayoutBounds().getWidth() / 2), Pong.HEIGHT / 2);
+		temp.setText("PRESS [R] TO RESTART");
+		gc.fillText("PRESS [R] TO RESTART", (Pong.WIDTH / 2) - (temp.getLayoutBounds().getWidth() / 2),
 				(Pong.HEIGHT / 2) + 50);
 	}
 
@@ -124,12 +139,21 @@ public class Game extends AnimationTimer {
 		Text temp = new Text("GAME PAUSED");
 		temp.setFont(Font.font(20));
 		gc.setFont(Font.font(20));
-		gc.fillText("GAME PAUSED", Pong.WIDTH / 2 - (temp.getLayoutBounds().getWidth() / 2), Pong.HEIGHT / 2);
-		gc.fillText("PRESS [P] TO UNPAUSE", Pong.WIDTH / 2 - (temp.getLayoutBounds().getWidth() / 2),
+		gc.fillText("GAME PAUSED", (Pong.WIDTH / 2) - (temp.getLayoutBounds().getWidth() / 2), Pong.HEIGHT / 2);
+		temp.setText("PRESS [P] TO UNPAUSE");
+		gc.fillText("PRESS [P] TO UNPAUSE", (Pong.WIDTH / 2) - (temp.getLayoutBounds().getWidth() / 2),
 				(Pong.HEIGHT / 2) + 50);
 	}
+	
+	private void drawScore() {
+		Text temp = new Text("SCORE!!");
+		temp.setFont(Font.font(20));
+		gc.setFont(Font.font(20));
+		gc.setFill(Color.FIREBRICK);
+		gc.fillText("SCORE!!", (Pong.WIDTH / 2) - (temp.getLayoutBounds().getWidth() / 2), 50);
+	}
 
-	public void addActionListeners() {
+	private void addActionListeners() {
 		canvas.setOnKeyPressed(e -> {
 			if (e.getCode() == KeyCode.DOWN) {
 				movePlayerDown = true;
@@ -150,6 +174,7 @@ public class Game extends AnimationTimer {
 				gameOver = false;
 			} else if (e.getCode() == KeyCode.SPACE && !started) {
 				this.start();
+				started = true;
 			}
 			e.consume();
 		});
@@ -162,6 +187,7 @@ public class Game extends AnimationTimer {
 			}
 		});
 	}
+	
 	
 	public void setPaused() {
 		if (!paused && !gameOver) {
@@ -200,7 +226,7 @@ public class Game extends AnimationTimer {
 		if ((ball.getRect().intersects(player.getRect()) && ball.getDx() < 0)
 				|| (ball.getRect().intersects(computer.getRect()) && ball.getDx() > 0)) {
 			ball.changeDirection();
-		} else if (ball.getYpos() <= 0 || ball.getYpos() + ball.getRadius() >= Pong.HEIGHT) {
+		} else if (ball.getYpos() <= 0 && ball.getDy() < 0 || ball.getYpos() + ball.getRadius() >= Pong.HEIGHT) {
 			ball.bounceWall();
 		} else if (ball.getXpos() <= 0) {
 			if (gameOver == false) {
@@ -213,9 +239,10 @@ public class Game extends AnimationTimer {
 			}
 		} else if (ball.getXpos() >= Pong.WIDTH) {
 			playerScore += 50;
-			ball.reset();
+			ball.changeDirection();
+			scored = true;
 		}
-		playerScoreStr = "PLAYER: " + Integer.toString(playerScore);
+		playerScoreStr = "SCORE: " + Integer.toString(playerScore);
 	}
 
 }

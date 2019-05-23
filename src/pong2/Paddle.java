@@ -10,9 +10,9 @@ public class Paddle {
 	private int yPos;
 	private double dy;
 	
-	public Paddle(int xPos, double dy) {
+	public Paddle(int xPos, double dy, int height) {
 		this.dy = dy;
-		this.height = 40;
+		this.height = height;
 		this.width = 10;
 		this.xPos = xPos;
 		this.yPos = (Pong.HEIGHT / 2) - height / 2;
