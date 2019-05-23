@@ -270,24 +270,24 @@ public class Painter extends AnimationTimer {
     }
 
     public void addNewScoreFloat(int score){
-        ScoreUp scoreUp = new ScoreUp(score);
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                root.getChildren().add(scoreUp);
-            }
-        });
-        scoreFloats.add(scoreUp);
-        executor.execute(scoreUp);
+   //     ScoreUp scoreUp = new ScoreUp(score);
+   //     Platform.runLater(new Runnable() {
+   //         @Override
+   //         public void run() {
+   //             root.getChildren().add(scoreUp);
+   //         }
+   //     });
+   //     scoreFloats.add(scoreUp);
+   //     executor.execute(scoreUp);
     }
 
     public void checkDeadObjects(){
-        for (ScoreUp e : new ArrayList<>(scoreFloats)){
-            if (!e.floating()){
-                scoreFloats.remove(e);
-                root.getChildren().remove(e);
-            }
-        }
+     // for (ScoreUp e : new ArrayList<>(scoreFloats)){
+     //     if (!e.floating()){
+     //         scoreFloats.remove(e);
+     //         root.getChildren().remove(e);
+     //     }
+     // }
         for (Explosion e : new ArrayList<>(explosions)){
             if (!e.exploding()){
                 explosions.remove(e);
