@@ -6,7 +6,7 @@ import java.io.FileNotFoundException;
 
 import java.util.Random;
 
-
+import chat.ChatController;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -34,6 +34,7 @@ public class Game extends AnimationTimer {
 	private boolean gameOver = false;
 	private boolean started = false;
 	private boolean firstGame = true;
+	private ChatController controller;
 
 	private Image pongBg;
 
@@ -42,7 +43,8 @@ public class Game extends AnimationTimer {
 	private Random rand = new Random();
 
 
-	public Game() {
+	public Game(ChatController controller) {
+		this.controller = controller;
 		init();
 		drawStart();
 	}
@@ -291,6 +293,16 @@ public class Game extends AnimationTimer {
 			started = false;
 			gameOver = false;
 		}
+	}
+
+	private void gameOver() {
+		this.stop();
+		player.reset(10);
+		computer.reset(Pong.WIDTH - 20);
+		drawGameOver();
+		controller.newHighscore("Pong", playerScore);
+		playerScore = 0;
+		gameOver = true;
 	}
 
 

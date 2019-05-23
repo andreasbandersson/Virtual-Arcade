@@ -45,6 +45,7 @@ public class Leaderboard {
 	private JukeBox jukebox;
 	private Label snakeHighscoreLabel = new Label();
 	private Label spaceHighscoreLabel = new Label();
+	private Label pongHighscoreLabel = new Label();
 	private Pane pane = new Pane();
 
 	private final int numOfCols = 48;
@@ -64,7 +65,6 @@ public class Leaderboard {
 
 		// Setting amount of columns and rows for the GridPane
 		createColumnsandRows();
-		
 
 		// Adding and setting the Label for the Leaderboard.
 		headerLabel.setId("leaderboardLabel");
@@ -136,20 +136,22 @@ public class Leaderboard {
 	// }
 
 	private void addHighscoreLabels() {
-		// String pongHighscoreString = "";
-		// pongHighscoreLabel.setId("highscoreLabel");
-		// pongHighscoreLabel.setPrefSize(400.0, 200.00);
-		// pongHighscoreLabel.setPadding(new Insets(0.0, 5.0, 0.0, 10.0));
-		// for (int i = 0; i < 10; i++) {
-		// pongHighscoreString += i + 1 + " Andreas " + "1000\n\n";
-		// pongHighscoreLabel.setText("PONG HIGHSCORES\n\n" + pongHighscoreString);
-		// }
-		// leaderboardRoot.add(pongHighscoreLabel, 8, 4, 9, 8);
-		
-		
+		pongHighscoreLabel.setId("highscoreLabel");
+		pongHighscoreLabel.setPrefSize(300.0, 400.00);
 
 		snakeHighscoreLabel.setId("highscoreLabel");
 		snakeHighscoreLabel.setPrefSize(300.0, 400.00);
+
+		pongHighscoreLabel.setTextAlignment(TextAlignment.LEFT);
+		pongHighscoreLabel.setMinHeight(400);
+		pongHighscoreLabel.setText("PONG");
+		pongHighscoreLabel.setMinWidth(Region.USE_PREF_SIZE);
+		pongHighscoreLabel.setMinHeight(Region.USE_PREF_SIZE);
+		pongHighscoreLabel.setContentDisplay(ContentDisplay.CENTER);
+		pongHighscoreLabel.setLayoutX(0);
+		pongHighscoreLabel.setLayoutY(0);
+		pongHighscoreLabel.setAlignment(Pos.TOP_CENTER);
+		pane.getChildren().add(pongHighscoreLabel);
 
 		snakeHighscoreLabel.setTextAlignment(TextAlignment.LEFT);
 		snakeHighscoreLabel.setMinHeight(400);
@@ -157,57 +159,67 @@ public class Leaderboard {
 		snakeHighscoreLabel.setMinWidth(Region.USE_PREF_SIZE);
 		snakeHighscoreLabel.setMinHeight(Region.USE_PREF_SIZE);
 		snakeHighscoreLabel.setContentDisplay(ContentDisplay.CENTER);
-		snakeHighscoreLabel.setLayoutX(0);
+		snakeHighscoreLabel.setLayoutX(565);
 		snakeHighscoreLabel.setLayoutY(0);
 		snakeHighscoreLabel.setAlignment(Pos.TOP_CENTER);
 		pane.getChildren().add(snakeHighscoreLabel);
-		//leaderboardRoot.add(snakeHighscoreLabel, 20, 4, 10, 16);
-
 
 		spaceHighscoreLabel.setId("highscoreLabel");
 		spaceHighscoreLabel.setPrefSize(300.0, 400.00);
-		
+
 		spaceHighscoreLabel.setAlignment(Pos.TOP_CENTER);
 		spaceHighscoreLabel.setTextAlignment(TextAlignment.LEFT);
 		spaceHighscoreLabel.setText("SPACE INVADERS");
 		spaceHighscoreLabel.setMinHeight(400);
 		spaceHighscoreLabel.setMinWidth(Region.USE_PREF_SIZE);
 		spaceHighscoreLabel.setMinHeight(Region.USE_PREF_SIZE);
-		spaceHighscoreLabel.setLayoutX(350);
+		spaceHighscoreLabel.setLayoutX(285);
 		spaceHighscoreLabel.setLayoutY(0);
 		spaceHighscoreLabel.setContentDisplay(ContentDisplay.CENTER);
 		pane.getChildren().add(spaceHighscoreLabel);
 		pane.setId("highscoreLabel");
-		leaderboardRoot.add(pane, 4, 6);
+		leaderboardRoot.add(pane, 0, 6);
 	}
 
 	public void updateHighscores(LinkedList<Highscore> highscores) {
 		if (highscores.size() > 0) {
 			if (highscores.get(0).getGame().equals("Snake")) {
-				String snakeHighscoreString = "";
+				String temp = "";
 				for (int i = 0; i < highscores.size(); i++) {
 					if (i == 9) {
-					snakeHighscoreString += i + 1 + " " + highscores.get(i).getUser().getUsername() + " "
-							+ highscores.get(i).getScore() + "\n";
+						temp += i + 1 + " " + highscores.get(i).getUser().getUsername() + " "
+								+ highscores.get(i).getScore() + "\n";
 					} else {
-						snakeHighscoreString += i + 1 + "  " + highscores.get(i).getUser().getUsername() + " "
+						temp += i + 1 + "  " + highscores.get(i).getUser().getUsername() + " "
 								+ highscores.get(i).getScore() + "\n";
 					}
 				}
-				snakeHighscoreLabel.setText("SNAKE\n\n" + snakeHighscoreString);
-				
+				snakeHighscoreLabel.setText("SNAKE\n\n" + temp);
+
+			} else if (highscores.get(0).getGame().equals("Space Invaders")) {
+				String temp = "";
+				for (int i = 0; i < highscores.size(); i++) {
+					if (i == 9) {
+						temp += i + 1 + " " + highscores.get(i).getUser().getUsername() + " "
+								+ highscores.get(i).getScore() + "\n";
+					} else {
+						temp += i + 1 + "  " + highscores.get(i).getUser().getUsername() + " "
+								+ highscores.get(i).getScore() + "\n";
+					}
+				}
+				spaceHighscoreLabel.setText("SPACE INVADERS\n\n" + temp);
 			} else {
-				String spaceHighscoreString = "";
+				String temp = "";
 				for (int i = 0; i < highscores.size(); i++) {
 					if (i == 9) {
-						spaceHighscoreString += i + 1 + " " + highscores.get(i).getUser().getUsername() + " "
+						temp += i + 1 + " " + highscores.get(i).getUser().getUsername() + " "
 								+ highscores.get(i).getScore() + "\n";
 					} else {
-						spaceHighscoreString += i + 1 + "  " + highscores.get(i).getUser().getUsername() + " "
+						temp += i + 1 + "  " + highscores.get(i).getUser().getUsername() + " "
 								+ highscores.get(i).getScore() + "\n";
 					}
 				}
-				spaceHighscoreLabel.setText("SPACE INVADERS\n\n" + spaceHighscoreString);
+				pongHighscoreLabel.setText("PONG \n\n" + temp);
 			}
 		}
 	}
@@ -223,8 +235,7 @@ public class Leaderboard {
 		playSoundImageView = new ImageView(playSoundImage);
 		muteSoundImageView = new ImageView(muteSoundImage);
 	}
-	
-	
+
 	public void checkSound() {
 		if (jukebox.isMute()) {
 			soundButton.setGraphic(muteSoundImageView);

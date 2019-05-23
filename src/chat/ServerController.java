@@ -29,11 +29,13 @@ public class ServerController {
 	private Server server;
 	private HighscoreList snakeScore;
 	private HighscoreList spaceScore;
+	private HighscoreList pongScore;
 
 	public ServerController() {
 		loadUsers();
 		loadHighscores(snakeScore, "snake");
 		loadHighscores(spaceScore, "space");
+		loadHighscores(pongScore, "pong");
 	}
 
 	public void addServer(Server server) {
@@ -112,12 +114,7 @@ public class ServerController {
 			server.sendObject(user, oos);
 			server.sendObject("LOGIN OK", oos);
 			sendUserList(user);
-			if (snakeScore != null) {
-				sendHighscoreList(snakeScore.getList());
-			}
-			if (spaceScore != null) {
-				sendHighscoreList(spaceScore.getList());
-			}
+			sendInitialLists(oos);
 			return true;
 		} else {
 			server.sendObject("Username and/or password is incorrect", oos);
@@ -147,13 +144,20 @@ public class ServerController {
 			server.sendObject("USER CREATED", oos);
 			sendUserList(user);
 			saveUsers();
-			if (snakeScore != null) {
-				sendHighscoreList(snakeScore.getList());
-			}
-			if (spaceScore != null) {
-				sendHighscoreList(spaceScore.getList());
-			}
+			sendInitialLists(oos);
 			return true;
+		}
+	}
+	
+	private void sendInitialLists(ObjectOutputStream oos) {
+		if (snakeScore != null) {
+			server.sendHighscore(snakeScore.getList(), oos);
+		}
+		if (spaceScore != null) {
+			server.sendHighscore(spaceScore.getList(), oos);
+		}
+		if (pongScore != null) {
+			server.sendHighscore(pongScore.getList(), oos);
 		}
 	}
 
@@ -202,12 +206,17 @@ public class ServerController {
 				newHighscore(highscore, snakeScore.getList());
 				saveHighscores(snakeScore, "snake");
 			}
-		} else {
+		} else if (highscore.getGame().equals("Space Invaders")) {
 			if (spaceScore.checkScore(highscore) == true) {
 				spaceScore.add(highscore);
-				System.out.println("Server: highscore tillagt");
 				newHighscore(highscore, spaceScore.getList());
 				saveHighscores(spaceScore, "space");
+			}
+		} else {
+			if (pongScore.checkScore(highscore) == true) {
+				pongScore.add(highscore);
+				newHighscore(highscore, pongScore.getList());
+				saveHighscores(pongScore, "pong");
 			}
 		}
 	}
@@ -234,6 +243,8 @@ public class ServerController {
 					spaceScore = (HighscoreList) ois.readObject();
 				} else if (name.equals("snake")) {
 					snakeScore = (HighscoreList) ois.readObject();
+				} else if (name.equals("pong")) {
+					pongScore = (HighscoreList) ois.readObject();
 				}
 			} catch (IOException | ClassNotFoundException e) {
 				e.printStackTrace();
@@ -242,6 +253,8 @@ public class ServerController {
 			snakeScore = new HighscoreList();
 		} else if (name.equals("space")) {
 			spaceScore = new HighscoreList();
+		} else if (name.equals("pong")) {
+			pongScore = new HighscoreList();
 		}
 	}
 
