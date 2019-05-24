@@ -31,6 +31,7 @@ public class Ball {
 //		this.acceleration = acceleration;
 //	}
 
+
 	public int getAcceleration() {
 		return acceleration;
 	}
