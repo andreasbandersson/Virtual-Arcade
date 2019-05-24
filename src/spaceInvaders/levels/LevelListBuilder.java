@@ -10,8 +10,13 @@ public class LevelListBuilder {
     private ArrayList<Level> levelList = new ArrayList<>();
 
     public LevelListBuilder(Controller controller) {
+        levelList.add(new Level1(Difficulty.EASY,controller));
         levelList.add(new Level2(Difficulty.EASY,controller));
-        levelList.add(new Level2(Difficulty.EASY,controller));
+        levelList.add(new Level3(Difficulty.EASY,controller));
+        levelList.add(new Boss1(Difficulty.EASY,controller));
+        levelList.add(new Level4(Difficulty.MEDIUM,controller));
+        levelList.add(new Level5(Difficulty.MEDIUM,controller));
+        levelList.add(new Boss2(Difficulty.HARD,controller));
     }
 
     public ArrayList getLevelList(){

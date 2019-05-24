@@ -45,7 +45,7 @@ import java.util.concurrent.Executors;
  * @author Viktor Altintas
  */
 
-public class Painter extends AnimationTimer {
+public class Painter extends AnimationTimer implements Runnable{
 
     private Controller controller;
     private Player player;
@@ -136,7 +136,7 @@ public class Painter extends AnimationTimer {
         // root.getChildren().add(backgroundLayer);
 
         createColumnsandRows();
-        setSoundButtonImages();
+       
         setSpaceInvadersArcadeMachineImage();
 
         root.setId("SpaceInvaders");
@@ -148,10 +148,11 @@ public class Painter extends AnimationTimer {
         // Adding an setting the button for mute and un-mute of login music
         soundButton = new Button();
         soundButton.setId("logOutButton");
-        soundButton.setGraphic(playSoundImageView);
         spaceInvadersRoot.add(soundButton, 32, 1);
-
         spaceInvadersRoot.setPrefSize(1200.0, 600.0);
+        
+        setSoundButtonImages();
+        checkSound();
 
         backButton.setFocusTraversable(false);
         soundButton.setFocusTraversable(false);
@@ -206,7 +207,19 @@ public class Painter extends AnimationTimer {
                 root.getChildren().add(endLabel);
             }
         });
+    }
 
+    public void run(){
+        for (Explosion e : new ArrayList<>(explosions)){
+            if (!e.exploding()){
+                explosions.remove(e);
+            }
+        }
+        for (ShotCollision e : new ArrayList<>(shotCollisions)){
+            if (!e.enemyHitHappening()){
+                shotCollisions.remove(e);
+            }
+        }
     }
 
     @Override
@@ -232,17 +245,17 @@ public class Painter extends AnimationTimer {
                 gc.drawImage(playerLifeSprite, 440 + ((i + 1) * 39), 10);
             }
 
-            checkDeadObjects();
+           checkDeadObjects();
 
-            if (explosions.stream().anyMatch(Explosion::exploding)) {
+           // if (explosions.stream().anyMatch(Explosion::exploding)) {
                 for (Explosion e : new ArrayList<>(explosions)) {
                     gc.drawImage(explosion, e.getPosition().getX(), e.getPosition().getY());
-                }
+             //   }
             }
-            if (shotCollisions.stream().anyMatch(ShotCollision::enemyHitHappening)) {
+            //if (shotCollisions.stream().anyMatch(ShotCollision::enemyHitHappening)) {
                 for (ShotCollision e : new ArrayList<>(shotCollisions)) {
                     gc.drawImage(shotCollision, e.getPosition().getX(), e.getPosition().getY() - 10);
-                }
+              //  }
             }
         }
         else {
@@ -288,16 +301,8 @@ public class Painter extends AnimationTimer {
      //         root.getChildren().remove(e);
      //     }
      // }
-        for (Explosion e : new ArrayList<>(explosions)){
-            if (!e.exploding()){
-                explosions.remove(e);
-            }
-        }
-        for (ShotCollision e : new ArrayList<>(shotCollisions)){
-            if (!e.enemyHitHappening()){
-                shotCollisions.remove(e);
-            }
-        }
+        executor.execute(this);
+
     }
 
     private void createColumnsandRows() {
@@ -325,6 +330,15 @@ public class Painter extends AnimationTimer {
         playSoundImageView = new ImageView(playSoundImage);
         muteSoundImageView = new ImageView(muteSoundImage);
     }
+    
+    //Checks if sound is muted or playing and sets image accordingly.
+	public void checkSound() {
+		if (jukebox.isMute()) {
+			soundButton.setGraphic(muteSoundImageView);
+		} else {
+			soundButton.setGraphic(playSoundImageView);
+		}
+	}
 
     //Sets and adds the arcade machine image for the SpaceInvaders game.
     public void setSpaceInvadersArcadeMachineImage() {
@@ -364,19 +378,19 @@ public class Painter extends AnimationTimer {
                         break;
 
                     case SPACE:
-                        if (controller.getGamePaused())
+                        if (controller.getGamePaused() || controller.getLevelLoading())
                             break;
                         player.shoot();
                         break;
                     case P:
-                        if (controller.getGamePaused())
-                        {
-                            root.getChildren().remove(pauseLabel);
+                        if (!gameEnded) {
+                            if (controller.getGamePaused()) {
+                                root.getChildren().remove(pauseLabel);
+                            } else  {
+                                root.getChildren().add(pauseLabel);
+                            }
+                            controller.setGamePaused();
                         }
-                        else {
-                            root.getChildren().add(pauseLabel);
-                        }
-                        controller.setGamePaused();
                         break;
                     case R:
                         if (gameEnded){
@@ -387,6 +401,7 @@ public class Painter extends AnimationTimer {
                             controller.restart();
                         }
                 }
+                event.consume();
             }
         });
 
@@ -424,9 +439,9 @@ public class Painter extends AnimationTimer {
         soundButton.setOnAction(e -> {
             jukebox.muteUnmute();
             if (jukebox.isMute()) {
-                soundButton.setGraphic(playSoundImageView);
-            } else {
                 soundButton.setGraphic(muteSoundImageView);
+            } else {
+                soundButton.setGraphic(playSoundImageView);
             }
         });
 
