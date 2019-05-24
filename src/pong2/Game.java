@@ -208,6 +208,12 @@ public class Game extends AnimationTimer implements Runnable {
 
 		gc.setFont(Font.font(40));
 		gc.fillText("Your Score: " + Integer.toString(playerScore), Pong.WIDTH / 4, centerY + 60);
+		
+		Text temp = new Text("PRESS [P] TO RESTART");
+		temp.setFont(Font.font(20));
+		gc.setFont(Font.font(20));
+		gc.fillText("PRESS [R] TO RESTART", Pong.WIDTH / 2 - (temp.getLayoutBounds().getWidth() / 2), Pong.HEIGHT / 2 - 100);
+		
 
 	}
 
@@ -216,9 +222,9 @@ public class Game extends AnimationTimer implements Runnable {
 		temp.setFont(Font.font(20));
 		gc.setFont(Font.font(20));
 		gc.fillText("GAME PAUSED", Pong.WIDTH / 2 - (temp.getLayoutBounds().getWidth() / 2), Pong.HEIGHT / 2);
-		// gc.fillText("PRESS [P] TO UNPAUSE", Pong.WIDTH / 2 -
-		// (temp.getLayoutBounds().getWidth() / 2),
-		// (Pong.HEIGHT / 2) + 50);
+		gc.fillText("PRESS [P] TO UNPAUSE", Pong.WIDTH / 2 -
+		(temp.getLayoutBounds().getWidth() / 2),
+		(Pong.HEIGHT / 2) + 50);
 	}
 
 	// private void drawScore() {
