@@ -238,9 +238,9 @@ public class Game extends AnimationTimer implements Runnable {
 
 	private void addActionListeners() {
 		canvas.setOnKeyPressed(e -> {
-			if (e.getCode() == KeyCode.S) {
+			if (e.getCode() == KeyCode.S || e.getCode() == KeyCode.DOWN) {
 				movePlayerDown = true;
-			} else if (e.getCode() == KeyCode.W) {
+			} else if (e.getCode() == KeyCode.W || e.getCode() == KeyCode.UP) {
 				movePlayerUp = true;
 			} else if (e.getCode() == KeyCode.P && gameOver == false) {
 				if (paused) {
@@ -275,10 +275,10 @@ public class Game extends AnimationTimer implements Runnable {
 		});
 
 		canvas.setOnKeyReleased(e -> {
-			if (e.getCode() == KeyCode.S) {
+			if (e.getCode() == KeyCode.S || e.getCode() == KeyCode.DOWN) {
 				player.setAcceleration(0);
 				movePlayerDown = false;
-			} else if (e.getCode() == KeyCode.W) {
+			} else if (e.getCode() == KeyCode.W || e.getCode() == KeyCode.UP) {
 				player.setAcceleration(0);
 				movePlayerUp = false;
 			}

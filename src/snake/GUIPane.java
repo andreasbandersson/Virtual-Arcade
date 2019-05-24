@@ -416,7 +416,7 @@ public class GUIPane implements Runnable {
 		// Keeps track of all the key presses in the gameScene.
 		gameScene.setOnKeyPressed(e -> {
 			// Pressing W will change the snakes direction to UP.
-			if (e.getCode() == KeyCode.W) {
+			if (e.getCode() == KeyCode.W || e.getCode() == KeyCode.UP) {
 				if (movementQueue.peek() != DOWN && directionChangeAllowed) {
 					directionChangeAllowed = false;
 					movementQueue.remove();
@@ -425,7 +425,7 @@ public class GUIPane implements Runnable {
 				}
 			}
 			// Pressing S will change the snakes direction to DOWN.
-			if (e.getCode() == KeyCode.S) {
+			if (e.getCode() == KeyCode.S || e.getCode() == KeyCode.DOWN) {
 				if (movementQueue.peek() != UP && directionChangeAllowed) {
 					directionChangeAllowed = false;
 					movementQueue.remove();
@@ -433,7 +433,7 @@ public class GUIPane implements Runnable {
 				}
 			}
 			// Pressing A will change the snakes direction to LEFT.
-			if (e.getCode() == KeyCode.A) {
+			if (e.getCode() == KeyCode.A || e.getCode() == KeyCode.LEFT) {
 				if (movementQueue.peek() != RIGHT && directionChangeAllowed) {
 					directionChangeAllowed = false;
 					movementQueue.remove();
@@ -441,7 +441,7 @@ public class GUIPane implements Runnable {
 				}
 			}
 			// Pressing D will change the snakes direction to RIGHT.
-			if (e.getCode() == KeyCode.D) {
+			if (e.getCode() == KeyCode.D || e.getCode() == KeyCode.RIGHT) {
 				if (movementQueue.peek() != LEFT && directionChangeAllowed) {
 					directionChangeAllowed = false;
 					movementQueue.remove();
