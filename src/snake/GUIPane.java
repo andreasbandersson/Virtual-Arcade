@@ -113,6 +113,7 @@ public class GUIPane implements Runnable{
 	private static Image snakeCharacterImage;
 	private static Image foodImage;
 	private static Image obstacleImage;
+	
 	private Executor executor = Executors.newFixedThreadPool(2);
 
 	private ChatController controller;
