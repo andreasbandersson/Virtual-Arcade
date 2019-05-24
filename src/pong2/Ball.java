@@ -27,9 +27,9 @@ public class Ball {
 		xpos += dx + acceleration;
 		ypos += dy + acceleration;
 	}
-	public void setAcceleration(int acceleration){
-		this.acceleration = acceleration;
-	}
+//	public void setAcceleration(int acceleration){
+//		this.acceleration = acceleration;
+//	}
 
 	public int getAcceleration() {
 		return acceleration;

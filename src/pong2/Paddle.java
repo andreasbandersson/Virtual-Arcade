@@ -65,7 +65,7 @@ public class Paddle {
 	}
 
 	public void reset(int xpos) {
-		this.xPos = xPos;
+		this.xPos = xpos;
 		this.yPos = (Pong.HEIGHT / 2) - height / 2;
 	}
 
