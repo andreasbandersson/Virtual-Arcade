@@ -1,4 +1,4 @@
-package chat;
+package server;
 
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -8,7 +8,7 @@ import chat.User;
 
 /**
  * Stores the ObjectOutputStreams for all connected users.
- * @author Mans
+ * @author Måns Grundberg
  *
  */
 

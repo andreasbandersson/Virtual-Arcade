@@ -1,4 +1,4 @@
-package chat;
+package server;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -13,7 +13,7 @@ import chat.User;
 
 /**
  * Handles all communication with the chat- and login systems client.
- * @author Mans
+ * @author Måns Grundberg
  *
  */
 

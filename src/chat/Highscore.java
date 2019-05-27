@@ -3,7 +3,7 @@ package chat;
 import java.io.Serializable;
 
 /**
- * 
+ * Class used to represent a highscore.
  * @author Måns Grundberg
  *
  */

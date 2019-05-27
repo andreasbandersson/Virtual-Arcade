@@ -1,4 +1,4 @@
-package chat;
+package server;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -6,9 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedList;
 
 import chat.Highscore;
@@ -19,7 +16,7 @@ import chat.UserList;
 /**
  * Handles the logic of the chat/login systems server side
  * 
- * @author Mans
+ * @author Måns Grundberg
  *
  */
 
@@ -149,6 +146,10 @@ public class ServerController {
 		}
 	}
 	
+	/**
+	 * Sends highscorelists to connecting user
+	 * @param oos
+	 */
 	private void sendInitialLists(ObjectOutputStream oos) {
 		if (snakeScore != null) {
 			server.sendHighscore(snakeScore.getList(), oos);
@@ -197,7 +198,10 @@ public class ServerController {
 		}
 	}
 
-	// TODO: Check/save highscores
+	/**
+	 * Evaluates highscore
+	 * @param highscore
+	 */
 
 	public void checkHighscore(Highscore highscore) {
 		if (highscore.getGame().equals("Snake")) {
@@ -221,6 +225,10 @@ public class ServerController {
 		}
 	}
 
+	/**
+	 * Sends updated highscorelist to all connected user
+	 * @param list The highscore list
+	 */
 	private void sendHighscoreList(LinkedList<Highscore> list) {
 		UserList temp = new UserList(clientStreams.getKeySet());
 		for (int i = 0; i < temp.size(); i++) {
@@ -228,6 +236,11 @@ public class ServerController {
 		}
 	}
 
+	/**
+	 * Sends out a notification of new highscore to all connected users
+	 * @param highscore The new highscore
+	 * @param list The updated highscore list
+	 */
 	private void newHighscore(Highscore highscore, LinkedList<Highscore> list) {
 		String str = highscore.getUser().getUsername() + " made it onto the " + highscore.getGame()
 				+ " Leaderboard with " + highscore.getScore() + " points!";
@@ -235,6 +248,11 @@ public class ServerController {
 		sendHighscoreList(list);
 	}
 
+	/**
+	 * Reads highscorelists from file
+	 * @param list  The list to write to
+	 * @param name The name of the game
+	 */
 	private void loadHighscores(HighscoreList list, String name) {
 		File highscoreFile = new File("files/" + name + ".dat");
 		if (highscoreFile.exists()) {
@@ -258,6 +276,11 @@ public class ServerController {
 		}
 	}
 
+	/**
+	 * Writes highscore list to file
+	 * @param list The list to write from
+	 * @param name The name of the game
+	 */
 	private void saveHighscores(HighscoreList list, String name) {
 		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("files/" + name + ".dat"))) {
 			oos.writeObject(list);

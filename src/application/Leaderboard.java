@@ -176,12 +176,15 @@ public class Leaderboard {
 			if (highscores.get(0).getGame().equals("Snake")) {
 				String temp = "";
 				for (int i = 0; i < highscores.size(); i++) {
+					String name = highscores.get(i).getUser().getUsername();
+					if (name.length() > 8) {
+						String temp2 = name.substring(0, 7);
+						name = temp2;
+					}
 					if (i == 9) {
-						temp += i + 1 + " " + highscores.get(i).getUser().getUsername() + " "
-								+ highscores.get(i).getScore() + "\n";
+						temp += i + 1 + " " + name + " " + highscores.get(i).getScore() + "\n";
 					} else {
-						temp += i + 1 + "  " + highscores.get(i).getUser().getUsername() + " "
-								+ highscores.get(i).getScore() + "\n";
+						temp += i + 1 + "  " + name + " " + highscores.get(i).getScore() + "\n";
 					}
 				}
 				snakeHighscoreLabel.setText("SNAKE\n\n" + temp);
@@ -189,24 +192,30 @@ public class Leaderboard {
 			} else if (highscores.get(0).getGame().equals("Space Invaders")) {
 				String temp = "";
 				for (int i = 0; i < highscores.size(); i++) {
+					String name = highscores.get(i).getUser().getUsername();
+					if (name.length() > 8) {
+						String temp2 = name.substring(0, 7);
+						name = temp2;
+					}
 					if (i == 9) {
-						temp += i + 1 + " " + highscores.get(i).getUser().getUsername() + " "
-								+ highscores.get(i).getScore() + "\n";
+						temp += i + 1 + " " + name + " " + highscores.get(i).getScore() + "\n";
 					} else {
-						temp += i + 1 + "  " + highscores.get(i).getUser().getUsername() + " "
-								+ highscores.get(i).getScore() + "\n";
+						temp += i + 1 + "  " + name + " " + highscores.get(i).getScore() + "\n";
 					}
 				}
 				spaceHighscoreLabel.setText("SPACE INVADERS\n\n" + temp);
 			} else {
 				String temp = "";
 				for (int i = 0; i < highscores.size(); i++) {
+					String name = highscores.get(i).getUser().getUsername();
+					if (name.length() > 8) {
+						String temp2 = name.substring(0, 7);
+						name = temp2;
+					}
 					if (i == 9) {
-						temp += i + 1 + " " + highscores.get(i).getUser().getUsername() + " "
-								+ highscores.get(i).getScore() + "\n";
+						temp += i + 1 + " " + name + " " + highscores.get(i).getScore() + "\n";
 					} else {
-						temp += i + 1 + "  " + highscores.get(i).getUser().getUsername() + " "
-								+ highscores.get(i).getScore() + "\n";
+						temp += i + 1 + "  " + name + " " + highscores.get(i).getScore() + "\n";
 					}
 				}
 				pongHighscoreLabel.setText("PONG \n\n" + temp);

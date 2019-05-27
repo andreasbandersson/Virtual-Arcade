@@ -159,6 +159,10 @@ public class ChatController {
 		}
 	}
 
+	/**
+	 * Calls UI with updated highscore list.
+	 * @param list
+	 */
 	private void updateHighscores(LinkedList<Highscore> list) {
 		Platform.runLater(new Runnable() {
 			public void run() {
@@ -167,6 +171,11 @@ public class ChatController {
 		});
 	}
 
+	/**
+	 * Sends out new highscore through Client.
+	 * @param game The game calling the method
+	 * @param score The game score to check
+	 */
 	public void newHighscore(String game, int score) {
 		client.sendHighscore(new Highscore(this.user, game, score));
 	}

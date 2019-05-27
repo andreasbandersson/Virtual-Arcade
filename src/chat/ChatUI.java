@@ -20,8 +20,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
 /**
- * 
- * @author M�ns Grundberg
+ * UI-class for the chat system.
+ * @author Måns Grundberg
  *
  */
 public class ChatUI extends Pane {
@@ -45,6 +45,9 @@ public class ChatUI extends Pane {
 		new ChatUI(new ChatController());
 	}
 
+	/**
+	 * Initializes GUI-components
+	 */
 	private void init() {
 		setPrefSize(300, 600);
 		
@@ -106,6 +109,11 @@ public class ChatUI extends Pane {
 		}
 	}
 
+	/**
+	 * Appends a new msg to text area
+	 * @param msg The string to append
+	 * @param type The type of message, determining the texts color
+	 */
 	public void addMessage(String msg, int type) {
 		Platform.runLater(new Runnable() {
 			public void run() {
@@ -122,6 +130,10 @@ public class ChatUI extends Pane {
 		});
 	}
 
+	/**
+	 * Updates text area with new list of online users
+	 * @param userList The list of online users
+	 */
 	public void updateUserList(UserList userList) {
 		Platform.runLater(new Runnable() {
 			public void run() {
@@ -134,6 +146,9 @@ public class ChatUI extends Pane {
 		});
 	}
 
+	/**
+	 * EventHandler. Handles all action events for buttons.
+	 */
 	EventHandler<ActionEvent> buttonHandler = new EventHandler<ActionEvent>() {
 		@Override
 		public void handle(ActionEvent event) {
@@ -157,6 +172,9 @@ public class ChatUI extends Pane {
 		}
 	};
 
+	/**
+	 * KeyHandler. Handles all key events.
+	 */
 	EventHandler<KeyEvent> keyFilter = new EventHandler<KeyEvent>() {
 		@Override
 		public void handle(KeyEvent e) {
