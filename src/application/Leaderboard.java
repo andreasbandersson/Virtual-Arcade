@@ -182,9 +182,12 @@ public class Leaderboard {
 						name = temp2;
 					}
 					if (i == 9) {
-						temp += i + 1 + " " + name + " " + highscores.get(i).getScore() + "\n";
+
+						temp += i + 1 + " " + name + " "
+								+ highscores.get(i).getScore() + "\n";
 					} else {
-						temp += i + 1 + "  " + name + " " + highscores.get(i).getScore() + "\n";
+						temp += i + 1 + "  " + name + " "
+								+ highscores.get(i).getScore() + "\n";
 					}
 				}
 				snakeHighscoreLabel.setText("SNAKE\n\n" + temp);
@@ -198,9 +201,11 @@ public class Leaderboard {
 						name = temp2;
 					}
 					if (i == 9) {
-						temp += i + 1 + " " + name + " " + highscores.get(i).getScore() + "\n";
+						temp += i + 1 + " " + name + " "
+								+ highscores.get(i).getScore() + "\n";
 					} else {
-						temp += i + 1 + "  " + name + " " + highscores.get(i).getScore() + "\n";
+						temp += i + 1 + "  " + name + " "
+								+ highscores.get(i).getScore() + "\n";
 					}
 				}
 				spaceHighscoreLabel.setText("SPACE INVADERS\n\n" + temp);
@@ -213,9 +218,11 @@ public class Leaderboard {
 						name = temp2;
 					}
 					if (i == 9) {
-						temp += i + 1 + " " + name + " " + highscores.get(i).getScore() + "\n";
+						temp += i + 1 + " " + name + " "
+								+ highscores.get(i).getScore() + "\n";
 					} else {
-						temp += i + 1 + "  " + name + " " + highscores.get(i).getScore() + "\n";
+						temp += i + 1 + "  " + name + " "
+								+ highscores.get(i).getScore() + "\n";
 					}
 				}
 				pongHighscoreLabel.setText("PONG \n\n" + temp);
