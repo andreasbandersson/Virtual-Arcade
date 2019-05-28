@@ -50,13 +50,11 @@ public class MainUI extends Application {
 	private Scene scene;
 	private GridPane mainRoot;
 	private Leaderboard leaderboard;
-	private pong2.Pong pong;
+	private pong.Pong pong;
 	private GUIPane snake;
 	private Painter spaceInvaders;
 	private JukeBox jukebox;
 	private ChatController controller;
-	private final int numOfCols = 48;
-	private final int numOfRows = 24;
 	private ChatUI chatUI;
 	public static Stage primaryStage = new Stage();
 
@@ -162,7 +160,7 @@ public class MainUI extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.centerOnScreen();
 		primaryStage.show();
-		primaryStage.setOnCloseRequest((EventHandler<WindowEvent>) new EventHandler<WindowEvent>() {
+		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			@Override
 			public void handle(WindowEvent e) {
 				Platform.exit();
@@ -177,6 +175,8 @@ public class MainUI extends Application {
 
 	// Sets the number and size-percentage of the rows and columns in the GridPane.
 	private void setColumnsandRows() {
+		final int numOfCols = 48;
+		final int numOfRows = 24;
 		for (int i = 0; i < numOfCols; i++) {
 			ColumnConstraints colConst = new ColumnConstraints();
 			colConst.setPercentWidth(100.0 / numOfCols);
@@ -288,10 +288,9 @@ public class MainUI extends Application {
 			}
 		});
 
-		// Skriv om. Instansiera pong och l�gg in i mainRoot som pane bara
 		pongPlayButton.setOnAction(e -> {
 			if (pong == null) {
-				pong = new pong2.Pong(this, chatUI, jukebox, controller);
+				pong = new pong.Pong(this, chatUI, jukebox, controller);
 			}
 
 			mainRoot.getChildren().remove(chatUI);
@@ -300,7 +299,6 @@ public class MainUI extends Application {
 			pong.checkSound();
 		});
 
-		// Skriv om. Instansiera Space Invaders och l�gg in i mainRoot som pane bara
 		spacePlayButton.setOnAction(e -> {
 			if (spaceInvaders == null) {
 				spaceInvaders = new Painter(this, chatUI, jukebox, controller);
@@ -311,7 +309,6 @@ public class MainUI extends Application {
 			spaceInvaders.checkSound();
 		});
 
-		// Skriv om. Instansiera Snake och l�gg in i mainRoot som pane bara
 		snakePlayButton.setOnAction(e -> {
 			if (snake == null) {
 				snake = new GUIPane(this, chatUI, jukebox, controller);

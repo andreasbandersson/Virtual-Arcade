@@ -47,9 +47,6 @@ public class LoginUI extends Application {
 	public static Stage stage = new Stage();
 	private ChatController controller;
 
-	private final int numOfCols = 48;
-	private final int numOfRows = 24;
-
 	public LoginUI(ChatController controller) {
 		this.controller = controller;
 	}
@@ -151,6 +148,9 @@ public class LoginUI extends Application {
 
 	// Sets the number and size-percentage of the rows and columns in the GridPane.
 	private void createColumnsandRows() {
+		final int numOfCols = 48;
+		final int numOfRows = 24;
+
 		for (int i = 0; i < numOfCols; i++) {
 			ColumnConstraints colConst = new ColumnConstraints();
 			colConst.setPercentWidth(100.0 / numOfCols);
@@ -180,7 +180,7 @@ public class LoginUI extends Application {
 	 * If it is muted the Soundbuttons symbol should show the correct symbol.
 	 * This method could be called upon from outside of this class.
 	 */
-	public void checkSound() {
+	private void checkSound() {
 		if (jukebox.isMute()) {
 			soundButton.setGraphic(muteSoundImageView);
 		} else {
@@ -237,24 +237,5 @@ public class LoginUI extends Application {
 			}
 		});
 
-	}
-	
-	/**
-	 * Function for adding and setting a KeyListener. 
-	 * The purpose of this is so that the user can push Enter after they have inputted their password.
-	 * @param primaryStage the current stage.
-	 */
-	public void addKeyListener(Stage primaryStage) {
-		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-
-			@Override
-			public void handle(KeyEvent event) {
-				if (event.getCode() == KeyCode.ENTER) {
-					loginButton.requestFocus();
-					loginButton.fire();
-					event.consume();
-				}
-			}
-		});
 	}
 }

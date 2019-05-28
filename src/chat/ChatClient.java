@@ -45,7 +45,6 @@ public class ChatClient {
 		}
 	}
 
-	// TODO: Koppla till UI
 	/**
 	 * Disconnects client from server.
 	 */

@@ -1,10 +1,9 @@
 package spaceInvaders.units;
 
 
-import application.JukeBox;
+
 import application.JukeBox2;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import spaceInvaders.levels.Difficulty;
 import spaceInvaders.logic.Controller;
 

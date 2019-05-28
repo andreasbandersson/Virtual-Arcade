@@ -1,8 +1,6 @@
 package snake;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.util.Random;
+
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -13,10 +11,10 @@ import javafx.scene.image.Image;
  */
 public class Food {
 	
-	private int foodX = 0;
-	private int foodY = 0;
-	private int unitWidth = 15;
-	private int unitHeight = 15;
+	private int foodX;
+	private int foodY;
+	private int unitWidth;
+	private int unitHeight;
 	private static Image foodImage;
 
 	public Food(Image foodImage, int foodX, int foodY, int unitWidth, int unitHeight) {
@@ -34,42 +32,14 @@ public class Food {
 		gc.drawImage(foodImage, foodX, foodY, unitWidth, unitHeight);
 	}
 	
-	public static Image getFoodImage() {
-		return foodImage;
-	}
-	public static void setFoodImage(Image foodImage) {
-		Food.foodImage = foodImage;
-	}
+
 	public int getFoodX() {
 		return foodX;
 	}
 
-	public void setFoodX(int foodX) {
-		this.foodX = foodX;
-	}
 
 	public int getFoodY() {
 		return foodY;
-	}
-
-	public void setFoodY(int foodY) {
-		this.foodY = foodY;
-	}
-
-	public int getUnitWidth() {
-		return unitWidth;
-	}
-
-	public void setUnitWidth(int unitWidth) {
-		this.unitWidth = unitWidth;
-	}
-
-	public int getUnitHeight() {
-		return unitHeight;
-	}
-
-	public void setUnitHeight(int unitHeight) {
-		this.unitHeight = unitHeight;
 	}
 
 }

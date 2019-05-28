@@ -76,7 +76,6 @@ public class JukeBox {
 				if (itr.hasNext()) {
 					play();
 				}
-				return;
 			}
 		});
 	}
@@ -93,7 +92,6 @@ public class JukeBox {
 				if (itr.hasNext()) {
 					play();
 				}
-				return;
 			}
 		});
 	}

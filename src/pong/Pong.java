@@ -1,7 +1,5 @@
 package pong;
 
-import static pong.Config.*;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -9,22 +7,25 @@ import java.net.MalformedURLException;
 
 import application.JukeBox;
 import application.MainUI;
+import chat.ChatController;
 import chat.ChatUI;
-import javafx.beans.InvalidationListener;
-import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.transform.Scale;
-import javafx.scene.transform.Transform;
-import pong.Game;
 
+/**
+ * 
+ * @author Andreas och Måns
+ */
+
+// Integrerar Pong med MainUI -> lägger till chatt osv
 public class Pong {
 	private MainUI mainUI;
 	private ChatUI chatUI;
@@ -32,38 +33,41 @@ public class Pong {
 	private Button backButton = new Button("BACK");
 	private Button soundButton;
 	private GridPane root = new GridPane();
-	private final int numOfCols = 48;
-	private final int numOfRows = 24;
 	private Image muteSoundImage;
 	private Image playSoundImage;
 	private ImageView muteSoundImageView;
 	private ImageView playSoundImageView;
+	private Image pongCabinettImage;
 	private JukeBox jukebox;
-	private int width = 600;
-	private int height = 400;
+	public static final int WIDTH = 600;
+	public static final int HEIGHT = 400;
 	private Game game;
+	private Canvas canvas;
+	private ChatController controller;
 
-	public Pong(MainUI mainUI, ChatUI chatUI, JukeBox jukebox) {
+	public Pong(MainUI mainUI, ChatUI chatUI, JukeBox jukebox, ChatController controller) {
 		this.mainUI = mainUI;
 		this.chatUI = chatUI;
 		this.jukebox = jukebox;
+		this.controller = controller;
 		init();
 	}
 
 	private void init() {
-		// Font.loadFont(getClass().getResource("arcade-normal.ttf").toString(), 0);
-
-		game = new Game();
-//		Group content = new Group();
-//		GameScreen gameScreen = new GameScreen(game);
-//		WelcomeScreen welcomeScreen = new WelcomeScreen();
-//		EndScreen endScreen = new EndScreen();
-//		content.getChildren().add(game);
-
+		game = new Game(controller);
 		createColumnsandRows();
+		setPongArcadeMachineImage();
 		
+		Pane pane = new Pane();
+		pane.setPrefSize(600, 400);
+		canvas = game.getCanvas();
+
+		pane.getChildren().add(canvas);
+
+		pane.setId("Pong");
+
 		root.setPrefSize(1200, 600);
-		root.add(game, 6, 4, 24, 16);
+		root.add(pane, 6, 4, 24, 16);
 
 		backButton.setId("logOutButton");
 		root.add(backButton, 1, 21, 6, 2);
@@ -72,7 +76,7 @@ public class Pong {
 		soundButton = new Button();
 		setSoundButtonImages();
 		soundButton.setId("logOutButton");
-		soundButton.setGraphic(playSoundImageView);
+		checkSound();
 		root.add(soundButton, 32, 1);
 
 		backButton.setFocusTraversable(false);
@@ -82,28 +86,6 @@ public class Pong {
 
 		addActionListeners();
 
-		/*
-		 * Sk�rm byte.
-		 */
-//		welcomeScreen.setOnStart(() -> {
-//			content.getChildren().clear();
-//			content.getChildren().add(gameScreen);
-//			gameScreen.requestFocus();
-//			game.start();
-//		});
-//		game.setOnGameEnd(() -> {
-//			content.getChildren().clear();
-//			content.getChildren().add(endScreen);
-//			endScreen.requestFocus();
-//			endScreen.setScore(game.getPlayer().getScore());
-//		});
-//		endScreen.setOnRestart(() -> {
-//			content.getChildren().clear();
-//			content.getChildren().add(gameScreen);
-//			gameScreen.requestFocus();
-//			game.start();
-//		});
-
 		scene = new Scene(root, 1200, 600, Color.BLACK);
 		try {
 			scene.getStylesheets().add((new File("styles//pongStyle.css")).toURI().toURL().toExternalForm());
@@ -111,58 +93,11 @@ public class Pong {
 			e.printStackTrace();
 		}
 
-//		Scale scale = Transform.scale(1, 1, 0, 0);
-//		content.getTransforms().add(scale);
+		backButton.setFocusTraversable(false);
+		soundButton.setFocusTraversable(false);
 
-		/*
-		 * The following listener is called whenever the scene is resized to update the
-		 * scale and add letter- and pillarboxing.
-		 */
-//	InvalidationListener updateScale = value -> {
-//			double scaleX = scene.getWidth()/1000;
-//			double scaleY = scene.getHeight()/500;
-//
-//			if (scaleX < scaleY) {
-//				/*
-//				 * Letterboxing.
-//				 */
-//				scale.setX(scaleX);
-//				scale.setY(scaleX);
-//				double remainingHeight = scene.getHeight() - HEIGHT * scaleX;
-//				content.setTranslateX(0);
-//				content.setTranslateY(remainingHeight / 2);
-//			} else if (scaleY < scaleX) {
-//				/*
-//				 * Pillarboxing.
-//				 */
-//				scale.setX(scaleY);
-//				scale.setY(scaleY);
-//				double remainingWidth = scene.getWidth() - WIDTH * scaleY;
-//				content.setTranslateX(remainingWidth / 2);
-//				content.setTranslateY(0);
-//			} else {
-//				/*
-//				 * Regular scaling.
-//				 */
-//				scale.setX(scaleX);
-//				scale.setY(scaleY);
-//				content.setTranslateX(0);
-//				content.setTranslateY(0);
-//			}
-//		};
-		
-		
-//		scene.widthProperty().addListener(updateScale);
-//		scene.heightProperty().addListener(updateScale);
-
-		game.requestFocus();
-		
-//�
-//		welcomeScreen.setOnMouseMoved(e -> welcomeScreen.requestFocus());
-//		gameScreen.setOnMouseMoved(e -> gameScreen.requestFocus());
-//		endScreen.setOnMouseMoved(e -> endScreen.requestFocus());
-//
-//		welcomeScreen.requestFocus(); /* This step is necessary to receive keyboard input. */
+		canvas.requestFocus();
+		canvas.setOnMouseMoved(e -> canvas.requestFocus());
 	}
 
 	public Scene getScene() {
@@ -173,6 +108,8 @@ public class Pong {
 
 	private void createColumnsandRows() {
 
+		final int numOfCols = 48;
+		final int numOfRows = 24;
 		for (int i = 0; i < numOfCols; i++) {
 			ColumnConstraints colConst = new ColumnConstraints();
 			colConst.setPercentWidth(100.0 / numOfCols);
@@ -195,21 +132,43 @@ public class Pong {
 		playSoundImageView = new ImageView(playSoundImage);
 		muteSoundImageView = new ImageView(muteSoundImage);
 	}
+	
+	public void checkSound() {
+		if (jukebox.isMute()) {
+			soundButton.setGraphic(muteSoundImageView);
+		} else {
+			soundButton.setGraphic(playSoundImageView);
+		}
+	}
+
+	// Sets and adds the arcade machine image for the SpaceInvaders game.
+	public void setPongArcadeMachineImage() {
+		ImageView pongCabinettView;
+		try {
+			pongCabinettImage = new Image(new FileInputStream("images/pongScreen3.png"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		pongCabinettView = new ImageView(pongCabinettImage);
+		pongCabinettView.setPreserveRatio(true);
+		root.add(pongCabinettView, 0, 14);
+	}
 
 	private void addActionListeners() {
 		backButton.setOnAction(e -> {
+			game.setPaused();
 			root.getChildren().remove(chatUI);
-			game.setPaused(true);
 			mainUI.switchToMainUI();
 		});
 
 		soundButton.setOnAction(e -> {
 			jukebox.muteUnmute();
 			if (jukebox.isMute()) {
-				soundButton.setGraphic(playSoundImageView);
-			} else {
 				soundButton.setGraphic(muteSoundImageView);
+			} else {
+				soundButton.setGraphic(playSoundImageView);
 			}
 		});
 	}
+
 }
