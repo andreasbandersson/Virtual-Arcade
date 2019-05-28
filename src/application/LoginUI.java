@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
-
 import chat.ChatController;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -63,13 +62,14 @@ public class LoginUI extends Application {
 
 		createColumnsandRows();
 
+		//initiating the jukebox and giving it the login music.
 		jukebox = new JukeBox("sounds/Login-Sound-1.mp3");
 		jukebox.play();
 
 		// Adding and setting the Label for Virtual Arcade-header
-		Label virtualArcadeLabel = new Label("VIRTUAL");
 		Glow glow = new Glow(0.2);
 		Bloom bloom = new Bloom(0.2);
+		Label virtualArcadeLabel = new Label("VIRTUAL");
 		virtualArcadeLabel.setId("vaLabel");
 		virtualArcadeLabel.setEffect(bloom);
 		virtualArcadeLabel.setEffect(glow);
@@ -140,7 +140,6 @@ public class LoginUI extends Application {
 		primaryStage.centerOnScreen();
 		primaryStage.show();
 		stage = primaryStage;
-
 		primaryStage.setOnCloseRequest((EventHandler<WindowEvent>) new EventHandler<WindowEvent>() {
 			@Override
 			public void handle(WindowEvent e) {
@@ -176,6 +175,11 @@ public class LoginUI extends Application {
 		muteSoundImageView = new ImageView(muteSoundImage);
 	}
 	
+	/**
+	 * Checks the sound if it is muted or not. 
+	 * If it is muted the Soundbuttons symbol should show the correct symbol.
+	 * This method could be called upon from outside of this class.
+	 */
 	public void checkSound() {
 		if (jukebox.isMute()) {
 			soundButton.setGraphic(muteSoundImageView);
@@ -234,7 +238,12 @@ public class LoginUI extends Application {
 		});
 
 	}
-
+	
+	/**
+	 * Function for adding and setting a KeyListener. 
+	 * The purpose of this is so that the user can push Enter after they have inputted their password.
+	 * @param primaryStage the current stage.
+	 */
 	public void addKeyListener(Stage primaryStage) {
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 
@@ -248,12 +257,4 @@ public class LoginUI extends Application {
 			}
 		});
 	}
-	
-//	public boolean permissionToCreateUser() {
-//		if(username.getText().length() >= 4 && password.getText().length() >= 6) {
-//			return false;
-//		}else {
-//			return true;
-//		}
-//	}
 }

@@ -15,7 +15,6 @@ import javafx.event.EventHandler;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
-import pong.Pong;
 import snake.GUIPane;
 import spaceInvaders.graphics.Painter;
 import javafx.scene.Scene;
@@ -53,8 +52,6 @@ public class MainUI extends Application {
 	private Leaderboard leaderboard;
 	private pong2.Pong pong;
 	private GUIPane snake;
-
-	// private SpaceInvaders spaceInvaders;
 	private Painter spaceInvaders;
 	private JukeBox jukebox;
 	private ChatController controller;
@@ -84,9 +81,9 @@ public class MainUI extends Application {
 		setArcadeMachineImage();
 
 		// Adding and setting the Label for Virtual Arcade-header
-		Label virtualArcadeLabel = new Label("VIRTUAL");
 		Glow glow = new Glow(0.1);
 		Bloom bloom = new Bloom(0.1);
+		Label virtualArcadeLabel = new Label("VIRTUAL");
 		virtualArcadeLabel.setId("vaLabel");
 		virtualArcadeLabel.setEffect(bloom);
 		virtualArcadeLabel.setEffect(glow);
@@ -110,10 +107,11 @@ public class MainUI extends Application {
 		fadeTransitionH.play();
 		mainRoot.add(headerLabel, 10, 7, 20, 4);
 
-		// Adding and setting the main menu buttons
+		// Adding and setting the Leaderboard button
 		leaderboardButton.setId("mainButtons");
 		mainRoot.add(leaderboardButton, 26, 0, 6, 3);
 
+		// Adding and setting the Log out button
 		logOutButton.setId("logOutButton");
 		mainRoot.add(logOutButton, 1, 21, 6, 3);
 
@@ -135,6 +133,7 @@ public class MainUI extends Application {
 		snakePlayButton.setMinWidth(Region.USE_PREF_SIZE);
 		mainRoot.add(snakePlayButton, 27, 20, 4, 1);
 
+		//Adding the Chat
 		mainRoot.add(chatUI, 36, 0, 12, 24);
 
 		// Sets the scene, adds all children nodes and sets the css-style.
@@ -144,10 +143,12 @@ public class MainUI extends Application {
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
+		
 		setSoundButtonImages();
 		checkSound();
 		addActionListeners(primaryStage);
 
+		//Prevents the buttons to get focus when hitting the Tab-button.
 		leaderboardButton.setFocusTraversable(false);
 		soundButton.setFocusTraversable(false);
 		logOutButton.setFocusTraversable(false);
@@ -161,8 +162,6 @@ public class MainUI extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.centerOnScreen();
 		primaryStage.show();
-		// stage = primaryStage;
-
 		primaryStage.setOnCloseRequest((EventHandler<WindowEvent>) new EventHandler<WindowEvent>() {
 			@Override
 			public void handle(WindowEvent e) {
@@ -171,6 +170,7 @@ public class MainUI extends Application {
 			}
 		});
 		
+		//The Virtual Arcade logo requests focus so that buttons doesn't steal it.
 		virtualArcadeLabel.requestFocus();
 
 	}
@@ -230,6 +230,11 @@ public class MainUI extends Application {
 
 	}
 	
+	/**
+	 * Checks the sound if it is muted or not. 
+	 * If it is muted the Soundbuttons symbol should show the correct symbol.
+	 * This method could be called upon from outside of this class.
+	 */
 	public void checkSound() {
 		if (jukebox.isMute()) {
 			soundButton.setGraphic(muteSoundImageView);
@@ -238,6 +243,7 @@ public class MainUI extends Application {
 		}
 	}
 
+	//Function that switches to the MainUI's scene. Called upon from outside classes.  
 	public void switchToMainUI() {
 		mainRoot.add(chatUI, 36, 0, 12, 24);
 		primaryStage.setScene(scene);
@@ -245,6 +251,7 @@ public class MainUI extends Application {
 		checkSound();
 	}
 
+	//A function that terminates the current MainUI object.
 	public void terminate() {
 		primaryStage.close();
 		jukebox.stopSound();
