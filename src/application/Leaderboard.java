@@ -189,6 +189,7 @@ public class Leaderboard {
 						name = temp2;
 					}
 					if (i == 9) {
+
 						temp += i + 1 + " " + name + " "
 								+ highscores.get(i).getScore() + "\n";
 					} else {

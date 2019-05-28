@@ -1,4 +1,4 @@
-package chat;
+package server;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -8,7 +8,7 @@ import chat.User;
 
 /**
  * Stores all registered users and their passwords.
- * @author Mans
+ * @author Måns Grundberg
  *
  */
 
