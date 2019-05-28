@@ -7,8 +7,7 @@ import javafx.scene.image.Image;
  * Obstacle class that has Setters and Getters for the obstacles and a draw method for drawing the obstacles. 
  * @author Max Matthiasson
  */
-public class Obstacle 
-{
+public class Obstacle {
 	private int obstacleX = 0;
 	private int obstacleY = 0;
 	private int unitWidth = 15;

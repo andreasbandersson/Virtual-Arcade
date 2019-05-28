@@ -1,9 +1,5 @@
 package snake;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Point;
-
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import snake.BodyPart;
@@ -69,7 +65,7 @@ public class BodyPart {
 	public static Image getSnakeImage() {
 		return snakeCharacterImage;
 	}
-	public static void setSnakeImage(Image snakeImage) {
+	public static void setSnakeImage(Image snakeCharacterImage) {
 		BodyPart.snakeCharacterImage = snakeCharacterImage;
 	}
 }

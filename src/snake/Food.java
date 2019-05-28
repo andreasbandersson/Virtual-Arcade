@@ -1,9 +1,5 @@
 package snake;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.util.Random;
-
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
