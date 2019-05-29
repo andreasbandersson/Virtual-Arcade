@@ -41,7 +41,6 @@ public class Message implements Serializable {
 		return this.text;
 	}
 	
-	// TODO
 	public String getTimeStamp() {
 		setTimeStamp();
 		return this.timeStamp;

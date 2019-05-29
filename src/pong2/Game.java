@@ -5,7 +5,6 @@ package pong2;
 import application.JukeBox2;
 import chat.ChatController;
 import javafx.animation.AnimationTimer;
-import javafx.application.Platform;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
@@ -37,7 +36,6 @@ public class Game extends AnimationTimer implements Runnable {
 	private Executor executor = Executors.newFixedThreadPool(2);
 	private ChatController controller;
 
-	// private Image pongBg;
 
 	public Game(ChatController controller) {
 		this.controller = controller;
@@ -52,11 +50,6 @@ public class Game extends AnimationTimer implements Runnable {
 	private void init() {
 		canvas = new Canvas(Pong.WIDTH, Pong.HEIGHT);
 		canvas.setId("Pong");
-//		try {
-//			pongBg = new Image(new FileInputStream("images/pongGridBg.png"));
-//		} catch (FileNotFoundException e) {
-//			e.printStackTrace();
-//		}
 		gc = canvas.getGraphicsContext2D();
 		ball = new Ball();
 		player = new Paddle(10, 5, 60);
@@ -71,14 +64,6 @@ public class Game extends AnimationTimer implements Runnable {
 			moveComputer();
 			checkPaddles();
 			checkCollision();
-			// if (scored && count < 20) {
-			// drawScore();
-			// count++;
-			// if (count == 20) {
-			// count = 0;
-			// scored = false;
-			// }
-			// }
 			timeSinceLastUpdate = now;
 		}
 	}
@@ -113,12 +98,6 @@ public class Game extends AnimationTimer implements Runnable {
 		Text temp = new Text("GAME OVER");
 		temp.setFont(Font.font(20));
 		gc.setFont(Font.font(20));
-		// gc.fillText("Control Padle with A + D", Pong.WIDTH / 2 -
-		// (temp.getLayoutBounds().getWidth() / 2), Pong.HEIGHT / 2);
-		// gc.fillText("PRESS [SPACE] TO START", Pong.WIDTH / 2 -
-		// (temp.getLayoutBounds().getWidth() / 2),
-		// (Pong.HEIGHT / 2) + 50);
-
 	}
 
 	// Anropar draw-metoder
@@ -182,19 +161,9 @@ public class Game extends AnimationTimer implements Runnable {
 	}
 
 	private void drawScoreBoard() {
-		/*Text temp = new Text(playerScoreStr);
-		temp.setStyle("-fx-font-weight: bold");
-
-		temp.setFont(Font.font(20));*/
 		gc.setFont(Font.font("Verdana", 20));
 		gc.setFill(Color.WHITE);
 		gc.fillText(playerScoreStr, 100, 25);
-		// Text computerScore = new Text(computerScoreStr);
-		// computerScore.setFont(Font.font(20));
-		// gc.setFont(Font.font(20));
-		// gc.setFill(Color.WHITE);
-		// gc.fillText(computerScoreStr, (Pong.WIDTH - 200), 25);
-
 	}
 
 	private void drawGameOver() {
@@ -226,15 +195,6 @@ public class Game extends AnimationTimer implements Runnable {
 		(temp.getLayoutBounds().getWidth() / 2),
 		(Pong.HEIGHT / 2) + 50);
 	}
-
-	// private void drawScore() {
-	// Text temp = new Text("SCORE!!");
-	// temp.setFont(Font.font(20));
-	// gc.setFont(Font.font(20));
-	// gc.setFill(Color.FIREBRICK);
-	// gc.fillText("SCORE!!", (Pong.WIDTH / 2) - (temp.getLayoutBounds().getWidth()
-	// / 2), 50);
-	// }
 
 	private void addActionListeners() {
 		canvas.setOnKeyPressed(e -> {
@@ -306,6 +266,7 @@ public class Game extends AnimationTimer implements Runnable {
 		drawGameOver();
 		controller.newHighscore("Pong", playerScore);
 		playerScore = 0;
+		drawScoreBoard();
 		gameOver = true;
 	}
 
@@ -333,7 +294,6 @@ public class Game extends AnimationTimer implements Runnable {
 		if ((ball.getRect().intersects(player.getRect()) && ball.getDx() < 0)
 				|| (ball.getRect().intersects(computer.getRect()) && ball.getDx() > 0)) {
 			ball.changeDirection();
-		//	ball.setAcceleration(player.getAcceleration()/2);
 		} else if (ball.getYpos() <= 0 && ball.getDy() < 0 || ball.getYpos() + ball.getRadius() >= Pong.HEIGHT) {
 			ball.bounceWall();
 		} else if (ball.getXpos() <= 0) {
@@ -344,7 +304,6 @@ public class Game extends AnimationTimer implements Runnable {
 			ball.reset();
 		} else if (ball.getXpos() >= Pong.WIDTH) {
 			executor.execute(this);
-			// scored = true;
 			ball.reset();
 		}
 	}
@@ -362,15 +321,5 @@ public class Game extends AnimationTimer implements Runnable {
 			}
 		}
 	}
-
-	// public void endGame() {
-	// this.stop();
-	// player.reset(10);
-	// computer.reset(Pong.WIDTH - 20);
-	// drawGameOver();
-	// playerScore = 0;
-	// computerScore = 0;
-	// gameOver = true;
-	// }
 
 }

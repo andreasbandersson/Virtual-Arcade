@@ -15,7 +15,6 @@ import javafx.event.EventHandler;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
-import pong.Pong;
 import snake.GUIPane;
 import spaceInvaders.graphics.Painter;
 import javafx.scene.Scene;
@@ -163,7 +162,7 @@ public class MainUI extends Application {
 		primaryStage.show();
 		// stage = primaryStage;
 
-		primaryStage.setOnCloseRequest((EventHandler<WindowEvent>) new EventHandler<WindowEvent>() {
+		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			@Override
 			public void handle(WindowEvent e) {
 				Platform.exit();
@@ -230,7 +229,7 @@ public class MainUI extends Application {
 
 	}
 	
-	public void checkSound() {
+	private void checkSound() {
 		if (jukebox.isMute()) {
 			soundButton.setGraphic(muteSoundImageView);
 		} else {
@@ -245,7 +244,7 @@ public class MainUI extends Application {
 		checkSound();
 	}
 
-	public void terminate() {
+	private void terminate() {
 		primaryStage.close();
 		jukebox.stopSound();
 		try {

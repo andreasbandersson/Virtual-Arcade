@@ -25,7 +25,7 @@ public class ChatController {
 	private Leaderboard leaderboard;
 
 	public ChatController() {
-		client = new ChatClient(60000, "10.2.9.244", this);
+		client = new ChatClient(60000, "10.2.20.126", this);
 		client.connect();
 		initLoginUI();
 		chatUI = new ChatUI(this);

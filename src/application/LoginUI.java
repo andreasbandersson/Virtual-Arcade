@@ -248,12 +248,4 @@ public class LoginUI extends Application {
 			}
 		});
 	}
-	
-//	public boolean permissionToCreateUser() {
-//		if(username.getText().length() >= 4 && password.getText().length() >= 6) {
-//			return false;
-//		}else {
-//			return true;
-//		}
-//	}
 }
