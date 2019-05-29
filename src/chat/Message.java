@@ -40,7 +40,7 @@ public class Message implements Serializable {
 	public String getText() {
 		return this.text;
 	}
-	
+
 	public String getTimeStamp() {
 		setTimeStamp();
 		return this.timeStamp;

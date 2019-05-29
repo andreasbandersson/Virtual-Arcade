@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
-
 import chat.ChatController;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -48,9 +47,6 @@ public class LoginUI extends Application {
 	public static Stage stage = new Stage();
 	private ChatController controller;
 
-	private final int numOfCols = 48;
-	private final int numOfRows = 24;
-
 	public LoginUI(ChatController controller) {
 		this.controller = controller;
 	}
@@ -63,13 +59,14 @@ public class LoginUI extends Application {
 
 		createColumnsandRows();
 
+		//initiating the jukebox and giving it the login music.
 		jukebox = new JukeBox("sounds/Login-Sound-1.mp3");
 		jukebox.play();
 
 		// Adding and setting the Label for Virtual Arcade-header
-		Label virtualArcadeLabel = new Label("VIRTUAL");
 		Glow glow = new Glow(0.2);
 		Bloom bloom = new Bloom(0.2);
+		Label virtualArcadeLabel = new Label("VIRTUAL");
 		virtualArcadeLabel.setId("vaLabel");
 		virtualArcadeLabel.setEffect(bloom);
 		virtualArcadeLabel.setEffect(glow);
@@ -140,7 +137,6 @@ public class LoginUI extends Application {
 		primaryStage.centerOnScreen();
 		primaryStage.show();
 		stage = primaryStage;
-
 		primaryStage.setOnCloseRequest((EventHandler<WindowEvent>) new EventHandler<WindowEvent>() {
 			@Override
 			public void handle(WindowEvent e) {
@@ -152,6 +148,9 @@ public class LoginUI extends Application {
 
 	// Sets the number and size-percentage of the rows and columns in the GridPane.
 	private void createColumnsandRows() {
+		final int numOfCols = 48;
+		final int numOfRows = 24;
+
 		for (int i = 0; i < numOfCols; i++) {
 			ColumnConstraints colConst = new ColumnConstraints();
 			colConst.setPercentWidth(100.0 / numOfCols);
@@ -176,7 +175,12 @@ public class LoginUI extends Application {
 		muteSoundImageView = new ImageView(muteSoundImage);
 	}
 	
-	public void checkSound() {
+	/**
+	 * Checks the sound if it is muted or not. 
+	 * If it is muted the Soundbuttons symbol should show the correct symbol.
+	 * This method could be called upon from outside of this class.
+	 */
+	private void checkSound() {
 		if (jukebox.isMute()) {
 			soundButton.setGraphic(muteSoundImageView);
 		} else {
@@ -233,19 +237,5 @@ public class LoginUI extends Application {
 			}
 		});
 
-	}
-
-	public void addKeyListener(Stage primaryStage) {
-		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-
-			@Override
-			public void handle(KeyEvent event) {
-				if (event.getCode() == KeyCode.ENTER) {
-					loginButton.requestFocus();
-					loginButton.fire();
-					event.consume();
-				}
-			}
-		});
 	}
 }

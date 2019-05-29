@@ -44,7 +44,7 @@ public class HighscoreList implements Serializable {
 		} else return false;
 	}
 	
-	public synchronized void sort() {
+	private synchronized void sort() {
 		list.sort(Collections.reverseOrder());
 	}
 	

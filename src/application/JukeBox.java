@@ -1,28 +1,23 @@
 package application;
 
 import java.io.File;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
-
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
 
 /**
- * 
+ * The class JukeBox plays and mutes sound files via JavaFx Mediaplayer class.
  * @author Andreas Andersson
  *
  */
 
 public class JukeBox {
 	private MediaPlayer mediaPlayer;
-	private MediaPlayer mediaPlayer2;
 	private ArrayList<String> songList = new ArrayList<>();
 	private Iterator<String> itr;
-	private double volume;
 	private static String song1 = "sounds/Lobby-Sound-1.mp3";
 	private static String song2 = "sounds/Lobby-Sound-2.mp3";
 	private static String song3 = "sounds/Lobby-Sound-3.mp3";
@@ -32,7 +27,6 @@ public class JukeBox {
 	private static String song7 = "sounds/Lobby-Sound-7.mp3";
 	private static String intro = "sounds/Welcome-Sound.mp3";
 
-	
 	public JukeBox() {
 		songList.add(song1);
 		songList.add(song2);
@@ -50,7 +44,7 @@ public class JukeBox {
 		songList.add(song1);
 		itr = songList.iterator();
 	}
-	
+
 	public JukeBox(String song1, String song2) {
 		songList.add(song1);
 		songList.add(song2);
@@ -63,6 +57,7 @@ public class JukeBox {
 		songList.add(song3);
 		itr = songList.iterator();
 	}
+
 	public JukeBox(ArrayList<String> songList) {
 		this.songList = songList;
 		itr = songList.iterator();
@@ -78,16 +73,14 @@ public class JukeBox {
 			@Override
 			public void run() {
 				mediaPlayer.stop();
-				if(itr.hasNext()) {
+				if (itr.hasNext()) {
 					play();
 				}
-				return;
 			}
 		});
 	}
 
 	public void playWithCustomVol(double volume) {
-		this.volume = volume;
 		Media sound = new Media(new File(itr.next()).toURI().toString());
 		mediaPlayer = new MediaPlayer(sound);
 		mediaPlayer.play();
@@ -96,14 +89,12 @@ public class JukeBox {
 			@Override
 			public void run() {
 				mediaPlayer.stop();
-				if(itr.hasNext()) {
+				if (itr.hasNext()) {
 					play();
 				}
-				return;
 			}
 		});
 	}
-
 
 	// Mutes the login music if the music is playing, otherwise the function unmutes
 	// the music.
@@ -123,9 +114,9 @@ public class JukeBox {
 			mediaPlayer.stop();
 		}
 	}
+
 	public boolean isMute() {
 		return mediaPlayer.isMute();
 	}
-
 
 }

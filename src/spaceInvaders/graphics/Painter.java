@@ -4,10 +4,7 @@ import application.JukeBox;
 import application.MainUI;
 import chat.ChatController;
 import chat.ChatUI;
-import chat.Highscore;
 import javafx.application.Platform;
-import javafx.concurrent.Task;
-import javafx.scene.text.Text;
 import spaceInvaders.Effects.Explosion;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
@@ -23,7 +20,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import spaceInvaders.Effects.ScoreUp;
 import spaceInvaders.Effects.ShotCollision;
 import spaceInvaders.logic.Controller;
 import spaceInvaders.units.Player;
@@ -35,9 +31,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.TimerTask;
 import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
@@ -69,17 +63,10 @@ public class Painter extends AnimationTimer implements Runnable{
     private Image spaceInvadersImage;
     private ImageView muteSoundImageView;
     private ImageView playSoundImageView;
-    private ImageView spaceInvadersView;
     private JukeBox jukebox;
-
-
-
-    private final int numOfCols = 48;
-    private final int numOfRows = 24;
 
     private static Image explosion;
     private static Image shotCollision;
-    private static Image backgroundImage;
     private ChatController chatController;
     private boolean gameEnded = false;
 
@@ -87,12 +74,10 @@ public class Painter extends AnimationTimer implements Runnable{
 
     private ArrayList<Explosion> explosions = new ArrayList<>();
     private ArrayList<ShotCollision> shotCollisions = new ArrayList<>();
-    private ArrayList<ScoreUp> scoreFloats = new ArrayList<>();
 
     static {
         try {
             playerLifeSprite = new Image(new FileInputStream("Sprites/player.png"),30,25,true,false);
-            backgroundImage = new Image(new FileInputStream("Sprites/SIBackground.png"),900,600,true,false);
             explosion = new Image(new FileInputStream("Sprites/deathExplosion.png"),25,20,false,false);
             shotCollision = new Image(new FileInputStream("Sprites/smallExplosion.png"),10,10,false,false);
 
@@ -121,19 +106,12 @@ public class Painter extends AnimationTimer implements Runnable{
         endLabel.setLayoutX(210);
         endLabel.setLayoutY(150);
 
-        //  backgroundLayer = new Pane();
-
         canvas = new Canvas(600.0,400.0);
         canvas.setId("SpaceInvaders");
 
         spaceInvadersRoot = new GridPane();
 
-
-        //  backgroundLayer.getChildren().add((backgroundImageView));
-
-
         root = new Pane();
-        // root.getChildren().add(backgroundLayer);
 
         createColumnsandRows();
        
@@ -258,9 +236,6 @@ public class Painter extends AnimationTimer implements Runnable{
               //  }
             }
         }
-        else {
-
-        }
     }
 
     public Scene getScene(){
@@ -282,30 +257,16 @@ public class Painter extends AnimationTimer implements Runnable{
         shotCollisions.add(shotCollision);
     }
 
-    public void addNewScoreFloat(int score){
-   //     ScoreUp scoreUp = new ScoreUp(score);
-   //     Platform.runLater(new Runnable() {
-   //         @Override
-   //         public void run() {
-   //             root.getChildren().add(scoreUp);
-   //         }
-   //     });
-   //     scoreFloats.add(scoreUp);
-   //     executor.execute(scoreUp);
-    }
+
 
     public void checkDeadObjects(){
-     // for (ScoreUp e : new ArrayList<>(scoreFloats)){
-     //     if (!e.floating()){
-     //         scoreFloats.remove(e);
-     //         root.getChildren().remove(e);
-     //     }
-     // }
         executor.execute(this);
-
     }
 
     private void createColumnsandRows() {
+
+         final int numOfCols = 48;
+         final int numOfRows = 24;
 
         for (int i = 0; i < numOfCols; i++) {
             ColumnConstraints colConst = new ColumnConstraints();
@@ -341,12 +302,13 @@ public class Painter extends AnimationTimer implements Runnable{
 	}
 
     //Sets and adds the arcade machine image for the SpaceInvaders game.
-    public void setSpaceInvadersArcadeMachineImage() {
+    private void setSpaceInvadersArcadeMachineImage() {
         try {
             spaceInvadersImage = new Image(new FileInputStream("images/spaceScreen.png"));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        ImageView spaceInvadersView;
         spaceInvadersView = new ImageView(spaceInvadersImage);
         spaceInvadersView.setPreserveRatio(true);
         spaceInvadersRoot.add(spaceInvadersView, 0, 14);
@@ -357,7 +319,7 @@ public class Painter extends AnimationTimer implements Runnable{
         return gameEnded;
     }
 
-    public void addListeners(Scene scene) {
+    private void addListeners(Scene scene) {
 
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
@@ -444,7 +406,6 @@ public class Painter extends AnimationTimer implements Runnable{
                 soundButton.setGraphic(playSoundImageView);
             }
         });
-
     }
 }
 

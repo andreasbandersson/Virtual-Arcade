@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.util.LinkedList;
-
 import chat.ChatUI;
 import chat.Highscore;
 import javafx.animation.Animation;
@@ -47,7 +46,6 @@ public class Leaderboard {
 	private Label spaceHighscoreLabel = new Label();
 	private Label pongHighscoreLabel = new Label();
 	private Pane pane = new Pane();
-
 	private final int numOfCols = 48;
 	private final int numOfRows = 24;
 
@@ -80,7 +78,7 @@ public class Leaderboard {
 		backButton.setId("logOutButton");
 		leaderboardRoot.add(backButton, 1, 21, 6, 2);
 
-		// Adding an setting the button for mute and un-mute of login music
+		// Adding an setting the sound button
 		soundButton = new Button();
 		soundButton.setId("logOutButton");
 		leaderboardRoot.add(soundButton, 32, 1);
@@ -90,9 +88,11 @@ public class Leaderboard {
 		setSoundButtonImages();
 		checkSound();
 
+		//Prevents these buttons from getting focus
 		backButton.setFocusTraversable(false);
 		soundButton.setFocusTraversable(false);
 
+		//Setting the scene and its styles.
 		scene = new Scene(leaderboardRoot, 1200, 600);
 		try {
 			scene.getStylesheets().add((new File("styles//mainStyle.css")).toURI().toURL().toExternalForm());
@@ -103,7 +103,6 @@ public class Leaderboard {
 
 	// Sets the number and size-percentage of the rows and columns in the GridPane.
 	private void createColumnsandRows() {
-
 		for (int i = 0; i < numOfCols; i++) {
 			ColumnConstraints colConst = new ColumnConstraints();
 			colConst.setPercentWidth(100.0 / numOfCols);
@@ -116,15 +115,23 @@ public class Leaderboard {
 		}
 	}
 
+	//Getter for this objects scene.
 	public Scene getScene() {
 		addChatUI(chatUI);
 		return this.scene;
 	}
 
+	/**
+	 * Function that adds the chat to this object.
+	 * @param chatUI the chat that is going to be set.
+	 */
 	private void addChatUI(ChatUI chatUI) {
 		leaderboardRoot.add(chatUI, 36, 0, 12, 24);
 	}
 
+	/*
+	 * Function that adds all of the labels for the highscores.
+	 */
 	private void addHighscoreLabels() {
 		pongHighscoreLabel.setId("highscoreLabel");
 		pongHighscoreLabel.setPrefSize(300.0, 350.00);
@@ -242,6 +249,11 @@ public class Leaderboard {
 		muteSoundImageView = new ImageView(muteSoundImage);
 	}
 
+	/**
+	 * Checks the sound if it is muted or not. 
+	 * If it is muted the Soundbuttons symbol should show the correct symbol.
+	 * This method could be called upon from outside of this class.
+	 */
 	public void checkSound() {
 		if (jukebox.isMute()) {
 			soundButton.setGraphic(muteSoundImageView);
