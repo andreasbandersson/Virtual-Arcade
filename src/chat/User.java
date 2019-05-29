@@ -3,7 +3,7 @@ package chat;
 import java.io.Serializable;
 
 /**
- * Represents a user
+ * Stores the information of a user
  * @author Mans
  *
  */

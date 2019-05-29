@@ -1,4 +1,4 @@
-package pong2;
+package pong;
 
 import java.awt.Rectangle;
 
@@ -49,10 +49,7 @@ public class Paddle {
 
 		if (this.yPos > 0) {
 			this.yPos -= this.dy + acceleration;
-      return;
 		}
-
-		
 	}
 
 	public void moveDown() {
@@ -64,7 +61,7 @@ public class Paddle {
 	}
 
 	public void reset(int xpos) {
-		this.xPos = xPos;
+		this.xPos = xpos;
 		this.yPos = (Pong.HEIGHT / 2) - height / 2;
 	}
 

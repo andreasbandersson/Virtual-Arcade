@@ -1,4 +1,4 @@
-package chat;
+package server;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -8,7 +8,7 @@ import chat.User;
 
 /**
  * Stores all registered users and their passwords.
- * @author Mans
+ * @author Måns Grundberg
  *
  */
 
@@ -32,21 +32,13 @@ public class RegisteredUsers implements Serializable {
 	 */
 	
 	public synchronized boolean checkPassword(User user, String password) {
-		if (users.get(user).equals(password)) {
-			return true;
-		} else {
-			return false;
-		}
+		return (users.get(user).equals(password));
 	}
 
 	/**
 	 * 
 	 * @return A list of all registered users
 	 */
-	
-	public synchronized ArrayList<User> getKeySet() {
-		return new ArrayList<User>(users.keySet());
-	}
 
 	public synchronized Boolean contains(User user) {
 		return users.containsKey(user);

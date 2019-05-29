@@ -72,10 +72,6 @@ public abstract class Unit {
 
     public abstract void shoot();
 
-   public void pause() {
-
-   }
-
    public void sendShotPositionData(Position position){
        shotThatHitYouPosition = new Position(position);
    }
@@ -90,17 +86,12 @@ public abstract class Unit {
         position.setY(position.getY() + y);
     }
 
-    public void move(Position position){
-        this.position.setX(position.getX());
-        this.position.setY(position.getY());
-    }
-
     public abstract void registerHit();
 
     public abstract void die();
 
 
-   public Rectangle getHitbox() {
+   private Rectangle getHitbox() {
        return new Rectangle(position.getX(),position.getY(),width,height);
    }
 

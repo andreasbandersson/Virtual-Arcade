@@ -37,7 +37,7 @@ import javafx.scene.text.Font;
  */
 public class GUIPane implements Runnable {
 
-	private Pane root;
+
 	private Canvas canvas;
 	
 	// Different gameStates that change what happens during the game. 
@@ -61,6 +61,7 @@ public class GUIPane implements Runnable {
 
 	private int snakeSize = 5; // Length of the snake.
 	private int score = 0; // Keeps track of the score.
+
 	public int unitWidth = 15; // Width of the units in the game. (The snakes body parts, the food and the spider)
 	public int unitHeight = 15; // Height of the units in the game. (The snakes body parts, the food and the spider)
 	public int snakeX = 0; // The snakes X-position.
@@ -71,6 +72,7 @@ public class GUIPane implements Runnable {
 	private int obstacleY; // The spiders Y-position.
 	private int spiderTicks; // Decides how often the spider should move. 
 	private int spiderDirection; //	Gets set to a random number between 0 and 3 that decides the spiders direction. 
+
 
 	// Queue that holds integers representing the direction the snake is traveling
 	// in. (UP, DOWN, LEFT, RIGHT).
@@ -98,12 +100,9 @@ public class GUIPane implements Runnable {
 	private ChatUI chatUI;
 	private JukeBox2 jukeBox2 = new JukeBox2();
 	private JukeBox jukeBox;
-	private JukeBox jukeboxEffects;
 	private Button backButton = new Button("BACK");
 	private Button soundButton = new Button();
 	private GraphicsContext gc;
-	private final int numOfCols = 48;
-	private final int numOfRows = 24;
 	private GridPane snakePane = new GridPane();
 	private Image muteSoundImage;
 	private Image playSoundImage;
@@ -143,6 +142,7 @@ public class GUIPane implements Runnable {
 		listSnake = new ArrayList<BodyPart>();
 		listFood = new ArrayList<Food>();
 		listObstacle = new ArrayList<Obstacle>();
+		 Pane root;
 
 		canvas = new Canvas(GAME_WIDTH, GAME_HEIGHT);
 		gc = canvas.getGraphicsContext2D();
@@ -333,7 +333,7 @@ public class GUIPane implements Runnable {
 				if (listFood.size() == 0) {
 					foodX = rand.nextInt(30) * 15;
 					foodY = rand.nextInt(20) * 15;
-					
+					 
 					foodPiece = new Food(foodImage, foodX, foodY, unitWidth, unitHeight);
 					listFood.add(foodPiece);
 
@@ -649,6 +649,9 @@ public class GUIPane implements Runnable {
 
 	private void createColumnsandRows() {
 
+		 final int numOfCols = 48;
+		 final int numOfRows = 24;
+
 		for (int i = 0; i < numOfCols; i++) {
 			ColumnConstraints colConst = new ColumnConstraints();
 			colConst.setPercentWidth(100.0 / numOfCols);
@@ -683,7 +686,7 @@ public class GUIPane implements Runnable {
 	}
 
 	// Sets and adds the arcade machine image for the SpaceInvaders game.
-	public void setSnakeArcadeMachineImage() {
+	private void setSnakeArcadeMachineImage() {
 		try {
 			snakeImage = new Image(new FileInputStream("images/snakeScreen.png"));
 		} catch (FileNotFoundException e) {
