@@ -157,7 +157,7 @@ public class GUIPane implements Runnable {
 		backButton.setId("logOutButton");
 		snakePane.add(backButton, 1, 21, 6, 2);
 
-		// Adding an setting the button for mute and un-mute of login music
+		// Adding an setting the sound buttons
 		soundButton = new Button();
 		soundButton.setId("logOutButton");
 		snakePane.add(soundButton, 32, 1);
@@ -166,7 +166,8 @@ public class GUIPane implements Runnable {
 
 		gameScene = new Scene(snakePane, 1200, 600, Color.BLACK);
 		snakePane.setId("mainRoot");
-
+		
+		//Sets the style of the scene
 		try {
 			gameScene.getStylesheets().add((new File("styles//snakeStyle.css")).toURI().toURL().toExternalForm());
 		} catch (MalformedURLException e) {
@@ -396,20 +397,17 @@ public class GUIPane implements Runnable {
 				drawShapes(gc);
 			}
 		});
-		// Pressing the soundButton will mute or unmute the game sound.
+		// Pressing the soundButton will pause or play the game sound.
+		// Andreas Andersson
 		soundButton.setOnAction(e -> {
-			jukeBox.muteUnmute();
-			if (jukeBox.isMute()) {
-				soundButton.setGraphic(playSoundImageView);
+			jukeBox.pauseOrPlay();
+			if (jukeBox.isPaused()) {
+				soundButton.setGraphic(muteSoundImageView);
 			} else {
-				jukeBox.muteUnmute();
-				if (jukeBox.isMute()) {
-					soundButton.setGraphic(muteSoundImageView);
-				} else {
 					soundButton.setGraphic(playSoundImageView);
-				}
 			}
 		});
+		
 		// Keeps track of all the key presses in the gameScene.
 		gameScene.setOnKeyPressed(e -> {
 			// Pressing W will change the snakes direction to UP.
@@ -659,7 +657,11 @@ public class GUIPane implements Runnable {
 
 		}
 	}
-
+	
+	/**
+	 * Sets the number and size-percentage of the rows and columns in the GridPane.
+	 * @author Andreas Andersson
+	 */
 	private void createColumnsandRows() {
 
 		 final int numOfCols = 48;
@@ -677,7 +679,10 @@ public class GUIPane implements Runnable {
 		}
 	}
 
-	// Sets the sound buttons images.
+	/**
+	 *  Sets the sound buttons images.
+	 *  @author Andreas Andersson
+	 */
 	private void setSoundButtonImages() {
 		try {
 			playSoundImage = new Image(new FileInputStream("images/sound.png"));
@@ -689,16 +694,22 @@ public class GUIPane implements Runnable {
 		muteSoundImageView = new ImageView(muteSoundImage);
 	}
 
-	// Checks if sound is muted or playing and sets image accordingly.
+	/**
+	 *  Checks if sound is paused or playing and sets image accordingly.
+	 *  @author Andreas Andersson
+	 */
 	public void checkSound() {
-		if (jukeBox.isMute()) {
+		if (jukeBox.isPaused()) {
 			soundButton.setGraphic(muteSoundImageView);
 		} else {
 			soundButton.setGraphic(playSoundImageView);
 		}
 	}
 
-	// Sets and adds the arcade machine image for the SpaceInvaders game.
+	/**
+	 *  Sets and adds the arcade machine image for the SpaceInvaders game.
+	 *  @author Andreas Andersson
+	 */
 	private void setSnakeArcadeMachineImage() {
 		try {
 			snakeImage = new Image(new FileInputStream("images/snakeScreen.png"));

@@ -6,15 +6,8 @@
     src: url('../fonts/Neoneon.otf');
 }
 
-#loginRoot{
-    -fx-background-image: url("../images/login2.jpg");
-    -fx-background-repeat: stretch;   
-    -fx-background-size:  cover;
-    -fx-background-position: center center; 
-}
-
 #mainRoot{
-    -fx-background-image: url("../images/arcade5.jpg");
+    -fx-background-image: url("../images/mainBg.jpg");
     -fx-background-repeat: stretch;   
     -fx-background-size: cover;
     -fx-background-position: center center; 

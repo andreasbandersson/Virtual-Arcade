@@ -25,7 +25,9 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.TextAlignment;
 
 /**
- * @author Andreas Andersson / MÃ¥ns Grundberg
+ * The Leaderboard class shows the different games high-scores in lists of 10.
+ * 
+ * @author Andreas Andersson & Måns Grundberg
  */
 
 public class Leaderboard {
@@ -49,13 +51,24 @@ public class Leaderboard {
 	private final int numOfCols = 48;
 	private final int numOfRows = 24;
 
+	/**
+	 * The constructor takes a MainUI, ChatUI and a Jukebox object.
+	 * 
+	 * @param mainMenu the mainmenu parameter is used so that the Leaderboard is running in the background and could be switched back to.
+	 * @param chatUI the chatUI parameter is used to show the chat.
+	 * @param jukebox the jukebox parameter is used so that the music keeps playing when switching between the leaderboard and the mainUI.
+	 */
+	
 	public Leaderboard(MainUI mainMenu, ChatUI chatUI, JukeBox jukebox) {
 		this.mainMenu = mainMenu;
 		this.chatUI = chatUI;
 		this.jukebox = jukebox;
 		init();
 	}
-
+	
+	/**
+	 * initiates the structure, graphics, music, labels and action listeners.
+	 */
 	private void init() {
 		leaderboardRoot = new GridPane();
 		leaderboardRoot.setId("leaderboardRoot");
@@ -101,7 +114,9 @@ public class Leaderboard {
 		}
 	}
 
-	// Sets the number and size-percentage of the rows and columns in the GridPane.
+	/**
+	 *  Sets the number and size-percentage of the rows and columns in the GridPane.
+	 */
 	private void createColumnsandRows() {
 		for (int i = 0; i < numOfCols; i++) {
 			ColumnConstraints colConst = new ColumnConstraints();
@@ -115,7 +130,10 @@ public class Leaderboard {
 		}
 	}
 
-	//Getter for this objects scene.
+	/**
+	 * Getter for this objects scene.
+	 * @return the scene
+	 */
 	public Scene getScene() {
 		addChatUI(chatUI);
 		return this.scene;
@@ -123,6 +141,7 @@ public class Leaderboard {
 
 	/**
 	 * Function that adds the chat to this object.
+	 * 
 	 * @param chatUI the chat that is going to be set.
 	 */
 	private void addChatUI(ChatUI chatUI) {
@@ -237,7 +256,9 @@ public class Leaderboard {
 		}
 	}
 
-	// Sets the sound buttons images.
+	/**
+	 *  Sets the sound buttons images.
+	 */
 	private void setSoundButtonImages() {
 		try {
 			playSoundImage = new Image(new FileInputStream("images/sound.png"));
@@ -250,19 +271,21 @@ public class Leaderboard {
 	}
 
 	/**
-	 * Checks the sound if it is muted or not. 
-	 * If it is muted the Soundbuttons symbol should show the correct symbol.
+	 * Checks the sound if it is paused or playing. 
+	 * If it is paused the sound buttons symbol should show the correct symbol.
 	 * This method could be called upon from outside of this class.
 	 */
 	public void checkSound() {
-		if (jukebox.isMute()) {
+		if (jukebox.isPaused()) {
 			soundButton.setGraphic(muteSoundImageView);
 		} else {
 			soundButton.setGraphic(playSoundImageView);
 		}
 	}
 
-	// Function for adding and setting Action Listeners to all Buttons.
+	/**
+	 *  Function for adding and setting Action Listeners to all Buttons.
+	 */
 	private void addActionListeners() {
 		backButton.setOnAction(e -> {
 			leaderboardRoot.getChildren().remove(chatUI);
@@ -270,8 +293,8 @@ public class Leaderboard {
 		});
 
 		soundButton.setOnAction(e -> {
-			jukebox.muteUnmute();
-			if (jukebox.isMute()) {
+			jukebox.pauseOrPlay();
+			if (jukebox.isPaused()) {
 				soundButton.setGraphic(muteSoundImageView);
 			} else {
 				soundButton.setGraphic(playSoundImageView);

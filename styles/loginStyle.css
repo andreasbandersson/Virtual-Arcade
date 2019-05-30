@@ -43,7 +43,7 @@
     -fx-font-family: 'sans-serif';
 }
 
-#logOutButton{
+#createButton{
 	-fx-padding: 10.0 22.0 20.0 22.0;
     -fx-background-insets: 0.0,0.0 0.0 5.0 0.0, 0.0 0.0 6.0 0.0, 0.0 0.0 7.0 0.0;
     -fx-background-radius: 24.0;
@@ -57,11 +57,11 @@
     -fx-font-size: 1em;
     -fx-alignment: center;
 }
-#logOutButton:pressed {
+#createButton:pressed {
     -fx-padding: 14.0 22.0 16.0 22.0;
     -fx-background-insets: 2.0 0.0 0.0 0.0,2.0 0.0 3.0 0.0, 2.0 0.0 4.0 0.0, 2.0 0.0 5.0 0.0;
 }
-#logOutButton .text {
+#createButton .text {
     -fx-fill: grey;
    
     -fx-font-family: 'sans-serif';

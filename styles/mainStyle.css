@@ -11,14 +11,14 @@
 }
 
 #mainRoot{
-    -fx-background-image: url("../images/arcade5.jpg");
+    -fx-background-image: url("../images/mainBg.jpg");
     -fx-background-repeat: stretch;   
     -fx-background-size: cover;
     -fx-background-position: center center; 
 }
 
 #leaderboardRoot{
-	 -fx-background-image: url("../images/login3.jpg");
+	 -fx-background-image: url("../images/leaderboard.jpg");
     -fx-background-repeat: stretch;   
     -fx-background-size: cover;
     -fx-background-position: center center; 
