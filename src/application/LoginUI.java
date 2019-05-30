@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
-import chat.ChatController;
+import chat.ClientController;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -45,9 +45,9 @@ public class LoginUI extends Application {
 	private TextField username = new TextField();
 	private PasswordField password = new PasswordField();
 	public static Stage stage = new Stage();
-	private ChatController controller;
+	private ClientController controller;
 
-	public LoginUI(ChatController controller) {
+	public LoginUI(ClientController controller) {
 		this.controller = controller;
 	}
 

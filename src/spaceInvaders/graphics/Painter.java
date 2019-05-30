@@ -2,7 +2,7 @@ package spaceInvaders.graphics;
 
 import application.JukeBox;
 import application.MainUI;
-import chat.ChatController;
+import chat.ClientController;
 import chat.ChatUI;
 import javafx.application.Platform;
 import spaceInvaders.Effects.Explosion;
@@ -67,7 +67,7 @@ public class Painter extends AnimationTimer implements Runnable{
 
     private static Image explosion;
     private static Image shotCollision;
-    private ChatController chatController;
+    private ClientController chatController;
     private boolean gameEnded = false;
 
     Executor executor;
@@ -86,7 +86,7 @@ public class Painter extends AnimationTimer implements Runnable{
         }
     }
 
-    public Painter(MainUI mainUI, ChatUI chatUI, JukeBox jukebox, ChatController controller) {
+    public Painter(MainUI mainUI, ChatUI chatUI, JukeBox jukebox, ClientController controller) {
         this.chatUI = chatUI;
         this.mainUI = mainUI;
         this.jukebox = jukebox;

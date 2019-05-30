@@ -12,9 +12,9 @@ import java.net.UnknownHostException;
 public class ServerLauncher {
 	public static void main(String[] args) {
 		ServerController serverController = new ServerController();
-		new Server(60000, serverController);
+		new Server(50000, serverController);
 		
-		// Kontrollera utskrift vid start, den IP som skrivs ut måste justeras i ClientLauncher
+		// Kontrollera utskrift vid start, den IP som skrivs ut måste justeras i ClientController
 		try {
 			System.out.println(InetAddress.getLocalHost().getHostAddress());
 		} catch (UnknownHostException e) {

@@ -7,7 +7,7 @@ import java.net.MalformedURLException;
 
 import application.JukeBox;
 import application.MainUI;
-import chat.ChatController;
+import chat.ClientController;
 import chat.ChatUI;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -43,9 +43,9 @@ public class Pong {
 	public static final int HEIGHT = 400;
 	private Game game;
 	private Canvas canvas;
-	private ChatController controller;
+	private ClientController controller;
 
-	public Pong(MainUI mainUI, ChatUI chatUI, JukeBox jukebox, ChatController controller) {
+	public Pong(MainUI mainUI, ChatUI chatUI, JukeBox jukebox, ClientController controller) {
 		this.mainUI = mainUI;
 		this.chatUI = chatUI;
 		this.jukebox = jukebox;
