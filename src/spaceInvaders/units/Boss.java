@@ -7,6 +7,7 @@ import spaceInvaders.logic.Controller;
 
 
 /**
+ * an abstract extension of unit, made for bosses
  * @author Viktor Altintas
  */
 
@@ -18,17 +19,13 @@ public abstract class Boss extends Unit implements Runnable {
 
     @Override
     public void shoot() {
-
     }
 
     @Override
     public void registerHit() {
-
     }
 
     public void start(){
         new Thread(this).start();
     }
-
-
 }

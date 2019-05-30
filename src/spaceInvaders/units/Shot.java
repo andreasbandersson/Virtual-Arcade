@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 
 
 /**
+ * this class holds the data for a shot and updates its movement
  * @author Viktor Altintas
  */
 
@@ -31,6 +32,13 @@ public class Shot extends Unit implements Runnable {
     }
 
 
+    /**
+     * constructor
+     * @param position the startposition
+     * @param speed the speed of the shot
+     * @param direction the direction it will travel
+     * @param controller the controller for the logic
+     */
     public Shot(Position position,int speed, boolean direction, Controller controller){
         super(1,position,shot, width,height, controller);
         this.speed = speed;
@@ -40,22 +48,33 @@ public class Shot extends Unit implements Runnable {
     @Override
     public void shoot() {}
 
+    /**
+     * calls the die-method
+     */
     @Override
     public void registerHit() {
         die();
     }
 
+    /**
+     * kills the shot
+     */
     @Override
     public void die() {
         flying = false;
         controller.removeUnit(this);
     }
 
-
+    /**
+     * stops it from flying
+     */
     public void remoteKill(){
         flying = false;
     }
 
+    /**
+     * moves the shot and requests a check if it hit something
+     */
     public void run() {
         while (flying) {
             while (paused){
