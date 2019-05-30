@@ -51,18 +51,19 @@ public class MainUI extends Application {
 	private Scene scene;
 	private GridPane mainRoot;
 	private Leaderboard leaderboard;
-	private pong2.Pong pong;
+	private Pong pong;
 	private GUIPane snake;
-
-	// private SpaceInvaders spaceInvaders;
 	private Painter spaceInvaders;
 	private JukeBox jukebox;
 	private ChatController controller;
-	private final int numOfCols = 48;
-	private final int numOfRows = 24;
 	private ChatUI chatUI;
 	public static Stage primaryStage = new Stage();
 
+	/**
+	 * Constructor that starts the music and initiates a leaderboard and sends it to the controller.
+	 * @param chatUI the chatUI parameter is used to display the chat.
+	 * @param controller the controller parameter is used to handle the leaderboard object.
+	 */
 	public MainUI(ChatUI chatUI, ChatController controller) {
 		this.chatUI = chatUI;
 		this.controller = controller;
@@ -72,7 +73,9 @@ public class MainUI extends Application {
 		controller.addLeaderboard(leaderboard);
 	}
 
-	// Function that initiates the main menu and its components.
+	/**
+	 * Function that initiates the main menu and its components.
+	 */
 	public void start(Stage primaryStage) {
 
 		// Setting the main Pane for the scene.
@@ -84,9 +87,9 @@ public class MainUI extends Application {
 		setArcadeMachineImage();
 
 		// Adding and setting the Label for Virtual Arcade-header
-		Label virtualArcadeLabel = new Label("VIRTUAL");
 		Glow glow = new Glow(0.1);
 		Bloom bloom = new Bloom(0.1);
+		Label virtualArcadeLabel = new Label("VIRTUAL");
 		virtualArcadeLabel.setId("vaLabel");
 		virtualArcadeLabel.setEffect(bloom);
 		virtualArcadeLabel.setEffect(glow);
@@ -110,10 +113,11 @@ public class MainUI extends Application {
 		fadeTransitionH.play();
 		mainRoot.add(headerLabel, 10, 7, 20, 4);
 
-		// Adding and setting the main menu buttons
+		// Adding and setting the Leaderboard button
 		leaderboardButton.setId("mainButtons");
 		mainRoot.add(leaderboardButton, 26, 0, 6, 3);
 
+		// Adding and setting the Log out button
 		logOutButton.setId("logOutButton");
 		mainRoot.add(logOutButton, 1, 21, 6, 3);
 
@@ -135,6 +139,7 @@ public class MainUI extends Application {
 		snakePlayButton.setMinWidth(Region.USE_PREF_SIZE);
 		mainRoot.add(snakePlayButton, 27, 20, 4, 1);
 
+		//Adding the Chat
 		mainRoot.add(chatUI, 36, 0, 12, 24);
 
 		// Sets the scene, adds all children nodes and sets the css-style.
@@ -144,10 +149,12 @@ public class MainUI extends Application {
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
+		
 		setSoundButtonImages();
 		checkSound();
 		addActionListeners(primaryStage);
 
+		//Prevents the buttons to get focus when hitting the Tab-button.
 		leaderboardButton.setFocusTraversable(false);
 		soundButton.setFocusTraversable(false);
 		logOutButton.setFocusTraversable(false);
@@ -161,9 +168,7 @@ public class MainUI extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.centerOnScreen();
 		primaryStage.show();
-		// stage = primaryStage;
-
-		primaryStage.setOnCloseRequest((EventHandler<WindowEvent>) new EventHandler<WindowEvent>() {
+		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			@Override
 			public void handle(WindowEvent e) {
 				Platform.exit();
@@ -171,12 +176,17 @@ public class MainUI extends Application {
 			}
 		});
 		
+		//The Virtual Arcade logo requests focus so that buttons doesn't steal it.
 		virtualArcadeLabel.requestFocus();
 
 	}
 
-	// Sets the number and size-percentage of the rows and columns in the GridPane.
+	/**
+	 * Sets the number and size-percentage of the rows and columns in the GridPane.
+	 */
 	private void setColumnsandRows() {
+		final int numOfCols = 48;
+		final int numOfRows = 24;
 		for (int i = 0; i < numOfCols; i++) {
 			ColumnConstraints colConst = new ColumnConstraints();
 			colConst.setPercentWidth(100.0 / numOfCols);
@@ -189,7 +199,9 @@ public class MainUI extends Application {
 		}
 	}
 
-	// Function that creates and sets the arcade machine images to the main menu.
+	/**
+	 * Function that creates and sets the arcade machine images to the main menu.
+	 */
 	private void setArcadeMachineImage() {
 		try {
 			pongImage = new Image(new FileInputStream("images/pongGame2.png"));
@@ -215,8 +227,10 @@ public class MainUI extends Application {
 		mainRoot.add(snakeView, 24, 17);
 
 	}
-
-	// Sets the sound buttons images.
+	
+	/**
+	 * Sets the sound buttons images.
+	 */
 	private void setSoundButtonImages() {
 		try {
 			playSoundImage = new Image(new FileInputStream("images/sound.png"));
@@ -230,14 +244,23 @@ public class MainUI extends Application {
 
 	}
 	
-	public void checkSound() {
-		if (jukebox.isMute()) {
+
+	/**
+	 * Checks the sound if it is paused or playing. 
+	 * If it is paused the sound button symbol should show the correct symbol.
+	 * This method could be called upon from outside of this class.
+	 */
+	private void checkSound() {
+		if (jukebox.isPaused()) {
 			soundButton.setGraphic(muteSoundImageView);
 		} else {
 			soundButton.setGraphic(playSoundImageView);
 		}
 	}
 
+	/**  
+	 * Function that switches to the MainUI's scene. Called upon from outside classes.
+	 */
 	public void switchToMainUI() {
 		mainRoot.add(chatUI, 36, 0, 12, 24);
 		primaryStage.setScene(scene);
@@ -245,7 +268,11 @@ public class MainUI extends Application {
 		checkSound();
 	}
 
-	public void terminate() {
+
+	/**
+	 * A function that terminates the current MainUI object and stops the sound so that the sound wont overlap.
+	 */
+	private void terminate() {
 		primaryStage.close();
 		jukebox.stopSound();
 		try {
@@ -255,7 +282,11 @@ public class MainUI extends Application {
 		}
 	}
 
-	// Function for adding and setting Action Listeners to all Buttons.
+	/** 
+	 * Function for adding and setting Action Listeners to all Buttons.
+	 * 
+	 * @param primaryStage the stage parameter is used so that everything is displayed in the same stage and not opened in a separate stage.
+	 */
 	private void addActionListeners(Stage primaryStage) {
 
 		leaderboardButton.setOnAction(e -> {
@@ -273,18 +304,17 @@ public class MainUI extends Application {
 		});
 
 		soundButton.setOnAction(e -> {
-			jukebox.muteUnmute();
-			if (jukebox.isMute()) {
+			jukebox.pauseOrPlay();
+			if (jukebox.isPaused()) {
 				soundButton.setGraphic(muteSoundImageView);
 			} else {
 				soundButton.setGraphic(playSoundImageView);
 			}
 		});
 
-		// Skriv om. Instansiera pong och l�gg in i mainRoot som pane bara
 		pongPlayButton.setOnAction(e -> {
 			if (pong == null) {
-				pong = new pong2.Pong(this, chatUI, jukebox, controller);
+				pong = new Pong(this, chatUI, jukebox, controller);
 			}
 
 			mainRoot.getChildren().remove(chatUI);
@@ -293,7 +323,6 @@ public class MainUI extends Application {
 			pong.checkSound();
 		});
 
-		// Skriv om. Instansiera Space Invaders och l�gg in i mainRoot som pane bara
 		spacePlayButton.setOnAction(e -> {
 			if (spaceInvaders == null) {
 				spaceInvaders = new Painter(this, chatUI, jukebox, controller);
@@ -304,7 +333,6 @@ public class MainUI extends Application {
 			spaceInvaders.checkSound();
 		});
 
-		// Skriv om. Instansiera Snake och l�gg in i mainRoot som pane bara
 		snakePlayButton.setOnAction(e -> {
 			if (snake == null) {
 				snake = new GUIPane(this, chatUI, jukebox, controller);

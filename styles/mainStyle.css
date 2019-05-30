@@ -11,27 +11,27 @@
 }
 
 #mainRoot{
-    -fx-background-image: url("../images/arcade5.jpg");
+    -fx-background-image: url("../images/mainBg.jpg");
     -fx-background-repeat: stretch;   
     -fx-background-size: cover;
     -fx-background-position: center center; 
 }
 
 #leaderboardRoot{
-	 -fx-background-image: url("../images/login3.jpg");
+	 -fx-background-image: url("../images/leaderboard.jpg");
     -fx-background-repeat: stretch;   
     -fx-background-size: cover;
     -fx-background-position: center center; 
 }
 
 #highscoreLabel{
-	-fx-background-color: transparent; 
+	-fx-background-color: transparent;
 	
 }
 #highscoreLabel .text{
 	-fx-fill: linear-gradient(#ffffff 0%, #ffff00 40%, #dd6000 70%);
     -fx-font-size: 1.25em;
-    -fx-effect: dropshadow( three-pass-box , rgba(0.0,0.0,0.0,0.90) , 4.0,0.0,0.0,0.90 );
+    -fx-effect: dropshadow( three-pass-box , rgba(0.0,0.0,0.0,1.0) , 4.0,0.0,0.0,1.0 );
     -fx-font-weight: bold;
     -fx-font-family: 'Press Start 2P';
     -fx-line-spacing: 0.5em;

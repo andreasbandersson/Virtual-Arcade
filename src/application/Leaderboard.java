@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.util.LinkedList;
-
 import chat.ChatUI;
 import chat.Highscore;
 import javafx.animation.Animation;
@@ -26,7 +25,9 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.TextAlignment;
 
 /**
- * @author Andreas Andersson / MÃ¥ns Grundberg
+ * The Leaderboard class shows the different games high-scores in lists of 10.
+ * 
+ * @author Andreas Andersson & Måns Grundberg
  */
 
 public class Leaderboard {
@@ -47,17 +48,27 @@ public class Leaderboard {
 	private Label spaceHighscoreLabel = new Label();
 	private Label pongHighscoreLabel = new Label();
 	private Pane pane = new Pane();
-
 	private final int numOfCols = 48;
 	private final int numOfRows = 24;
 
+	/**
+	 * The constructor takes a MainUI, ChatUI and a Jukebox object.
+	 * 
+	 * @param mainMenu the mainmenu parameter is used so that the Leaderboard is running in the background and could be switched back to.
+	 * @param chatUI the chatUI parameter is used to show the chat.
+	 * @param jukebox the jukebox parameter is used so that the music keeps playing when switching between the leaderboard and the mainUI.
+	 */
+	
 	public Leaderboard(MainUI mainMenu, ChatUI chatUI, JukeBox jukebox) {
 		this.mainMenu = mainMenu;
 		this.chatUI = chatUI;
 		this.jukebox = jukebox;
 		init();
 	}
-
+	
+	/**
+	 * initiates the structure, graphics, music, labels and action listeners.
+	 */
 	private void init() {
 		leaderboardRoot = new GridPane();
 		leaderboardRoot.setId("leaderboardRoot");
@@ -80,7 +91,7 @@ public class Leaderboard {
 		backButton.setId("logOutButton");
 		leaderboardRoot.add(backButton, 1, 21, 6, 2);
 
-		// Adding an setting the button for mute and un-mute of login music
+		// Adding an setting the sound button
 		soundButton = new Button();
 		soundButton.setId("logOutButton");
 		leaderboardRoot.add(soundButton, 32, 1);
@@ -90,9 +101,11 @@ public class Leaderboard {
 		setSoundButtonImages();
 		checkSound();
 
+		//Prevents these buttons from getting focus
 		backButton.setFocusTraversable(false);
 		soundButton.setFocusTraversable(false);
 
+		//Setting the scene and its styles.
 		scene = new Scene(leaderboardRoot, 1200, 600);
 		try {
 			scene.getStylesheets().add((new File("styles//mainStyle.css")).toURI().toURL().toExternalForm());
@@ -101,9 +114,10 @@ public class Leaderboard {
 		}
 	}
 
-	// Sets the number and size-percentage of the rows and columns in the GridPane.
+	/**
+	 *  Sets the number and size-percentage of the rows and columns in the GridPane.
+	 */
 	private void createColumnsandRows() {
-
 		for (int i = 0; i < numOfCols; i++) {
 			ColumnConstraints colConst = new ColumnConstraints();
 			colConst.setPercentWidth(100.0 / numOfCols);
@@ -116,15 +130,27 @@ public class Leaderboard {
 		}
 	}
 
+	/**
+	 * Getter for this objects scene.
+	 * @return the scene
+	 */
 	public Scene getScene() {
 		addChatUI(chatUI);
 		return this.scene;
 	}
 
+	/**
+	 * Function that adds the chat to this object.
+	 * 
+	 * @param chatUI the chat that is going to be set.
+	 */
 	private void addChatUI(ChatUI chatUI) {
 		leaderboardRoot.add(chatUI, 36, 0, 12, 24);
 	}
 
+	/*
+	 * Function that adds all of the labels for the highscores.
+	 */
 	private void addHighscoreLabels() {
 		pongHighscoreLabel.setId("highscoreLabel");
 		pongHighscoreLabel.setPrefSize(300.0, 350.00);
@@ -176,11 +202,17 @@ public class Leaderboard {
 			if (highscores.get(0).getGame().equals("Snake")) {
 				String temp = "";
 				for (int i = 0; i < highscores.size(); i++) {
+					String name = highscores.get(i).getUser().getUsername();
+					if (name.length() > 8) {
+						String temp2 = name.substring(0, 7);
+						name = temp2;
+					}
 					if (i == 9) {
-						temp += i + 1 + " " + highscores.get(i).getUser().getUsername() + " "
+
+						temp += i + 1 + " " + name + " "
 								+ highscores.get(i).getScore() + "\n";
 					} else {
-						temp += i + 1 + "  " + highscores.get(i).getUser().getUsername() + " "
+						temp += i + 1 + "  " + name + " "
 								+ highscores.get(i).getScore() + "\n";
 					}
 				}
@@ -189,11 +221,16 @@ public class Leaderboard {
 			} else if (highscores.get(0).getGame().equals("Space Invaders")) {
 				String temp = "";
 				for (int i = 0; i < highscores.size(); i++) {
+					String name = highscores.get(i).getUser().getUsername();
+					if (name.length() > 8) {
+						String temp2 = name.substring(0, 7);
+						name = temp2;
+					}
 					if (i == 9) {
-						temp += i + 1 + " " + highscores.get(i).getUser().getUsername() + " "
+						temp += i + 1 + " " + name + " "
 								+ highscores.get(i).getScore() + "\n";
 					} else {
-						temp += i + 1 + "  " + highscores.get(i).getUser().getUsername() + " "
+						temp += i + 1 + "  " + name + " "
 								+ highscores.get(i).getScore() + "\n";
 					}
 				}
@@ -201,11 +238,16 @@ public class Leaderboard {
 			} else {
 				String temp = "";
 				for (int i = 0; i < highscores.size(); i++) {
+					String name = highscores.get(i).getUser().getUsername();
+					if (name.length() > 8) {
+						String temp2 = name.substring(0, 7);
+						name = temp2;
+					}
 					if (i == 9) {
-						temp += i + 1 + " " + highscores.get(i).getUser().getUsername() + " "
+						temp += i + 1 + " " + name + " "
 								+ highscores.get(i).getScore() + "\n";
 					} else {
-						temp += i + 1 + "  " + highscores.get(i).getUser().getUsername() + " "
+						temp += i + 1 + "  " + name + " "
 								+ highscores.get(i).getScore() + "\n";
 					}
 				}
@@ -214,7 +256,9 @@ public class Leaderboard {
 		}
 	}
 
-	// Sets the sound buttons images.
+	/**
+	 *  Sets the sound buttons images.
+	 */
 	private void setSoundButtonImages() {
 		try {
 			playSoundImage = new Image(new FileInputStream("images/sound.png"));
@@ -226,15 +270,22 @@ public class Leaderboard {
 		muteSoundImageView = new ImageView(muteSoundImage);
 	}
 
+	/**
+	 * Checks the sound if it is paused or playing. 
+	 * If it is paused the sound buttons symbol should show the correct symbol.
+	 * This method could be called upon from outside of this class.
+	 */
 	public void checkSound() {
-		if (jukebox.isMute()) {
+		if (jukebox.isPaused()) {
 			soundButton.setGraphic(muteSoundImageView);
 		} else {
 			soundButton.setGraphic(playSoundImageView);
 		}
 	}
 
-	// Function for adding and setting Action Listeners to all Buttons.
+	/**
+	 *  Function for adding and setting Action Listeners to all Buttons.
+	 */
 	private void addActionListeners() {
 		backButton.setOnAction(e -> {
 			leaderboardRoot.getChildren().remove(chatUI);
@@ -242,8 +293,8 @@ public class Leaderboard {
 		});
 
 		soundButton.setOnAction(e -> {
-			jukebox.muteUnmute();
-			if (jukebox.isMute()) {
+			jukebox.pauseOrPlay();
+			if (jukebox.isPaused()) {
 				soundButton.setGraphic(muteSoundImageView);
 			} else {
 				soundButton.setGraphic(playSoundImageView);

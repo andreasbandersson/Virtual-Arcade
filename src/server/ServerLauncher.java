@@ -1,8 +1,13 @@
-package chat;
+package server;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+/**
+ * The server side's main-method. Launches the server.
+ * @author Måns Grundberg
+ *
+ */
 
 public class ServerLauncher {
 	public static void main(String[] args) {

@@ -20,9 +20,6 @@ import java.util.concurrent.Executors;
 
 public class Controller implements Runnable {
 
-    private final int FPS = 2;
-    private final int enemySpeed = 20;
-
     private Canvas canvas;
     private int score = 0;
     private int levelCounter = 1;
@@ -64,7 +61,7 @@ public class Controller implements Runnable {
         initializeLevel(levelList.get(levelCounter2));
     }
 
-    public void createLevelList(){
+    private void createLevelList(){
         levelList = new LevelListBuilder(this).getLevelList();
     }
 
@@ -230,6 +227,7 @@ public class Controller implements Runnable {
                 }
             }
             try {
+                final int FPS = 2;
                 Thread.sleep(1500 / FPS);
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -241,7 +239,7 @@ public class Controller implements Runnable {
         levelWin();
     }
 
-    public void movementRun() {
+    private void movementRun() {
         while (!enemies.stream().allMatch(List::isEmpty)) { //if all objects delivered by the stream match the method isEmpty, statement is true
             // stream = take out the elements one by one
             while (gamePaused) {
@@ -273,7 +271,7 @@ public class Controller implements Runnable {
         }
     }
 
-    public void enemyFire(Enemy e){
+    private void enemyFire(Enemy e){
         if (e.willShoot()){
             e.shoot();
         }
@@ -290,7 +288,7 @@ public class Controller implements Runnable {
         return levelCounter;
     }
 
-    public synchronized void levelWin() {
+    private synchronized void levelWin() {
         levelCounter++;
         levelCounter2 = (levelCounter2+1) % levelList.size();
         initializeLevel(levelList.get(levelCounter2));

@@ -4,10 +4,7 @@ import application.JukeBox;
 import application.MainUI;
 import chat.ChatController;
 import chat.ChatUI;
-import chat.Highscore;
 import javafx.application.Platform;
-import javafx.concurrent.Task;
-import javafx.scene.text.Text;
 import spaceInvaders.Effects.Explosion;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
@@ -23,428 +20,409 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import spaceInvaders.Effects.ScoreUp;
 import spaceInvaders.Effects.ShotCollision;
 import spaceInvaders.logic.Controller;
 import spaceInvaders.units.Player;
 import spaceInvaders.units.Position;
 import spaceInvaders.units.Unit;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.TimerTask;
 import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 
 /**
  * @author Viktor Altintas
  */
 
-public class Painter extends AnimationTimer implements Runnable{
+public class Painter extends AnimationTimer implements Runnable {
 
-    private Controller controller;
-    private Player player;
+	private Controller controller;
+	private Player player;
 
-    private Label scoreLabel;
-    private Label levelTitle;
-    private Label pauseLabel;
-    private Label endLabel;
-    private static Image playerLifeSprite;
-    private GraphicsContext gc;
-    private Pane root;
-    private Canvas canvas;
-    private Scene scene;
-    private MainUI mainUI;
-    private ChatUI chatUI;
-    private GridPane spaceInvadersRoot;
-    private Button backButton = new Button("BACK");
-    private Button soundButton = new Button();
-    private Image muteSoundImage;
-    private Image playSoundImage;
-    private Image spaceInvadersImage;
-    private ImageView muteSoundImageView;
-    private ImageView playSoundImageView;
-    private ImageView spaceInvadersView;
-    private JukeBox jukebox;
+	private Label scoreLabel;
+	private Label levelTitle;
+	private Label pauseLabel;
+	private Label endLabel;
+	private static Image playerLifeSprite;
+	private GraphicsContext gc;
+	private Pane root;
+	private Canvas canvas;
+	private Scene scene;
+	private MainUI mainUI;
+	private ChatUI chatUI;
+	private GridPane spaceInvadersRoot;
+	private Button backButton = new Button("BACK");
+	private Button soundButton = new Button();
+	private Image muteSoundImage;
+	private Image playSoundImage;
+	private Image spaceInvadersImage;
+	private ImageView muteSoundImageView;
+	private ImageView playSoundImageView;
+	private JukeBox jukebox;
 
+	private static Image explosion;
+	private static Image shotCollision;
+	private ChatController chatController;
+	private boolean gameEnded = false;
 
+	Executor executor;
 
-    private final int numOfCols = 48;
-    private final int numOfRows = 24;
+	private ArrayList<Explosion> explosions = new ArrayList<>();
+	private ArrayList<ShotCollision> shotCollisions = new ArrayList<>();
 
-    private static Image explosion;
-    private static Image shotCollision;
-    private static Image backgroundImage;
-    private ChatController chatController;
-    private boolean gameEnded = false;
+	static {
+		try {
+			playerLifeSprite = new Image(new FileInputStream("Sprites/player.png"), 30, 25, true, false);
+			explosion = new Image(new FileInputStream("Sprites/deathExplosion.png"), 25, 20, false, false);
+			shotCollision = new Image(new FileInputStream("Sprites/smallExplosion.png"), 10, 10, false, false);
 
-    Executor executor;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
 
-    private ArrayList<Explosion> explosions = new ArrayList<>();
-    private ArrayList<ShotCollision> shotCollisions = new ArrayList<>();
-    private ArrayList<ScoreUp> scoreFloats = new ArrayList<>();
+	public Painter(MainUI mainUI, ChatUI chatUI, JukeBox jukebox, ChatController controller) {
+		this.chatUI = chatUI;
+		this.mainUI = mainUI;
+		this.jukebox = jukebox;
+		executor = Executors.newFixedThreadPool(5);
+		this.chatController = controller;
+		init();
+	}
 
-    static {
-        try {
-            playerLifeSprite = new Image(new FileInputStream("Sprites/player.png"),30,25,true,false);
-            backgroundImage = new Image(new FileInputStream("Sprites/SIBackground.png"),900,600,true,false);
-            explosion = new Image(new FileInputStream("Sprites/deathExplosion.png"),25,20,false,false);
-            shotCollision = new Image(new FileInputStream("Sprites/smallExplosion.png"),10,10,false,false);
+	private void init() {
+		scoreLabel = new Label("");
+		scoreLabel.setTextFill(Color.rgb(255, 255, 255));
+		scoreLabel.setFont(Font.loadFont("file:fonts/ARCADE.TTF", 25));
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
+		endLabel = new Label("Game Over\nTo Restart:\nPress [R]");
+		endLabel.setTextFill(Color.rgb(255, 255, 255));
+		endLabel.setFont(Font.loadFont("file:fonts/ARCADE.TTF", 30));
+		endLabel.setLayoutX(210);
+		endLabel.setLayoutY(150);
 
-    public Painter(MainUI mainUI, ChatUI chatUI, JukeBox jukebox, ChatController controller) {
-        this.chatUI = chatUI;
-        this.mainUI = mainUI;
-        this.jukebox = jukebox;
-        executor = Executors.newFixedThreadPool(5);
-        this.chatController = controller;
-        init();
-    }
+		canvas = new Canvas(600.0, 400.0);
+		canvas.setId("SpaceInvaders");
 
-    private void init() {
-        scoreLabel = new Label("");
-        scoreLabel.setTextFill(Color.rgb(255,255,255));
-        scoreLabel.setFont(Font.loadFont("file:fonts/ARCADE.TTF", 25));
+		spaceInvadersRoot = new GridPane();
 
-        endLabel = new Label("Game Over\nTo Restart:\nPress [R]");
-        endLabel.setTextFill(Color.rgb(255,255,255));
-        endLabel.setFont(Font.loadFont("file:fonts/ARCADE.TTF", 30));
-        endLabel.setLayoutX(210);
-        endLabel.setLayoutY(150);
+		root = new Pane();
 
-        //  backgroundLayer = new Pane();
+		createColumnsandRows();
 
-        canvas = new Canvas(600.0,400.0);
-        canvas.setId("SpaceInvaders");
+		setSpaceInvadersArcadeMachineImage();
 
-        spaceInvadersRoot = new GridPane();
+		root.setId("SpaceInvaders");
 
+		// Adding and setting the main buttons
+		backButton.setId("logOutButton");
+		spaceInvadersRoot.add(backButton, 1, 21, 6, 2);
 
-        //  backgroundLayer.getChildren().add((backgroundImageView));
+		// Adding an setting the button for mute and un-mute of login music
+		soundButton = new Button();
+		soundButton.setId("logOutButton");
+		spaceInvadersRoot.add(soundButton, 32, 1);
+		spaceInvadersRoot.setPrefSize(1200.0, 600.0);
 
+		setSoundButtonImages();
+		checkSound();
 
-        root = new Pane();
-        // root.getChildren().add(backgroundLayer);
+		backButton.setFocusTraversable(false);
+		soundButton.setFocusTraversable(false);
+		controller = new Controller(canvas, this);
+		this.player = controller.getPlayer();
 
-        createColumnsandRows();
-       
-        setSpaceInvadersArcadeMachineImage();
+		levelTitle = new Label("Level " + controller.getLevelCounter());
+		levelTitle.setFont(Font.loadFont("file:fonts/ARCADE.TTF", 24));
+		levelTitle.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+		levelTitle.setTextFill(Color.WHITE);
 
-        root.setId("SpaceInvaders");
+		levelTitle.setLayoutX(250);
+		levelTitle.setLayoutY(0);
 
-        // Adding and setting the main buttons
-        backButton.setId("logOutButton");
-        spaceInvadersRoot.add(backButton, 1, 21, 6, 2);
+		pauseLabel = new Label("Game Paused\n[P] to Resume");
+		pauseLabel.setFont(Font.loadFont("file:fonts/ARCADE.TTF", 30));
+		pauseLabel.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+		pauseLabel.setTextFill(Color.WHITE);
+		pauseLabel.setLayoutX(210);
+		pauseLabel.setLayoutY(210);
 
-        // Adding an setting the button for mute and un-mute of login music
-        soundButton = new Button();
-        soundButton.setId("logOutButton");
-        spaceInvadersRoot.add(soundButton, 32, 1);
-        spaceInvadersRoot.setPrefSize(1200.0, 600.0);
-        
-        setSoundButtonImages();
-        checkSound();
+		root.getChildren().add(scoreLabel);
+		root.getChildren().add(levelTitle);
+		root.getChildren().add(canvas);
+		spaceInvadersRoot.add(root, 6, 4, 24, 16);
 
-        backButton.setFocusTraversable(false);
-        soundButton.setFocusTraversable(false);
-        controller = new Controller(canvas,this);
-        this.player = controller.getPlayer();
+		spaceInvadersRoot.setId("mainRoot");
 
-        levelTitle = new Label("Level " + controller.getLevelCounter());
-        levelTitle.setFont(Font.loadFont("file:fonts/ARCADE.TTF", 24));
-        levelTitle.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
-        levelTitle.setTextFill(Color.WHITE);
+		scene = new Scene(spaceInvadersRoot, 1200, 600, Color.BLACK);
 
-        levelTitle.setLayoutX(250);
-        levelTitle.setLayoutY(0);
+		//Sets the scenes styles
+		try {
+			scene.getStylesheets().add((new File("styles//spaceStyle.css")).toURI().toURL().toExternalForm());
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
 
-        pauseLabel = new Label("Game Paused\n[P] to Resume");
-        pauseLabel.setFont(Font.loadFont("file:fonts/ARCADE.TTF", 30));
-        pauseLabel.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
-        pauseLabel.setTextFill(Color.WHITE);
-        pauseLabel.setLayoutX(210);
-        pauseLabel.setLayoutY(210);
+		gc = canvas.getGraphicsContext2D();
+		addListeners(scene);
 
-        root.getChildren().add(scoreLabel);
-        root.getChildren().add(levelTitle);
-        root.getChildren().add(canvas);
-        spaceInvadersRoot.add(root,6,4,24,16);
+		canvas.requestFocus();
+		canvas.setOnMouseMoved(e -> canvas.requestFocus());
+		start(); // starts the animation timer
+	}
 
-        spaceInvadersRoot.setId("mainRoot");
+	public void gameEnd() {
+		chatController.newHighscore("Space Invaders", controller.getScore());
+		gameEnded = true;
+		controller.clearGameField();
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				root.getChildren().add(endLabel);
+			}
+		});
+	}
 
-        scene = new Scene(spaceInvadersRoot,1200,600, Color.BLACK);
+	public void run() {
+		for (Explosion e : new ArrayList<>(explosions)) {
+			if (!e.exploding()) {
+				explosions.remove(e);
+			}
+		}
+		for (ShotCollision e : new ArrayList<>(shotCollisions)) {
+			if (!e.enemyHitHappening()) {
+				shotCollisions.remove(e);
+			}
+		}
+	}
 
-        try {
-            scene.getStylesheets().add((new File("styles//spaceStyle.css")).toURI().toURL().toExternalForm());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+	@Override
+	public void handle(long now) {
 
-        gc = canvas.getGraphicsContext2D();
-        addListeners(scene);
+		gc.clearRect(0, 0, 600, 400);
 
-        canvas.requestFocus();
-        canvas.setOnMouseMoved(e -> canvas.requestFocus());
-        start(); // starts the animation timer
-    }
+		scoreLabel.setText("Score: " + controller.getScore());
+		levelTitle.setText("Level " + controller.getLevelCounter());
 
-    public void gameEnd(){
-        chatController.newHighscore("Space Invaders",controller.getScore());
-        gameEnded = true;
-        controller.clearGameField();
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                root.getChildren().add(endLabel);
-            }
-        });
-    }
+		if (!gameEnded) {
+			for (Unit unit : controller.getAllUnits()) {
+				if (unit.getPaused()) {
+					gc.setGlobalAlpha(0.50);
+					gc.drawImage(unit.getSprite(), unit.getPosition().getX(), unit.getPosition().getY());
+				} else {
+					gc.setGlobalAlpha(100);
+					gc.drawImage(unit.getSprite(), unit.getPosition().getX(), unit.getPosition().getY());
+				}
 
-    public void run(){
-        for (Explosion e : new ArrayList<>(explosions)){
-            if (!e.exploding()){
-                explosions.remove(e);
-            }
-        }
-        for (ShotCollision e : new ArrayList<>(shotCollisions)){
-            if (!e.enemyHitHappening()){
-                shotCollisions.remove(e);
-            }
-        }
-    }
+			}
+			for (int i = 0; i < player.getLife(); i++) {
+				gc.drawImage(playerLifeSprite, 440 + ((i + 1) * 39), 10);
+			}
 
-    @Override
-    public void handle(long now) {
+			checkDeadObjects();
 
-        gc.clearRect(0, 0, 600, 400);
+			// if (explosions.stream().anyMatch(Explosion::exploding)) {
+			for (Explosion e : new ArrayList<>(explosions)) {
+				gc.drawImage(explosion, e.getPosition().getX(), e.getPosition().getY());
+				// }
+			}
+			// if (shotCollisions.stream().anyMatch(ShotCollision::enemyHitHappening)) {
+			for (ShotCollision e : new ArrayList<>(shotCollisions)) {
+				gc.drawImage(shotCollision, e.getPosition().getX(), e.getPosition().getY() - 10);
+				// }
+			}
+		}
+	}
 
-        scoreLabel.setText("Score: " + controller.getScore());
-        levelTitle.setText("Level " + controller.getLevelCounter());
+	/**
+	 * Getter for this objects scene.
+	 * @return this objects scene
+	 */
+	public Scene getScene() {
+		spaceInvadersRoot.add(chatUI, 36, 0, 12, 24);
+		chatUI.setFocusTraversable(false);
+		return scene;
+	}
 
-        if (!gameEnded) {
-            for (Unit unit : controller.getAllUnits()) {
-                if (unit.getPaused()) {
-                    gc.setGlobalAlpha(0.50);
-                    gc.drawImage(unit.getSprite(), unit.getPosition().getX(), unit.getPosition().getY());
-                } else {
-                    gc.setGlobalAlpha(100);
-                    gc.drawImage(unit.getSprite(), unit.getPosition().getX(), unit.getPosition().getY());
-                }
+	public void setExplosionData(Position position) {
+		Explosion explosion = new Explosion(position);
+		executor.execute(explosion);
+		explosions.add(explosion);
 
-            }
-            for (int i = 0; i < player.getLife(); i++) {
-                gc.drawImage(playerLifeSprite, 440 + ((i + 1) * 39), 10);
-            }
+	}
 
-           checkDeadObjects();
+	public void setShotCollisionData(Position position) {
+		ShotCollision shotCollision = new ShotCollision(position);
+		executor.execute(shotCollision);
+		shotCollisions.add(shotCollision);
+	}
 
-           // if (explosions.stream().anyMatch(Explosion::exploding)) {
-                for (Explosion e : new ArrayList<>(explosions)) {
-                    gc.drawImage(explosion, e.getPosition().getX(), e.getPosition().getY());
-             //   }
-            }
-            //if (shotCollisions.stream().anyMatch(ShotCollision::enemyHitHappening)) {
-                for (ShotCollision e : new ArrayList<>(shotCollisions)) {
-                    gc.drawImage(shotCollision, e.getPosition().getX(), e.getPosition().getY() - 10);
-              //  }
-            }
-        }
-        else {
+	public void checkDeadObjects() {
+		executor.execute(this);
+	}
 
-        }
-    }
+	/**
+	 * Sets the number and size-percentage of the rows and columns in the GridPane.
+	 * @author Andreas Andersson
+	 */
+	private void createColumnsandRows() {
 
-    public Scene getScene(){
-        spaceInvadersRoot.add(chatUI,36,0,12,24);
-        chatUI.setFocusTraversable(false);
-        return scene;
-    }
+		final int numOfCols = 48;
+		final int numOfRows = 24;
 
-    public void setExplosionData(Position position){
-        Explosion explosion = new Explosion(position);
-        executor.execute(explosion);
-        explosions.add(explosion);
+		for (int i = 0; i < numOfCols; i++) {
+			ColumnConstraints colConst = new ColumnConstraints();
+			colConst.setPercentWidth(100.0 / numOfCols);
+			spaceInvadersRoot.getColumnConstraints().add(colConst);
+		}
+		for (int i = 0; i < numOfRows; i++) {
+			RowConstraints rowConst = new RowConstraints();
+			rowConst.setPercentHeight(100.0 / numOfRows);
+			spaceInvadersRoot.getRowConstraints().add(rowConst);
+		}
+	}
 
-    }
+	/** 
+	 * Sets the sound buttons images.
+	 * @author Andreas Andersson
+	 */
+	private void setSoundButtonImages() {
+		try {
+			playSoundImage = new Image(new FileInputStream("images/sound.png"));
+			muteSoundImage = new Image(new FileInputStream("images/mute.png"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		playSoundImageView = new ImageView(playSoundImage);
+		muteSoundImageView = new ImageView(muteSoundImage);
+	}
 
-    public void setShotCollisionData(Position position){
-        ShotCollision shotCollision = new ShotCollision(position);
-        executor.execute(shotCollision);
-        shotCollisions.add(shotCollision);
-    }
-
-    public void addNewScoreFloat(int score){
-   //     ScoreUp scoreUp = new ScoreUp(score);
-   //     Platform.runLater(new Runnable() {
-   //         @Override
-   //         public void run() {
-   //             root.getChildren().add(scoreUp);
-   //         }
-   //     });
-   //     scoreFloats.add(scoreUp);
-   //     executor.execute(scoreUp);
-    }
-
-    public void checkDeadObjects(){
-     // for (ScoreUp e : new ArrayList<>(scoreFloats)){
-     //     if (!e.floating()){
-     //         scoreFloats.remove(e);
-     //         root.getChildren().remove(e);
-     //     }
-     // }
-        executor.execute(this);
-
-    }
-
-    private void createColumnsandRows() {
-
-        for (int i = 0; i < numOfCols; i++) {
-            ColumnConstraints colConst = new ColumnConstraints();
-            colConst.setPercentWidth(100.0 / numOfCols);
-            spaceInvadersRoot.getColumnConstraints().add(colConst);
-        }
-        for (int i = 0; i < numOfRows; i++) {
-            RowConstraints rowConst = new RowConstraints();
-            rowConst.setPercentHeight(100.0 / numOfRows);
-            spaceInvadersRoot.getRowConstraints().add(rowConst);
-        }
-    }
-
-    // Sets the sound buttons images.
-    private void setSoundButtonImages() {
-        try {
-            playSoundImage = new Image(new FileInputStream("images/sound.png"));
-            muteSoundImage = new Image(new FileInputStream("images/mute.png"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        playSoundImageView = new ImageView(playSoundImage);
-        muteSoundImageView = new ImageView(muteSoundImage);
-    }
-    
-    //Checks if sound is muted or playing and sets image accordingly.
+	/**
+	 * Checks the sound if it is paused or playing. 
+	 * If it is paused the sound button symbol should show the correct symbol.
+	 * This method could be called upon from outside of this class.
+	 * @author Andreas Andersson
+	 */
 	public void checkSound() {
-		if (jukebox.isMute()) {
+		if (jukebox.isPaused()) {
 			soundButton.setGraphic(muteSoundImageView);
 		} else {
 			soundButton.setGraphic(playSoundImageView);
 		}
 	}
 
-    //Sets and adds the arcade machine image for the SpaceInvaders game.
-    public void setSpaceInvadersArcadeMachineImage() {
-        try {
-            spaceInvadersImage = new Image(new FileInputStream("images/spaceScreen.png"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        spaceInvadersView = new ImageView(spaceInvadersImage);
-        spaceInvadersView.setPreserveRatio(true);
-        spaceInvadersRoot.add(spaceInvadersView, 0, 14);
+	/**
+	 *  Sets and adds the arcade machine image for the SpaceInvaders game.
+	 *  @author Andreas Andersson
+	 */
+	private void setSpaceInvadersArcadeMachineImage() {
+		try {
+			spaceInvadersImage = new Image(new FileInputStream("images/spaceScreen.png"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		ImageView spaceInvadersView;
+		spaceInvadersView = new ImageView(spaceInvadersImage);
+		spaceInvadersView.setPreserveRatio(true);
+		spaceInvadersRoot.add(spaceInvadersView, 0, 14);
 
-    }
+	}
 
-    public boolean getGameEnded(){
-        return gameEnded;
-    }
+	public boolean getGameEnded() {
+		return gameEnded;
+	}
 
-    public void addListeners(Scene scene) {
+	private void addListeners(Scene scene) {
 
-        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                switch (event.getCode()) {
-                    case A:
-                    case LEFT:
-                        if (controller.getGamePaused())
-                            break;
-                        player.setTravelingLeftTrue();
-                        break;
+		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+				switch (event.getCode()) {
+				case A:
+				case LEFT:
+					if (controller.getGamePaused())
+						break;
+					player.setTravelingLeftTrue();
+					break;
 
-                    case D:
-                    case RIGHT:
-                        if (controller.getGamePaused())
-                            break;
-                        player.setTravelingRightTrue();
-                        break;
+				case D:
+				case RIGHT:
+					if (controller.getGamePaused())
+						break;
+					player.setTravelingRightTrue();
+					break;
 
-                    case SPACE:
-                        if (controller.getGamePaused() || controller.getLevelLoading())
-                            break;
-                        player.shoot();
-                        break;
-                    case P:
-                        if (!gameEnded) {
-                            if (controller.getGamePaused()) {
-                                root.getChildren().remove(pauseLabel);
-                            } else  {
-                                root.getChildren().add(pauseLabel);
-                            }
-                            controller.setGamePaused();
-                        }
-                        break;
-                    case R:
-                        if (gameEnded){
-                            root.getChildren().remove(endLabel);
-                            gameEnded = false;
-                            controller.setScore(0);
-                            player.renewLife(3);
-                            controller.restart();
-                        }
-                }
-                event.consume();
-            }
-        });
+				case SPACE:
+					if (controller.getGamePaused() || controller.getLevelLoading())
+						break;
+					player.shoot();
+					break;
+				case P:
+					if (!gameEnded) {
+						if (controller.getGamePaused()) {
+							root.getChildren().remove(pauseLabel);
+						} else {
+							root.getChildren().add(pauseLabel);
+						}
+						controller.setGamePaused();
+					}
+					break;
+				case R:
+					if (gameEnded) {
+						root.getChildren().remove(endLabel);
+						gameEnded = false;
+						controller.setScore(0);
+						player.renewLife(3);
+						controller.restart();
+					}
+				}
+				event.consume();
+			}
+		});
 
-        scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                switch (event.getCode()) {
-                    case A:
-                    case LEFT:
-                        if (controller.getGamePaused())
-                            break;
-                        player.setTravelingLeftF();
-                        break;
+		scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+				switch (event.getCode()) {
+				case A:
+				case LEFT:
+					if (controller.getGamePaused())
+						break;
+					player.setTravelingLeftF();
+					break;
 
-                    case D:
-                    case RIGHT:
-                        if (controller.getGamePaused())
-                            break;
-                        player.setTravelingRightF();
-                        break;
+				case D:
+				case RIGHT:
+					if (controller.getGamePaused())
+						break;
+					player.setTravelingRightF();
+					break;
 
-                }
-            }
-        });
+				}
+			}
+		});
+		
+		//Andreas
+		backButton.setOnAction(e -> {
+			spaceInvadersRoot.getChildren().remove(chatUI);
+			if (!controller.getGamePaused() && !gameEnded) {
+				controller.setGamePaused();
+				root.getChildren().add(pauseLabel);
+			}
+			mainUI.switchToMainUI();
+		});
 
-        backButton.setOnAction(e -> {
-            spaceInvadersRoot.getChildren().remove(chatUI);
-            if (!controller.getGamePaused() && !gameEnded) {
-                controller.setGamePaused();
-                root.getChildren().add(pauseLabel);
-            }
-            mainUI.switchToMainUI();
-        });
-
-        soundButton.setOnAction(e -> {
-            jukebox.muteUnmute();
-            if (jukebox.isMute()) {
-                soundButton.setGraphic(muteSoundImageView);
-            } else {
-                soundButton.setGraphic(playSoundImageView);
-            }
-        });
-
-    }
+		//Andreas
+		soundButton.setOnAction(e -> {
+			jukebox.pauseOrPlay();
+			if (jukebox.isPaused()) {
+				soundButton.setGraphic(muteSoundImageView);
+			} else {
+				soundButton.setGraphic(playSoundImageView);
+			}
+		});
+	}
 }
-

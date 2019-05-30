@@ -1,7 +1,5 @@
 package pong;
 
-import static pong.Config.*;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -9,21 +7,24 @@ import java.net.MalformedURLException;
 
 import application.JukeBox;
 import application.MainUI;
+import chat.ChatController;
 import chat.ChatUI;
-import javafx.beans.InvalidationListener;
-import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.transform.Scale;
-import javafx.scene.transform.Transform;
-import pong.Game;
+
+/**
+ * The class integrates the Pong game with the MainUI and adds the Chat and the Jukebox.
+ * 
+ * @author Andreas Andersson & Måns Grundberg
+ */
 
 public class Pong {
 	private MainUI mainUI;
@@ -32,38 +33,50 @@ public class Pong {
 	private Button backButton = new Button("BACK");
 	private Button soundButton;
 	private GridPane root = new GridPane();
-	private final int numOfCols = 48;
-	private final int numOfRows = 24;
 	private Image muteSoundImage;
 	private Image playSoundImage;
 	private ImageView muteSoundImageView;
 	private ImageView playSoundImageView;
+	private Image pongCabinettImage;
 	private JukeBox jukebox;
-	private int width = 600;
-	private int height = 400;
+	public static final int WIDTH = 600;
+	public static final int HEIGHT = 400;
 	private Game game;
+	private Canvas canvas;
+	private ChatController controller;
 
-	public Pong(MainUI mainUI, ChatUI chatUI, JukeBox jukebox) {
+	/**
+	 * The constructor receives the mainUI, chatUI, jukebox, chat controller and initiates the class.
+	 * @param mainUI the mainUI parameter lets the class switch back to the same main menu.
+	 * @param chatUI the chatUI parameter shows the chat in the class.
+	 * @param jukebox the jukebox parameter lets the music play without overlaps when switching between classes.
+	 * @param controller the controller parameter holds the logic for the chat
+	 */
+	public Pong(MainUI mainUI, ChatUI chatUI, JukeBox jukebox, ChatController controller) {
 		this.mainUI = mainUI;
 		this.chatUI = chatUI;
 		this.jukebox = jukebox;
+		this.controller = controller;
 		init();
 	}
-
+	/**
+	 * initiates the structure, graphics, game, styles, music and adds actionslisteners etc.
+	 */
 	private void init() {
-		// Font.loadFont(getClass().getResource("arcade-normal.ttf").toString(), 0);
-
-		game = new Game();
-//		Group content = new Group();
-//		GameScreen gameScreen = new GameScreen(game);
-//		WelcomeScreen welcomeScreen = new WelcomeScreen();
-//		EndScreen endScreen = new EndScreen();
-//		content.getChildren().add(game);
-
+		game = new Game(controller);
 		createColumnsandRows();
+		setPongArcadeMachineImage();
 		
+		Pane pane = new Pane();
+		pane.setPrefSize(600, 400);
+		canvas = game.getCanvas();
+
+		pane.getChildren().add(canvas);
+
+		pane.setId("Pong");
+
 		root.setPrefSize(1200, 600);
-		root.add(game, 6, 4, 24, 16);
+		root.add(pane, 6, 4, 24, 16);
 
 		backButton.setId("logOutButton");
 		root.add(backButton, 1, 21, 6, 2);
@@ -72,7 +85,7 @@ public class Pong {
 		soundButton = new Button();
 		setSoundButtonImages();
 		soundButton.setId("logOutButton");
-		soundButton.setGraphic(playSoundImageView);
+		checkSound();
 		root.add(soundButton, 32, 1);
 
 		backButton.setFocusTraversable(false);
@@ -81,29 +94,8 @@ public class Pong {
 		root.setId("mainRoot");
 
 		addActionListeners();
-
-		/*
-		 * Skï¿½rm byte.
-		 */
-//		welcomeScreen.setOnStart(() -> {
-//			content.getChildren().clear();
-//			content.getChildren().add(gameScreen);
-//			gameScreen.requestFocus();
-//			game.start();
-//		});
-//		game.setOnGameEnd(() -> {
-//			content.getChildren().clear();
-//			content.getChildren().add(endScreen);
-//			endScreen.requestFocus();
-//			endScreen.setScore(game.getPlayer().getScore());
-//		});
-//		endScreen.setOnRestart(() -> {
-//			content.getChildren().clear();
-//			content.getChildren().add(gameScreen);
-//			gameScreen.requestFocus();
-//			game.start();
-//		});
-
+		
+		// Sets the scenes styles
 		scene = new Scene(root, 1200, 600, Color.BLACK);
 		try {
 			scene.getStylesheets().add((new File("styles//pongStyle.css")).toURI().toURL().toExternalForm());
@@ -111,58 +103,11 @@ public class Pong {
 			e.printStackTrace();
 		}
 
-//		Scale scale = Transform.scale(1, 1, 0, 0);
-//		content.getTransforms().add(scale);
+		backButton.setFocusTraversable(false);
+		soundButton.setFocusTraversable(false);
 
-		/*
-		 * The following listener is called whenever the scene is resized to update the
-		 * scale and add letter- and pillarboxing.
-		 */
-//	InvalidationListener updateScale = value -> {
-//			double scaleX = scene.getWidth()/1000;
-//			double scaleY = scene.getHeight()/500;
-//
-//			if (scaleX < scaleY) {
-//				/*
-//				 * Letterboxing.
-//				 */
-//				scale.setX(scaleX);
-//				scale.setY(scaleX);
-//				double remainingHeight = scene.getHeight() - HEIGHT * scaleX;
-//				content.setTranslateX(0);
-//				content.setTranslateY(remainingHeight / 2);
-//			} else if (scaleY < scaleX) {
-//				/*
-//				 * Pillarboxing.
-//				 */
-//				scale.setX(scaleY);
-//				scale.setY(scaleY);
-//				double remainingWidth = scene.getWidth() - WIDTH * scaleY;
-//				content.setTranslateX(remainingWidth / 2);
-//				content.setTranslateY(0);
-//			} else {
-//				/*
-//				 * Regular scaling.
-//				 */
-//				scale.setX(scaleX);
-//				scale.setY(scaleY);
-//				content.setTranslateX(0);
-//				content.setTranslateY(0);
-//			}
-//		};
-		
-		
-//		scene.widthProperty().addListener(updateScale);
-//		scene.heightProperty().addListener(updateScale);
-
-		game.requestFocus();
-		
-//ï¿½
-//		welcomeScreen.setOnMouseMoved(e -> welcomeScreen.requestFocus());
-//		gameScreen.setOnMouseMoved(e -> gameScreen.requestFocus());
-//		endScreen.setOnMouseMoved(e -> endScreen.requestFocus());
-//
-//		welcomeScreen.requestFocus(); /* This step is necessary to receive keyboard input. */
+		canvas.requestFocus();
+		canvas.setOnMouseMoved(e -> canvas.requestFocus());
 	}
 
 	public Scene getScene() {
@@ -170,9 +115,15 @@ public class Pong {
 		chatUI.setFocusTraversable(false);
 		return this.scene;
 	}
-
+	
+	/**
+	 * Sets the number and size-percentage of the rows and columns in the GridPane.
+	 * @author Andreas Andersson
+	 */
 	private void createColumnsandRows() {
 
+		final int numOfCols = 48;
+		final int numOfRows = 24;
 		for (int i = 0; i < numOfCols; i++) {
 			ColumnConstraints colConst = new ColumnConstraints();
 			colConst.setPercentWidth(100.0 / numOfCols);
@@ -185,6 +136,10 @@ public class Pong {
 		}
 	}
 
+	/** 
+	 * Sets the sound buttons images.
+	 * @author Andreas Andersson
+	 */
 	private void setSoundButtonImages() {
 		try {
 			playSoundImage = new Image(new FileInputStream("images/sound.png"));
@@ -195,21 +150,56 @@ public class Pong {
 		playSoundImageView = new ImageView(playSoundImage);
 		muteSoundImageView = new ImageView(muteSoundImage);
 	}
+	
+	/**
+	 * Checks the sound if it is paused or playing. 
+	 * If it is paused the sound button symbol should show the correct symbol.
+	 * This method could be called upon from outside of this class.
+	 * @author Andreas Andersson
+	 */
+	public void checkSound() {
+		if (jukebox.isPaused()) {
+			soundButton.setGraphic(muteSoundImageView);
+		} else {
+			soundButton.setGraphic(playSoundImageView);
+		}
+	}
 
+	/**
+	 *  Sets and adds the arcade machine image for the Pong game.
+	 *  @author Andreas Andersson
+	 */
+	public void setPongArcadeMachineImage() {
+		ImageView pongCabinettView;
+		try {
+			pongCabinettImage = new Image(new FileInputStream("images/pongScreen3.png"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		pongCabinettView = new ImageView(pongCabinettImage);
+		pongCabinettView.setPreserveRatio(true);
+		root.add(pongCabinettView, 0, 14);
+	}
+
+	/**
+	 * Adds and sets the action listeners for the sound and back button.
+	 * @author Andreas Andersson
+	 */
 	private void addActionListeners() {
 		backButton.setOnAction(e -> {
+			game.setPaused();
 			root.getChildren().remove(chatUI);
-			game.setPaused(true);
 			mainUI.switchToMainUI();
 		});
 
 		soundButton.setOnAction(e -> {
-			jukebox.muteUnmute();
-			if (jukebox.isMute()) {
-				soundButton.setGraphic(playSoundImageView);
-			} else {
+			jukebox.pauseOrPlay();
+			if (jukebox.isPaused()) {
 				soundButton.setGraphic(muteSoundImageView);
+			} else {
+				soundButton.setGraphic(playSoundImageView);
 			}
 		});
 	}
+
 }

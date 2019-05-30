@@ -38,10 +38,6 @@ public class Player extends Unit implements Runnable {
 
     }
 
-    public Image getPlayerSprite() {
-        return playerSprite;
-    }
-
     @Override
     public void shoot() {
         controller.registerShot(this);

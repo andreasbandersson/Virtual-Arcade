@@ -4,17 +4,25 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 /**
- * Obstacle class that has Setters and Getters for the obstacles and a draw method for drawing the obstacles. 
+ * Class that has Get-methods for the obstacles X and Y position and a draw method for drawing the obstacles. 
  * @author Max Matthiasson
  */
-public class Obstacle 
-{
-	private int obstacleX = 0;
-	private int obstacleY = 0;
-	private int unitWidth = 15;
-	private int unitHeight = 15;
+public class Obstacle {
+	
+	private int obstacleX;
+	private int obstacleY;
+	private int unitWidth;
+	private int unitHeight;
 	private static Image obstacleImage;
-
+	
+	/**
+	 * Constructor for the obstacles.
+	 * @param obstacleImage - The image representing the obstacle. 
+	 * @param obstacleX - The X-position of the obstacle.
+	 * @param obstacleY - The Y-position of the obstacle.
+	 * @param unitWidth - The width of the obstacle.
+	 * @param unitHeight - The height of the obstacle. 
+	 */
 	public Obstacle(Image obstacleImage, int obstacleX, int obstacleY, int unitWidth, int unitHeight) {
 		Obstacle.obstacleImage = obstacleImage;
 		this.obstacleX = obstacleX;
@@ -22,6 +30,7 @@ public class Obstacle
 		this.unitWidth = unitWidth;
 		this.unitHeight = unitHeight;
 	}
+	
 	/**
 	 * Draws the obstacles. 
 	 * @param gc
@@ -34,39 +43,7 @@ public class Obstacle
 		return obstacleX;
 	}
 
-	public void setObstacleX(int obstacleX) {
-		this.obstacleX = obstacleX;
-	}
-
 	public int getObstacleY() {
 		return obstacleY;
-	}
-
-	public void setObstacleY(int obstacleY) {
-		this.obstacleY = obstacleY;
-	}
-
-	public int getUnitWidth() {
-		return unitWidth;
-	}
-
-	public void setUnitWidth(int unitWidth) {
-		this.unitWidth = unitWidth;
-	}
-
-	public int getUnitHeight() {
-		return unitHeight;
-	}
-
-	public void setUnitHeight(int unitHeight) {
-		this.unitHeight = unitHeight;
-	}
-
-	public static Image getObstacleImage() {
-		return obstacleImage;
-	}
-
-	public static void setObstacleImage(Image obstacleImage) {
-		Obstacle.obstacleImage = obstacleImage;
 	}
 }
