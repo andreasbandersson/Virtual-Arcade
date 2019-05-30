@@ -149,7 +149,7 @@ public class ChatUI extends Pane {
 	/**
 	 * EventHandler. Handles all action events for buttons.
 	 */
-	EventHandler<ActionEvent> buttonHandler = new EventHandler<ActionEvent>() {
+	private EventHandler<ActionEvent> buttonHandler = new EventHandler<ActionEvent>() {
 		@Override
 		public void handle(ActionEvent event) {
 			if (event.getSource() == sendBtn && !newMessage.getText().isEmpty()) {
@@ -175,7 +175,7 @@ public class ChatUI extends Pane {
 	/**
 	 * KeyHandler. Handles all key events.
 	 */
-	EventHandler<KeyEvent> keyFilter = new EventHandler<KeyEvent>() {
+	private EventHandler<KeyEvent> keyFilter = new EventHandler<KeyEvent>() {
 		@Override
 		public void handle(KeyEvent e) {
 			if (e.getCode() == KeyCode.ENTER) {

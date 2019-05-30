@@ -160,6 +160,7 @@ public class MainUI extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.centerOnScreen();
 		primaryStage.show();
+
 		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			@Override
 			public void handle(WindowEvent e) {
@@ -230,12 +231,13 @@ public class MainUI extends Application {
 
 	}
 	
+
 	/**
 	 * Checks the sound if it is muted or not. 
 	 * If it is muted the Soundbuttons symbol should show the correct symbol.
 	 * This method could be called upon from outside of this class.
 	 */
-	public void checkSound() {
+	private void checkSound() {
 		if (jukebox.isMute()) {
 			soundButton.setGraphic(muteSoundImageView);
 		} else {
@@ -251,8 +253,9 @@ public class MainUI extends Application {
 		checkSound();
 	}
 
+
 	//A function that terminates the current MainUI object.
-	public void terminate() {
+	private void terminate() {
 		primaryStage.close();
 		jukebox.stopSound();
 		try {
