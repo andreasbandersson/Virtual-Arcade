@@ -5,7 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 
-import chat.ChatController;
+import chat.ClientController;
 import chat.ChatUI;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
@@ -55,7 +55,7 @@ public class MainUI extends Application {
 	private GUIPane snake;
 	private Painter spaceInvaders;
 	private JukeBox jukebox;
-	private ChatController controller;
+	private ClientController controller;
 	private ChatUI chatUI;
 	public static Stage primaryStage = new Stage();
 
@@ -64,7 +64,7 @@ public class MainUI extends Application {
 	 * @param chatUI the chatUI parameter is used to display the chat.
 	 * @param controller the controller parameter is used to handle the leaderboard object.
 	 */
-	public MainUI(ChatUI chatUI, ChatController controller) {
+	public MainUI(ChatUI chatUI, ClientController controller) {
 		this.chatUI = chatUI;
 		this.controller = controller;
 		jukebox = new JukeBox();
@@ -300,7 +300,7 @@ public class MainUI extends Application {
 			this.terminate();
 			controller.disconnect();
 			controller = null;
-			new ChatController();
+			new ClientController();
 		});
 
 		soundButton.setOnAction(e -> {

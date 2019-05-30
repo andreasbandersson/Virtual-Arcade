@@ -2,7 +2,7 @@ package spaceInvaders.graphics;
 
 import application.JukeBox;
 import application.MainUI;
-import chat.ChatController;
+import chat.ClientController;
 import chat.ChatUI;
 import javafx.application.Platform;
 import spaceInvaders.Effects.Explosion;
@@ -39,6 +39,7 @@ import java.util.concurrent.Executors;
  * @author Viktor Altintas
  */
 
+    //Checks if sound is muted or playing and sets image accordingly.
 public class Painter extends AnimationTimer implements Runnable {
 
 	private Controller controller;
@@ -67,7 +68,7 @@ public class Painter extends AnimationTimer implements Runnable {
 
 	private static Image explosion;
 	private static Image shotCollision;
-	private ChatController chatController;
+	private ClientController chatController;
 	private boolean gameEnded = false;
 
 	Executor executor;
@@ -93,7 +94,8 @@ public class Painter extends AnimationTimer implements Runnable {
 	 * @param jukebox a jukebox for playing sounds
 	 * @param controller a controller for interactions with the game logic
 	 */
-	public Painter(MainUI mainUI, ChatUI chatUI, JukeBox jukebox, ChatController controller) {
+
+	public Painter(MainUI mainUI, ChatUI chatUI, JukeBox jukebox, ClientController controller) {
 		this.chatUI = chatUI;
 		this.mainUI = mainUI;
 		this.jukebox = jukebox;

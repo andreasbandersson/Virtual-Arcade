@@ -145,9 +145,10 @@ public class ServerController {
 			return true;
 		}
 	}
-	
+
 	/**
 	 * Sends highscorelists to connecting user
+	 * 
 	 * @param oos
 	 */
 	private void sendInitialLists(ObjectOutputStream oos) {
@@ -200,6 +201,7 @@ public class ServerController {
 
 	/**
 	 * Evaluates highscore
+	 * 
 	 * @param highscore
 	 */
 
@@ -227,6 +229,7 @@ public class ServerController {
 
 	/**
 	 * Sends updated highscorelist to all connected user
+	 * 
 	 * @param list The highscore list
 	 */
 	private void sendHighscoreList(LinkedList<Highscore> list) {
@@ -238,8 +241,9 @@ public class ServerController {
 
 	/**
 	 * Sends out a notification of new highscore to all connected users
+	 * 
 	 * @param highscore The new highscore
-	 * @param list The updated highscore list
+	 * @param list      The updated highscore list
 	 */
 	private void newHighscore(Highscore highscore, LinkedList<Highscore> list) {
 		String str = highscore.getUser().getUsername() + " made it onto the " + highscore.getGame()
@@ -250,7 +254,8 @@ public class ServerController {
 
 	/**
 	 * Reads highscorelists from file
-	 * @param list  The list to write to
+	 * 
+	 * @param list The list to write to
 	 * @param name The name of the game
 	 */
 	private void loadHighscores(HighscoreList list, String name) {
@@ -278,6 +283,7 @@ public class ServerController {
 
 	/**
 	 * Writes highscore list to file
+	 * 
 	 * @param list The list to write from
 	 * @param name The name of the game
 	 */

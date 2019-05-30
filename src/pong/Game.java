@@ -3,7 +3,7 @@ package pong;
 
 
 import application.JukeBox2;
-import chat.ChatController;
+import chat.ClientController;
 import javafx.animation.AnimationTimer;
 
 import javafx.scene.canvas.Canvas;
@@ -35,11 +35,11 @@ public class Game extends AnimationTimer implements Runnable {
 	private boolean firstGame = true;
 	private JukeBox2 jukeBox2 = new JukeBox2();
 	private Executor executor = Executors.newFixedThreadPool(2);
-	private ChatController controller;
+	private ClientController controller;
 
 	// private Image pongBg;
 
-	public Game(ChatController controller) {
+	public Game(ClientController controller) {
 		this.controller = controller;
 		init();
 		drawStart();

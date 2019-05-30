@@ -14,7 +14,7 @@ import java.util.concurrent.Executors;
 import application.JukeBox;
 import application.JukeBox2;
 import application.MainUI;
-import chat.ChatController;
+import chat.ClientController;
 import chat.ChatUI;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
@@ -115,7 +115,7 @@ public class GUIPane implements Runnable {
 	
 	private Executor executor = Executors.newFixedThreadPool(2); // Thread pool used to play a sound multiple times when getting points. 
 
-	private ChatController controller;
+	private ClientController controller;
 
 	static {
 		try {
@@ -128,7 +128,7 @@ public class GUIPane implements Runnable {
 		}
 	}
 
-	public GUIPane(MainUI mainUI, ChatUI chatUI, JukeBox jukeBox, ChatController controller) {
+	public GUIPane(MainUI mainUI, ChatUI chatUI, JukeBox jukeBox, ClientController controller) {
 		this.mainUI = mainUI;
 		this.chatUI = chatUI;
 		this.jukeBox = jukeBox;
