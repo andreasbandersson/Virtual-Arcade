@@ -4,18 +4,25 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 /**
- * Obstacle class that has Setters and Getters for the obstacles and a draw method for drawing the obstacles. 
+ * Class that has Get-methods for the obstacles X and Y position and a draw method for drawing the obstacles. 
  * @author Max Matthiasson
  */
-
-public class Obstacle 
-{
+public class Obstacle {
+	
 	private int obstacleX;
 	private int obstacleY;
 	private int unitWidth;
 	private int unitHeight;
 	private static Image obstacleImage;
-
+	
+	/**
+	 * Constructor for the obstacles.
+	 * @param obstacleImage - The image representing the obstacle. 
+	 * @param obstacleX - The X-position of the obstacle.
+	 * @param obstacleY - The Y-position of the obstacle.
+	 * @param unitWidth - The width of the obstacle.
+	 * @param unitHeight - The height of the obstacle. 
+	 */
 	public Obstacle(Image obstacleImage, int obstacleX, int obstacleY, int unitWidth, int unitHeight) {
 		Obstacle.obstacleImage = obstacleImage;
 		this.obstacleX = obstacleX;
@@ -23,6 +30,7 @@ public class Obstacle
 		this.unitWidth = unitWidth;
 		this.unitHeight = unitHeight;
 	}
+	
 	/**
 	 * Draws the obstacles. 
 	 * @param gc
@@ -38,5 +46,4 @@ public class Obstacle
 	public int getObstacleY() {
 		return obstacleY;
 	}
-
 }

@@ -37,7 +37,6 @@ import javafx.scene.text.Font;
  */
 public class GUIPane implements Runnable {
 
-
 	private Canvas canvas;
 	
 	// Different gameStates that change what happens during the game. 
@@ -62,17 +61,16 @@ public class GUIPane implements Runnable {
 	private int snakeSize = 5; // Length of the snake.
 	private int score = 0; // Keeps track of the score.
 
-	public int unitWidth = 15; // Width of the units in the game. (The snakes body parts, the food and the spider)
-	public int unitHeight = 15; // Height of the units in the game. (The snakes body parts, the food and the spider)
-	public int snakeX = 0; // The snakes X-position.
-	public int snakeY = 0; // The snakes Y-position.
-	public int foodX = 0; // The foods X-position.
-	public int foodY = 0; // The foods Y-position.
+	private int unitWidth = 15; // Width of the units in the game. (The snakes body parts, the food and the spider)
+	private int unitHeight = 15; // Height of the units in the game. (The snakes body parts, the food and the spider)
+	private int snakeX; // The snakes X-position.  
+	private int snakeY; // The snakes Y-position.	
+	private int foodX; // The foods X-position.	
+	private int foodY; // The foods Y-position.
 	private int obstacleX; // The spiders X-position.
 	private int obstacleY; // The spiders Y-position.
 	private int spiderTicks; // Decides how often the spider should move. 
 	private int spiderDirection; //	Gets set to a random number between 0 and 3 that decides the spiders direction. 
-
 
 	// Queue that holds integers representing the direction the snake is traveling
 	// in. (UP, DOWN, LEFT, RIGHT).
@@ -115,7 +113,7 @@ public class GUIPane implements Runnable {
 	private static Image foodImage;
 	private static Image obstacleImage;
 	
-	private Executor executor = Executors.newFixedThreadPool(2);
+	private Executor executor = Executors.newFixedThreadPool(2); // Thread pool used to play a sound multiple times when getting points. 
 
 	private ChatController controller;
 
@@ -142,7 +140,8 @@ public class GUIPane implements Runnable {
 		listSnake = new ArrayList<BodyPart>();
 		listFood = new ArrayList<Food>();
 		listObstacle = new ArrayList<Obstacle>();
-		 Pane root;
+		
+		Pane root;
 
 		canvas = new Canvas(GAME_WIDTH, GAME_HEIGHT);
 		gc = canvas.getGraphicsContext2D();
@@ -190,7 +189,7 @@ public class GUIPane implements Runnable {
 	}
 
 	/**
-	 * Creates an AnimationTimer containing all the things that continuously happen during the game.
+	 * Creates an AnimationTimer.
 	 */
 	private void createAnimationTimer() {
 		gameAnimationTimer = new AnimationTimer() {
@@ -202,7 +201,7 @@ public class GUIPane implements Runnable {
 				// if-statement that happens every X amount of nanoseconds. (75_000_000)
 				if (now - lastUpdate >= updateSpeed) {
 
-					// Switch statement checking what int value is in the queue and changing the
+					// Switch statement checking what int value (UP, DOWN, LEFT, RIGHT) is in the queue and changing the
 					// snakes X or Y value accordingly.
 					switch (movementQueue.peek()) {
 						case UP:
@@ -355,7 +354,7 @@ public class GUIPane implements Runnable {
 						listObstacle.remove(0);
 					}
 				}
-				// Collision for the snake colliding with an obstacle (spider)
+				// Collision for the snake colliding with an obstacle.
 				for (int i = 0; i < listObstacle.size(); i++) {
 					if (snakeX == listObstacle.get(i).getObstacleX() && snakeY == listObstacle.get(i).getObstacleY()) {
 						listObstacle.remove(i);
@@ -370,7 +369,10 @@ public class GUIPane implements Runnable {
 			}
 		};
 	}
-
+	
+	/**
+	 * Activates the Thread pool. 
+	 */
 	public void activateThreadPool() {
 		executor.execute(this);
 	}
@@ -478,7 +480,9 @@ public class GUIPane implements Runnable {
 			e.consume();
 		});
 	}
-
+	/**
+	 * Run method for increasing the score and playing a sound.
+	 */
 	public void run() {
 
 		for (int i = 0; i < 10; i++) {
@@ -496,7 +500,6 @@ public class GUIPane implements Runnable {
 	public Scene getScene() {
 		snakePane.add(chatUI, 36, 0, 12, 24);
 		chatUI.setFocusTraversable(false);
-		// canvas.requestFocus();
 		return gameScene;
 	}
 
@@ -586,7 +589,7 @@ public class GUIPane implements Runnable {
 		if (gameState == INGAME_STATE) {
 			gc.clearRect(0, 0, 600, 400);
 
-			// Draws border
+			// Draws the the rectangle representing the game screen. 
 			gc.setStroke(Color.BLACK);
 			gc.strokeRect(15, 45, 570, 345);
 
@@ -602,7 +605,6 @@ public class GUIPane implements Runnable {
 			for (int i = 0; i < listObstacle.size(); i++) {
 				listObstacle.get(i).drawObstacle(gc);
 			}
-
 			// Draws the score.
 			gc.setFont(Font.loadFont("file:fonts/lunchds.ttf", 30));
 			gc.setFill(Color.BLACK);
@@ -649,8 +651,8 @@ public class GUIPane implements Runnable {
 
 	private void createColumnsandRows() {
 
-		 final int numOfCols = 48;
-		 final int numOfRows = 24;
+		final int numOfCols = 48;
+		final int numOfRows = 24;
 
 		for (int i = 0; i < numOfCols; i++) {
 			ColumnConstraints colConst = new ColumnConstraints();
@@ -664,7 +666,9 @@ public class GUIPane implements Runnable {
 		}
 	}
 
-	// Sets the sound buttons images.
+	/**
+	 * Sets the sound buttons images.
+	 */
 	private void setSoundButtonImages() {
 		try {
 			playSoundImage = new Image(new FileInputStream("images/sound.png"));
@@ -676,7 +680,9 @@ public class GUIPane implements Runnable {
 		muteSoundImageView = new ImageView(muteSoundImage);
 	}
 
-	// Checks if sound is muted or playing and sets image accordingly.
+	/**
+	 * Checks if sound is muted or playing and sets image accordingly.
+	 */
 	public void checkSound() {
 		if (jukeBox.isMute()) {
 			soundButton.setGraphic(muteSoundImageView);
@@ -685,7 +691,9 @@ public class GUIPane implements Runnable {
 		}
 	}
 
-	// Sets and adds the arcade machine image for the SpaceInvaders game.
+	/**
+	 * Sets and adds the arcade machine image for the Snake game.
+	 */
 	private void setSnakeArcadeMachineImage() {
 		try {
 			snakeImage = new Image(new FileInputStream("images/snakeScreen.png"));
