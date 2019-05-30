@@ -19,7 +19,6 @@ public class JukeBox2 extends JFXPanel {
     public static final String SNAKEHIT2    = "sounds/Hit2.wav";
     public static final String GAMEOVER    = "sounds/GameOver.mp3";
     private static Map<String, MediaPlayer> looping = new HashMap<>();
-    private static JFXPanel panel = new JFXPanel();
 
     public static final void playMP3(String file) {
         playMP3Times(file, 1);

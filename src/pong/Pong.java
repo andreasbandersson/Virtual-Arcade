@@ -21,11 +21,11 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 
 /**
+ * The class integrates the Pong game with the MainUI and adds the Chat and the Jukebox.
  * 
- * @author Andreas och Måns
+ * @author Andreas Andersson & M�ns Grundberg
  */
 
-// Integrerar Pong med MainUI -> lägger till chatt osv
 public class Pong {
 	private MainUI mainUI;
 	private ChatUI chatUI;
@@ -45,6 +45,14 @@ public class Pong {
 	private Canvas canvas;
 	private ClientController controller;
 
+
+	/**
+	 * The constructor receives the mainUI, chatUI, jukebox, chat controller and initiates the class.
+	 * @param mainUI the mainUI parameter lets the class switch back to the same main menu.
+	 * @param chatUI the chatUI parameter shows the chat in the class.
+	 * @param jukebox the jukebox parameter lets the music play without overlaps when switching between classes.
+	 * @param controller the controller parameter holds the logic for the chat
+	 */
 	public Pong(MainUI mainUI, ChatUI chatUI, JukeBox jukebox, ClientController controller) {
 		this.mainUI = mainUI;
 		this.chatUI = chatUI;
@@ -52,7 +60,9 @@ public class Pong {
 		this.controller = controller;
 		init();
 	}
-
+	/**
+	 * initiates the structure, graphics, game, styles, music and adds actionslisteners etc.
+	 */
 	private void init() {
 		game = new Game(controller);
 		createColumnsandRows();
@@ -85,7 +95,8 @@ public class Pong {
 		root.setId("mainRoot");
 
 		addActionListeners();
-
+		
+		// Sets the scenes styles
 		scene = new Scene(root, 1200, 600, Color.BLACK);
 		try {
 			scene.getStylesheets().add((new File("styles//pongStyle.css")).toURI().toURL().toExternalForm());
@@ -105,7 +116,11 @@ public class Pong {
 		chatUI.setFocusTraversable(false);
 		return this.scene;
 	}
-
+	
+	/**
+	 * Sets the number and size-percentage of the rows and columns in the GridPane.
+	 * @author Andreas Andersson
+	 */
 	private void createColumnsandRows() {
 
 		final int numOfCols = 48;
@@ -122,6 +137,10 @@ public class Pong {
 		}
 	}
 
+	/** 
+	 * Sets the sound buttons images.
+	 * @author Andreas Andersson
+	 */
 	private void setSoundButtonImages() {
 		try {
 			playSoundImage = new Image(new FileInputStream("images/sound.png"));
@@ -133,15 +152,24 @@ public class Pong {
 		muteSoundImageView = new ImageView(muteSoundImage);
 	}
 	
+	/**
+	 * Checks the sound if it is paused or playing. 
+	 * If it is paused the sound button symbol should show the correct symbol.
+	 * This method could be called upon from outside of this class.
+	 * @author Andreas Andersson
+	 */
 	public void checkSound() {
-		if (jukebox.isMute()) {
+		if (jukebox.isPaused()) {
 			soundButton.setGraphic(muteSoundImageView);
 		} else {
 			soundButton.setGraphic(playSoundImageView);
 		}
 	}
 
-	// Sets and adds the arcade machine image for the SpaceInvaders game.
+	/**
+	 *  Sets and adds the arcade machine image for the Pong game.
+	 *  @author Andreas Andersson
+	 */
 	public void setPongArcadeMachineImage() {
 		ImageView pongCabinettView;
 		try {
@@ -154,6 +182,10 @@ public class Pong {
 		root.add(pongCabinettView, 0, 14);
 	}
 
+	/**
+	 * Adds and sets the action listeners for the sound and back button.
+	 * @author Andreas Andersson
+	 */
 	private void addActionListeners() {
 		backButton.setOnAction(e -> {
 			game.setPaused();
@@ -162,8 +194,8 @@ public class Pong {
 		});
 
 		soundButton.setOnAction(e -> {
-			jukebox.muteUnmute();
-			if (jukebox.isMute()) {
+			jukebox.pauseOrPlay();
+			if (jukebox.isPaused()) {
 				soundButton.setGraphic(muteSoundImageView);
 			} else {
 				soundButton.setGraphic(playSoundImageView);

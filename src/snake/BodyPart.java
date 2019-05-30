@@ -1,13 +1,10 @@
 package snake;
 
-
-
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-
 /**
- * BodyPart class that has Setters and Getters for the snakes body parts and a draw method for drawing the snakes body parts. 
+ * Class that has Get-methods for the snakes X and Y position and a draw method for drawing the snakes body parts. 
  * @author Max Matthiasson
  */
 public class BodyPart {
@@ -18,6 +15,14 @@ public class BodyPart {
 	private int unitHeight;
 	private static Image snakeCharacterImage;
 	
+	/**
+	 * Constructor for the snakes body parts. 
+	 * @param snakeCharacterImage - The image representing the snakes body parts. 
+	 * @param snakeX - The X-position for the snake.
+	 * @param snakeY - The Y-position for the snake.
+	 * @param unitWidth - The width of the the snakes body parts.
+	 * @param unitHeight - The height of the snakes body parts.
+	 */
 	public BodyPart(Image snakeCharacterImage, int snakeX, int snakeY, int unitWidth, int unitHeight) {
 		BodyPart.snakeCharacterImage = snakeCharacterImage;
 		this.snakeX = snakeX;
@@ -25,6 +30,7 @@ public class BodyPart {
 		this.unitWidth = unitWidth;
 		this.unitHeight = unitHeight;
 	}
+	
 	/**
 	 * Draws the body parts of the snake.  
 	 * @param gc
@@ -37,9 +43,7 @@ public class BodyPart {
 		return snakeX;
 	}
 
-
 	public int getSnakeY() {
 		return snakeY;
 	}
-
 }

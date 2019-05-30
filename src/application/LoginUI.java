@@ -27,6 +27,8 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 /**
+ * The LoginUI class is a graphical user interface for Virtual Arcade.
+ * 
  * @author Andreas Andersson
  */
 
@@ -47,10 +49,18 @@ public class LoginUI extends Application {
 	public static Stage stage = new Stage();
 	private ClientController controller;
 
+	/**
+	 * The constructor takes a controller.
+	 * 
+	 * @param controller the controller parameter is used to login or create a new user.
+	 */
 	public LoginUI(ClientController controller) {
 		this.controller = controller;
 	}
-
+	
+	/**
+	 * Initiates the graphics, styles, music and action listeners.
+	 */
 	public void start(Stage primaryStage) {
 
 		// Setting the main Pane for the scene.
@@ -107,13 +117,13 @@ public class LoginUI extends Application {
 		loginRoot.add(loginButton, 16, 20, 9, 1);
 
 		// Adding and setting the button for creating a new user
-		newUserButton.setId("logOutButton");
+		newUserButton.setId("createButton");
 		newUserButton.setMinWidth(Region.USE_PREF_SIZE);
 		loginRoot.add(newUserButton, 24, 20, 9, 1);
 
 		// Adding an setting the button for mute and un-mute of login music
 		soundButton = new Button();
-		soundButton.setId("logOutButton");
+		soundButton.setId("createButton");
 		soundButton.setGraphic(playSoundImageView);
 		loginRoot.add(soundButton, 42, 2);
 
@@ -123,7 +133,6 @@ public class LoginUI extends Application {
 
 		// Sets the scene, adds all children nodes and sets the css-style.
 		scene = new Scene(loginRoot, 700, 400);
-
 		try {
 			scene.getStylesheets().add((new File("styles//loginStyle.css")).toURI().toURL().toExternalForm());
 		} catch (MalformedURLException e) {
@@ -146,7 +155,9 @@ public class LoginUI extends Application {
 		});
 	}
 
-	// Sets the number and size-percentage of the rows and columns in the GridPane.
+	/**
+	 * Sets the number and size-percentage of the rows and columns in the GridPane.
+	 */
 	private void createColumnsandRows() {
 		final int numOfCols = 48;
 		final int numOfRows = 24;
@@ -163,7 +174,9 @@ public class LoginUI extends Application {
 		}
 	}
 
-	// Sets the sound buttons images.
+	/**
+	 * Sets the sound buttons images.
+	 */
 	private void setSoundButtonImages() {
 		try {
 			playSoundImage = new Image(new FileInputStream("images/sound.png"));
@@ -176,19 +189,23 @@ public class LoginUI extends Application {
 	}
 	
 	/**
-	 * Checks the sound if it is muted or not. 
-	 * If it is muted the Soundbuttons symbol should show the correct symbol.
+	 * Checks the sound if it is paused or playing. 
+	 * If it is paused the sound buttons symbol should show the correct symbol.
 	 * This method could be called upon from outside of this class.
 	 */
 	private void checkSound() {
-		if (jukebox.isMute()) {
+		if (jukebox.isPaused()) {
 			soundButton.setGraphic(muteSoundImageView);
 		} else {
 			soundButton.setGraphic(playSoundImageView);
 		}
 	}
 
-	// Mans
+	/**
+	 * A function that is called upon if a user or password is too short.
+	 * 
+	 * @param response the response 
+	 */
 	public void setResponse(String response) {
 		Platform.runLater(new Runnable() {
 			public void run() {
@@ -198,7 +215,9 @@ public class LoginUI extends Application {
 		});
 	}
 
-	// Mans
+	/**
+	 * A function that terminates the current MainUI object and stops the sound so that the sound wont overlap.
+	 */
 	public void terminate() {
 		stage.close();
 		jukebox.stopSound();
@@ -209,13 +228,21 @@ public class LoginUI extends Application {
 		}
 	}
 
-	// Mans
+	/**
+	 * Disables or enables the login and create new user button 
+	 * 
+	 * @param disabled the disabled parameter is set to either true or false depending on the login information
+	 */
 	private void disableButtons(boolean disabled) {
 		loginButton.setDisable(disabled);
 		newUserButton.setDisable(disabled);
 	}
-
-	// Function for adding and setting Action Listeners to all Buttons.
+	
+	/** 
+	 * Function for adding and setting Action Listeners to all Buttons.
+	 * 
+	 * @param primaryStage the stage parameter is used so that everything is displayed in the same stage and not opened in a separate stage.
+	 */
 	private void addActionListeners(Stage primaryStage) {
 		// Mans
 		loginButton.setOnAction(e -> {
@@ -229,8 +256,8 @@ public class LoginUI extends Application {
 		});
 
 		soundButton.setOnAction(e -> {
-			jukebox.muteUnmute();
-			if (jukebox.isMute()) {
+			jukebox.pauseOrPlay();
+			if (jukebox.isPaused()) {
 				soundButton.setGraphic(muteSoundImageView);
 			} else {
 				soundButton.setGraphic(playSoundImageView);

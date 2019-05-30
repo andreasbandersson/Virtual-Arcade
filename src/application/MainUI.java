@@ -15,6 +15,7 @@ import javafx.event.EventHandler;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
+import pong.Pong;
 import snake.GUIPane;
 import spaceInvaders.graphics.Painter;
 import javafx.scene.Scene;
@@ -50,7 +51,7 @@ public class MainUI extends Application {
 	private Scene scene;
 	private GridPane mainRoot;
 	private Leaderboard leaderboard;
-	private pong.Pong pong;
+	private Pong pong;
 	private GUIPane snake;
 	private Painter spaceInvaders;
 	private JukeBox jukebox;
@@ -58,6 +59,11 @@ public class MainUI extends Application {
 	private ChatUI chatUI;
 	public static Stage primaryStage = new Stage();
 
+	/**
+	 * Constructor that starts the music and initiates a leaderboard and sends it to the controller.
+	 * @param chatUI the chatUI parameter is used to display the chat.
+	 * @param controller the controller parameter is used to handle the leaderboard object.
+	 */
 	public MainUI(ChatUI chatUI, ClientController controller) {
 		this.chatUI = chatUI;
 		this.controller = controller;
@@ -67,7 +73,9 @@ public class MainUI extends Application {
 		controller.addLeaderboard(leaderboard);
 	}
 
-	// Function that initiates the main menu and its components.
+	/**
+	 * Function that initiates the main menu and its components.
+	 */
 	public void start(Stage primaryStage) {
 
 		// Setting the main Pane for the scene.
@@ -160,7 +168,6 @@ public class MainUI extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.centerOnScreen();
 		primaryStage.show();
-
 		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			@Override
 			public void handle(WindowEvent e) {
@@ -174,7 +181,9 @@ public class MainUI extends Application {
 
 	}
 
-	// Sets the number and size-percentage of the rows and columns in the GridPane.
+	/**
+	 * Sets the number and size-percentage of the rows and columns in the GridPane.
+	 */
 	private void setColumnsandRows() {
 		final int numOfCols = 48;
 		final int numOfRows = 24;
@@ -190,7 +199,9 @@ public class MainUI extends Application {
 		}
 	}
 
-	// Function that creates and sets the arcade machine images to the main menu.
+	/**
+	 * Function that creates and sets the arcade machine images to the main menu.
+	 */
 	private void setArcadeMachineImage() {
 		try {
 			pongImage = new Image(new FileInputStream("images/pongGame2.png"));
@@ -216,8 +227,10 @@ public class MainUI extends Application {
 		mainRoot.add(snakeView, 24, 17);
 
 	}
-
-	// Sets the sound buttons images.
+	
+	/**
+	 * Sets the sound buttons images.
+	 */
 	private void setSoundButtonImages() {
 		try {
 			playSoundImage = new Image(new FileInputStream("images/sound.png"));
@@ -233,19 +246,21 @@ public class MainUI extends Application {
 	
 
 	/**
-	 * Checks the sound if it is muted or not. 
-	 * If it is muted the Soundbuttons symbol should show the correct symbol.
+	 * Checks the sound if it is paused or playing. 
+	 * If it is paused the sound button symbol should show the correct symbol.
 	 * This method could be called upon from outside of this class.
 	 */
 	private void checkSound() {
-		if (jukebox.isMute()) {
+		if (jukebox.isPaused()) {
 			soundButton.setGraphic(muteSoundImageView);
 		} else {
 			soundButton.setGraphic(playSoundImageView);
 		}
 	}
 
-	//Function that switches to the MainUI's scene. Called upon from outside classes.  
+	/**  
+	 * Function that switches to the MainUI's scene. Called upon from outside classes.
+	 */
 	public void switchToMainUI() {
 		mainRoot.add(chatUI, 36, 0, 12, 24);
 		primaryStage.setScene(scene);
@@ -254,7 +269,9 @@ public class MainUI extends Application {
 	}
 
 
-	//A function that terminates the current MainUI object.
+	/**
+	 * A function that terminates the current MainUI object and stops the sound so that the sound wont overlap.
+	 */
 	private void terminate() {
 		primaryStage.close();
 		jukebox.stopSound();
@@ -265,7 +282,11 @@ public class MainUI extends Application {
 		}
 	}
 
-	// Function for adding and setting Action Listeners to all Buttons.
+	/** 
+	 * Function for adding and setting Action Listeners to all Buttons.
+	 * 
+	 * @param primaryStage the stage parameter is used so that everything is displayed in the same stage and not opened in a separate stage.
+	 */
 	private void addActionListeners(Stage primaryStage) {
 
 		leaderboardButton.setOnAction(e -> {
@@ -283,8 +304,8 @@ public class MainUI extends Application {
 		});
 
 		soundButton.setOnAction(e -> {
-			jukebox.muteUnmute();
-			if (jukebox.isMute()) {
+			jukebox.pauseOrPlay();
+			if (jukebox.isPaused()) {
 				soundButton.setGraphic(muteSoundImageView);
 			} else {
 				soundButton.setGraphic(playSoundImageView);
@@ -293,7 +314,7 @@ public class MainUI extends Application {
 
 		pongPlayButton.setOnAction(e -> {
 			if (pong == null) {
-				pong = new pong.Pong(this, chatUI, jukebox, controller);
+				pong = new Pong(this, chatUI, jukebox, controller);
 			}
 
 			mainRoot.getChildren().remove(chatUI);
