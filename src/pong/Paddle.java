@@ -3,7 +3,7 @@ package pong;
 import java.awt.Rectangle;
 
 /**
-	@author Gulcin Kanat
+	@author Gulcin Kanat & Måns Grundberg
 **/
 public class Paddle {
 

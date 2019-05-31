@@ -16,6 +16,9 @@ import java.util.TimerTask;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+/**
+	@author Gulcin Kanat & Måns Grundberg
+*/
 public class Game extends AnimationTimer implements Runnable {
 	private Canvas canvas;
 	private Paddle player;
@@ -385,7 +388,7 @@ public class Game extends AnimationTimer implements Runnable {
 		Each time player earns +150 points, gameLevel is updated and displayed.
 	**/
 	public void displayLevel() {
-		
+
 		clearBackground();
 
 		gc.setFont(new Font(40));
