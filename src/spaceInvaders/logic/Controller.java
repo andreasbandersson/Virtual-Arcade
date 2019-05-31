@@ -15,6 +15,7 @@ import java.util.concurrent.Executors;
 
 
 /**
+ * a controller that holds all the logics for Space Invaders
  * @author Viktor Altintas
  */
 
@@ -44,6 +45,11 @@ public class Controller implements Runnable {
 
     private int direction = +1; //+1 = right; -1 = left
 
+    /**
+     * constructor that creates the player, the threadpool, and starts the first level
+     * @param canvas the canvas, used for size measurements so enemies dont go offscreen.
+     * @param painter the painter, so the controller can give updates to the painter.
+     */
     public Controller( Canvas canvas, Painter painter) {
         this.canvas = canvas;
         this.painter = painter;
@@ -54,6 +60,9 @@ public class Controller implements Runnable {
         initializeLevel(levelList.get(levelCounter2));
     }
 
+    /**
+     * restarts the game state to a fresh state.
+     */
     public void restart(){
         allUnits.add(player);
         levelCounter = 1;
@@ -61,18 +70,32 @@ public class Controller implements Runnable {
         initializeLevel(levelList.get(levelCounter2));
     }
 
+    /**
+     * creates the levelList
+     */
     private void createLevelList(){
         levelList = new LevelListBuilder(this).getLevelList();
     }
 
+    /**
+     * @return if game is paused
+     */
     public boolean getGamePaused() {
         return gamePaused;
     }
 
+    /**
+     * @return the player object
+     */
     public Player getPlayer() {
         return player;
     }
 
+    /**
+     * initialises the level by extracting the data from the current level and adding the objects to their respective lists
+     * and then starting the runnable
+     * @param level the current level
+     */
     private void initializeLevel(Level level){
         jukeBox2.playMP3(JukeBox2.NEWLEVEL);
 
@@ -85,22 +108,42 @@ public class Controller implements Runnable {
         start();
     }
 
+    /**
+     * starts a new thread with the runnable
+     */
     private void start(){
         new Thread(this).start();
     }
 
+    /**
+     * getter
+     * @return a copy of the all units list
+     */
     public synchronized List<Unit> getAllUnits() {
         return new ArrayList<>(allUnits);
     }
 
+    /**
+     *
+     * @return the players score
+     */
     public int getScore() {
         return score;
     }
 
+    /**
+     *
+     * @param score the new score
+     */
     public void setScore(int score){
         this.score = score;
     }
 
+    /**
+     * if a shot is successfully registered, this method is called, which creates a different type of shot depending on
+     * who registered the shot request.
+     * @param shooter the unit that got its shot request successfully approved.
+     */
     public void registerShot(Unit shooter){
         Shot shot;
         if (shooter instanceof Player && !timerActivated) {
@@ -118,10 +161,16 @@ public class Controller implements Runnable {
         allUnits.add(shot);
     }
 
+    /**
+     * @return the boolean that pauses the game while true, set true while a level is being created
+     */
     public boolean getLevelLoading(){
         return levelLoading;
     }
 
+    /**
+     * this method checks if any units rectangle hitbox intersects with any others, and if so, it reports a registered hit.
+     */
     public synchronized void requestHitboxCheck(){
 
         ArrayList<Unit> temp = new ArrayList<>(allUnits);
@@ -145,6 +194,10 @@ public class Controller implements Runnable {
         }
     }
 
+    /**
+     * removes a unit from all its lists.
+     * @param unit the unit that will be removed
+     */
     public void removeUnit(Unit unit){
         allUnits.remove(unit);
         if(unit instanceof Shot){
@@ -168,6 +221,10 @@ public class Controller implements Runnable {
         }
     }
 
+    /**
+     * sends a position to the painter where a shot collision animation is to happen
+     * @param position the position
+     */
     public void remotePainterAccess(Position position) {
         painter.setShotCollisionData(position);
     }
@@ -175,7 +232,7 @@ public class Controller implements Runnable {
     /**
      * the timeout for players reload
      * @param runnable
-     * @param delay
+     * @param delay for how long the timeout should be
      */
     public  void setTimeout(Runnable runnable, int delay){
         new Thread(() -> {
@@ -189,6 +246,10 @@ public class Controller implements Runnable {
         }).start();
     }
 
+    /**
+     * checks if any enemy has reached the end of the canvas
+     * @return true or false if any enemy has reached the edge
+     */
     private boolean anyEnemyTouchesBorder(){
         for(List<Enemy> row : new ArrayList<>(enemies)){
             for(Enemy e : row){
@@ -201,6 +262,9 @@ public class Controller implements Runnable {
         return false;
     }
 
+    /**
+     * this run handles the main game logic, the movement of the characters, and generates shots from the enemies randomly.
+     */
     @Override
     public void run(){ //moves blocks of enemies
         try {
@@ -239,6 +303,10 @@ public class Controller implements Runnable {
         levelWin();
     }
 
+    /**
+     * checks if any enemy touches the border, and if so changes the direction of all enemies, otherwise it just moves them
+     * all normally.
+     */
     private void movementRun() {
         while (!enemies.stream().allMatch(List::isEmpty)) { //if all objects delivered by the stream match the method isEmpty, statement is true
             // stream = take out the elements one by one
@@ -271,12 +339,19 @@ public class Controller implements Runnable {
         }
     }
 
+    /**
+     * method that calls the units shoot method if their random shot chance comes out positive.
+     * @param e the unit that might shoot.
+     */
     private void enemyFire(Enemy e){
         if (e.willShoot()){
             e.shoot();
         }
     }
 
+    /**
+     * sets the paused state to its current opposite
+     */
     public void setGamePaused(){
         gamePaused = !gamePaused;
         for (Unit unit : allUnits){
@@ -284,16 +359,26 @@ public class Controller implements Runnable {
         }
     }
 
+    /**
+     * getter
+     * @return the level counter
+     */
     public int getLevelCounter() {
         return levelCounter;
     }
 
+    /**
+     * this method increments the levelcounters, and initalises the next level in the list.
+     */
     private synchronized void levelWin() {
         levelCounter++;
         levelCounter2 = (levelCounter2+1) % levelList.size();
         initializeLevel(levelList.get(levelCounter2));
     }
 
+    /**
+     * clears the game field, meaning removes all units from the unit lists.
+     */
     public void clearGameField(){
         allUnits.clear();
         bosses.clear();
