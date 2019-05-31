@@ -1,7 +1,5 @@
 package pong;
 
-
-
 import application.JukeBox2;
 import chat.ClientController;
 import javafx.animation.AnimationTimer;
@@ -13,6 +11,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -36,6 +36,19 @@ public class Game extends AnimationTimer implements Runnable {
 	private JukeBox2 jukeBox2 = new JukeBox2();
 	private Executor executor = Executors.newFixedThreadPool(2);
 	private ClientController controller;
+	private int gameLevel = 1;
+	private boolean levelUp = false;
+	private long lastTime = System.currentTimeMillis();
+	
+	private Color[] bgColors = {
+			Color.rgb(69, 153, 55),
+			Color.rgb(153, 143, 55),
+			Color.rgb(153, 63, 55),
+			Color.rgb(55, 100, 153),
+			Color.rgb(193, 62, 92)
+	};
+	
+	private int colorIndex = 0;
 
 	// private Image pongBg;
 
@@ -50,6 +63,7 @@ public class Game extends AnimationTimer implements Runnable {
 	}
 
 	private void init() {
+		playerScoreStr = "SCORE: 0";
 		canvas = new Canvas(Pong.WIDTH, Pong.HEIGHT);
 		canvas.setId("Pong");
 		gc = canvas.getGraphicsContext2D();
@@ -107,9 +121,7 @@ public class Game extends AnimationTimer implements Runnable {
 		clearBackground();
 
 		gc.setLineWidth(2);
-		gc.setLineDashes(10);
 		gc.strokeLine(Pong.WIDTH / 2, 0, Pong.WIDTH / 2, Pong.HEIGHT);
-		gc.setLineDashes(0);
 
 		// gc.fill();
 		drawBall();
@@ -118,11 +130,11 @@ public class Game extends AnimationTimer implements Runnable {
 	}
 
 	private void clearBackground() {
-		gc.setFill(Color.DARKGREEN);
+		gc.setFill(this.bgColors[this.colorIndex % this.bgColors.length]);
 		gc.fillRect(0, 0, 600, 400);
 		gc.setStroke(Color.WHITE);
 		gc.setLineWidth(5);
-		gc.strokeRect(0, 0, 600, 400);
+		gc.strokeRect(0, 0, 600, 400);		
 	}
 
 	private void drawBall() {
@@ -165,7 +177,7 @@ public class Game extends AnimationTimer implements Runnable {
 	private void drawScoreBoard() {
 		gc.setFont(Font.font("Verdana", 20));
 		gc.setFill(Color.WHITE);
-		gc.fillText(playerScoreStr, 100, 25);
+		gc.fillText(playerScoreStr, 20, 25);
 	}
 
 	private void drawGameOver() {
@@ -185,7 +197,6 @@ public class Game extends AnimationTimer implements Runnable {
 		gc.setFont(Font.font(20));
 		gc.fillText("PRESS [R] TO RESTART", Pong.WIDTH / 2 - (temp.getLayoutBounds().getWidth() / 2), Pong.HEIGHT / 2 - 100);
 		
-
 	}
 
 	private void drawPaused() {
@@ -268,6 +279,9 @@ public class Game extends AnimationTimer implements Runnable {
 		drawGameOver();
 		controller.newHighscore("Pong", playerScore);
 		playerScore = 0;
+		playerScoreStr = "SCORE: 0";
+		gameLevel = 1;
+		colorIndex = 0;
 		gameOver = true;
 	}
 
@@ -292,7 +306,7 @@ public class Game extends AnimationTimer implements Runnable {
 
 		if ((ball.getRect().intersects(player.getRect()) && ball.getDx() < 0)
 				|| (ball.getRect().intersects(computer.getRect()) && ball.getDx() > 0)) {
-			ball.changeDirection();
+			ball.changeDirection(this.gameLevel);
 		//	ball.setAcceleration(player.getAcceleration()/2);
 		} else if (ball.getYpos() <= 0 && ball.getDy() < 0 || ball.getYpos() + ball.getRadius() >= Pong.HEIGHT) {
 			ball.bounceWall();
@@ -305,6 +319,7 @@ public class Game extends AnimationTimer implements Runnable {
 		} else if (ball.getXpos() >= Pong.WIDTH) {
 			executor.execute(this);
 			ball.reset();
+
 		}
 	}
 
@@ -320,5 +335,45 @@ public class Game extends AnimationTimer implements Runnable {
 				e.printStackTrace();
 			}
 		}
+		
+		if(this.playerScore % 150 == 0 && this.playerScore > 0) {
+			
+			// Increase Level & bgColor index
+			this.colorIndex++;
+			this.gameLevel++;			
+
+			// Show level
+			displayLevel();
+			
+			// reset ball
+			ball.reset();
+			
+		}
+		
+		lastTime = System.currentTimeMillis();
 	}
+	
+	public void displayLevel() {
+		
+		clearBackground();
+		
+		gc.setFont(new Font(40));
+		gc.setFill(Color.WHITE);
+		gc.fillText("LEVEL: " + gameLevel, Pong.WIDTH/2 - 50, Pong.HEIGHT/2);
+
+		this.stop();
+		
+		AnimationTimer self = this;
+		
+		Timer t = new Timer();
+		t.schedule(new TimerTask() {	
+			@Override
+			public void run() {
+				self.start();
+			}
+		}, 2000);
+
+		
+	}
+	
 }

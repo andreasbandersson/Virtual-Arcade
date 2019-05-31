@@ -6,8 +6,8 @@ public class Ball {
 	private int xpos;
 	private int ypos;
 	private int radius;
-	private int dx; // Bollens horisontella färdriktning
-	private int dy; // Bollens vertikala färdriktning
+	private double dx; // Bollens horisontella färdriktning
+	private double dy; // Bollens vertikala färdriktning
 	private int width;
 	private int height;
 	private int acceleration = 0;
@@ -53,25 +53,28 @@ public class Ball {
 		this.dy = -this.dy;
 	}
 
-	public void changeDirection() {
+	public void changeDirection(int gameLevel) {
 		this.dx = -this.dx;
-		increaseSpeed();
+		increaseSpeed(gameLevel);
 	}
 
-	public int getDx( ) {
+	public double getDx( ) {
 		return this.dx;
 	}
 
-	public int getDy() {
+	public double getDy() {
 		return this.dy;
 	}
 
-	private void increaseSpeed() {
+	// 0.5 (+-) (0.15 * 1) = 0.65 	-- level 1, (in/de)crease by 0.15
+	// 0.5 (+-) (0.15 * 2) = 0.8	-- level 2, (in/de)crease by 0.3
+	// 0.5 (+-) (0.15 * 3) = 0.95	-- level 3, (in/de)crease by 0.45
+	private void increaseSpeed(int gameLevel) {
 		if (this.dx < 0) {
-			this.dx -= 1;
+			this.dx -= 0.5 - (0.15 * gameLevel);
 
 		} else {
-			this.dx++;
+			this.dx += 0.5 + (0.15 * gameLevel);
 		}
 	}
 
