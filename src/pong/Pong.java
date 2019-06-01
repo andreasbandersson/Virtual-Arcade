@@ -7,7 +7,7 @@ import java.net.MalformedURLException;
 
 import application.JukeBox;
 import application.MainUI;
-import chat.ChatController;
+import chat.ClientController;
 import chat.ChatUI;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -23,7 +23,7 @@ import javafx.scene.paint.Color;
 /**
  * The class integrates the Pong game with the MainUI and adds the Chat and the Jukebox.
  * 
- * @author Andreas Andersson & Måns Grundberg
+ * @author Andreas Andersson & Mï¿½ns Grundberg
  */
 
 public class Pong {
@@ -43,7 +43,8 @@ public class Pong {
 	public static final int HEIGHT = 400;
 	private Game game;
 	private Canvas canvas;
-	private ChatController controller;
+	private ClientController controller;
+
 
 	/**
 	 * The constructor receives the mainUI, chatUI, jukebox, chat controller and initiates the class.
@@ -52,7 +53,7 @@ public class Pong {
 	 * @param jukebox the jukebox parameter lets the music play without overlaps when switching between classes.
 	 * @param controller the controller parameter holds the logic for the chat
 	 */
-	public Pong(MainUI mainUI, ChatUI chatUI, JukeBox jukebox, ChatController controller) {
+	public Pong(MainUI mainUI, ChatUI chatUI, JukeBox jukebox, ClientController controller) {
 		this.mainUI = mainUI;
 		this.chatUI = chatUI;
 		this.jukebox = jukebox;

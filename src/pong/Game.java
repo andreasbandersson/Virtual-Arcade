@@ -1,9 +1,7 @@
 package pong;
 
-
-
 import application.JukeBox2;
-import chat.ChatController;
+import chat.ClientController;
 import javafx.animation.AnimationTimer;
 
 import javafx.scene.canvas.Canvas;
@@ -13,9 +11,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+/**
+	@author Gulcin Kanat & Måns Grundberg
+*/
 public class Game extends AnimationTimer implements Runnable {
 	private Canvas canvas;
 	private Paddle player;
@@ -35,21 +38,47 @@ public class Game extends AnimationTimer implements Runnable {
 	private boolean firstGame = true;
 	private JukeBox2 jukeBox2 = new JukeBox2();
 	private Executor executor = Executors.newFixedThreadPool(2);
-	private ChatController controller;
+	private ClientController controller;
+	private int gameLevel = 1;
+	private boolean levelUp = false;
+	private long lastTime = System.currentTimeMillis();
+
+	private Color[] bgColors = {
+			Color.rgb(69, 153, 55),
+			Color.rgb(153, 143, 55),
+			Color.rgb(153, 63, 55),
+			Color.rgb(55, 100, 153),
+			Color.rgb(193, 62, 92)
+	};
+
+	private int colorIndex = 0;
 
 	// private Image pongBg;
 
-	public Game(ChatController controller) {
+	/**
+		Game constructor initalizes clientController,
+		calls init() & drawStart() methods.
+	**/
+	public Game(ClientController controller) {
 		this.controller = controller;
 		init();
 		drawStart();
 	}
 
+	/**
+		Returns current canvas object
+		@return Canvas
+	**/
 	public Canvas getCanvas() {
 		return this.canvas;
 	}
 
+	/**
+		Initializes playerscore, canvas, GraphicsContext2D,
+		ball, player, computer & adds Action Listeners
+	**/
 	private void init() {
+		playerScoreStr = "SCORE: 0";
 		canvas = new Canvas(Pong.WIDTH, Pong.HEIGHT);
 		canvas.setId("Pong");
 		gc = canvas.getGraphicsContext2D();
@@ -59,6 +88,9 @@ public class Game extends AnimationTimer implements Runnable {
 		addActionListeners();
 	}
 
+	/**
+		Game Loop
+	**/
 	public void handle(long now) {
 		if (now - timeSinceLastUpdate >= 8000000) {
 			draw();
@@ -70,7 +102,9 @@ public class Game extends AnimationTimer implements Runnable {
 		}
 	}
 
-	// Kollar om paddlar ska flyttas
+	/**
+		Checks if paddle movements were (requested?)
+	**/
 	private void checkPaddles() {
 		if (movePlayerUp) {
 			player.moveUp();
@@ -88,6 +122,9 @@ public class Game extends AnimationTimer implements Runnable {
 		}
 	}
 
+	/**
+		Paints start screen if firstGame set to true, otherwise Game Over will be painted.
+	**/
 	private void drawStart() {
 
 		if (firstGame) {
@@ -102,23 +139,25 @@ public class Game extends AnimationTimer implements Runnable {
 		gc.setFont(Font.font(20));
 	}
 
-	// Anropar draw-metoder
+	/**
+		Call draw methods
+	**/
 	private void draw() {
 		clearBackground();
 
 		gc.setLineWidth(2);
-		gc.setLineDashes(10);
 		gc.strokeLine(Pong.WIDTH / 2, 0, Pong.WIDTH / 2, Pong.HEIGHT);
-		gc.setLineDashes(0);
 
-		// gc.fill();
 		drawBall();
 		drawPaddles();
 		drawScoreBoard();
 	}
 
+	/**
+		Render canvas background with a color picked from bgColors array
+	**/
 	private void clearBackground() {
-		gc.setFill(Color.DARKGREEN);
+		gc.setFill(this.bgColors[this.colorIndex % this.bgColors.length]);
 		gc.fillRect(0, 0, 600, 400);
 		gc.setStroke(Color.WHITE);
 		gc.setLineWidth(5);
@@ -136,6 +175,10 @@ public class Game extends AnimationTimer implements Runnable {
 		gc.fillRect(computer.getXpos(), computer.getYpos(), computer.getWidth(), computer.getHeight());
 	}
 
+	/**
+		drawInstructions() is called by drawStart() method the first time game starts.
+		Displays which keys to use for specific actions.
+	**/
 	private void drawInstructions() {
 		clearBackground();
 
@@ -165,7 +208,7 @@ public class Game extends AnimationTimer implements Runnable {
 	private void drawScoreBoard() {
 		gc.setFont(Font.font("Verdana", 20));
 		gc.setFill(Color.WHITE);
-		gc.fillText(playerScoreStr, 100, 25);
+		gc.fillText(playerScoreStr, 20, 25);
 	}
 
 	private void drawGameOver() {
@@ -179,12 +222,11 @@ public class Game extends AnimationTimer implements Runnable {
 
 		gc.setFont(Font.font(40));
 		gc.fillText("Your Score: " + playerScore, Pong.WIDTH / 4, centerY + 60);
-		
+
 		Text temp = new Text("PRESS [P] TO RESTART");
 		temp.setFont(Font.font(20));
 		gc.setFont(Font.font(20));
 		gc.fillText("PRESS [R] TO RESTART", Pong.WIDTH / 2 - (temp.getLayoutBounds().getWidth() / 2), Pong.HEIGHT / 2 - 100);
-		
 
 	}
 
@@ -268,6 +310,9 @@ public class Game extends AnimationTimer implements Runnable {
 		drawGameOver();
 		controller.newHighscore("Pong", playerScore);
 		playerScore = 0;
+		playerScoreStr = "SCORE: 0";
+		gameLevel = 1;
+		colorIndex = 0;
 		gameOver = true;
 	}
 
@@ -292,7 +337,7 @@ public class Game extends AnimationTimer implements Runnable {
 
 		if ((ball.getRect().intersects(player.getRect()) && ball.getDx() < 0)
 				|| (ball.getRect().intersects(computer.getRect()) && ball.getDx() > 0)) {
-			ball.changeDirection();
+			ball.changeDirection(this.gameLevel);
 		//	ball.setAcceleration(player.getAcceleration()/2);
 		} else if (ball.getYpos() <= 0 && ball.getDy() < 0 || ball.getYpos() + ball.getRadius() >= Pong.HEIGHT) {
 			ball.bounceWall();
@@ -305,6 +350,7 @@ public class Game extends AnimationTimer implements Runnable {
 		} else if (ball.getXpos() >= Pong.WIDTH) {
 			executor.execute(this);
 			ball.reset();
+
 		}
 	}
 
@@ -320,5 +366,52 @@ public class Game extends AnimationTimer implements Runnable {
 				e.printStackTrace();
 			}
 		}
+
+		if(this.playerScore % 150 == 0 && this.playerScore > 0) {
+
+			// Increase Level & bgColor index
+			this.colorIndex++;
+			this.gameLevel++;
+
+			// Show level
+			displayLevel();
+
+			// reset ball
+			ball.reset();
+
+		}
+
+		lastTime = System.currentTimeMillis();
 	}
+
+	/**
+		Each time player earns +150 points, gameLevel is updated and displayed.
+	**/
+	public void displayLevel() {
+
+		clearBackground();
+
+		gc.setFont(new Font(40));
+		gc.setFill(Color.WHITE);
+		gc.fillText("LEVEL: " + gameLevel, Pong.WIDTH/2 - 50, Pong.HEIGHT/2);
+
+		// stop animation timer
+		this.stop();
+
+		// save a reference of current AnimationTimer
+		AnimationTimer self = this;
+
+		// set timertask to be executed after 2s
+		// starts AnimationTimer again.
+		Timer t = new Timer();
+		t.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				self.start();
+			}
+		}, 2000);
+
+
+	}
+
 }

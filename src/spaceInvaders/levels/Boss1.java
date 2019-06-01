@@ -6,6 +6,11 @@ import spaceInvaders.units.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * One of many Level-Classes. All these classes are identical except for which types of enemies are added to the enemy list.
+ * @author Viktor Altintas
+ */
+
 public class Boss1 extends Level {
 
     private static final List<List<Enemy>> enemyBlock = new ArrayList<>();
@@ -16,10 +21,17 @@ public class Boss1 extends Level {
 
     }
 
+    /**
+     * @param difficulty the boss difficulty
+     * @param controller the controller for the logic
+     */
     public Boss1(Difficulty difficulty, Controller controller) {
         super(difficulty, enemyBlock, controller);
     }
 
+    /**
+     * returns new arrayList
+     */
     @Override
     public List<Boss> getBosses() {
         return new ArrayList<>();

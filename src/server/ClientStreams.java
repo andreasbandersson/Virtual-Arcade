@@ -8,6 +8,7 @@ import chat.User;
 
 /**
  * Stores the ObjectOutputStreams for all connected users.
+ * 
  * @author Måns Grundberg
  *
  */

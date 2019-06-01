@@ -6,7 +6,9 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 /**
- * Client handling all communication between the chat system and the server side.
+ * Client handling all communication between the chat system and the server
+ * side.
+ * 
  * @author Mans
  *
  */
@@ -19,9 +21,9 @@ public class ChatClient {
 	private String ip;
 	private boolean connected = false;
 	private InputListener listener;
-	private ChatController controller;
+	private ClientController controller;
 
-	public ChatClient(int port, String ip, ChatController controller) {
+	public ChatClient(int port, String ip, ClientController controller) {
 		this.controller = controller;
 		this.ip = ip;
 		this.port = port;
@@ -64,7 +66,8 @@ public class ChatClient {
 
 	/**
 	 * Sends specified user and password to server for check
-	 * @param user The specified user
+	 * 
+	 * @param user     The specified user
 	 * @param password The specified password
 	 */
 	public void login(User user, String password) {
@@ -80,7 +83,8 @@ public class ChatClient {
 
 	/**
 	 * Sends specified user and password to server to create new user
-	 * @param user The specified user
+	 * 
+	 * @param user     The specified user
 	 * @param password The specified password
 	 */
 	public void newUser(User user, String password) {
@@ -93,9 +97,10 @@ public class ChatClient {
 			System.err.println(e);
 		}
 	}
-	
+
 	/**
 	 * Sends message to server
+	 * 
 	 * @param message The message to send
 	 */
 	public void sendMessage(Message message) {
@@ -105,7 +110,7 @@ public class ChatClient {
 			System.err.println(e);
 		}
 	}
-	
+
 	public void sendHighscore(Highscore highscore) {
 		try {
 			oos.writeObject(highscore);
@@ -116,6 +121,7 @@ public class ChatClient {
 
 	/**
 	 * Listens for input from server, sending it along to controller
+	 * 
 	 * @author Mans
 	 *
 	 */
@@ -133,7 +139,7 @@ public class ChatClient {
 				}
 			}
 		}
-		
+
 		/**
 		 * Terminates thread by interrupting it's run method
 		 */

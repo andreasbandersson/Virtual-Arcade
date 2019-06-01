@@ -21,6 +21,7 @@ import javafx.scene.text.TextFlow;
 
 /**
  * UI-class for the chat system.
+ * 
  * @author Måns Grundberg
  *
  */
@@ -34,15 +35,11 @@ public class ChatUI extends Pane {
 	private StackPane sPane = new StackPane();
 	private TextArea onlineUsers = new TextArea();
 	private Boolean showingMessages = true;
-	private ChatController controller;
+	private ClientController controller;
 
-	public ChatUI(ChatController controller) {
+	public ChatUI(ClientController controller) {
 		this.controller = controller;
 		init();
-	}
-	
-	public static void main(String[] args) {
-		new ChatUI(new ChatController());
 	}
 
 	/**
@@ -50,8 +47,7 @@ public class ChatUI extends Pane {
 	 */
 	private void init() {
 		setPrefSize(300, 600);
-		
-		
+
 		newMessage.setPromptText("Type @username to send a private message");
 		onlineUsers.setWrapText(true);
 		onlineUsers.setEditable(false);
@@ -60,8 +56,8 @@ public class ChatUI extends Pane {
 		sendBtn.setPrefSize(280, 25);
 		switchBtn.setPrefSize(280, 25);
 		newMessage.setPrefSize(300, 50);
-		
-		//Andreas
+
+		// Andreas
 		sendBtn.setId("sendButton");
 		switchBtn.setId("checkButton");
 
@@ -71,19 +67,19 @@ public class ChatUI extends Pane {
 		scroll.setPrefSize(260, 460);
 		scroll.viewportBoundsProperty();
 		messages.setPrefSize(300, scroll.getPrefViewportHeight());
-			
+
 		vPane.setAlignment(Pos.CENTER);
 		vPane.setPrefSize(300.0, 600.0);
-		
+
 		sPane.getChildren().add(scroll);
 		vPane.getChildren().add(sPane);
 		vPane.getChildren().add(newMessage);
 		vPane.getChildren().add(sendBtn);
 		vPane.getChildren().add(switchBtn);
-		
+
 		messages.setMaxWidth(300);
 		messages.setMaxHeight(460);
-		
+
 		messages.setId("messageArea");
 		onlineUsers.setId("messageArea");
 		vPane.setId("vPane");
@@ -99,8 +95,7 @@ public class ChatUI extends Pane {
 		addMessage("Messages are public by default", 2);
 		addMessage("Type @username to send a private message", 2);
 		addMessage("Example: @Aragorn This is a message", 2);
-		
-		
+
 		getChildren().add(vPane);
 		try {
 			getStylesheets().add((new File("styles//chatStyle.css")).toURI().toURL().toExternalForm());
@@ -111,7 +106,8 @@ public class ChatUI extends Pane {
 
 	/**
 	 * Appends a new msg to text area
-	 * @param msg The string to append
+	 * 
+	 * @param msg  The string to append
 	 * @param type The type of message, determining the texts color
 	 */
 	public void addMessage(String msg, int type) {
@@ -132,6 +128,7 @@ public class ChatUI extends Pane {
 
 	/**
 	 * Updates text area with new list of online users
+	 * 
 	 * @param userList The list of online users
 	 */
 	public void updateUserList(UserList userList) {
@@ -186,9 +183,5 @@ public class ChatUI extends Pane {
 				e.consume();
 			}
 		}
-		
-		
 	};
-	
-
 }

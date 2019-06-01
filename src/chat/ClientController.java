@@ -15,7 +15,7 @@ import javafx.embed.swing.JFXPanel;
  *
  */
 
-public class ChatController {
+public class ClientController {
 	private ChatUI chatUI;
 	private MainUI mainUI;
 	private LoginUI loginUI;
@@ -24,8 +24,8 @@ public class ChatController {
 	private UserList userList;
 	private Leaderboard leaderboard;
 
-	public ChatController() {
-		client = new ChatClient(60000, "localhost", this);
+	public ClientController() {
+		client = new ChatClient(50000, "localhost", this);
 		client.connect();
 		initLoginUI();
 		chatUI = new ChatUI(this);
@@ -39,7 +39,7 @@ public class ChatController {
 		new JFXPanel();
 		Platform.runLater(new Runnable() {
 			public void run() {
-				loginUI = new LoginUI(ChatController.this);
+				loginUI = new LoginUI(ClientController.this);
 				loginUI.start(LoginUI.stage);
 			}
 		});
@@ -48,13 +48,13 @@ public class ChatController {
 	private void initMainUI() {
 		Platform.runLater(new Runnable() {
 			public void run() {
-				mainUI = new MainUI(chatUI, ChatController.this);
+				mainUI = new MainUI(chatUI, ClientController.this);
 				mainUI.start(MainUI.primaryStage);
-				chatUI.addMessage("Welcome to Virtual Arcade " + ChatController.this.user.getUsername() + "!", 1);
+				chatUI.addMessage("Welcome to Virtual Arcade " + ClientController.this.user.getUsername() + "!", 1);
 			}
 		});
 	}
-	
+
 	public void disconnect() {
 		client.disconnect();
 	}
@@ -134,6 +134,7 @@ public class ChatController {
 	 * 
 	 * @param obj The object received (Message/User/UserList/String)
 	 */
+	@SuppressWarnings("unchecked")
 	public void incoming(Object obj) {
 		if (obj instanceof Message) {
 			Message message = (Message) obj;
@@ -161,6 +162,7 @@ public class ChatController {
 
 	/**
 	 * Calls UI with updated highscore list.
+	 * 
 	 * @param list
 	 */
 	private void updateHighscores(LinkedList<Highscore> list) {
@@ -173,7 +175,8 @@ public class ChatController {
 
 	/**
 	 * Sends out new highscore through Client.
-	 * @param game The game calling the method
+	 * 
+	 * @param game  The game calling the method
 	 * @param score The game score to check
 	 */
 	public void newHighscore(String game, int score) {
@@ -204,7 +207,6 @@ public class ChatController {
 	}
 
 	public static void main(String[] args) {
-		new ChatController();
+		new ClientController();
 	}
-
 }

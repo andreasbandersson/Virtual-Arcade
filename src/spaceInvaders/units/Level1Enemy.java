@@ -10,12 +10,11 @@ import java.io.FileNotFoundException;
 import java.util.Random;
 
 /**
+ * a class that holds the properties of a level one enemy.
  * @author Viktor Altintas
  */
 
 public class Level1Enemy extends Enemy {
-
-
 
     private static Image enemySprite1;
     private static Image enemySprite2;
@@ -31,15 +30,28 @@ public class Level1Enemy extends Enemy {
     }
     private Random rand = new Random();
 
+    /**
+     * constructor
+     * @param position the startposition for the enemy
+     * @param controller the controller for the logic
+     * @param difficulty the difficulty of the enemy
+     */
     public Level1Enemy(Position position, Controller controller, Difficulty difficulty) {
         super(1, position, enemySprite1,enemySprite2,35,30, controller, 20, difficulty);
     }
 
+    /**
+     * calls the registershot method in controller
+     */
     @Override
     public void shoot() {
         controller.registerShot(this);
     }
 
+    /**
+     * calculates if the enemy will shoot.
+     * @return true if shot was made
+     */
     @Override
     public boolean willShoot() {
         int r = rand.nextInt(1000);
@@ -56,6 +68,10 @@ public class Level1Enemy extends Enemy {
         return false;
     }
 
+    /**
+     * getter
+     * @return a clone of the Unit
+     */
     @Override
     public Enemy clone() {
         return new Level1Enemy(new Position(this.position),this.controller,this.difficulty);

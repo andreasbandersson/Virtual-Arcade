@@ -13,6 +13,7 @@ import chat.User;
 
 /**
  * Handles all communication with the chat- and login systems client.
+ * 
  * @author Måns Grundberg
  *
  */
@@ -28,6 +29,7 @@ public class Server {
 
 	/**
 	 * Sends specified object to specified client
+	 * 
 	 * @param obj The object to send
 	 * @param oos The ObjectOutputStream to send through
 	 */
@@ -40,7 +42,7 @@ public class Server {
 			System.err.println(e);
 		}
 	}
-	
+
 	public void sendHighscore(LinkedList<Highscore> list, ObjectOutputStream oos) {
 		try {
 			System.out.println(Thread.currentThread().getName() + "skickar meddelande");
@@ -53,6 +55,7 @@ public class Server {
 
 	/**
 	 * Listens for connecting clients, spawning ClientHandlers
+	 * 
 	 * @author Mans
 	 *
 	 */
@@ -82,6 +85,7 @@ public class Server {
 
 	/**
 	 * Handles all the incoming data from a specific Client
+	 * 
 	 * @author Mans
 	 *
 	 */
@@ -110,12 +114,11 @@ public class Server {
 						break;
 					}
 				}
-				while (true) { // Listens for incoming messages aslong as the client is connected
+				while (true) { // Listens for incoming messages as long as the client is connected
 					try {
-						System.out.println(Thread.currentThread().getName() + "tar emot meddelande");
 						Object obj = ois.readObject();
 						if (obj instanceof Message) {
-						controller.newMessage((Message) obj);
+							controller.newMessage((Message) obj);
 						} else {
 							controller.checkHighscore((Highscore) obj);
 						}
@@ -125,7 +128,6 @@ public class Server {
 				}
 			} catch (IOException e) {
 				try {
-					System.out.println(socket.getInetAddress().getHostAddress() + " kopplar ner");
 					controller.disconnectUser(user);
 					socket.close();
 				} catch (Exception e2) {
