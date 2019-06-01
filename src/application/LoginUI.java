@@ -27,7 +27,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 /**
- * The LoginUI class is a graphical user interface for Virtual Arcade.
+ * The LoginUI class is a graphical user interface for the login screen to Virtual Arcade.
  * 
  * @author Andreas Andersson
  */

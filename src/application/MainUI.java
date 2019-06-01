@@ -31,6 +31,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.RowConstraints;
 
 /**
+ * The MainUI class is Virtual Arcades main GUI and connects all of the games, the chat and the leader board together.
  * @author Andreas Andersson
  */
 
