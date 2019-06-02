@@ -25,7 +25,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 /**
- * The LoginUI class is a graphical user interface for Virtual Arcade.
+ * The LoginUI class is a graphical user interface for the login screen to Virtual Arcade.
  * 
  * @author Andreas Andersson
  */
@@ -115,13 +115,13 @@ public class LoginUI extends Application {
 		loginRoot.add(loginButton, 16, 20, 9, 1);
 
 		// Adding and setting the button for creating a new user
-		newUserButton.setId("createButton");
+		newUserButton.setId("blueButton");
 		newUserButton.setMinWidth(Region.USE_PREF_SIZE);
 		loginRoot.add(newUserButton, 24, 20, 9, 1);
 
 		// Adding an setting the button for mute and un-mute of login music
 		soundButton = new Button();
-		soundButton.setId("createButton");
+		soundButton.setId("greyButton");
 		soundButton.setGraphic(playSoundImageView);
 		loginRoot.add(soundButton, 42, 2);
 

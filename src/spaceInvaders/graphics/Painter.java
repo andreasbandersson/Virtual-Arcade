@@ -34,6 +34,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 /**
+ * this class creates and paints all the graphical properties of space invaders, and also hosts the various action listeners
+ * for the controls.
  * @author Viktor Altintas
  */
 
@@ -85,6 +87,14 @@ public class Painter extends AnimationTimer implements Runnable {
 		}
 	}
 
+	/**
+	 *
+	 * @param mainUI the main UI
+	 * @param chatUI the Chat UI
+	 * @param jukebox a jukebox for playing sounds
+	 * @param controller a controller for interactions with the game logic
+	 */
+
 	public Painter(MainUI mainUI, ChatUI chatUI, JukeBox jukebox, ClientController controller) {
 		this.chatUI = chatUI;
 		this.mainUI = mainUI;
@@ -94,6 +104,9 @@ public class Painter extends AnimationTimer implements Runnable {
 		init();
 	}
 
+	/**
+	 * initialiser for all the graphical components
+	 */
 	private void init() {
 		scoreLabel = new Label("");
 		scoreLabel.setTextFill(Color.rgb(255, 255, 255));
@@ -119,12 +132,12 @@ public class Painter extends AnimationTimer implements Runnable {
 		root.setId("SpaceInvaders");
 
 		// Adding and setting the main buttons
-		backButton.setId("logOutButton");
+		backButton.setId("greyButton");
 		spaceInvadersRoot.add(backButton, 1, 21, 6, 2);
 
 		// Adding an setting the button for mute and un-mute of login music
 		soundButton = new Button();
-		soundButton.setId("logOutButton");
+		soundButton.setId("greyButton");
 		spaceInvadersRoot.add(soundButton, 32, 1);
 		spaceInvadersRoot.setPrefSize(1200.0, 600.0);
 
@@ -175,6 +188,9 @@ public class Painter extends AnimationTimer implements Runnable {
 		start(); // starts the animation timer
 	}
 
+	/**
+	 * a method that sets the game to its game over state
+	 */
 	public void gameEnd() {
 		chatController.newHighscore("Space Invaders", controller.getScore());
 		gameEnded = true;
@@ -187,6 +203,10 @@ public class Painter extends AnimationTimer implements Runnable {
 		});
 	}
 
+	/**
+	 * a runnable that goes through all explosion and shotcollision animations and checks if they are done,
+	 * if so then they are removed.
+	 */
 	public void run() {
 		for (Explosion e : new ArrayList<>(explosions)) {
 			if (!e.exploding()) {
@@ -200,6 +220,10 @@ public class Painter extends AnimationTimer implements Runnable {
 		}
 	}
 
+	/**
+	 * the java fx animation loop. Its called 60 times per second.
+	 * @param now
+	 */
 	@Override
 	public void handle(long now) {
 
@@ -248,6 +272,10 @@ public class Painter extends AnimationTimer implements Runnable {
 		return scene;
 	}
 
+	/**
+	 * creates a new explosion animation at the designated position
+	 * @param position the designated position
+	 */
 	public void setExplosionData(Position position) {
 		Explosion explosion = new Explosion(position);
 		executor.execute(explosion);
@@ -255,12 +283,19 @@ public class Painter extends AnimationTimer implements Runnable {
 
 	}
 
+	/**
+	 * creates a new shotCollision animation at the designated position
+	 * @param position the designated position
+	 */
 	public void setShotCollisionData(Position position) {
 		ShotCollision shotCollision = new ShotCollision(position);
 		executor.execute(shotCollision);
 		shotCollisions.add(shotCollision);
 	}
 
+	/**
+	 * a threadpool call for the runnable in this Painter-Object
+	 */
 	public void checkDeadObjects() {
 		executor.execute(this);
 	}
@@ -332,10 +367,18 @@ public class Painter extends AnimationTimer implements Runnable {
 
 	}
 
+	/**
+	 *
+	 * @return gameEnded boolean
+	 */
 	public boolean getGameEnded() {
 		return gameEnded;
 	}
 
+	/**
+	 * this method holds all the actionlistener behaviour for the game
+	 * @param scene the scene which the listener should listen to
+	 */
 	private void addListeners(Scene scene) {
 
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {

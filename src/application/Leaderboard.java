@@ -88,12 +88,12 @@ public class Leaderboard {
 		leaderboardRoot.add(headerLabel, 8, 0, 30, 5);
 
 		// Adding and setting the main buttons
-		backButton.setId("logOutButton");
+		backButton.setId("greyButton");
 		leaderboardRoot.add(backButton, 1, 21, 6, 2);
 
 		// Adding an setting the sound button
 		soundButton = new Button();
-		soundButton.setId("logOutButton");
+		soundButton.setId("greyButton");
 		leaderboardRoot.add(soundButton, 32, 1);
 
 		addHighscoreLabels();

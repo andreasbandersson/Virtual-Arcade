@@ -8,6 +8,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Random;
 
+/**
+ * a class that holds the properties of a level two enemy.
+ * @author Viktor Altintas
+ */
+
 public class Level2Enemy extends Enemy {
 
     private static Image enemySprite1;
@@ -24,15 +29,30 @@ public class Level2Enemy extends Enemy {
     }
     private Random rand = new Random();
 
+
+    /**
+     * constructor
+     * @param position the startposition for the enemy
+     * @param controller the controller for the logic
+     * @param difficulty the difficulty of the enemy
+     */
     public Level2Enemy(Position position, Controller controller, Difficulty difficulty) {
         super(1, position, enemySprite1,enemySprite2,35,30, controller, 20, difficulty);
     }
 
+
+    /**
+     * calls register shot in the controller
+     */
     @Override
     public void shoot() {
         controller.registerShot(this);
     }
 
+    /**
+     * calculates if the enemy will shoot.
+     * @return true if shot was made
+     */
     @Override
     public boolean willShoot() {
         int r = rand.nextInt(1000);
@@ -49,6 +69,10 @@ public class Level2Enemy extends Enemy {
         return false;
     }
 
+    /**
+     * returns a clone
+     * @return clone of the unit
+     */
     @Override
     public Enemy clone() {
         return new Level2Enemy(new Position(this.position),this.controller,this.difficulty);

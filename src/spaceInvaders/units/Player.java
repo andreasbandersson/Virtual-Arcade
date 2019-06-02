@@ -10,6 +10,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 /**
+ * the player unit
  * @author Viktor Altintas
  */
 
@@ -31,6 +32,11 @@ public class Player extends Unit implements Runnable {
 
     private static Position startPosition = new Position(270,350);
 
+    /**
+     * constructor
+     * @param controller the controller for the logic
+     * @param painter the painter, made for sending positiondata of the player when it collides with a shot
+     */
     public Player(Controller controller, Painter painter) {
         super(3, new Position(startPosition), playerSprite,50,40, controller);
         this.painter = painter;
@@ -38,28 +44,46 @@ public class Player extends Unit implements Runnable {
 
     }
 
+    /**
+     * calls registerShot in the controller
+     */
     @Override
     public void shoot() {
         controller.registerShot(this);
     }
 
-
+    /**
+     * setter for the boolean travelingLeft
+     */
     public void setTravelingLeftTrue(){
         travelingLeft = true;
     }
 
+    /**
+     * setter for the boolean travelingRight
+     */
     public void setTravelingRightTrue(){
         travelingRight = true;
     }
 
+    /**
+     * setter for the boolean travelingLeft
+     */
     public void setTravelingLeftF() {
         this.travelingLeft = false;
     }
 
+    /**
+     * setter for the boolean travelingRight
+     */
     public void setTravelingRightF() {
         travelingRight = false;
     }
 
+    /**
+     * runnable that moves the player character as long as game isnt paused and the player is holding down the button to
+     * steer in one direction
+     */
     public void run() {
         while (true){
             while (!travelingLeft && !travelingRight || paused) {
@@ -84,10 +108,17 @@ public class Player extends Unit implements Runnable {
 
     }
 
+    /**
+     * sets lifepoints back to the given parameter
+     * @param healthpoints the healthpoints the player should be restored to
+     */
     public void renewLife(int healthpoints){
         life += healthpoints;
     }
 
+    /**
+     * subtracts life from the player, if 0 then game ends
+     */
     @Override
     public void registerHit() {
         life--;
@@ -104,6 +135,5 @@ public class Player extends Unit implements Runnable {
 
     @Override
     public void die() {
-
     }
 }

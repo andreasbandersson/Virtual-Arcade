@@ -31,6 +31,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.RowConstraints;
 
 /**
+ * The MainUI class is Virtual Arcades main GUI and connects all of the games, the chat and the leader board together.
  * @author Andreas Andersson
  */
 
@@ -118,12 +119,12 @@ public class MainUI extends Application {
 		mainRoot.add(leaderboardButton, 26, 0, 6, 3);
 
 		// Adding and setting the Log out button
-		logOutButton.setId("logOutButton");
+		logOutButton.setId("greyButton");
 		mainRoot.add(logOutButton, 1, 21, 6, 3);
 
 		// Adding an setting the button for mute and un-mute of login music
 		soundButton = new Button();
-		soundButton.setId("logOutButton");
+		soundButton.setId("greyButton");
 		mainRoot.add(soundButton, 32, 1);
 
 		// Adding and setting the "Play"-buttons for the different arcade games

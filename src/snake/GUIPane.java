@@ -156,12 +156,12 @@ public class GUIPane implements Runnable {
 		setSnakeArcadeMachineImage();
 
 		// Adding and setting the main buttons
-		backButton.setId("logOutButton");
+		backButton.setId("greyButton");
 		snakePane.add(backButton, 1, 21, 6, 2);
 
 		// Adding an setting the sound buttons
 		soundButton = new Button();
-		soundButton.setId("logOutButton");
+		soundButton.setId("greyButton");
 		snakePane.add(soundButton, 32, 1);
 
 		snakePane.add(root, 6, 4, 24, 16);
