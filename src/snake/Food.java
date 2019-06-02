@@ -1,45 +1,49 @@
 package snake;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 
-public class Food 
-{
-	private int x, y;
-	private int width, height;
-	private int tileSize;
+/**
+ * Class that has Get-methods for the foods X and Y position and a draw method for drawing the food. 
+ * @author Max Matthiasson
+ */
+public class Food {
 	
-	public Food(int x, int y, int tileSize)
-	{
-		this.x = x;
-		this.y = y;
-		this.width = tileSize;
-		this.height = tileSize;
+	private int foodX;
+	private int foodY;
+	private int unitWidth;
+	private int unitHeight;
+	private static Image foodImage;
+	
+	/**
+	 * Constructor for the food pieces.
+	 * @param foodImage - The image representing the pieces of food. 
+	 * @param foodX - The X-position of the food piece.
+	 * @param foodY - The Y-position of the food piece. 
+	 * @param unitWidth - The width of the food piece. 
+	 * @param unitHeight - The height of the food piece. 
+	 */
+	public Food(Image foodImage, int foodX, int foodY, int unitWidth, int unitHeight) {
+		Food.foodImage = foodImage;
+		this.foodX = foodX;
+		this.foodY = foodY;
+		this.unitWidth = unitWidth;
+		this.unitHeight = unitHeight;
 	}
 	
-	public void draw(Graphics g)
-	{
-		g.setColor(Color.red);
-		g.fillRect(x * width, y * height, width, height);
+	/**
+	 * Draws the pieces of food.
+	 * @param gc
+	 */
+	public void drawFoodPane(GraphicsContext gc) {
+		gc.drawImage(foodImage, foodX, foodY, unitWidth, unitHeight);
+	}
+	
+	public int getFoodX() {
+		return foodX;
 	}
 
-	public int getX() 
-	{
-		return x;
-	}
-
-	public void setX(int x) 
-	{
-		this.x = x;
-	}
-
-	public int getY() 
-	{
-		return y;
-	}
-
-	public void setY(int y) 
-	{
-		this.y = y;
+	public int getFoodY() {
+		return foodY;
 	}
 }

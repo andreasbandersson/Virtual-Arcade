@@ -1,0 +1,111 @@
+@font-face {
+    src: url('../fonts/PressStart2P.ttf');
+}
+
+@font-face {
+    src: url('../fonts/Neoneon.otf');
+}
+
+@font-face {
+    src: url('../fonts/GAMEPLAYED.OTF');
+}
+
+#loginRoot{
+    -fx-background-image: url("../images/login2.jpg");
+    -fx-background-repeat: stretch;   
+    -fx-background-size:  cover;
+    -fx-background-position: center center; 
+}
+
+#loginButton{
+	-fx-padding: 10.0 22.0 20.0 22.0;
+    -fx-background-insets: 0.0,0.0 0.0 5.0 0.0, 0.0 0.0 6.0 0.0, 0.0 0.0 7.0 0.0;
+    -fx-background-radius: 24.0;
+  -fx-background-color: 
+        linear-gradient(from 0.0% 93.0% to 0.0% 100.0%, #c11111 0.0%, #b50101 100.0%),
+        #b70303,
+        #ff3838,
+        radial-gradient(center 50.0% 50.0%, radius 100.0%, #ff3838, #ce1a1a);
+    -fx-effect: dropshadow( gaussian , rgba(0.0,0.0,0.0,0.25) , 4.0,0.0,0.0,1.0 );
+    -fx-font-weight: normal;
+    -fx-font-size: 1em;
+    -fx-alignment: center;
+}
+
+#loginButton:pressed {
+    -fx-padding: 14.0 22.0 16.0 22.0;
+    -fx-background-insets: 2.0 0.0 0.0 0.0,2.0 0.0 3.0 0.0, 2.0 0.0 4.0 0.0, 2.0 0.0 5.0 0.0;
+}
+
+#loginButton .text {
+    -fx-fill: white;
+   
+    -fx-font-family: 'sans-serif';
+}
+
+#blueButton{
+	-fx-padding: 10.0 22.0 20.0 22.0;
+    -fx-background-insets: 0.0,0.0 0.0 5.0 0.0, 0.0 0.0 6.0 0.0, 0.0 0.0 7.0 0.0;
+    -fx-background-radius: 24.0;
+    -fx-background-color: 
+        linear-gradient(from 0.0% 93.0% to 0.0% 100.0%, #0d5490 0.0%, #0d5490 100.0%),
+        #0d5490,
+        #208dad,
+        radial-gradient(center 50.0% 50.0%, radius 100.0%, #1f85bf, #1574aa);
+    -fx-effect: dropshadow( gaussian , rgba(0.0,0.0,0.0,0.25) , 4.0,0.0,0.0,1.0 );
+    -fx-font-weight: normal;
+    -fx-font-size: 1em;
+    -fx-alignment: center;
+}
+
+#blueButton:pressed {
+    -fx-padding: 14.0 22.0 16.0 22.0;
+    -fx-background-insets: 2.0 0.0 0.0 0.0,2.0 0.0 3.0 0.0, 2.0 0.0 4.0 0.0, 2.0 0.0 5.0 0.0;
+}
+
+#blueButton .text {
+    -fx-fill: white;
+   
+    -fx-font-family: 'sans-serif';
+}
+
+#greyButton{
+	-fx-padding: 10.0 22.0 20.0 22.0;
+    -fx-background-insets: 0.0,0.0 0.0 5.0 0.0, 0.0 0.0 6.0 0.0, 0.0 0.0 7.0 0.0;
+    -fx-background-radius: 24.0;
+    -fx-background-color: 
+        linear-gradient(from 0.0% 93.0% to 0.0% 100.0%, #333333 0.0%, #222222 100.0%),
+        #555555,
+        #444444,
+        radial-gradient(center 50.0% 50.0%, radius 100.0%, #666666, #333333);
+    -fx-effect: dropshadow( gaussian , rgba(0.0,0.0,0.0,0.25) , 4.0,0.0,0.0,1.0 );
+    -fx-font-weight: normal;
+    -fx-font-size: 1em;
+    -fx-alignment: center;
+}
+
+#greyButton:pressed {
+    -fx-padding: 14.0 22.0 16.0 22.0;
+    -fx-background-insets: 2.0 0.0 0.0 0.0,2.0 0.0 3.0 0.0, 2.0 0.0 4.0 0.0, 2.0 0.0 5.0 0.0;
+}
+#greyButton .text {
+    -fx-fill: grey;
+   
+    -fx-font-family: 'sans-serif';
+}
+
+.label .text{
+	-fx-fill: white;
+	-fx-font-size: 1.2em;
+}
+
+#vaLabel .text{
+	-fx-fill: linear-gradient(#002641 0%, #2989cc 7%, #58baff 27%, #ffffff 47%, #ffffff 50%, #6b004c 54%, #c60488 75%, #ff2abb 100%);
+   	-fx-stroke: linear-gradient(#918c85 0%, #c9c2b7 12%, #fffdfa 18%, #c9c6c1 30%, #918c85 35%, #c9c2b7 45%, #fffdfa 50%, #c9c6c1 62%, #918c85 68%, #c9c2b7 80%, #fdfaf7 86%, #d1ceca 100%);
+   	-fx-stroke-width: 1px; 
+   	-fx-stroke-type: outside;
+    -fx-font-size: 4.5em;
+    -fx-effect: dropshadow( three-pass-box , rgba(0.0,0.0,0.0,0.90) , 4.0,0.0,0.0,0.90 );
+    -fx-font-weight: bold;
+    -fx-font-family: 'Game Played';
+}

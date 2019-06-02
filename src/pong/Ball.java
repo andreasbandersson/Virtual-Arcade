@@ -1,104 +1,140 @@
 package pong;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.util.LinkedList;
-import java.util.Random;
 
+/**
+	@author Gulcin Kanat & Måns Grundberg
+**/
 public class Ball {
-	
-	private int x, y, dirX, dirY;
-	private int width, height;
-	private int[] directions;
-	
-	private boolean hitPlatform, resetBall;
-	
-	private int speed;
-	
-	public Ball(int x, int y) {
-		this.x = x;
-		this.y = y;
-		
-		this.width = Config.Ball.width;
-		this.height = Config.Ball.height;
-		this.speed = Config.Ball.speed;
-		
-		Random rand = new Random();
-		directions = new int[]{-1, 1};
-		this.dirX = directions[rand.nextInt(directions.length)];
-		this.dirY = this.directions[rand.nextInt(this.directions.length)];
-		
-		this.hitPlatform = this.resetBall = false;
-	}
-	
-	public void update(LinkedList<Platform> platforms) {
-		
-		this.x += this.dirX * this.speed;
+	private int xpos;
+	private int ypos;
+	private int radius;
+	private double dx; // Bollens horisontella färdriktning
+	private double dy; // Bollens vertikala färdriktning
+	private int width;
+	private int height;
+	private int acceleration = 0;
 
-		for(Platform platform: platforms) {
-			if(platform.getBounds().intersects(getBounds())) {
-				
-				// switch direction
-				this.dirX *= -1;
-				
-				this.hitPlatform = true;
-				
-				break;
-			}
-		
-			// +1 to left platform
-			if(this.x+this.width >= Config.Window.width) {
-				if(platform.getPlayerId() == 1)
-					platform.increasePoints();
-				
-				this.resetBall = true;
-			} else if(this.x <= 0) {
-				if(platform.getPlayerId() == 2)
-					platform.increasePoints();
-			
-				this.resetBall = true;
-			}
-		}
-		
-		
-		
-		if(this.resetBall) {
-			resetPos();
-			this.resetBall = false;
-		}
-		
-		this.y += this.dirY * this.speed;
-		
-		if(this.y <= 0 || (this.y + this.height >= Config.Window.height)) {
-			this.dirY *= -1;
-		}
-		
-		if(this.hitPlatform) {
-			Sound.play(Config.Ball.bounceSound);
-			this.hitPlatform = false;
-		}
-	
-				
-	}
-	
-	public void resetPos() {
-		this.x = (Config.Window.width/2)-(Config.Ball.width/2);
-		this.y = (Config.Window.height/2)-(Config.Ball.height/2);
-
-		Random rand = new Random();
-		this.directions = new int[]{-1, 1};
-		this.dirX = this.directions[rand.nextInt(this.directions.length)];
-		this.dirY = this.directions[rand.nextInt(this.directions.length)];
-	}
-	
-	public void render(Graphics2D g) {
-		g.setColor(Color.WHITE);
-		g.fillOval(x, y, width, height);
+	/**
+		Ball constructor
+	**/
+	public Ball() {
+		dx = 6;
+		dy = 3;
+		width = 10;
+		height = 10;
+		radius = 5;
+		xpos = Pong.WIDTH / 2;
+		ypos = Pong.HEIGHT / 2;
 	}
 
-	public Rectangle getBounds() {
-		return new Rectangle(x, y, width, height);
+	/**
+		Moves ball object in x and y directions depending on dx, dy & acceleration
+	**/
+	public void move() {
+		xpos += dx + acceleration;
+		ypos += dy + acceleration;
 	}
-	
+
+	/**
+		@return returns width of ball
+	**/
+	public int getWidht() {
+		return this.width;
+	}
+
+	/**
+		@return returns height of ball
+	**/
+	public int getHeight() {
+		return this.height;
+	}
+
+	/**
+		@return returns X-position of ball
+	**/
+	public int getXpos() {
+		return this.xpos;
+	}
+
+	/**
+		@return returns Y-position of ball
+	**/
+	public int getYpos() {
+		return this.ypos;
+	}
+
+	/**
+		@return returns radius of ball
+	**/
+	public int getRadius() {
+		return this.radius;
+	}
+
+	/**
+		changes (y)direction to the opposite when it collides with walls
+	**/
+	public void bounceWall() {
+		this.dy = -this.dy;
+	}
+
+	/**
+		Changes x(direction) when the ball hits a paddle
+		and calls increaseSpeed()
+	**/
+	public void changeDirection(int gameLevel) {
+		this.dx = -this.dx;
+		increaseSpeed(gameLevel);
+	}
+
+	/**
+		@return dx ( horizontal step )
+	**/
+	public double getDx( ) {
+		return this.dx;
+	}
+
+	/**
+		@return dy ( vertical step )
+	**/
+	public double getDy() {
+		return this.dy;
+	}
+
+	/**
+		(in/de)creases ball speed, with a small amount,
+		based on the direction ball is traveling.
+	**/
+	private void increaseSpeed(int gameLevel) {
+
+		// 0.5 (+-) (0.15 * 1) = 0.65 	-- level 1, (in/de)crease by 0.15
+		// 0.5 (+-) (0.15 * 2) = 0.8	-- level 2, (in/de)crease by 0.3
+		// 0.5 (+-) (0.15 * 3) = 0.95	-- level 3, (in/de)crease by 0.45
+
+		if (this.dx < 0) {
+			this.dx -= 0.5 - (0.15 * gameLevel);
+
+		} else {
+			this.dx += 0.5 + (0.15 * gameLevel);
+		}
+
+	}
+
+	/**
+		Resets ball position & dx
+	**/
+	public void reset() {
+		this.xpos = Pong.WIDTH - 100;
+		this.ypos = Pong.HEIGHT / 2;
+		this.dx = -6;
+	}
+
+	/**
+		Returns a rectangle with current bounds.
+		@return Rectangle
+	**/
+	public Rectangle getRect() {
+		return new Rectangle(xpos, ypos, width, height);
+	}
+
 }

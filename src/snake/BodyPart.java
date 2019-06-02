@@ -1,45 +1,49 @@
 package snake;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 
-public class BodyPart 
-{
-	private int x, y;
-	private int width, height;
-	private int tileSize;
+/**
+ * Class that has Get-methods for the snakes X and Y position and a draw method for drawing the snakes body parts. 
+ * @author Max Matthiasson
+ */
+public class BodyPart {
 	
-	public BodyPart(int xCoordinate, int yCoordinate, int tileSize)
-	{
-		this.x = xCoordinate;
-		this.y = yCoordinate;
-		width = tileSize;
-		height = tileSize;
+	private int snakeX;
+	private int snakeY;
+	private int unitWidth;
+	private int unitHeight;
+	private static Image snakeCharacterImage;
+	
+	/**
+	 * Constructor for the snakes body parts. 
+	 * @param snakeCharacterImage - The image representing the snakes body parts. 
+	 * @param snakeX - The X-position for the snake.
+	 * @param snakeY - The Y-position for the snake.
+	 * @param unitWidth - The width of the the snakes body parts.
+	 * @param unitHeight - The height of the snakes body parts.
+	 */
+	public BodyPart(Image snakeCharacterImage, int snakeX, int snakeY, int unitWidth, int unitHeight) {
+		BodyPart.snakeCharacterImage = snakeCharacterImage;
+		this.snakeX = snakeX;
+		this.snakeY = snakeY;
+		this.unitWidth = unitWidth;
+		this.unitHeight = unitHeight;
 	}
 	
-	public void draw(Graphics g)
-	{
-		g.setColor(Color.green);
-		g.fillRect(x * width, y * height, width, height);
+	/**
+	 * Draws the body parts of the snake.  
+	 * @param gc
+	 */
+	public void drawSnakePane(GraphicsContext gc) {
+		gc.drawImage(snakeCharacterImage, snakeX, snakeY, unitWidth, unitHeight);
+	}
+	
+	public int getSnakeX() {
+		return snakeX;
 	}
 
-	public int getX() 
-	{
-		return x;
-	}
-
-	public void setX(int x) 
-	{
-		this.x = x;
-	}
-
-	public int getY() 
-	{
-		return y;
-	}
-
-	public void setY(int y) 
-	{
-		this.y = y;
+	public int getSnakeY() {
+		return snakeY;
 	}
 }

@@ -1,0 +1,216 @@
+@font-face {
+    src: url('../fonts/PressStart2P.ttf');
+}
+
+@font-face {
+    src: url('../fonts/Neoneon.otf');
+}
+
+@font-face {
+    src: url('../fonts/GAMEPLAYED.OTF');
+}
+
+#mainRoot{
+    -fx-background-image: url("../images/mainBg.jpg");
+    -fx-background-repeat: stretch;   
+    -fx-background-size: cover;
+    -fx-background-position: center center; 
+}
+
+#leaderboardRoot{
+	 -fx-background-image: url("../images/leaderboard.jpg");
+    -fx-background-repeat: stretch;   
+    -fx-background-size: cover;
+    -fx-background-position: center center; 
+}
+
+#highscoreLabel{
+	-fx-background-color: transparent;
+	
+}
+#highscoreLabel .text{
+	-fx-fill: linear-gradient(#ffffff 0%, #ffff00 40%, #dd6000 70%);
+    -fx-font-size: 1.25em;
+    -fx-effect: dropshadow( three-pass-box , rgba(0.0,0.0,0.0,1.0) , 4.0,0.0,0.0,1.0 );
+    -fx-font-weight: bold;
+    -fx-font-family: 'Press Start 2P';
+    -fx-line-spacing: 0.5em;
+}
+
+#responseLabel .text{
+	-fx-fill: #fa0404;
+	-fx-font-weight: normal;
+	-fx-effect: dropshadow( three-pass-box , rgba(0.0,0.0,0.0,0.25) , 4.0,0.0,0.0,1.0 );
+	-fx-text-alignment: center;
+	-fx-font-size: 1.1em;
+}
+
+#greyButton{
+	-fx-padding: 10.0 22.0 20.0 22.0;
+    -fx-background-insets: 0.0,0.0 0.0 5.0 0.0, 0.0 0.0 6.0 0.0, 0.0 0.0 7.0 0.0;
+    -fx-background-radius: 24.0;
+    -fx-background-color: 
+        linear-gradient(from 0.0% 93.0% to 0.0% 100.0%, #333333 0.0%, #222222 100.0%),
+        #555555,
+        #444444,
+        radial-gradient(center 50.0% 50.0%, radius 100.0%, #666666, #333333);
+    -fx-effect: dropshadow( gaussian , rgba(0.0,0.0,0.0,0.25) , 4.0,0.0,0.0,1.0 );
+    -fx-font-weight: normal;
+    -fx-font-size: 1em;
+    -fx-alignment: center;
+}
+
+#greyButton:pressed {
+    -fx-padding: 14.0 22.0 16.0 22.0;
+    -fx-background-insets: 2.0 0.0 0.0 0.0,2.0 0.0 3.0 0.0, 2.0 0.0 4.0 0.0, 2.0 0.0 5.0 0.0;
+}
+
+#greyButton .text {
+    -fx-fill: white;
+    -fx-font-family: 'sans-serif';
+}
+
+#vaLabel .text{
+	-fx-fill: linear-gradient(#002641 0%, #2989cc 7%, #58baff 27%, #ffffff 47%, #ffffff 50%, #6b004c 54%, #c60488 75%, #ff2abb 100%);
+   	-fx-stroke: linear-gradient(#918c85 0%, #c9c2b7 12%, #fffdfa 18%, #c9c6c1 30%, #918c85 35%, #c9c2b7 45%, #fffdfa 50%, #c9c6c1 62%, #918c85 68%, #c9c2b7 80%, #fdfaf7 86%, #d1ceca 100%);
+   	-fx-stroke-width: 2px; 
+   	-fx-stroke-type: outside;
+    -fx-font-size: 6em;
+    -fx-effect: dropshadow( three-pass-box , rgba(0.0,0.0,0.0,0.90) , 4.0,0.0,0.0,0.90 );
+    -fx-font-weight: bold;
+    -fx-font-family: 'Game Played';
+}
+
+#leaderboardLabel .text{
+	-fx-fill: linear-gradient(#ffffff 0%, #ffff00 40%, #dd6000 70%);
+    -fx-font-size: 4em;
+    -fx-effect: dropshadow( three-pass-box , rgba(0.0,0.0,0.0,0.90) , 4.0,0.0,0.0,0.90 );
+    -fx-font-weight: bold;
+    -fx-font-family: 'Press Start 2P';
+}
+
+#headerLabel .text{
+	-fx-fill: linear-gradient(#ffffff 0%, #ffff00 40%, #dd6000 70%);
+    -fx-font-size: 2.2em;
+    -fx-effect: dropshadow( three-pass-box , rgba(0.0,0.0,0.0,0.90) , 4.0,0.0,0.0,0.90 );
+    -fx-font-weight: bold;
+    -fx-font-family: 'Press Start 2P';
+}
+.text-area .content{
+	-fx-background-color: black;
+}
+.label .text{
+	-fx-fill: white;
+	-fx-font-size: 1.2em;
+}
+
+#arcadeButtons{
+	-fx-padding: 15.0 25.0 25.0 25.0;
+    -fx-background-insets: 0.0,0.0 0.0 5.0 0.0, 0.0 0.0 6.0 0.0, 0.0 0.0 7.0 0.0;
+    -fx-background-radius: 4.0;
+    -fx-background-color: 
+        linear-gradient(from 0.0% 93.0% to 0.0% 100.0%, #c11111 0.0%, #b50101 100.0%),
+        #b70303,
+        #ff3838,
+        radial-gradient(center 50.0% 50.0%, radius 100.0%, #ff3838, #ce1a1a);
+    -fx-effect: dropshadow( gaussian , rgba(0.0,0.0,0.0,0.75) , 4.0,0.0,0.0,1.0 );
+    -fx-font-weight: normal;
+    -fx-font-size: 1.2em;
+    -fx-alignment: center;
+}
+#arcadeButtons:pressed {
+    -fx-padding: 19.0 25.0 21.0 25.0;
+    -fx-background-insets: 2.0 0.0 0.0 0.0,2.0 0.0 3.0 0.0, 2.0 0.0 4.0 0.0, 2.0 0.0 5.0 0.0;
+}
+#arcadeButtons .text {
+    -fx-fill: white;
+    -fx-effect: dropshadow( gaussian , #a30000 , 0.0,0.0,0.0,2.0 );
+    -fx-font-family: 'sans-serif';
+}
+
+#blueButton{
+	-fx-padding: 10.0 22.0 20.0 22.0;
+    -fx-background-insets: 0.0,0.0 0.0 5.0 0.0, 0.0 0.0 6.0 0.0, 0.0 0.0 7.0 0.0;
+    -fx-background-radius: 24.0;
+    -fx-background-color: 
+        linear-gradient(from 0.0% 93.0% to 0.0% 100.0%, #0d5490 0.0%, #0d5490 100.0%),
+        #0d5490,
+        #208dad,
+        radial-gradient(center 50.0% 50.0%, radius 100.0%, #1f85bf, #1574aa);
+    -fx-effect: dropshadow( gaussian , rgba(0.0,0.0,0.0,0.25) , 4.0,0.0,0.0,1.0 );
+    -fx-font-weight: normal;
+    -fx-font-size: 1em;
+    -fx-alignment: center;
+}
+
+#blueButton:pressed {
+    -fx-padding: 14.0 22.0 16.0 22.0;
+    -fx-background-insets: 2.0 0.0 0.0 0.0,2.0 0.0 3.0 0.0, 2.0 0.0 4.0 0.0, 2.0 0.0 5.0 0.0;
+}
+
+#blueButton .text {
+    -fx-fill: white;
+   
+    -fx-font-family: 'sans-serif';
+}
+
+#nokiaButton{
+	-fx-padding: 10.0 25.0 20.0 25.0;
+    -fx-background-insets: 0.0,0.0 0.0 5.0 0.0, 0.0 0.0 6.0 0.0, 0.0 0.0 7.0 0.0;
+    -fx-background-radius: 24.0;
+    -fx-background-color: 
+        linear-gradient(from 0.0% 93.0% to 0.0% 100.0%, #BBBBBB 0.0%, #CCCCCC 100.0%),
+        #AAAAAA,
+        #DDDDDD,
+        radial-gradient(center 50.0% 50.0%, radius 100.0%, #DDDDDD, #CCCCCC);
+    -fx-effect: dropshadow( gaussian , rgba(0.0,0.0,0.0,0.25) , 4.0,0.0,0.0,1.0 );
+    -fx-font-weight: normal;
+    -fx-font-size: 1.2em;
+    -fx-text-alignment: center;
+}
+
+#nokiaButton:pressed {
+    -fx-padding: 14.0 25.0 16.0 25.0;
+    -fx-background-insets: 2.0 0.0 0.0 0.0,2.0 0.0 3.0 0.0, 2.0 0.0 4.0 0.0, 2.0 0.0 5.0 0.0;
+}
+
+#nokiaButton .text {
+    -fx-fill: grey;
+   
+    -fx-font-family: 'sans-serif';
+}
+
+#mainButtons{
+	-fx-padding: 15.0 20.0 25.0 20.0;
+    -fx-background-insets: 0.0,0.0 0.0 5.0 0.0, 0.0 0.0 6.0 0.0, 0.0 0.0 7.0 0.0;
+    -fx-background-radius: 4.0;
+    -fx-background-color: 
+        linear-gradient(from 0.0% 93.0% to 0.0% 100.0%, #c11111 0.0%, #b50101 100.0%),
+        #b70303,
+        #ff3838,
+        radial-gradient(center 50.0% 50.0%, radius 100.0%, #ff3838, #ce1a1a);
+    -fx-effect: dropshadow( gaussian , rgba(0.0,0.0,0.0,0.75) , 4.0,0.0,0.0,1.0 );
+    -fx-font-weight: normal;
+    -fx-font-size: 1em;
+    -fx-text-alignment: center;
+ }
+
+#mainButtons:pressed {
+    -fx-padding: 19.0 20.0 21.0 20.0;
+    -fx-background-insets: 2.0 0.0 0.0 0.0,2.0 0.0 3.0 0.0, 2.0 0.0 4.0 0.0, 2.0 0.0 5.0 0.0;
+}
+
+#mainButtons .text {
+    -fx-fill: white;
+    -fx-effect: dropshadow( gaussian , #a30000 , 0.0,0.0,0.0,2.0 );
+    -fx-font-family: 'sans-serif';
+}
+
+#startLabel{
+	-fx-fill: white;
+	-fx-font-family: 'monospace';
+	-fx-font-weight: bold;
+	-fx-font-size: 1.4em;
+}
+
+ 
