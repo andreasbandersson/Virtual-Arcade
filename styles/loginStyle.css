@@ -43,25 +43,52 @@
     -fx-font-family: 'sans-serif';
 }
 
-#createButton{
+#blueButton{
 	-fx-padding: 10.0 22.0 20.0 22.0;
     -fx-background-insets: 0.0,0.0 0.0 5.0 0.0, 0.0 0.0 6.0 0.0, 0.0 0.0 7.0 0.0;
     -fx-background-radius: 24.0;
     -fx-background-color: 
-        linear-gradient(from 0.0% 93.0% to 0.0% 100.0%, #BBBBBB 0.0%, #CCCCCC 100.0%),
-        #AAAAAA,
-        #DDDDDD,
-        radial-gradient(center 50.0% 50.0%, radius 100.0%, #DDDDDD, #CCCCCC);
+        linear-gradient(from 0.0% 93.0% to 0.0% 100.0%, #0d5490 0.0%, #0d5490 100.0%),
+        #0d5490,
+        #208dad,
+        radial-gradient(center 50.0% 50.0%, radius 100.0%, #1f85bf, #1574aa);
     -fx-effect: dropshadow( gaussian , rgba(0.0,0.0,0.0,0.25) , 4.0,0.0,0.0,1.0 );
     -fx-font-weight: normal;
     -fx-font-size: 1em;
     -fx-alignment: center;
 }
-#createButton:pressed {
+
+#blueButton:pressed {
     -fx-padding: 14.0 22.0 16.0 22.0;
     -fx-background-insets: 2.0 0.0 0.0 0.0,2.0 0.0 3.0 0.0, 2.0 0.0 4.0 0.0, 2.0 0.0 5.0 0.0;
 }
-#createButton .text {
+
+#blueButton .text {
+    -fx-fill: white;
+   
+    -fx-font-family: 'sans-serif';
+}
+
+#greyButton{
+	-fx-padding: 10.0 22.0 20.0 22.0;
+    -fx-background-insets: 0.0,0.0 0.0 5.0 0.0, 0.0 0.0 6.0 0.0, 0.0 0.0 7.0 0.0;
+    -fx-background-radius: 24.0;
+    -fx-background-color: 
+        linear-gradient(from 0.0% 93.0% to 0.0% 100.0%, #333333 0.0%, #222222 100.0%),
+        #555555,
+        #444444,
+        radial-gradient(center 50.0% 50.0%, radius 100.0%, #666666, #333333);
+    -fx-effect: dropshadow( gaussian , rgba(0.0,0.0,0.0,0.25) , 4.0,0.0,0.0,1.0 );
+    -fx-font-weight: normal;
+    -fx-font-size: 1em;
+    -fx-alignment: center;
+}
+
+#greyButton:pressed {
+    -fx-padding: 14.0 22.0 16.0 22.0;
+    -fx-background-insets: 2.0 0.0 0.0 0.0,2.0 0.0 3.0 0.0, 2.0 0.0 4.0 0.0, 2.0 0.0 5.0 0.0;
+}
+#greyButton .text {
     -fx-fill: grey;
    
     -fx-font-family: 'sans-serif';

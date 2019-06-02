@@ -79,13 +79,13 @@ public class Pong {
 		root.setPrefSize(1200, 600);
 		root.add(pane, 6, 4, 24, 16);
 
-		backButton.setId("logOutButton");
+		backButton.setId("greyButton");
 		root.add(backButton, 1, 21, 6, 2);
 
 		// Adding an setting the button for mute and un-mute of login music
 		soundButton = new Button();
 		setSoundButtonImages();
-		soundButton.setId("logOutButton");
+		soundButton.setId("greyButton");
 		checkSound();
 		root.add(soundButton, 32, 1);
 

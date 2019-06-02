@@ -58,8 +58,9 @@ public class ChatUI extends Pane {
 		newMessage.setPrefSize(300, 50);
 
 		// Andreas
+		newMessage.setId("newMessage");
 		sendBtn.setId("sendButton");
-		switchBtn.setId("checkButton");
+		switchBtn.setId("blueButton");
 
 		scroll = new ScrollPane(messages);
 		scroll.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
@@ -158,11 +159,13 @@ public class ChatUI extends Pane {
 					sPane.getChildren().clear();
 					sPane.getChildren().add(onlineUsers);
 					switchBtn.setText("Show messages");
+					switchBtn.setId("sendButton");
 					showingMessages = false;
 				} else if (!showingMessages) {
 					sPane.getChildren().clear();
 					sPane.getChildren().add(scroll);
 					switchBtn.setText("Show online users");
+					switchBtn.setId("blueButton");
 					showingMessages = true;
 				}
 			}

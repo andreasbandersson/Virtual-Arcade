@@ -132,12 +132,12 @@ public class Painter extends AnimationTimer implements Runnable {
 		root.setId("SpaceInvaders");
 
 		// Adding and setting the main buttons
-		backButton.setId("logOutButton");
+		backButton.setId("greyButton");
 		spaceInvadersRoot.add(backButton, 1, 21, 6, 2);
 
 		// Adding an setting the button for mute and un-mute of login music
 		soundButton = new Button();
-		soundButton.setId("logOutButton");
+		soundButton.setId("greyButton");
 		spaceInvadersRoot.add(soundButton, 32, 1);
 		spaceInvadersRoot.setPrefSize(1200.0, 600.0);
 
