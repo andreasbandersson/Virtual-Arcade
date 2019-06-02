@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaPlayer.Status;
 
 /**
  * The class JukeBox plays and pauses sound files via JavaFX Mediaplayer class.

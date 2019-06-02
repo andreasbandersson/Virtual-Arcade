@@ -1,7 +1,5 @@
 package pong;
 
-
-
 import application.JukeBox2;
 import chat.ClientController;
 import javafx.animation.AnimationTimer;
@@ -33,7 +31,6 @@ public class Game extends AnimationTimer implements Runnable {
 	private boolean gameOver = false;
 	private boolean started = false;
 	private boolean firstGame = true;
-	private JukeBox2 jukeBox2 = new JukeBox2();
 	private Executor executor = Executors.newFixedThreadPool(2);
 	private ClientController controller;
 
@@ -311,7 +308,7 @@ public class Game extends AnimationTimer implements Runnable {
 	public void run() {
 		for (int i = 0; i < 25; i++) {
 			playerScore += 2;
-			jukeBox2.playMP3(JukeBox2.POINTSBLIP);
+			JukeBox2.playMP3(JukeBox2.POINTSBLIP);
 			playerScoreStr = "Score: " + Integer.toString(playerScore);
 			try {
 				Thread.sleep(20);
